@@ -1,0 +1,1628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Milton Winroth — A creative problem solver</title>
+<meta name="description" content="Designer working across content, brand, UX/UI and web — and building the AI systems and workflows that make creative work go further.">
+
+<meta property="og:title" content="Milton Winroth — A creative problem solver">
+<meta property="og:description" content="Designer working across content, brand, UX/UI and web — and building the AI systems and workflows that make creative work go further.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F7F6F3">
+
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="assets/css/main.css">
+<script type="module" src="assets/js/main.js"></script>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="cursor" data-cursor aria-hidden="true"></div>
+
+<div class="edge-blur edge-blur--top" data-layer="1" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--top" data-layer="2" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--top" data-layer="3" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" data-layer="1" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" data-layer="2" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" data-layer="3" aria-hidden="true"></div>
+
+<!-- ==========================================================================
+     NAV
+     ========================================================================== -->
+<!-- ==========================================================================
+     TOPBAR — the site's own navigation, and only at the very top
+     Transparent and in normal flow, so it scrolls away with the hero rather
+     than following you down. Everything below the fold is handled by the
+     dock and the menu button, which is why this one never needs to persist.
+     ========================================================================== -->
+<header class="topbar">
+  <a class="topbar__mark" href="/">
+    <span class="topbar__mark-full">Milton Winroth</span>
+  </a>
+
+  <nav class="topbar__links" aria-label="Site">
+    <a class="topbar__link" href="work/">Case studies</a>
+    <a class="topbar__link" href="about/">About me</a>
+    <a class="topbar__link" href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ==========================================================================
+     MENU BUTTON — top right, arrives with the dock
+     Same curtain as before; it just no longer lives inside the pill.
+     ========================================================================== -->
+<button class="menu-btn glass glass--pill" data-menu-toggle data-late
+        aria-expanded="false" aria-controls="menu">
+  <i aria-hidden="true"></i>
+  <i aria-hidden="true"></i>
+  <span class="sr-only">Menu</span>
+</button>
+
+<!-- ==========================================================================
+     DOCK — the page's own table of contents
+     Bottom centre, glass, and only once you have started reading. Anchors
+     only: this is where you are in the page, not where you can go on the site.
+     ========================================================================== -->
+<nav class="dock glass glass--pill" data-dock data-late aria-label="Sections">
+  <a class="dock__link" href="#solve">What I solve</a>
+
+  <div class="dock__group">
+    <a class="dock__link dock__link--parent" href="#work"
+       aria-expanded="false" aria-controls="dock-work">
+      Work
+      <span class="dock__caret" aria-hidden="true"></span>
+    </a>
+
+    <div class="dock__sub" id="dock-work">
+      <a class="dock__sublink" href="#work">Content</a>
+      <a class="dock__sublink" href="#systems">Systems</a>
+      <a class="dock__sublink" href="#brand">Brand &amp; web</a>
+    </div>
+  </div>
+
+  <a class="dock__link" href="#capabilities">What I do</a>
+  <a class="dock__link" href="#ai">AI</a>
+  <a class="dock__link" href="#about">About me</a>
+</nav>
+
+<!-- ==========================================================================
+     MENU CURTAIN
+     ========================================================================== -->
+<div class="menu" id="menu" data-menu data-ground="dark" aria-label="Menu">
+  <button class="menu__close" data-menu-close>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span class="sr-only">Close menu</span>
+  </button>
+
+  <div class="menu__inner">
+    <ul class="menu__list" role="list">
+      <li class="menu__item" style="--i: 0"><a class="menu__link" href="/">Home</a></li>
+      <li class="menu__item" style="--i: 1"><a class="menu__link" href="work/">Case studies</a></li>
+      <li class="menu__item" style="--i: 2"><a class="menu__link" href="about/">About me</a></li>
+      <li class="menu__item" style="--i: 3"><a class="menu__link" href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="menu__meta t-small">
+      <span class="t-label">Get in touch</span>
+      <a class="link" href="mailto:hello@mwstudio.se">hello@mwstudio.se</a>
+      <a class="link" href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
+      <p class="t-label" style="margin-top: var(--sp-4)">
+        Stockholm — <span data-clock class="tabular">--:--</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ========================================================================
+       HERO · light
+       Type only. The motto has to land before a single image competes with it.
+       ======================================================================== -->
+  <section class="hero canvas-host" data-ground="light" data-hero>
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <span class="hero__rule" aria-hidden="true"></span>
+
+    <div class="shell hero__inner">
+      <p class="t-label" data-reveal="fade">Milton Winroth — Designer, Sweden</p>
+
+      <h1 class="hero__title" data-reveal="lines">
+        <span class="line"><span>A creative</span></span>
+        <span class="line"><span><em class="em">problem</em> solver.</span></span>
+      </h1>
+
+      <div class="hero__foot">
+        <p class="t-body-l hero__sub" data-reveal="fade" style="--i: 1">
+          I design brands, interfaces and advertising — and build the AI systems
+          that make creative work go further.
+        </p>
+
+        <span class="hero__cue t-label" aria-hidden="true">
+          Scroll
+          <span></span>
+        </span>
+      </div>
+
+      <div class="hero__meta" data-reveal="fade" style="--i: 2">
+        <span class="t-label">Currently at SoScale Media</span>
+        <span class="t-label">Content · AI systems · Brand · UX/UI · Web</span>
+        <span class="t-label">Stockholm — <span data-clock class="tabular">--:--</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       STATEMENT · dark
+       ======================================================================== -->
+  <section class="section canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <div class="row row--between" style="align-items: flex-start">
+        <p class="statement" data-statement>
+          Design has been around me my whole life. My dad ran advertising agencies, and I
+          grew up watching ideas turn into things people could actually see. I do the same
+          thing now, mostly on screens. Someone brings me something messy, and I find the
+          shape of the problem before I start making things. The making is the fun part.
+          The finding is the job.
+        </p>
+
+        <!-- The one photograph of a person on the page — moved here from the
+             closing "Right now" section so the reader has a face early. Set
+             down from the text's own baseline rather than aligned to it, so
+             the two don't read as one deliberately paired block. -->
+        <div class="media media--tall"
+             style="width: clamp(13rem, 20vw, 17rem); flex: none; margin-top: var(--sp-16)">
+          <picture>
+            <source srcset="assets/media/milton-portrait.webp" type="image/webp">
+            <img src="assets/media/milton-portrait.jpg"
+                 alt="Milton Winroth, seated, holding a copy of Typografisk handbok"
+                 width="1067" height="1600" loading="lazy" decoding="async"
+                 data-parallax="0.16">
+          </picture>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SCENE · ZOOM — the page falls into an image, and comes out dark
+       ======================================================================== -->
+  <section class="zoom canvas-host" data-ground="light" data-scene data-scene-ease aria-label="Selected imagery">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="zoom__viewport">
+      <div class="zoom__frame">
+        <div class="zoom__media">
+          <picture>
+            <source srcset="assets/media/friends-agenda.webp" type="image/webp">
+            <img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda website"
+                 width="1800" height="1350" fetchpriority="high" decoding="async">
+          </picture>
+        </div>
+      </div>
+
+      <div class="zoom__caption">
+        <div class="shell">
+          <p class="t-label" style="color: rgb(255 255 255 / 0.6)">What I solve</p>
+          <p class="t-h2" data-reveal="lines" style="max-width: 18ch">
+            Content, systems and brands that have to <em class="em">earn</em> their place.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PROBLEMS · dark, sticky stack
+       ======================================================================== -->
+  <!-- ========================================================================
+       03 · WHAT I SOLVE — four acts, four directions of travel
+       Each act carries its own vector: down-right, sideways, down-left, then
+       up-right. The graphics are scenery here, not figures — oversized,
+       cropped by the act's edges, and drifting against the copy so the two
+       read as separate planes.
+       ======================================================================== -->
+  <section class="section section--flush-top section--flush-bottom has-rail acts" id="solve" data-ground="light">
+    <span class="rail t-label" aria-hidden="true">Four sentences I hear often</span>
+
+    <!-- Same fix as the trailing spacer below, mirrored at the top: the
+         section's own padding-block-start (zeroed via section--flush-top)
+         moved here as a real element so it can carry a canvas — otherwise
+         the gap before Act 1 begins was wide enough at some viewports to
+         read as the field not starting until partway into the section. -->
+    <div class="canvas-host" style="height: var(--section-y)">
+      <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    </div>
+
+    <!-- ---- ACT 1 · down and to the right ---------------------------------- -->
+    <article class="act canvas-host" data-ground="light" data-scene="cover" data-scene-ease
+             style="--dx: .9; --dy: .5; --env-dx: -.7; --env-dy: -.35">
+      <!-- The same creative in three placements, drawn as empty format
+           frames on a measured baseline: 9:16, 1:1, 4:5, then the readout
+           they get judged against. Outline only, spread across the full
+           width so the composition survives being used as background. -->
+      <canvas class="particles" data-particles aria-hidden="true"></canvas>
+      <div class="act__env wire" aria-hidden="true">
+        <svg viewBox="0 0 2400 1000" preserveAspectRatio="xMidYMid meet"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <path class="wire__mark" d="M 40 90 V 40 H 90"/>
+          <path class="wire__mark" d="M 2310 40 H 2360 V 90"/>
+          <path class="wire__mark" d="M 2360 910 V 960 H 2310"/>
+          <path class="wire__mark" d="M 90 960 H 40 V 910"/>
+
+          <!-- Measure line the three placements sit on -->
+          <g class="wire__plane" style="--depth: -0.18">
+            <path class="wire__rule" d="M 120 880 H 2280"/>
+            <path class="wire__rule" d="M 120 866 V 894"/>
+            <path class="wire__rule" d="M 700 866 V 894"/>
+            <path class="wire__rule" d="M 1280 866 V 894"/>
+            <path class="wire__rule" d="M 1860 866 V 894"/>
+            <path class="wire__rule" d="M 2280 866 V 894"/>
+            <text class="wire__label" x="120" y="932">One idea</text>
+            <text class="wire__label" x="2280" y="932" text-anchor="end">Three placements</text>
+          </g>
+
+          <!-- 9:16 -->
+          <g class="wire__plane" style="--depth: 0.85">
+            <text class="wire__label wire__label--accent" x="200" y="176">9:16</text>
+            <rect class="wire__rect" x="200" y="200" width="338" height="600"/>
+            <path class="wire__rule" d="M 218 226 H 268"/>
+            <path class="wire__rule" d="M 280 226 H 330"/>
+            <path class="wire__rule" d="M 342 226 H 392"/>
+            <path class="wire__rule wire__rule--accent" d="M 218 226 H 268"/>
+            <circle class="wire__rect" cx="369" cy="440" r="112"/>
+            <path class="wire__rule" d="M 240 660 H 452"/>
+            <path class="wire__rule" d="M 240 692 H 380"/>
+          </g>
+
+          <!-- 1:1 -->
+          <g class="wire__plane" style="--depth: -0.55">
+            <text class="wire__label" x="780" y="296">1:1</text>
+            <rect class="wire__rect" x="780" y="320" width="440" height="440"/>
+            <circle class="wire__rect" cx="1000" cy="500" r="128"/>
+            <path class="wire__dash" d="M 872 500 H 1128"/>
+            <path class="wire__dash" d="M 1000 372 V 628"/>
+            <path class="wire__rule" d="M 812 700 H 1024"/>
+          </g>
+
+          <!-- 4:5 -->
+          <g class="wire__plane" style="--depth: -0.15">
+            <text class="wire__label" x="1460" y="216">4:5</text>
+            <rect class="wire__rect wire__rect--accent" x="1460" y="240" width="440" height="550"/>
+            <circle class="wire__rect" cx="1680" cy="450" r="134"/>
+            <path class="wire__rule" d="M 1492 660 H 1780"/>
+            <path class="wire__rule" d="M 1492 692 H 1660"/>
+            <path class="wire__rule" d="M 1492 724 H 1720"/>
+          </g>
+
+          <!-- The accent route: one idea travelling across all three -->
+          <path class="wire__glyph wire__glyph--accent wire__draw" pathLength="1"
+                d="M 369 440 C 620 440 640 500 1000 500 C 1360 500 1420 450 1680 450"/>
+
+          <!-- Readout -->
+          <g class="wire__plane" style="--depth: -0.9">
+            <text class="wire__label" x="2000" y="416">Measured</text>
+            <rect class="wire__rect" x="2000" y="440" width="280" height="34"/>
+            <rect class="wire__rect wire__rect--accent" x="2000" y="440" width="212" height="34"/>
+            <rect class="wire__rect" x="2000" y="500" width="280" height="34"/>
+            <rect class="wire__rect wire__rect--accent" x="2000" y="500" width="134" height="34"/>
+            <rect class="wire__rect" x="2000" y="560" width="280" height="34"/>
+            <rect class="wire__rect wire__rect--accent" x="2000" y="560" width="86" height="34"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="shell">
+        <div class="act__body">
+          <span class="t-label accent">Content &amp; advertising</span>
+          <p class="act__quote" data-reveal="lines">“Our ads get seen, not remembered.”</p>
+          <p class="act__note t-body-l" data-reveal="fade">
+            Hooks tested against each other. Formats built for the platform they live on.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---- ACT 2 · sideways ----------------------------------------------
+         The pipeline reads left to right, so the page does too. Pinned by CSS
+         sticky, distance measured by modules/track.js, timing from scene.js.
+         --------------------------------------------------------------------- -->
+    <article class="act-rail canvas-host" data-ground="light" data-scene>
+      <div class="act-rail__view">
+      <canvas class="particles" data-particles aria-hidden="true"></canvas>
+        <div class="act-rail__track" data-track>
+
+          <div class="act-rail__body">
+            <span class="t-label accent">AI systems &amp; workflows</span>
+            <p class="act__quote" data-reveal="lines">“The team spends its day doing this by hand.”</p>
+            <p class="act__note t-body-l" data-reveal="fade">
+              Built once, documented, handed over. Hours back without flattening the craft.
+            </p>
+          </div>
+
+          <div class="act-rail__env gfx gfx--bare nodes" aria-hidden="true">
+            <svg viewBox="0 0 2320 620" preserveAspectRatio="xMidYMid meet"
+                 xmlns="http://www.w3.org/2000/svg">
+
+              <!-- Wires first, so the boxes always sit on top of them. -->
+              <path class="nodes__wire" d="M 280 310 H 350 V 155 H 420"/>
+              <path class="nodes__wire" d="M 280 310 H 350 V 465 H 420"/>
+              <path class="nodes__wire nodes__wire--live" d="M 660 155 H 740 V 315 H 820"/>
+              <path class="nodes__wire" d="M 660 465 H 740 V 315 H 820"/>
+              <path class="nodes__wire" d="M 1100 315 H 1170 V 140 H 1240"/>
+              <path class="nodes__wire nodes__wire--live" d="M 1100 315 H 1240"/>
+              <path class="nodes__wire" d="M 1100 315 H 1170 V 470 H 1240"/>
+              <path class="nodes__wire" d="M 1440 140 H 1520 V 310 H 1600"/>
+              <path class="nodes__wire nodes__wire--live" d="M 1440 305 H 1600"/>
+              <path class="nodes__wire" d="M 1440 470 H 1520 V 310 H 1600"/>
+              <path class="nodes__wire nodes__wire--live" d="M 1840 310 H 1980"/>
+
+              <!-- Input -->
+              <text class="nodes__tag" x="40" y="240">Input</text>
+              <rect class="nodes__box" x="40" y="265" width="240" height="90" rx="6"/>
+              <text class="nodes__label" x="160" y="316" text-anchor="middle">Brief</text>
+              <rect class="nodes__port" x="275" y="305" width="10" height="10"/>
+
+              <!-- Branch -->
+              <rect class="nodes__box" x="420" y="110" width="240" height="90" rx="6"/>
+              <text class="nodes__label" x="540" y="161" text-anchor="middle">Research</text>
+              <rect class="nodes__port" x="415" y="150" width="10" height="10"/>
+              <rect class="nodes__port" x="655" y="150" width="10" height="10"/>
+
+              <rect class="nodes__box" x="420" y="420" width="240" height="90" rx="6"/>
+              <text class="nodes__label" x="540" y="471" text-anchor="middle">Reviews</text>
+              <rect class="nodes__port" x="415" y="460" width="10" height="10"/>
+              <rect class="nodes__port" x="655" y="460" width="10" height="10"/>
+
+              <!-- Generate -->
+              <text class="nodes__tag" x="820" y="240">Generate</text>
+              <rect class="nodes__fill" x="820" y="265" width="280" height="100" rx="6"/>
+              <rect class="nodes__box nodes__box--live" x="820" y="265" width="280" height="100" rx="6"/>
+              <text class="nodes__label nodes__label--live" x="960" y="321" text-anchor="middle">Variants</text>
+              <rect class="nodes__port" x="815" y="310" width="10" height="10"/>
+              <rect class="nodes__port" x="1095" y="310" width="10" height="10"/>
+
+              <!-- Formats -->
+              <text class="nodes__tag" x="1240" y="75">Formats</text>
+              <rect class="nodes__box" x="1240" y="100" width="200" height="80" rx="6"/>
+              <text class="nodes__label" x="1340" y="146" text-anchor="middle">1:1</text>
+              <rect class="nodes__box" x="1240" y="265" width="200" height="80" rx="6"/>
+              <text class="nodes__label" x="1340" y="311" text-anchor="middle">4:5</text>
+              <rect class="nodes__box" x="1240" y="430" width="200" height="80" rx="6"/>
+              <text class="nodes__label" x="1340" y="476" text-anchor="middle">9:16</text>
+
+              <!-- Measure -->
+              <rect class="nodes__box" x="1600" y="265" width="240" height="90" rx="6"/>
+              <text class="nodes__label" x="1720" y="316" text-anchor="middle">Measure</text>
+              <rect class="nodes__port" x="1595" y="305" width="10" height="10"/>
+              <rect class="nodes__port" x="1835" y="305" width="10" height="10"/>
+
+              <!-- Ship -->
+              <text class="nodes__tag" x="1980" y="240">Output</text>
+              <rect class="nodes__fill" x="1980" y="265" width="240" height="90" rx="6"/>
+              <rect class="nodes__box nodes__box--live" x="1980" y="265" width="240" height="90" rx="6"/>
+              <text class="nodes__label nodes__label--live" x="2100" y="316" text-anchor="middle">Ship</text>
+              <rect class="nodes__port" x="1975" y="305" width="10" height="10"/>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </article>
+
+    <!-- ---- ACT 3 · down and to the left ------------------------------------ -->
+    <article class="act act--right canvas-host" data-ground="light" data-scene="cover" data-scene-ease
+             style="--dx: -.9; --dy: .45; --env-dx: .7; --env-dy: -.3">
+      <!-- A brand manual with the covers taken off: the baseline grid it is
+           built on, two glyphs sitting on it, the palette as empty swatches,
+           a monogram under construction on its module grid, and the spacing
+           scale. Outline only, laid out across the full width so it reads at
+           background scale instead of being sliced into a strip. -->
+      <canvas class="particles" data-particles aria-hidden="true"></canvas>
+      <div class="act__env wire" aria-hidden="true">
+        <svg viewBox="0 0 2400 1000" preserveAspectRatio="xMidYMid meet"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Registration marks, one per corner -->
+          <path class="wire__mark" d="M 40 90 V 40 H 90"/>
+          <path class="wire__mark" d="M 2310 40 H 2360 V 90"/>
+          <path class="wire__mark" d="M 2360 910 V 960 H 2310"/>
+          <path class="wire__mark" d="M 90 960 H 40 V 910"/>
+
+          <!-- Type baselines, running the full width -->
+          <g class="wire__plane" style="--depth: -0.2">
+            <path class="wire__rule" d="M 120 210 H 2280"/>
+            <path class="wire__rule" d="M 120 290 H 2280"/>
+            <path class="wire__rule wire__rule--accent" d="M 120 490 H 2280"/>
+            <path class="wire__rule" d="M 120 570 H 2280"/>
+
+            <text class="wire__label" x="120" y="196">Cap</text>
+            <text class="wire__label" x="120" y="276">X</text>
+            <text class="wire__label wire__label--accent" x="120" y="476">Baseline</text>
+            <text class="wire__label" x="120" y="556">Desc</text>
+          </g>
+
+          <!-- Two glyphs, drawn as construction rather than as letters -->
+          <g class="wire__plane" style="--depth: 0.5">
+            <path class="wire__glyph" d="M 200 490 L 330 210 L 460 490"/>
+            <path class="wire__glyph" d="M 252 370 H 408"/>
+
+            <path class="wire__glyph" d="M 700 290 A 78 100 0 1 0 700 490 A 78 100 0 1 0 700 290"/>
+            <path class="wire__glyph" d="M 778 290 V 570 A 78 78 0 0 1 622 570"/>
+            <path class="wire__rule" d="M 622 290 H 778"/>
+          </g>
+
+          <!-- Palette, as empty swatches: outline plus the diagonal that means
+               "no colour assigned yet" in every drawing program there is. -->
+          <g class="wire__plane" style="--depth: -0.55">
+            <text class="wire__label" x="200" y="672">Palette</text>
+
+            <rect class="wire__rect wire__rect--accent" x="200" y="700" width="118" height="118"/>
+            <path class="wire__rule--accent wire__rule" d="M 200 818 L 318 700"/>
+
+            <rect class="wire__rect" x="338" y="700" width="118" height="118"/>
+            <path class="wire__rule" d="M 338 818 L 456 700"/>
+
+            <rect class="wire__rect" x="476" y="700" width="118" height="118"/>
+            <path class="wire__rule" d="M 476 818 L 594 700"/>
+
+            <rect class="wire__rect" x="614" y="700" width="118" height="118"/>
+            <path class="wire__rule" d="M 614 818 L 732 700"/>
+
+            <rect class="wire__rect" x="752" y="700" width="118" height="118"/>
+            <path class="wire__rule" d="M 752 818 L 870 700"/>
+
+            <rect class="wire__rect" x="890" y="700" width="118" height="118"/>
+            <path class="wire__rule" d="M 890 818 L 1008 700"/>
+          </g>
+
+          <!-- Monogram on its module grid -->
+          <g class="wire__plane" style="--depth: 0.7">
+            <text class="wire__label" x="1280" y="196">Mark — 3×3</text>
+
+            <rect class="wire__rect" x="1280" y="220" width="130" height="130"/>
+            <rect class="wire__rect" x="1410" y="220" width="130" height="130"/>
+            <rect class="wire__rect" x="1540" y="220" width="130" height="130"/>
+            <rect class="wire__rect" x="1280" y="350" width="130" height="130"/>
+            <rect class="wire__rect" x="1410" y="350" width="130" height="130"/>
+            <rect class="wire__rect" x="1540" y="350" width="130" height="130"/>
+            <rect class="wire__rect" x="1280" y="480" width="130" height="130"/>
+            <rect class="wire__rect" x="1410" y="480" width="130" height="130"/>
+            <rect class="wire__rect" x="1540" y="480" width="130" height="130"/>
+
+            <circle class="wire__rule" cx="1475" cy="415" r="195"/>
+            <path class="wire__dash" d="M 1280 220 L 1670 610"/>
+            <path class="wire__dash" d="M 1670 220 L 1280 610"/>
+
+            <path class="wire__glyph wire__glyph--accent wire__draw" pathLength="1"
+                  d="M 1330 560 V 270 L 1475 470 L 1620 270 V 560"/>
+          </g>
+
+          <!-- Spacing scale -->
+          <g class="wire__plane" style="--depth: -0.75">
+            <text class="wire__label" x="1820" y="672">Spacing</text>
+
+            <path class="wire__rule" d="M 1820 720 H 1900"/>
+            <path class="wire__rule" d="M 1820 706 V 734"/>
+            <path class="wire__rule" d="M 1900 706 V 734"/>
+            <text class="wire__label" x="1918" y="726">24</text>
+
+            <path class="wire__rule" d="M 1820 790 H 1980"/>
+            <path class="wire__rule" d="M 1820 776 V 804"/>
+            <path class="wire__rule" d="M 1980 776 V 804"/>
+            <text class="wire__label" x="1998" y="796">48</text>
+
+            <path class="wire__rule wire__rule--accent" d="M 1820 860 H 2140"/>
+            <path class="wire__rule" d="M 1820 846 V 874"/>
+            <path class="wire__rule" d="M 2140 846 V 874"/>
+            <text class="wire__label" x="2158" y="866">96</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="shell">
+        <div class="act__body">
+          <span class="t-label accent">Brand &amp; identity</span>
+          <p class="act__quote" data-reveal="lines">“Our brand doesn't look like anyone.”</p>
+          <p class="act__note t-body-l" data-reveal="fade">
+            Systems built to be used, not admired — and handed over so the team can keep building.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---- ACT 4 · up and to the right ------------------------------------- -->
+    <article class="act canvas-host" data-scene="cover" data-scene-ease
+             style="--dx: .55; --dy: -.6; --env-dx: -.5; --env-dy: .5; --env-opacity: .4">
+      <canvas class="particles" data-particles aria-hidden="true"></canvas>
+      <div class="act__env nodes" aria-hidden="true">
+        <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice"
+             xmlns="http://www.w3.org/2000/svg">
+          <!-- An information architecture, abstracted to boxes and routes. -->
+          <path class="nodes__wire" d="M 600 110 V 170 H 220 V 230"/>
+          <path class="nodes__wire nodes__wire--live" d="M 600 110 V 230"/>
+          <path class="nodes__wire" d="M 600 110 V 170 H 980 V 230"/>
+          <path class="nodes__wire" d="M 220 330 V 390 H 100 V 450"/>
+          <path class="nodes__wire" d="M 220 330 V 450"/>
+          <path class="nodes__wire nodes__wire--live" d="M 600 330 V 450"/>
+          <path class="nodes__wire" d="M 980 330 V 390 H 1100 V 450"/>
+
+          <rect class="nodes__box nodes__box--live" x="480" y="20" width="240" height="90" rx="6"/>
+          <rect class="nodes__box" x="100" y="230" width="240" height="100" rx="6"/>
+          <rect class="nodes__box" x="480" y="230" width="240" height="100" rx="6"/>
+          <rect class="nodes__box" x="860" y="230" width="240" height="100" rx="6"/>
+
+          <rect class="nodes__box" x="20"  y="450" width="160" height="80" rx="6"/>
+          <rect class="nodes__box" x="200" y="450" width="160" height="80" rx="6"/>
+          <rect class="nodes__fill" x="520" y="450" width="160" height="80" rx="6"/>
+          <rect class="nodes__box nodes__box--live" x="520" y="450" width="160" height="80" rx="6"/>
+          <rect class="nodes__box" x="1020" y="450" width="160" height="80" rx="6"/>
+        </svg>
+      </div>
+
+      <div class="shell">
+        <div class="act__body">
+          <span class="t-label accent">UX &amp; UI</span>
+          <p class="act__quote" data-reveal="lines">“People can't find what they came for.”</p>
+          <p class="act__note t-body-l" data-reveal="fade">
+            Research, architecture and interfaces that get out of the way.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- The section's own trailing padding-block-end (zeroed above via
+         section--flush-bottom) moved here as an explicit spacer instead —
+         it needs to be a real element so it can carry a canvas of its own.
+         Without this, the gap between the last act and the next section was
+         wide enough at wide viewports (--section-y clamps up to 12.5rem) to
+         read as the field visibly cutting off. -->
+    <div class="canvas-host" style="height: var(--section-y)">
+      <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SEAM · ZOOM — out of the four problems and into the proof
+       ======================================================================== -->
+  <section class="zoom canvas-host" data-ground="light" data-scene data-scene-ease
+           aria-label="Selected work">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="zoom__viewport">
+      <div class="zoom__frame">
+        <div class="zoom__media">
+          <div class="media__placeholder media__placeholder--filled">
+            <picture>
+              <source srcset="assets/media/aros-auto.webp" type="image/webp">
+              <img src="assets/media/aros-auto.jpg" alt="" loading="lazy" decoding="async">
+            </picture>
+          </div>
+        </div>
+      </div>
+
+      <div class="zoom__caption">
+        <div class="shell">
+          <p class="t-label" style="color: rgb(255 255 255 / 0.6)">The proof</p>
+          <p class="t-h2" data-reveal="lines" style="max-width: 16ch">
+            Four problems. Here's what <em class="em">happened</em> to them.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       BREATHER · light — the page stops talking
+       ======================================================================== -->
+  <section class="statement-scene canvas-host" data-ground="light" data-scene="cover">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <p class="statement-scene__text marks">
+        <span class="statement-scene__line" style="--depth: 0.55">Design that works</span>
+        <span class="statement-scene__line" style="--depth: 0.2">harder than it <em class="em">looks</em>.</span>
+      </p>
+      <div class="statement-scene__foot">
+        <span class="t-label">Selected work</span>
+        <span class="t-label">2024 — now</span>
+        <span class="t-label">Content · Systems · Brand</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       WORK · light → the two cases that matter most, at full size
+       Caption pins while the media column scrolls past it.
+       ======================================================================== -->
+  <section class="section canvas-host" id="work" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+
+      <article class="feature">
+        <div class="feature__caption" data-reveal="stagger">
+          <div class="case__tags">
+            <span class="t-label accent">Content</span>
+            <span class="t-label">2025—</span>
+            <span class="t-label">Static</span>
+            <span class="t-label">Motion</span>
+            <span class="t-label">Film</span>
+          </div>
+          <h3 class="t-h2" data-reveal="lines">Advertising that has to <em class="em">earn</em> its place</h3>
+          <p class="t-body-l muted measure">
+            Static and video creative built from customer research and review mining,
+            hypothesis-tested against each other, and rebuilt monthly against what the
+            numbers actually say. Not decoration — a variable in the media plan.
+          </p>
+          <p><a class="btn btn--ghost" href="work/soscale-performance-creative/">Read the case <span aria-hidden="true">→</span></a></p>
+        </div>
+
+        <div class="feature__media">
+          <div class="media media--hero">
+            <div class="media__placeholder media__placeholder--filled" data-parallax="0.1"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+            <span class="media__chip glass glass--pill t-label">Meta · 9:16 · 2025</span>
+          </div>
+          <div class="grid" style="gap: var(--sp-6)">
+            <div class="col-6 media media--square">
+              <div class="media__placeholder media__placeholder--filled" data-parallax="0.16"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+            </div>
+            <div class="col-6 media media--square">
+              <div class="media__placeholder media__placeholder--dark media__placeholder--filled" data-parallax="0.22"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+            </div>
+          </div>
+          <div class="media media--wide">
+            <div class="media__placeholder media__placeholder--filled" data-parallax="0.12"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       CREATIVE WALL · dark — the evidence behind the content case
+       Edge to edge, per-item parallax, focal-plane defocus. See
+       docs/masonry-snippet.html for the rationale.
+       ======================================================================== -->
+<section class="creative-wall canvas-host" data-ground="light" data-nav-section="work" aria-labelledby="creative-wall-title">
+  <canvas class="particles" data-particles aria-hidden="true"></canvas>
+
+  <div class="shell creative-wall__head">
+    <div class="section__head" style="margin-bottom: 0">
+      <span class="t-label accent">Creative</span>
+      <h2 class="t-h3" id="creative-wall-title" data-reveal="lines">
+        Most of it never becomes a <em class="em">case study</em>
+      </h2>
+      <p class="t-small muted section__aside" data-reveal="fade">
+        Static and motion, built to the format they ship in. No write-ups — this
+        part of the job is judged on sight.
+      </p>
+    </div>
+  </div>
+
+  <!-- Edge to edge. No .shell here, deliberately: the wall is the one place on
+       the page that ignores the 1440 grid. -->
+  <div class="creative-wall__grid" data-masonry>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .06; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .08; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder — Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .11; --ratio: 9 / 16">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .13; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .16; --ratio: 16 / 9">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .18; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .16; --ratio: 3 / 4">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .13; --ratio: 9 / 16">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .11; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder — Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .08; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .06; --ratio: 16 / 9">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .07; --ratio: 2 / 3">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .09; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .12; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .15; --ratio: 9 / 16">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .17; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder — Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .15; --ratio: 16 / 9">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .12; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .09; --ratio: 3 / 4">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .07; --ratio: 9 / 16">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .05; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .07; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .10; --ratio: 2 / 3">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder — Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .13; --ratio: 16 / 9">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .16; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .18; --ratio: 9 / 16">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .15; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .12; --ratio: 4 / 5">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .10; --ratio: 3 / 4">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .07; --ratio: 16 / 9">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder — Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .06; --ratio: 1 / 1">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+    <figure class="creative-wall__item" data-plane style="--speed: .09; --ratio: 9 / 16">
+      <div class="creative-wall__frame">
+        <div class="creative-wall__media">
+          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder — the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+        </div>
+      </div>
+    </figure>
+
+  </div>
+</section>
+
+  <!-- ========================================================================
+       STATEMENT SCENE · light — the case for testing, in six words
+       ======================================================================== -->
+  <section class="statement-scene canvas-host" data-ground="light" data-scene="cover">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <p class="statement-scene__text marks">
+        <span class="statement-scene__line" style="--depth: 0.45">Twenty versions.</span>
+        <span class="statement-scene__line" style="--depth: 0.15">One that <em class="em">wins</em>.</span>
+      </p>
+      <div class="statement-scene__foot">
+        <span class="t-label">Research → hypothesis → creative → data</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="systems" class="section canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <article class="feature feature--flip">
+        <div class="feature__caption" data-reveal="stagger">
+          <div class="case__tags">
+            <span class="t-label accent">Systems</span>
+            <span class="t-label">2025</span>
+            <span class="t-label">AI workflow</span>
+            <span class="t-label">Automation</span>
+          </div>
+          <h3 class="t-h2" data-reveal="lines">Giving a production team its <em class="em">week</em> back</h3>
+          <p class="t-body-l muted measure">
+            An AI-driven pipeline for generating, versioning and resizing creative assets.
+            Built once, documented, handed over — and still running without me standing
+            next to it.
+          </p>
+          <p><a class="btn btn--ghost" href="work/ai-production-system/">Read the case <span aria-hidden="true">→</span></a></p>
+        </div>
+
+        <div class="feature__media">
+          <div class="media media--hero">
+            <div class="media__placeholder media__placeholder--dark media__placeholder--filled" data-parallax="0.1"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+            <span class="media__chip glass glass--pill t-label">n8n · Figma · Claude</span>
+          </div>
+          <div class="media media--tall">
+            <div class="media__placeholder media__placeholder--filled" data-parallax="0.14"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder — the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       STATEMENT SCENE · light — what a good system actually means
+       ======================================================================== -->
+  <section class="statement-scene canvas-host" data-ground="light" data-nav-section="systems" data-scene="cover">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <p class="statement-scene__text marks">
+        <span class="statement-scene__line" style="--depth: -0.5">Systems outlive</span>
+        <span class="statement-scene__line" style="--depth: -0.2">the person who <em class="em">built</em> them.</span>
+      </p>
+      <div class="statement-scene__foot">
+        <span class="t-label">Built once</span>
+        <span class="t-label">Documented</span>
+        <span class="t-label">Handed over</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       WORK · secondary — brand and web, at a smaller but still generous size
+       ======================================================================== -->
+  <section id="brand" class="section canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <div class="section__head">
+        <span class="t-label section__num">02</span>
+        <h2 class="t-h2" data-reveal="lines">Brand &amp; web</h2>
+        <p class="t-small muted section__aside" data-reveal="fade">
+          Identity and interface work, mostly built end to end — research, design,
+          and the code that shipped it.
+        </p>
+      </div>
+
+      <div class="work">
+        <article class="case">
+          <a class="case__link" href="work/aros-auto/"><span class="sr-only">Aros Auto case study</span></a>
+          <div class="media media--hero case__media">
+            <picture>
+              <source srcset="assets/media/aros-auto.webp" type="image/webp">
+              <img src="assets/media/aros-auto.jpg" alt="The Aros Auto site shown across desktop and mobile mockups" width="1800" height="1350"
+                   loading="lazy" decoding="async" data-parallax="0.12">
+            </picture>
+          </div>
+          <div class="stack-3">
+            <div class="case__tags">
+              <span class="t-label accent">Brand &amp; web</span>
+              <span class="t-label">2025</span>
+              <span class="t-label">Art direction</span>
+              <span class="t-label">UX</span>
+            </div>
+            <h3 class="case__title" data-reveal="lines">Aros Auto <span class="case__arrow" aria-hidden="true">→</span></h3>
+            <p class="t-small muted measure">
+              A dealership site buried under its own content. A new identity, a bento-led
+              structure, and fifty pages the marketing team can actually maintain.
+            </p>
+          </div>
+        </article>
+
+        <article class="case">
+          <a class="case__link" href="work/logimark/"><span class="sr-only">Logimark case study</span></a>
+          <div class="media media--hero case__media">
+            <picture>
+              <source srcset="assets/media/logimark.webp" type="image/webp">
+              <img src="assets/media/logimark.jpg" alt="The Logimark identity and site shown across several screens" width="1800" height="1350"
+                   loading="lazy" decoding="async" data-parallax="0.12">
+            </picture>
+          </div>
+          <div class="stack-3">
+            <div class="case__tags">
+              <span class="t-label accent">Brand &amp; web</span>
+              <span class="t-label">2025</span>
+              <span class="t-label">Art direction</span>
+              <span class="t-label">UX</span>
+            </div>
+            <h3 class="case__title" data-reveal="lines">Logimark <span class="case__arrow" aria-hidden="true">→</span></h3>
+            <p class="t-small muted measure">
+              “Flat and anonymous”, in the client's own words. Nine rounds later, an
+              identity built around the marks they put on things for a living.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <p style="margin-top: var(--sp-16)">
+        <a class="btn btn--ghost" href="work/">All work — content, systems, brand, print <span aria-hidden="true">→</span></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       CAPABILITIES · light, glass over an ambient field
+       ======================================================================== -->
+  <section class="section capabilities canvas-host" id="capabilities" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+
+    <div class="shell">
+      <div class="section__head">
+        <span class="t-label section__num">03</span>
+        <h2 class="t-h2" data-reveal="lines">What I do</h2>
+        <p class="t-small muted section__aside" data-reveal="fade">
+          I like being involved across a project — from strategy to the last handover
+          file. These are the parts I've gone deepest on.
+        </p>
+      </div>
+
+      <!-- A list of short labels doesn't need seven boxes. Type on the
+           ground, hairline separated, with one graphic holding the left. -->
+      <div class="split">
+        <div class="split__hold">
+          <div class="media media--tall">
+            <div class="media__placeholder media__placeholder--filled" data-parallax="0.18"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          </div>
+          <p class="t-small muted">Ordered by where the work actually is.</p>
+        </div>
+
+        <div class="rows" data-reveal="stagger">
+          <div class="row-item">
+            <span class="t-label row-item__n">01</span>
+            <h3 class="row-item__title" data-reveal="lines">Content</h3>
+            <p class="t-small row-item__note">Static, motion and film. Built on real data, made to convert.</p>
+          </div>
+          <div class="row-item">
+            <span class="t-label row-item__n">02</span>
+            <h3 class="row-item__title" data-reveal="lines">AI systems &amp; workflows</h3>
+            <p class="t-small row-item__note">Pipelines that give a team hours back every week.</p>
+          </div>
+          <div class="row-item">
+            <span class="t-label row-item__n">03</span>
+            <h3 class="row-item__title" data-reveal="lines">Brand &amp; identity</h3>
+            <p class="t-small row-item__note">Systems a team can keep building with.</p>
+          </div>
+          <div class="row-item">
+            <span class="t-label row-item__n">04</span>
+            <h3 class="row-item__title" data-reveal="lines">UX &amp; UI design</h3>
+            <p class="t-small row-item__note">Research through to interface.</p>
+          </div>
+          <div class="row-item">
+            <span class="t-label row-item__n">05</span>
+            <h3 class="row-item__title" data-reveal="lines">Web design &amp; development</h3>
+            <p class="t-small row-item__note">I code what I design.</p>
+          </div>
+          <div class="row-item">
+            <span class="t-label row-item__n">06</span>
+            <h3 class="row-item__title" data-reveal="lines">Print &amp; physical</h3>
+            <p class="t-small row-item__note">Posters, packaging, signage.</p>
+          </div>
+          <div class="row-item">
+            <span class="t-label row-item__n">07</span>
+            <h3 class="row-item__title" data-reveal="lines">Strategy &amp; concept</h3>
+            <p class="t-small row-item__note">The part before anyone opens a design tool.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SCENE · SLIDE — a panel arrives from the side and hands over to dark
+       ======================================================================== -->
+  <section class="slide" data-ground="light" data-nav-section="ai" data-scene data-scene-ease aria-hidden="true">
+    <div class="slide__viewport">
+      <div class="slide__under">
+        <!-- .slide__under carries its own transform already (see scenes.css),
+             which establishes a stacking context on its own — the canvas's
+             z-index: -1 is contained by it without needing .canvas-host. -->
+        <canvas class="particles" data-particles aria-hidden="true"></canvas>
+        <div class="statement-scene" style="position: relative; z-index: 1; height: 100%; min-height: 0">
+          <p class="statement-scene__text">It's still mostly made by <em class="em">hand</em>.</p>
+        </div>
+      </div>
+
+      <!-- Handing off to dark locally, ahead of the AI section itself
+           picking up data-ground="dark" right after this scene. The panel's
+           own canvas has to live in here, not out at the .slide level like
+           the zoom scene's does — it needs to inherit THIS data-ground for
+           its dots to come out light-on-dark instead of the section's light
+           ground bleeding through as dark-on-dark. -->
+      <div class="slide__panel" data-ground="dark">
+        <canvas class="particles" data-particles aria-hidden="true"></canvas>
+        <div class="slide__content">
+          <div class="shell">
+            <p class="statement-scene__text">
+              Then there's <em class="em">AI</em>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       AI · dark — told as a short sequence rather than one static split.
+       Reused straight from the light sections: statement-scene for the
+       framing line, feature + sticky caption for each of the two cases.
+       ======================================================================== -->
+  <section class="statement-scene canvas-host" data-ground="dark" data-scene="cover" data-scene-ease>
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <p class="statement-scene__text marks">
+        <span class="statement-scene__line" style="--depth: -0.5">I test everything.</span>
+        <span class="statement-scene__line" style="--depth: -0.15">I keep what <em class="em">earns</em> its place.</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section canvas-host has-rail" id="ai" data-ground="dark">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <span class="rail t-label" aria-hidden="true">Taste is mine · Volume is the machine's</span>
+    <div class="shell">
+
+      <!-- ---- Case 1 · content ------------------------------------------------- -->
+      <article class="feature">
+        <div class="feature__caption" data-reveal="stagger">
+          <div class="case__tags">
+            <span class="t-label accent">AI for content</span>
+            <span class="t-label">Image</span>
+            <span class="t-label">Video</span>
+            <span class="t-label">Voice</span>
+            <span class="t-label">Graphics</span>
+          </div>
+          <h3 class="t-h2" data-reveal="lines">More of it, without lowering the bar</h3>
+          <p class="t-body-l muted measure" data-reveal="fade">
+            I keep close to what's actually possible right now, not what's hyped — new
+            models, new tools, tested as they land. Used well, that means a version that
+            used to be too expensive to produce, or too slow to justify, is suddenly worth
+            making. I generate the assets myself — images, video effects, voiceovers,
+            graphics — then direct, edit, and lay them out by hand, so the same material
+            keeps working across the next iteration, or an entirely different format.
+          </p>
+        </div>
+
+        <div class="feature__media">
+          <figure class="gfx gfx--wire" data-scene="cover" data-scene-ease>
+            <div class="gfx__stage">
+              <span class="gfx__grid" data-parallax="0.08" aria-hidden="true"></span>
+
+              <svg class="gfx__art" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet"
+                   aria-hidden="true" focusable="false">
+
+                <g class="gfx-plane" style="--depth: -0.08">
+                  <path class="gfx-wire" d="M 296 102 L 296 140 L 115 140 L 115 200"/>
+                  <path class="gfx-wire gfx-wire--live" d="M 300 102 L 300 200"/>
+                  <path class="gfx-wire" d="M 304 102 L 304 140 L 485 140 L 485 200"/>
+
+                  <path class="gfx-wire" d="M 115 262 L 115 320 L 296 320 L 296 360"/>
+                  <path class="gfx-wire gfx-wire--live" d="M 300 262 L 300 360"/>
+                  <path class="gfx-wire" d="M 485 262 L 485 320 L 304 320 L 304 360"/>
+                </g>
+
+                <!-- ---- Direction, held by a person, not handed to the model ---- -->
+                <text class="gfx-t" x="30" y="30">DIRECTION</text>
+
+                <rect class="gfx-box gfx-box--live" x="214" y="40" width="172" height="62" rx="6"
+                      style="--dx: 0; --dy: -1.1"/>
+                <text class="gfx-label gfx-label--live" x="300" y="72" text-anchor="middle">Brief</text>
+                <rect class="gfx-port" x="296" y="98" width="8" height="8"/>
+
+                <!-- ---- Assets, generated, three different kinds --------------- -->
+                <text class="gfx-t" x="30" y="192">ASSETS</text>
+
+                <rect class="gfx-box" x="40" y="200" width="150" height="62" rx="6"
+                      style="--dx: -1.2; --dy: -0.3"/>
+                <text class="gfx-label" x="115" y="232" text-anchor="middle">Image</text>
+                <rect class="gfx-port" x="111" y="196" width="8" height="8"/>
+                <rect class="gfx-port" x="111" y="258" width="8" height="8"/>
+
+                <rect class="gfx-box gfx-box--fill" x="225" y="200" width="150" height="62" rx="6"
+                      style="--dx: 0; --dy: -0.3"/>
+                <text class="gfx-label" x="300" y="232" text-anchor="middle">Video</text>
+                <rect class="gfx-port" x="296" y="196" width="8" height="8"/>
+                <rect class="gfx-port" x="296" y="258" width="8" height="8"/>
+
+                <rect class="gfx-box" x="410" y="200" width="150" height="62" rx="6"
+                      style="--dx: 1.2; --dy: -0.3"/>
+                <text class="gfx-label" x="485" y="232" text-anchor="middle">Voice</text>
+                <rect class="gfx-port" x="481" y="196" width="8" height="8"/>
+                <rect class="gfx-port" x="481" y="258" width="8" height="8"/>
+
+                <!-- ---- Ship, edited and laid out by hand ----------------------- -->
+                <rect class="gfx-box gfx-box--live" x="214" y="360" width="172" height="62" rx="6"
+                      style="--dx: 0; --dy: 1.1"/>
+                <text class="gfx-label gfx-label--live" x="300" y="392" text-anchor="middle">Ship</text>
+                <rect class="gfx-port" x="296" y="356" width="8" height="8"/>
+
+                <text class="gfx-t gfx-t--minor" x="40"  y="480">3 ASSET TYPES</text>
+                <text class="gfx-t gfx-t--minor" x="410" y="480">1 DIRECTION</text>
+              </svg>
+            </div>
+
+            <figcaption class="gfx__cap t-label">
+              <span>Direction, still mine</span>
+              <span>Image · video · voice</span>
+            </figcaption>
+          </figure>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       AI · bridge — the other half of the job, said in one line
+       ======================================================================== -->
+  <section class="statement-scene canvas-host" data-ground="dark" data-scene="cover" data-scene-ease data-nav-section="ai">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <p class="statement-scene__text marks">
+        <span class="statement-scene__line" style="--depth: -0.5">Half the week was</span>
+        <span class="statement-scene__line" style="--depth: -0.15">never the <em class="em">creative</em> half.</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section canvas-host" data-ground="dark" data-nav-section="ai">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+
+      <!-- ---- Case 2 · systems --------------------------------------------------- -->
+      <article class="feature feature--flip">
+        <div class="feature__caption" data-reveal="stagger">
+          <div class="case__tags">
+            <span class="t-label accent">AI for systems</span>
+            <span class="t-label">Workflows</span>
+            <span class="t-label">Automations</span>
+            <span class="t-label">Apps</span>
+          </div>
+          <h3 class="t-h2" data-reveal="lines">The boring half of the week, automated</h3>
+          <p class="t-body-l muted measure" data-reveal="fade">
+            The research comes first — sitting with the actual work until the real
+            bottleneck shows itself, not the one that's easiest to blame. From there it's
+            a plan: a workflow stitched together from existing tools, an automation that
+            runs on its own, or, when neither fits, a small app built specifically for
+            that one repetitive job. None of it is the interesting part of the work —
+            which is exactly why it's worth removing. What's left is more time on the
+            half that actually moves things forward.
+          </p>
+        </div>
+
+        <div class="feature__media">
+          <figure class="gfx gfx--wire" data-scene="cover" data-scene-ease>
+            <div class="gfx__stage">
+              <span class="gfx__grid" data-parallax="0.08" aria-hidden="true"></span>
+
+              <svg class="gfx__art" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet"
+                   aria-hidden="true" focusable="false">
+
+                <g class="gfx-plane" style="--depth: -0.08">
+                  <path class="gfx-wire" d="M 115 96 L 115 160 L 296 160 L 296 220"/>
+                  <path class="gfx-wire gfx-wire--live" d="M 300 96 L 300 220"/>
+                  <path class="gfx-wire" d="M 485 96 L 485 160 L 304 160 L 304 220"/>
+
+                  <path class="gfx-wire gfx-wire--live" d="M 300 286 L 300 400"/>
+                </g>
+
+                <!-- ---- The repeated, manual half of the job ------------------- -->
+                <text class="gfx-t" x="30" y="30">TASKS</text>
+
+                <rect class="gfx-box" x="40" y="40" width="150" height="56" rx="6"
+                      style="--dx: -1.2; --dy: -1.1"/>
+                <text class="gfx-label" x="115" y="69" text-anchor="middle">Task</text>
+                <rect class="gfx-port" x="111" y="92" width="8" height="8"/>
+
+                <rect class="gfx-box" x="225" y="40" width="150" height="56" rx="6"
+                      style="--dx: 0; --dy: -1.1"/>
+                <text class="gfx-label" x="300" y="69" text-anchor="middle">Task</text>
+                <rect class="gfx-port" x="296" y="92" width="8" height="8"/>
+
+                <rect class="gfx-box" x="410" y="40" width="150" height="56" rx="6"
+                      style="--dx: 1.2; --dy: -1.1"/>
+                <text class="gfx-label" x="485" y="69" text-anchor="middle">Task</text>
+                <rect class="gfx-port" x="481" y="92" width="8" height="8"/>
+
+                <!-- ---- The one workflow, automation or small app -------------- -->
+                <text class="gfx-t" x="30" y="212">AUTOMATE</text>
+
+                <rect class="gfx-box gfx-box--live gfx-box--fill" x="214" y="220" width="172" height="66" rx="6"
+                      style="--dx: 0; --dy: 0"/>
+                <text class="gfx-label gfx-label--live" x="300" y="254" text-anchor="middle">Workflow</text>
+                <rect class="gfx-port" x="296" y="216" width="8" height="8"/>
+                <rect class="gfx-port" x="296" y="282" width="8" height="8"/>
+
+                <!-- ---- Time, spent on the work that actually matters ---------- -->
+                <rect class="gfx-box gfx-box--live" x="214" y="400" width="172" height="62" rx="6"
+                      style="--dx: 0; --dy: 1.1"/>
+                <text class="gfx-label gfx-label--live" x="300" y="432" text-anchor="middle">Time back</text>
+                <rect class="gfx-port" x="296" y="396" width="8" height="8"/>
+
+                <text class="gfx-t gfx-t--minor" x="40"  y="520">3 REPEATED TASKS</text>
+                <text class="gfx-t gfx-t--minor" x="410" y="520">1 WORKFLOW</text>
+              </svg>
+            </div>
+
+            <figcaption class="gfx__cap t-label">
+              <span>Workflows &amp; small apps</span>
+              <span>Bottleneck · build · time back</span>
+            </figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <p class="t-body-l measure" style="margin-top: var(--sp-24); padding-top: var(--sp-8); border-top: 1px solid var(--line)">
+        The read I keep coming back to, after trying most of what comes out: AI is the
+        fastest way I've found to reach a good decision — never a shortcut around
+        making one.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PROCESS · dark, horizontal on desktop
+       ======================================================================== -->
+  <section id="process" class="canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell section section--tight">
+      <div class="section__head" style="margin-bottom: 0">
+        <span class="t-label section__num">05</span>
+        <h2 class="t-h2" data-reveal="lines">How I work</h2>
+      </div>
+    </div>
+
+    <div class="process-pin" data-process-pin data-scene>
+      <div class="process-pin__viewport">
+        <div class="process shell" data-process-track data-track>
+          <article class="process__step">
+            <span class="process__n">01</span>
+            <h3 class="t-h3" data-reveal="lines">Understand</h3>
+            <p class="t-small muted">
+              Interviews, data, competitors, and a lot of questions. I want the real
+              problem, not the stated one — they are rarely the same sentence.
+            </p>
+          </article>
+
+          <article class="process__step">
+            <span class="process__n">02</span>
+            <h3 class="t-h3" data-reveal="lines">Explore</h3>
+            <p class="t-small muted">
+              Wide and fast. Directions on the table before anything gets precious,
+              so we're choosing between options rather than defending the first one.
+            </p>
+          </article>
+
+          <article class="process__step">
+            <span class="process__n">03</span>
+            <h3 class="t-h3" data-reveal="lines">Build</h3>
+            <p class="t-small muted">
+              Figma libraries, components, code. Made to be handed over and lived with,
+              which usually means less clever and more maintainable.
+            </p>
+          </article>
+
+          <article class="process__step">
+            <span class="process__n">04</span>
+            <h3 class="t-h3" data-reveal="lines">Prove</h3>
+            <p class="t-small muted">
+              Ship, measure, adjust. Design that performs is the only kind worth
+              defending in a room full of people with different opinions.
+            </p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       BREATHER · light
+       ======================================================================== -->
+  <section class="statement-scene canvas-host" data-ground="light" data-scene="cover">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <p class="statement-scene__text marks">
+        <span class="statement-scene__line" style="--depth: -0.5">I'd rather prove it</span>
+        <span class="statement-scene__line" style="--depth: -0.15">than <em class="em">claim</em> it.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       NUMBERS · light
+       TBC — figures marked data-tbc need confirming. Only "70+ pages" is
+       currently backed by documented case data (Aros 50+, Logimark 20+).
+       ======================================================================== -->
+  <section class="section section--tight section--flush-top canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell">
+      <div class="figures" data-reveal="stagger">
+        <div class="stack-3">
+          <span class="figure__value"><span data-count="70">70</span>+</span>
+          <span class="t-label">Pages designed and shipped</span>
+        </div>
+        <div class="stack-3" data-tbc>
+          <span class="figure__value"><span data-count="20">20</span>+</span>
+          <span class="t-label">Projects delivered</span>
+        </div>
+        <div class="stack-3" data-tbc>
+          <span class="figure__value"><span data-count="5">5</span></span>
+          <span class="t-label">Years in the industry</span>
+        </div>
+        <div class="stack-3">
+          <span class="figure__value"><span data-count="6">6</span></span>
+          <span class="t-label">Disciplines I work across</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       NOW · light
+       ======================================================================== -->
+  <section id="about" class="section canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell stack-12">
+      <div class="stack-6">
+        <div class="stack-4">
+          <span class="t-label section__num">06</span>
+          <h2 class="t-h2" data-reveal="lines">Right <em class="em">now</em></h2>
+        </div>
+        <p class="t-body-l measure">
+          I'm a graphic designer at
+          <a class="link" href="https://www.soscalemedia.se/" target="_blank" rel="noopener">SoScale Media</a>,
+          a performance-driven content agency. I make digital advertising that has to
+          earn its place — built on customer research, hypothesis-tested, and rebuilt
+          monthly against what the data actually says.
+        </p>
+        <p class="t-body-l muted measure">
+          Alongside the static and motion work, I develop the AI-driven workflows the
+          production runs on. It's the closest thing I've found to doing all three of
+          the things I like at once: designing, systematising, and proving it worked.
+        </p>
+      </div>
+    </div>
+
+    <div class="marquee" data-marquee aria-label="Tools I work in" style="margin-top: var(--sp-16)">
+      <div class="marquee__track t-h3">
+        <span>Figma</span><span>After Effects</span><span>Illustrator</span>
+        <span>Photoshop</span><span>Premiere Pro</span><span>WordPress</span>
+        <span>HTML &amp; CSS</span><span>JavaScript</span><span>GSAP</span>
+        <span>Claude</span><span>Midjourney</span><span>n8n</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================================================
+     FOOTER — the headline is the call to action
+     ========================================================================== -->
+<footer class="footer" id="contact" data-ground="dark">
+  <div class="shell">
+    <div class="stack-8">
+      <h2 class="footer__cta" data-reveal="lines">
+        <span class="line"><span>Got something</span></span>
+        <span class="line"><span>worth <em class="em">solving?</em></span></span>
+      </h2>
+
+      <p>
+        <a class="footer__mail glass glass--pill" href="mailto:hello@mwstudio.se" data-magnetic>
+          hello@mwstudio.se
+          <span aria-hidden="true">→</span>
+        </a>
+      </p>
+    </div>
+
+    <div class="footer__grid" data-reveal="stagger">
+      <div class="footer__col">
+        <span class="t-label">Shortcuts</span>
+        <a href="/">Home</a>
+        <a href="work/">Work</a>
+        <a href="about/">About me</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label">Projects</span>
+        <a href="work/aros-auto/">Aros Auto</a>
+        <a href="work/logimark/">Logimark</a>
+        <a href="work/creative-strategy-hub/">Creative strategy hub</a>
+        <a href="work/ai-production-system/">AI creation</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label">About me</span>
+        <a href="about/">Biography</a>
+        <a href="about/">Work experience</a>
+        <a href="about/">Academic experience</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label">Contact details</span>
+        <a href="mailto:hello@miltonw.com">hello@miltonw.com</a>
+        <a href="tel:+46733883533">+46 733 88 35 33</a>
+      </div>
+    </div>
+
+    <!-- TODO: confirm the TikTok handle — placeholder until Milton confirms it. -->
+    <div class="footer__elsewhere" data-reveal="fade">
+      <span class="t-label">Else where</span>
+      <a href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.tiktok.com/@miltonwinroth" target="_blank" rel="noopener">TikTok</a>
+    </div>
+
+    <div class="footer__bottom t-label">
+      <span>© <span class="tabular">2026</span> Milton Winroth</span>
+      <span>A creative problem solver</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

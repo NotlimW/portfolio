@@ -1,0 +1,284 @@
+/* ==========================================================================
+   BASE — elements and the type system
+   ========================================================================== */
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-body);
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  /* ---- Type scale --------------------------------------------------------
+     Classes, not element selectors, so an <h2> can be set at display scale
+     without breaking the document outline.
+     --------------------------------------------------------------------- */
+  .t-display-xl,
+  .t-display-l,
+  .t-h2,
+  .t-h3 {
+    font-weight: var(--fw-medium);
+    text-wrap: balance;
+  }
+
+  .t-display-xl {
+    font-size: var(--fs-display-xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tr-display-xl);
+  }
+
+  .t-display-l {
+    font-size: var(--fs-display-l);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tr-display-l);
+  }
+
+  .t-h2 {
+    font-size: var(--fs-h2);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--tr-heading);
+  }
+
+  .t-h3 {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--tr-heading);
+  }
+
+  .t-body-l {
+    font-size: var(--fs-body-l);
+    line-height: 1.5;
+  }
+
+  .t-small {
+    font-size: var(--fs-small);
+    line-height: 1.55;
+  }
+
+  /* ---- Label ---------------------------------------------------------------
+     A small chip, not a line of tracked-out capitals.
+
+     Tiny uppercase with wide letter-spacing is the default reflex for an
+     eyebrow, and it costs more than it looks: caps remove the word-shapes the
+     eye reads by, and the tracking that makes caps legible is what makes the
+     line read as texture rather than as a word. A bordered chip does the same
+     job — mark this as meta, separate it from the heading — while staying a
+     readable word at a readable size.
+
+     Mono stays. It is what gives the site its technical texture, and it is
+     the caps and the tracking that were the problem, not the face.
+     --------------------------------------------------------------------- */
+  .t-label {
+    display: inline-flex;
+    align-items: center;
+    /* A flex item has its display blockified, so `inline-flex` becomes `flex`
+       and the chip stretches to the full column width. fit-content is what
+       actually keeps it the size of its own word — and most of these labels
+       do sit inside a flex stack. */
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.34em 0.72em;
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    color: var(--text-muted);
+    /* Deliberately not nowrap. A chip that refuses to wrap will happily grow
+       past a narrow grid cell and take the whole document's width with it —
+       which is exactly what the figures row did at 375px. Wrapping inside the
+       pill is the lesser evil, and at these lengths it almost never happens. */
+    text-wrap: balance;
+  }
+
+  .t-label.accent {
+    border-color: color-mix(in oklab, var(--c-accent) 34%, transparent);
+  }
+
+  /* ---- Bare label ----------------------------------------------------------
+     The same type without the chrome, for the places where a chip would be a
+     box floating in nothing: a rotated rail, the scroll cue, a figure
+     caption, a numeric column, and anything already inside its own container.
+     Scoped by the second class each of these already carries, so none of this
+     needs a markup change.
+     --------------------------------------------------------------------- */
+  .t-label.section__num,
+  .t-label.row-item__n,
+  .t-label.rail,
+  .t-label.hero__cue,
+  .t-label.gfx__cap,
+  .t-label.footer__bottom,
+  .t-label.media__chip,
+  /* A caption under a statistic is describing the number above it, not
+     tagging it. A pill around "Pages designed and shipped" reads as a
+     category the figure belongs to, which is the wrong relationship. */
+  .figures .t-label {
+    display: inline;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    white-space: normal;
+  }
+
+  .t-label.hero__cue,
+  .t-label.footer__bottom { display: inline-flex; }
+
+  .t-label.media__chip { display: inline-flex; padding: var(--sp-3) var(--sp-4); }
+
+  /* Chips sitting on photography take their chrome from the image, not from
+     the page ground underneath it. */
+  .zoom__caption .t-label,
+  .slide__content .t-label {
+    border-color: rgb(255 255 255 / 0.32);
+  }
+
+  /* The signature: exactly one italic serif word inside a plain headline.
+     Used no more than once per section — that is what keeps it a signature.
+
+     Instrument Serif runs small: at the same font-size its cap height lands
+     well under Satoshi's, so the accent word was reading as a footnote
+     inside its own headline instead of as the emphasis. The size bump is an
+     optical correction, not a shout — it makes the two faces sit on the same
+     line. The negative side bearings close the gap an italic leaves after
+     itself, so `problem solver.` reads as one phrase rather than two words
+     with a seam between them. */
+  .em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.06em;
+    letter-spacing: -0.005em;
+    margin-inline: -0.02em -0.03em;
+  }
+
+  .muted { color: var(--text-muted); }
+  .faint { color: var(--text-faint); }
+
+  /* ---- Reading measure --------------------------------------------------- */
+  .measure       { max-width: var(--measure); }
+  .measure-tight { max-width: var(--measure-tight); }
+
+  /* ---- Links --------------------------------------------------------------
+     The rule enters from the left and leaves to the right — it never
+     retraces its own path. That directionality is the whole difference
+     between an underline that grows and one that feels drawn: the anchor
+     point flips instantly (0s) while only the width is timed, so the mark
+     always travels the way the eye already reads.
+     --------------------------------------------------------------------- */
+  .link {
+    color: var(--text);
+    background-image: linear-gradient(var(--c-accent), var(--c-accent));
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-size: 0 1.5px;
+    padding-bottom: 0.06em;
+    transition: background-size var(--d-short) var(--e-micro),
+                background-position 0s,
+                color var(--d-micro) var(--e-micro);
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    color: var(--c-accent);
+    background-position: 0 100%;
+    background-size: 100% 1.5px;
+  }
+
+  /* ---- Skip link --------------------------------------------------------- */
+  .skip-link {
+    position: fixed;
+    top: var(--sp-4);
+    left: var(--sp-4);
+    z-index: calc(var(--z-menu) + 1);
+    /* Was carrying a raw 1.25rem fallback for a --sp-5 that does not exist
+       in the scale. The scale has no 20px step by design. */
+    padding: var(--sp-3) var(--sp-6);
+    border-radius: var(--r-pill);
+    background: var(--c-ink);
+    color: var(--c-paper);
+    font-size: var(--fs-small);
+    transform: translateY(-200%);
+    transition: transform var(--d-short) var(--e-reveal);
+  }
+
+  .skip-link:focus-visible { transform: none; }
+
+  /* ---- Buttons ------------------------------------------------------------
+     The fill wipes up from the bottom edge instead of cross-fading. A colour
+     transition tells you the state changed; a wipe tells you the button did
+     something — and it costs one transform on a pseudo-element, so it stays
+     off the main thread. The trailing glyph carries on past the label with
+     the overshoot curve, which is the bit that reads as attitude.
+
+     ::before sits at z-index -1 inside the button's own stacking context, so
+     it paints over the button's background but under its label. Same trick
+     .glass uses for its frost.
+     --------------------------------------------------------------------- */
+  .btn {
+    --btn-fill:     var(--c-accent);
+    --btn-fill-ink: var(--c-accent-ink);
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-4) var(--sp-6);
+    min-height: 2.75rem;               /* 44px touch target */
+    border-radius: var(--r-pill);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.005em;
+    background: var(--text);
+    color: var(--bg);
+    transition: color var(--d-micro) var(--e-micro),
+                border-color var(--d-short) var(--e-micro);
+    will-change: transform;
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--btn-fill);
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    transition: transform var(--d-short) var(--e-overlay);
+  }
+
+  .btn:hover,
+  .btn:focus-visible { color: var(--btn-fill-ink); }
+
+  .btn:hover::before,
+  .btn:focus-visible::before { transform: scaleY(1); }
+
+  /* The arrow leads the label out. Targets the decorative glyph the markup
+     already carries, so no new element is needed. */
+  .btn > [aria-hidden] {
+    display: inline-block;
+    transition: transform var(--d-short) var(--e-attitude);
+  }
+
+  .btn:hover > [aria-hidden],
+  .btn:focus-visible > [aria-hidden] { transform: translateX(0.3em); }
+
+  .btn--ghost {
+    --btn-fill:     var(--text);
+    --btn-fill-ink: var(--bg);
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--line-strong);
+  }
+
+  .btn--ghost:hover,
+  .btn--ghost:focus-visible { border-color: var(--text); }
+}

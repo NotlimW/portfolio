@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphics harness — Milton Winroth</title>
+
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components/graphics.css">
+
+<style>
+  /* Harness chrome only. Nothing in here belongs to the components. */
+  .hz { padding-block: var(--sp-16); }
+  .hz__head {
+    display: flex; gap: var(--sp-6); align-items: baseline;
+    margin-bottom: var(--sp-12); border-bottom: 1px solid var(--line);
+    padding-bottom: var(--sp-3);
+  }
+  .hz__scrub {
+    position: fixed; inset: auto var(--sp-4) var(--sp-4) auto; z-index: 900;
+    display: flex; gap: var(--sp-3); align-items: center;
+    padding: var(--sp-3) var(--sp-4); border-radius: var(--r-pill);
+    background: var(--c-white); color: var(--c-ink);
+    box-shadow: var(--shadow-float); font-family: var(--font-mono);
+    font-size: var(--fs-label);
+  }
+  .hz__trio { display: grid; gap: var(--sp-12); }
+  @media (min-width: 64rem) { .hz__trio { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>
+</head>
+
+<body>
+<main>
+
+  <!-- Static side-by-side, light ground: composition check at --progress 0.5 -->
+  <section class="section hz" data-ground="light">
+    <div class="shell">
+      <div class="hz__head">
+        <span class="t-label accent">A</span>
+        <h1 class="t-h3">Composed state · light ground</h1>
+        <span class="t-label muted" style="margin-left:auto">--progress pinned 0.5</span>
+      </div>
+      <div class="hz__trio" id="slot-light"></div>
+    </div>
+  </section>
+
+  <!-- Same, dark ground -->
+  <section class="section hz" data-ground="dark">
+    <div class="shell">
+      <div class="hz__head">
+        <span class="t-label accent">B</span>
+        <h1 class="t-h3">Composed state · dark ground</h1>
+        <span class="t-label muted" style="margin-left:auto">--progress pinned 0.5</span>
+      </div>
+      <div class="hz__trio" id="slot-dark"></div>
+    </div>
+  </section>
+
+  <!-- Live: each figure carries its own data-scene="cover" -->
+  <section class="section hz" data-ground="light">
+    <div class="shell">
+      <div class="hz__head">
+        <span class="t-label accent">C</span>
+        <h1 class="t-h3">Live · own scene, problem-row context</h1>
+      </div>
+      <div id="slot-rows"></div>
+    </div>
+  </section>
+
+  <!-- Live: sticky split, scene on the wrapper -->
+  <section class="section hz" data-ground="dark">
+    <div class="shell">
+      <div class="hz__head">
+        <span class="t-label accent">D</span>
+        <h1 class="t-h3">Live · sticky split, scene on the wrapper</h1>
+      </div>
+      <div class="split split--flip" id="slot-split" data-scene data-scene-ease>
+        <div class="split__hold" id="slot-hold"></div>
+        <div class="stack-24">
+          <p class="t-h2">More directions,<br>tested against real data</p>
+          <p class="t-body-l muted measure">Filler so the column is tall enough for the sticky hold to have something to hold against.</p>
+          <p class="t-body-l muted measure">Filler so the column is tall enough for the sticky hold to have something to hold against.</p>
+          <p class="t-body-l muted measure">Filler so the column is tall enough for the sticky hold to have something to hold against.</p>
+          <p class="t-body-l muted measure">Filler so the column is tall enough for the sticky hold to have something to hold against.</p>
+          <p class="t-body-l muted measure">Filler so the column is tall enough for the sticky hold to have something to hold against.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="height: 60vh"></div>
+</main>
+
+<div class="hz__scrub">
+  <label for="scrub">P</label>
+  <input id="scrub" type="range" min="0" max="1" step="0.01" value="0.5">
+  <output id="scrub-out">0.50</output>
+</div>
+
+<script type="module">
+import * as smoothScroll from "../assets/js/modules/smooth-scroll.js";
+import * as scene from "../assets/js/modules/scene.js";
+import * as parallax from "../assets/js/modules/parallax.js";
+
+const source = await fetch("./graphics-snippets.html").then((r) => r.text());
+const doc = new DOMParser().parseFromString(`<body>${source}</body>`, "text/html");
+const figures = Array.from(doc.querySelectorAll("figure.gfx"));
+
+const clone = (i) => figures[i].cloneNode(true);
+
+// A + B — static, no scene, so --progress never lands and the fallback (0.5)
+// is what renders. This is the reduced-motion resting state too.
+for (const id of ["slot-light", "slot-dark"]) {
+  const host = document.getElementById(id);
+  figures.forEach((_, i) => {
+    const f = clone(i);
+    f.removeAttribute("data-scene");
+    f.removeAttribute("data-scene-ease");
+    f.classList.remove("problem-row__media");
+    host.append(f);
+  });
+}
+
+// C — problem rows, each figure driving its own scene.
+const rows = document.getElementById("slot-rows");
+["Our ads get seen, not remembered.", "Our brand doesn't look like anyone.", "The team spends its day doing this by hand."]
+  .forEach((quote, n) => {
+    const order = [1, 0, 2][n];
+    const article = document.createElement("article");
+    article.className = n % 2 ? "problem-row problem-row--flip" : "problem-row";
+    const p = document.createElement("p");
+    p.className = "problem-row__quote";
+    p.textContent = `“${quote}”`;
+    const note = document.createElement("p");
+    note.className = "problem-row__note t-body-l";
+    note.textContent = "Answer copy sits here, deliberately not beside the quote.";
+    const fig = clone(order);
+    fig.classList.add("problem-row__media");
+    article.append(p, fig, note);
+    rows.append(article);
+  });
+
+// D — sticky hold; scene lives on the .split wrapper in the markup above.
+const hold = document.getElementById("slot-hold");
+const held = clone(2);
+held.removeAttribute("data-scene");
+held.removeAttribute("data-scene-ease");
+held.classList.remove("problem-row__media");
+hold.append(held);
+
+smoothScroll.init();
+scene.init();
+parallax.init();
+
+// Manual scrub over the static pair, for checking the extremes by hand.
+const scrub = document.getElementById("scrub");
+const out = document.getElementById("scrub-out");
+scrub.addEventListener("input", () => {
+  out.textContent = Number(scrub.value).toFixed(2);
+  document.querySelectorAll("#slot-light .gfx, #slot-dark .gfx")
+    .forEach((el) => el.style.setProperty("--progress", scrub.value));
+});
+</script>
+</body>
+</html>

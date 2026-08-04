@@ -1,0 +1,32 @@
+/* ==========================================================================
+   MAIN — Milton Winroth Portfolio
+   The cascade is designed, not accidental. Layer order is declared once,
+   here, before anything is imported. Later layers always win regardless of
+   selector specificity, so a utility never has to fight a component.
+   ========================================================================== */
+
+@layer reset, tokens, base, layout, components, utilities;
+
+@import url("reset.css");
+@import url("tokens.css");
+@import url("base.css");
+@import url("layout.css");
+
+@import url("components/hero.css");
+@import url("components/glass.css");
+/* After glass, not before: the nav composes .glass and has to be able to
+   override it. The dock is both the glass panel and the fixed element, and
+   .glass sets position: relative — which silently won while nav came first. */
+@import url("components/nav.css");
+@import url("components/scenes.css");
+@import url("components/graphics.css");
+@import url("components/masonry.css");
+@import url("components/acts.css");
+@import url("components/editorial.css");
+@import url("components/sections.css");
+@import url("components/cards.css");
+@import url("components/footer.css");
+@import url("components/motion.css");
+@import url("components/edge-blur.css");
+
+@import url("utilities.css");

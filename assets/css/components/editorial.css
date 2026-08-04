@@ -1,0 +1,167 @@
+/* ==========================================================================
+   EDITORIAL LAYOUTS
+   The alternative to putting everything in a card.
+
+   A card is a container you reach for when the layout isn't doing the work.
+   These patterns let type sit directly on the ground, held in place by the
+   grid and by hairlines instead of by a box — which reads quieter, and lets
+   a page carry far more air at the same amount of content.
+   ========================================================================== */
+
+@layer components {
+
+  /* ==========================================================================
+     SPLIT — asymmetric two-column, one side sticky
+     The workhorse. Type on one side, image or graphic on the other, and the
+     side that holds still is a deliberate choice per instance.
+     ========================================================================== */
+
+  .split {
+    display: grid;
+    gap: var(--sp-12);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .split {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      gap: var(--sp-24);
+    }
+
+    /* Wider text side, narrower media side. */
+    .split--text-led { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); }
+
+    .split--flip > :first-child { order: 2; }
+
+    .split__hold {
+      position: sticky;
+      top: 18vh;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-6);
+    }
+  }
+
+  /* ==========================================================================
+     RAIL — a rotated label running up the edge of a section
+     Borrowed from print margins and from the ruler in a design tool. Purely
+     typographic, costs no vertical space, and gives the eye something to
+     find at the far left where nothing else lives.
+     ========================================================================== */
+
+  .rail {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: var(--sp-16);
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 80rem) {
+    .rail { display: block; }
+    .has-rail { position: relative; }
+    /* Pull content clear of the rail without narrowing the shell. */
+    .has-rail > .shell { padding-left: calc(var(--page-inline) + var(--sp-8)); }
+  }
+
+  /* ==========================================================================
+     ROWS — large type as a list, hairline separated
+     Replaces a grid of tiles when the content is a set of short labels.
+     Each row is one line of display type; the detail sits opposite it and
+     stays out of the way until the row is hovered.
+     ========================================================================== */
+
+  .rows { border-top: 1px solid var(--line); }
+
+  .row-item {
+    position: relative;
+    display: grid;
+    gap: var(--sp-2) var(--sp-8);
+    grid-template-columns: 1fr;
+    align-items: baseline;
+    padding-block: var(--sp-6);
+    border-bottom: 1px solid var(--line);
+    transition: padding-left var(--d-short) var(--e-micro);
+  }
+
+  @media (min-width: 48rem) {
+    .row-item {
+      grid-template-columns: 3.5rem minmax(0, 5fr) minmax(0, 6fr);
+      padding-block: var(--sp-8);
+    }
+    .row-item:hover { padding-left: var(--sp-4); }
+  }
+
+  .row-item__n { color: var(--c-accent); }
+
+  .row-item__title {
+    font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+    line-height: 1.05;
+    letter-spacing: var(--tr-heading);
+    font-weight: var(--fw-medium);
+  }
+
+  .row-item__note { color: var(--text-muted); }
+
+  /* The accent rule that draws itself in on hover. */
+  .row-item::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: 1px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-short) var(--e-reveal);
+  }
+
+  .row-item:hover::after { transform: scaleX(1); }
+
+  /* ==========================================================================
+     PROBLEM ROWS — the quote leads, everything else defers to it
+     No card. The quote is set large and hangs off the grid; the answer sits
+     in a narrow column underneath the graphic, deliberately not beside the
+     quote, so the eye reads the problem first and the solution second.
+     ========================================================================== */
+
+  .problem-row {
+    display: grid;
+    gap: var(--sp-8);
+    padding-block: var(--sp-16);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 64rem) {
+    .problem-row {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--sp-8) var(--grid-gutter);
+      align-items: start;
+    }
+
+    /* The graphic gets five columns, not four. These figures are the most
+       interesting thing in the row and they hold detail — a diagram squeezed
+       into a third of the page stops being readable and becomes texture. */
+    .problem-row__quote { grid-column: 1 / span 6; }
+    .problem-row__media { grid-column: 8 / span 5; grid-row: 1 / span 2; }
+    .problem-row__note  { grid-column: 2 / span 5; }
+
+    /* Every other row mirrors, so the column never becomes a rhythm you
+       stop seeing. */
+    .problem-row--flip .problem-row__quote { grid-column: 7 / span 6; text-align: right; }
+    .problem-row--flip .problem-row__media { grid-column: 1 / span 5; }
+    .problem-row--flip .problem-row__note  { grid-column: 8 / span 5; text-align: right; }
+  }
+
+  .problem-row__quote {
+    font-size: clamp(1.75rem, 4.6vw, 3.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    font-weight: var(--fw-medium);
+    text-wrap: balance;
+  }
+
+  .problem-row__note { color: var(--text-muted); max-width: 42ch; }
+  .problem-row--flip .problem-row__note { margin-left: auto; }
+}

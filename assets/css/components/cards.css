@@ -1,0 +1,77 @@
+/* ==========================================================================
+   CASE CARDS
+   ========================================================================== */
+
+@layer components {
+
+  .work { display: grid; gap: var(--sp-24); }
+
+  @media (min-width: 64rem) {
+    .work {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--sp-24) var(--grid-gutter);
+    }
+
+    /* Neither case sits in a "column". The first hangs from the left edge
+       and stops short; the second starts late and runs to the right edge,
+       dropped well below its neighbour. The offset is the composition. */
+    .case:nth-child(odd)  { grid-column: 1 / span 6; }
+    .case:nth-child(even) { grid-column: 8 / span 5; margin-top: var(--sp-32); }
+  }
+
+  /* minmax(0, 1fr), not the implicit `auto`. A grid item's automatic minimum
+     size is its min-content size, and a 1800px photograph's min-content size
+     is 1800px — so an `auto` track lets the image set the card's width and
+     push the whole document sideways, even though .media clips the picture
+     itself. This is the single most common cause of an unexplained horizontal
+     scrollbar in a grid layout. */
+  .case {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+  }
+
+  .case__media { position: relative; min-width: 0; }
+
+  .case__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.06);
+    transition: transform var(--d-reveal) var(--e-reveal);
+    will-change: transform;
+  }
+
+  .case:hover .case__img { transform: scale(1.02); }
+
+  .case__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-4);
+  }
+
+  .case__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--tr-heading);
+    font-weight: var(--fw-medium);
+  }
+
+  /* The whole card is the click target. The anchor *is* the overlay rather
+     than an inline element carrying an ::after overlay — an inline box that
+     only holds a visually-hidden label still generates line boxes, and those
+     were measuring wider than the card and pushing the document sideways. */
+  .case__link {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-raised);
+  }
+
+  .case__arrow {
+    display: inline-block;
+    transition: transform var(--d-short) var(--e-micro);
+  }
+
+  .case:hover .case__arrow { transform: translateX(4px); }
+}

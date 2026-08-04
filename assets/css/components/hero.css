@@ -1,0 +1,215 @@
+/* ==========================================================================
+   HERO
+   The thesis of the whole site: one motto at display scale, one italic word.
+   ========================================================================== */
+
+@layer components {
+
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: calc(var(--sp-24) + var(--sp-16)) var(--sp-12);
+    overflow: clip;
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: var(--sp-8);
+    width: 100%;
+  }
+
+  .hero__title {
+    font-size: var(--fs-display-xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tr-display-xl);
+    font-weight: var(--fw-medium);
+    text-wrap: nowrap;
+  }
+
+  /* Optical hang. A capital A at 11rem carries a wide left sidebearing, so
+     the headline was sitting visibly inside the label above it even though
+     both boxes started at the same x. Pulling the box left by a fraction of
+     the page margin puts the *ink* on the margin instead of the box. Only
+     ever negative, and only a fraction of a margin that already exists, so
+     it cannot reach the viewport edge. */
+  @media (min-width: 64rem) {
+    .hero__title { margin-left: calc(var(--page-inline) * -0.24); }
+
+    /* The second line steps in. Nothing about the grid asks for this — that
+       is the point: a two-line motto set flush left is a default, and a
+       reader registers a default as a decision nobody made. The step is
+       small enough to read as typesetting rather than as an effect, and it
+       lands the italic word roughly under the middle of the line above it.
+       Gated to desktop: the line is at its widest relative to the viewport
+       on small screens, where any indent would cost a wrap. */
+    .hero__title .line:nth-child(2) { padding-left: 6%; }
+  }
+
+  .hero__sub {
+    max-width: 34ch;
+    color: var(--text-muted);
+  }
+
+  /* ---- Meta strip ---------------------------------------------------------
+     An instrument row rather than three loose labels: hairline separators
+     between the readings, and a live accent dot marking the first one, which
+     is the only item on it that is a status rather than a fact.
+     --------------------------------------------------------------------- */
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3) var(--sp-8);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .hero__meta > * {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+
+  .hero__meta > * + *::before {
+    content: "";
+    align-self: stretch;
+    width: 1px;
+    margin-right: var(--sp-2);
+    background: var(--line-strong);
+  }
+
+  .hero__meta > :first-child::before {
+    content: "";
+    width: var(--sp-2);
+    height: var(--sp-2);
+    border-radius: var(--r-pill);
+    background: var(--c-accent);
+    animation: hero-live 3.2s var(--e-micro) infinite;
+  }
+
+  /* Resting state is the lit dot, not the dark one — the status has to stay
+     true when the animation is off. */
+  @keyframes hero-live {
+    0%, 68%, 100% { opacity: 1; }
+    80%           { opacity: 0.25; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__meta > :first-child::before { animation: none; opacity: 1; }
+  }
+
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--sp-8);
+  }
+
+  /* ---- Scroll cue --------------------------------------------------------
+     Turned on its side and moved to the right margin. Horizontal, sitting in
+     the same row as the intro paragraph, it was competing with body copy for
+     the same eye movement; running it vertically up the edge makes it read
+     as an instrument marking rather than as a second sentence — and it frees
+     the whole bottom row for the paragraph.
+
+     The line is now a track with a segment travelling down it, not a bar
+     that pulses. A track states there is further to go; a pulse only says
+     something is animating.
+     --------------------------------------------------------------------- */
+  .hero__cue {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    color: var(--text-faint);
+    transition: opacity var(--d-short) var(--e-micro);
+  }
+
+  .hero__cue span {
+    position: relative;
+    display: block;
+    width: 1px;
+    height: 3.5rem;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .hero__cue span::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 45%;
+    background: var(--c-accent);
+    animation: cue 2.4s var(--e-overlay) infinite;
+  }
+
+  @media (min-width: 64rem) {
+    .hero__cue {
+      position: absolute;
+      right: var(--page-inline);
+      bottom: calc(var(--sp-24) + var(--sp-4));
+      z-index: 1;
+      flex-direction: column;
+      writing-mode: vertical-rl;
+      font-size: var(--fs-micro);
+      letter-spacing: var(--tr-micro);
+    }
+
+    .hero__cue span { width: 1px; height: 5rem; }
+  }
+
+  .hero[data-scrolled="true"] .hero__cue { opacity: 0; }
+
+  @keyframes cue {
+    0%       { transform: translateY(-100%); }
+    60%, 100% { transform: translateY(230%); }
+  }
+
+  /* Resting state: the segment parked at the top of the track, so the cue
+     still reads as "there is more below" without moving. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__cue span::after { animation: none; transform: none; }
+  }
+
+  /* ---- Rule ---------------------------------------------------------------
+     A hairline running the full width under the meta row, with a tick at
+     each column edge. Reads as a ruler rather than as decoration.
+     --------------------------------------------------------------------- */
+  .hero__rule {
+    position: absolute;
+    inset: auto 0 0;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Minor ticks on every column, major ticks every third — the way a real
+     ruler is graduated. A single uniform comb reads as a pattern; a graduated
+     one reads as a measurement, which is the whole point of the device. */
+  .hero__rule::before {
+    content: "";
+    position: absolute;
+    inset: -3px 0 auto;
+    height: 7px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--line-strong) 0 1px,
+      transparent 1px calc(100% / 12)
+    );
+    opacity: 0.5;
+  }
+
+  .hero__rule::after {
+    content: "";
+    position: absolute;
+    inset: -7px 0 auto;
+    height: 15px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--c-accent) 0 1px,
+      transparent 1px calc(100% / 4)
+    );
+    opacity: 0.28;
+  }
+}

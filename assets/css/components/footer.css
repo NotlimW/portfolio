@@ -1,0 +1,93 @@
+/* ==========================================================================
+   FOOTER — the headline is the call to action
+   ========================================================================== */
+
+@layer components {
+
+  .footer {
+    background: var(--bg-invert);
+    color: var(--text-invert);
+    padding-block: var(--section-y) var(--sp-8);
+    overflow: clip;
+  }
+
+  .footer__cta {
+    font-size: var(--fs-display-l);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tr-display-l);
+    font-weight: var(--fw-medium);
+    text-wrap: balance;
+  }
+
+  .footer__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-8);
+    font-size: var(--fs-body-l);
+    transition: background var(--d-short) var(--e-micro),
+                color var(--d-short) var(--e-micro),
+                border-color var(--d-short) var(--e-micro);
+    will-change: transform;
+  }
+
+  .footer__mail:hover {
+    background: var(--c-paper);
+    color: var(--c-ink);
+    border-color: var(--c-paper);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: var(--sp-12) var(--grid-gutter);
+    padding-block: var(--sp-24) var(--sp-16);
+  }
+
+  @media (min-width: 30rem) {
+    .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 48rem) {
+    .footer__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .footer__col a {
+    color: var(--text-invert-muted);
+    width: fit-content;
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .footer__col a:hover { color: var(--c-paper); }
+
+  /* Same shape as .footer__col — a label over a short list — but set apart
+     from the four-column grid rather than competing for a fifth slot in it. */
+  .footer__elsewhere {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--sp-3) var(--sp-8);
+    padding-bottom: var(--sp-16);
+  }
+
+  .footer__elsewhere a {
+    color: var(--text-invert-muted);
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .footer__elsewhere a:hover { color: var(--c-paper); }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4) var(--sp-8);
+    justify-content: space-between;
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line-invert);
+  }
+}

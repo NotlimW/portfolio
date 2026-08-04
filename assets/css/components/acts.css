@@ -1,0 +1,392 @@
+/* ==========================================================================
+   ACTS — "What I solve", as four movements
+
+   The section used to be four rows you scrolled straight down through. It is
+   now four acts, and each one travels in its own direction as it passes: down
+   and right, then sideways, then down and left, then up and right. The page
+   still only scrolls vertically — the content moves across it. That is what
+   turns a list into a sequence you are being carried through.
+
+   Two rules keep it from becoming seasickness:
+
+     1. Foreground and background always move on opposing vectors. If both
+        drifted the same way the whole act would just be sliding, and sliding
+        reads as a bug. Opposed, it reads as depth.
+
+     2. Travel is capped by viewport width. On a phone the whole thing
+        collapses to a gentle vertical settle, because a horizontal drift on a
+        375px screen is just text leaving the page.
+
+   Everything is driven by --progress from scene.js. No act has its own script.
+   ========================================================================== */
+
+@layer components {
+
+  .acts {
+    /* How far anything in an act travels across a full crossing. */
+    --act-travel: clamp(28px, 7vw, 150px);
+
+    /* Horizontal travel is gated here rather than by zeroing --dx, because
+       each act declares --dx as an inline style and inline always beats a
+       stylesheet rule. Multiplying by a factor the stylesheet owns is the
+       only way a media query can actually switch the axis off. */
+    --act-travel-x: var(--act-travel);
+  }
+
+  .act {
+    position: relative;
+    display: grid;
+    align-content: center;
+    min-height: 100svh;
+    padding-block: var(--section-y);
+    /* The background environment is deliberately larger than the act. */
+    overflow: clip;
+  }
+
+  /* ---- The environment ---------------------------------------------------
+     The graphic, blown up well past the edges of the act and pushed behind
+     the type. It is scenery, not a figure: it is not framed, it is not
+     captioned, and it is allowed to be cropped by any edge.
+     --------------------------------------------------------------------- */
+  .act__env {
+    position: absolute;
+    inset: -18% -22%;
+    z-index: 0;
+    opacity: var(--env-opacity, 0.55);
+    pointer-events: none;
+    transform: translate3d(
+      calc((var(--progress, 0.5) - 0.5) * var(--env-dx, 0) * var(--act-travel-x) * 1.6),
+      calc((var(--progress, 0.5) - 0.5) * var(--env-dy, 0) * var(--act-travel) * 1.6),
+      0
+    );
+    will-change: transform;
+  }
+
+  /* The graphics were authored as framed figures. As scenery they keep their
+     internal animation — which is what .gfx supplies — and lose every trace
+     of the frame around it. */
+  .act__env.gfx,
+  .act-rail__env.gfx {
+    border: 0;
+    background: none;
+    border-radius: 0;
+    aspect-ratio: auto;
+    padding: 0;
+  }
+
+  .act__env > svg,
+  .act__env .gfx__art {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ---- The copy ---------------------------------------------------------- */
+  .act__body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--sp-8);
+    max-width: 46rem;
+    transform: translate3d(
+      calc((var(--progress, 0.5) - 0.5) * var(--dx, 0) * var(--act-travel-x)),
+      calc((var(--progress, 0.5) - 0.5) * var(--dy, 0) * var(--act-travel)),
+      0
+    );
+    will-change: transform;
+  }
+
+  /* Which side of the grid the copy sits on. Alternating this is what stops
+     four full-height acts reading as one long column. */
+  .act--right .act__body { margin-left: auto; text-align: right; }
+  .act--right .act__body .measure { margin-left: auto; }
+
+  .act__quote {
+    font-size: clamp(2rem, 5.2vw, 4.25rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    font-weight: var(--fw-medium);
+    text-wrap: balance;
+  }
+
+  .act__note { color: var(--text-muted); max-width: 40ch; }
+  .act--right .act__note { margin-left: auto; }
+
+  /* Below 48rem every act settles to a plain vertical drift: sideways travel
+     on a narrow screen only moves text towards an edge it cannot cross. */
+  @media (max-width: 48rem) {
+    .acts { --act-travel-x: 0px; }
+
+    .act {
+      min-height: auto;
+      padding-block: var(--sp-24);
+    }
+
+    .act--right .act__body { text-align: left; margin-left: 0; }
+    .act--right .act__note { margin-left: 0; }
+  }
+
+  /* ==========================================================================
+     RAIL ACT — the one that travels sideways
+     A tall section with a pinned viewport, and a track inside it that moves
+     in X against scroll progress. Same mechanism as the process section:
+     CSS position: sticky does the pinning, modules/track.js measures how far
+     the track has to travel, and scene.js supplies the timing.
+     ========================================================================== */
+
+  .act-rail {
+    position: relative;
+    height: 300svh;
+  }
+
+  .act-rail__view {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: grid;
+    align-content: center;
+    overflow: clip;
+  }
+
+  .act-rail__track {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    transform: translate3d(
+      calc(var(--progress, 0) * -1 * var(--track-distance, 0px)),
+      0,
+      0
+    );
+    will-change: transform;
+  }
+
+  /* The copy rides the same track, so it leaves as the diagram arrives. */
+  .act-rail__body {
+    display: grid;
+    gap: var(--sp-8);
+    width: min(38rem, 80vw);
+    padding-inline: var(--page-inline);
+  }
+
+  .act-rail__env {
+    /* Wide enough that scrolling it past is worth the vertical distance it
+       costs. Capped in vw so it never becomes a marathon on a large screen. */
+    width: clamp(48rem, 190vw, 150rem);
+    padding-inline: var(--sp-16);
+    opacity: var(--env-opacity, 0.85);
+  }
+
+  .act-rail__env > svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* On a phone the horizontal hijack costs more than it gives: unpin it and
+     let the diagram be a wide element you can simply see. */
+  @media (max-width: 48rem) {
+    .act-rail { height: auto; }
+
+    .act-rail__view {
+      position: static;
+      height: auto;
+      overflow: visible;
+      padding-block: var(--sp-24);
+    }
+
+    .act-rail__track {
+      grid-auto-flow: row;
+      gap: var(--sp-16);
+      transform: none;
+    }
+
+    .act-rail__body { width: auto; }
+    .act-rail__env { width: 100%; padding-inline: var(--page-inline); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .act__env,
+    .act__body,
+    .act-rail__track { transform: none !important; }
+
+    .act-rail { height: auto; }
+    .act-rail__view { position: static; height: auto; }
+  }
+
+  /* ==========================================================================
+     NODE DIAGRAM — horizontal, and deliberately dumb
+     Boxes with a border, joined by dashed lines, reading left to right. The
+     point is that anyone recognises it as a pipeline in about a second; the
+     labels are there to be glanced at, not read.
+     ========================================================================== */
+
+  /* ==========================================================================
+     WIRE — the drawing vocabulary shared by every act illustration
+
+     Outline only. No fills, no plates, no blocks: the page is already built
+     out of hairlines, dashed guides and a construction grid, and the
+     illustrations belong in that same language rather than sitting on top of
+     it as solid shapes.
+
+     One dial, --wire-weight, decides how present a drawing is. The same art
+     is scenery in one act and the subject in another.
+     ========================================================================== */
+
+  .wire {
+    color: var(--text);
+    --wire-weight: 0.55;
+  }
+
+  .wire__rect,
+  .wire__glyph {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    opacity: var(--wire-weight);
+  }
+
+  .wire__rect--accent,
+  .wire__glyph--accent {
+    stroke: var(--c-accent);
+    opacity: 1;
+  }
+
+  /* Construction rules: the baselines, margins and registration lines a
+     drawing is built on, left visible the way they are in an open file. */
+  /* fill: none is not optional. An SVG shape with no fill declared defaults
+     to solid black, which is invisible on this ground but still occludes
+     everything behind it — the monogram's construction circle was painting
+     as a disc over its own module grid. */
+  .wire__rule {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: calc(var(--wire-weight) * 0.42);
+  }
+
+  .wire__rule--accent {
+    stroke: var(--c-accent);
+    opacity: 0.7;
+  }
+
+  /* Measures and connections. The dash pattern crawls with scroll progress,
+     which is what stops a static diagram reading as a static diagram. */
+  .wire__dash {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-dasharray: 6 8;
+    stroke-dashoffset: calc(var(--progress, 0) * -240);
+    opacity: calc(var(--wire-weight) * 0.55);
+  }
+
+  .wire__mark {
+    fill: none;
+    stroke: var(--c-accent);
+    stroke-width: 1.5;
+    opacity: 0.65;
+  }
+
+  /* Belt and braces: anything inside a wire drawing that hasn't opted into a
+     fill doesn't get one. New shapes are added to these drawings often, and
+     the failure mode is silent. */
+  .wire svg :not(text):not([class*="fill"]) { fill: none; }
+
+  .wire__label {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: var(--tr-label);
+    text-transform: uppercase;
+    fill: currentColor;
+    opacity: calc(var(--wire-weight) * 0.75);
+  }
+
+  .wire__label--accent { fill: var(--c-accent); opacity: 0.9; }
+
+  /* Depth planes. --depth is authored per group; positive drifts with the
+     scroll, negative against it, and the spread is what gives a flat outline
+     drawing a sense of space. */
+  .wire__plane {
+    transform: translate(
+      calc((var(--progress, 0.5) - 0.5) * var(--depth, 0) * 90px),
+      calc((var(--progress, 0.5) - 0.5) * var(--depth, 0) * 26px)
+    );
+  }
+
+  /* Accent paths draw themselves in as the act arrives. pathLength="1" means
+     the maths is the same whatever the real length of the path is. */
+  .wire__draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - clamp(0, calc((var(--progress, 0.5) - 0.15) * 1.8), 1));
+  }
+
+  .nodes {
+    color: var(--text);
+    /* Alias, so the node diagram is tuned by the same dial as everything
+       else that is drawn in outline. */
+    --nodes-weight: var(--wire-weight, 0.55);
+  }
+
+  /* In the rail act the pipeline *is* the content, so it carries full weight. */
+  .act-rail__env.nodes { --nodes-weight: 0.8; }
+
+  .nodes__box {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    opacity: var(--nodes-weight);
+  }
+
+  .nodes__box--live {
+    stroke: var(--c-accent);
+    opacity: 1;
+  }
+
+  .nodes__fill {
+    fill: var(--c-accent);
+    opacity: 0.1;
+  }
+
+  /* Dashed, and the dash pattern crawls forward with scroll progress — the
+     line reads as carrying something rather than as decoration. */
+  .nodes__wire {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-dasharray: 7 9;
+    stroke-dashoffset: calc(var(--progress, 0) * -320);
+    opacity: calc(var(--nodes-weight) * 0.7);
+  }
+
+  .nodes__wire--live {
+    stroke: var(--c-accent);
+    opacity: 0.9;
+  }
+
+  .nodes__port {
+    fill: var(--bg);
+    stroke: currentColor;
+    stroke-width: 1.5;
+    opacity: var(--nodes-weight);
+  }
+
+  .nodes__label {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: var(--tr-label);
+    text-transform: uppercase;
+    fill: currentColor;
+    opacity: 0.75;
+  }
+
+  .nodes__label--live { fill: var(--c-accent); opacity: 1; }
+
+  .nodes__tag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: var(--tr-label);
+    text-transform: uppercase;
+    fill: currentColor;
+    opacity: 0.32;
+  }
+}

@@ -1,0 +1,685 @@
+/* ==========================================================================
+   NAVIGATION — three pieces, each with one job
+
+     .topbar    the site's own menu. Transparent, in flow, top of the hero
+                only. It scrolls away and never comes back, because below the
+                fold its job belongs to the other two.
+
+     .dock      the page's table of contents. Glass, bottom centre, arrives
+                once you have started reading. Anchors only — where you *are*
+                in this page, not where you can go on the site.
+
+     .menu-btn  the site menu again, once the topbar has gone. Top right,
+                arrives with the dock, opens the same curtain.
+
+   Splitting them this way is what lets each be honest about its content.
+   One bar trying to be both a site menu and a page menu is why the old pill
+   had a wordmark, four anchors and a hamburger fighting for the same 400px.
+   ========================================================================== */
+
+@layer components {
+
+  /* ==========================================================================
+     TOPBAR
+     ========================================================================== */
+
+  .topbar {
+    position: absolute;
+    top: var(--sp-8);
+    inset-inline: 0;
+    z-index: var(--z-nav);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-8);
+    padding-inline: var(--page-inline);
+    /* No background by design. It sits on the hero's own ground. */
+  }
+
+  .topbar__mark {
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .topbar__mark:hover { color: var(--c-accent); }
+
+  .topbar__links {
+    display: flex;
+    gap: var(--sp-8);
+    font-size: var(--fs-small);
+  }
+
+  .topbar__link {
+    position: relative;
+    color: var(--text-muted);
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .topbar__link::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -0.35em 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--d-short) var(--e-reveal);
+  }
+
+  .topbar__link:hover,
+  .topbar__link:focus-visible { color: var(--text); }
+
+  .topbar__link:hover::after,
+  .topbar__link:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  @media (max-width: 30rem) {
+    .topbar { gap: var(--sp-4); }
+    .topbar__links { gap: var(--sp-4); font-size: var(--fs-label); }
+  }
+
+  /* ==========================================================================
+     LATE ARRIVALS — the dock and the menu button
+     Both are hidden until you have committed to reading, and both come back
+     the moment you have. data-shown is set by modules/nav.js.
+     ========================================================================== */
+
+  /* Dark glass, on a page that is now almost entirely paper.
+     White-tinted glass over a white ground has nothing to separate itself
+     from — the pill read as part of the page rather than as something
+     floating above it, and its labels inherited that problem. Inverting it
+     fixes both at once: the panel gets an unmistakable edge, and light text
+     on a dark scrim is legible over whatever happens to scroll underneath,
+     including the one dark section. Same reasoning as .media__chip over
+     photography. */
+  .dock,
+  .menu-btn {
+    /* Tint dropped from 0.74 to 0.68 — that's the actual dial for "does this
+       read as glass": backdrop-filter keeps blurring and saturating whatever
+       scrolls underneath either way, but at 0.74 barely a quarter of it was
+       ever let through, so the panel looked like a solid dark pill that
+       happened to have a blur nobody could see. It can't drop much further
+       than this: the dock has to stay legible over the *lightest* thing that
+       could ever scroll under it, not just the dark section, and every
+       0.01 of transparency here is borrowed directly from that contrast
+       budget — 0.6 measured 3.9:1 against the page's paper, under the 4.5:1
+       floor; 0.68 clears it with real margin. Saturate is boosted locally,
+       on top of the shared 1.5 in tokens.css, because more of the backdrop
+       is now showing through and it's the colour bleeding through a blur
+       that reads as looking *through* something, not just at it. */
+    --glass-tint:     rgb(11 11 12 / 0.68);
+    --glass-saturate: 2.1;
+    --glass-line:     rgb(255 255 255 / 0.2);
+    --glass-grain:    0.16;
+    --glass-edge:     inset 0 1px 0 rgb(255 255 255 / 0.3),
+                      inset 0 -1px 0 rgb(0 0 0 / 0.5);
+    --glass-drop:     0 2px 6px rgb(11 11 12 / 0.16),
+                      0 24px 56px -20px rgb(11 11 12 / 0.45);
+
+    /* Text tokens of the dock's own, not the page's --text-muted / --c-ink.
+       Those are calibrated for whichever ground a *section* declares; the
+       dock is a fixed panel that ignores the page's ground entirely, so
+       borrowing them was the actual cause of the low-contrast labels — a
+       mid-grey built for paper, sitting on near-black glass. Alpha nudged up
+       from 0.8 to 0.85 alongside the thinner tint, so resting labels keep
+       the same comfortable margin they had before either changed. */
+    --dock-text:        rgb(247 246 243 / 0.85);
+    --dock-text-strong: var(--c-paper);
+
+    /* Same move the cursor already makes on a dark ground: raw cobalt reads
+       heavy on near-black, so anything inside — the progress ring, the roll's
+       incoming word — resolves to the lifted tint instead. The tint is
+       lower now too, so without this the accent would be reading against
+       whatever colour is bleeding through, not a reliable dark backing. */
+    --c-accent: var(--c-accent-lift);
+
+    position: fixed;
+    z-index: var(--z-nav);
+    color: var(--c-paper);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--d-short) var(--e-reveal),
+                transform var(--d-short) var(--e-reveal),
+                translate var(--d-short) var(--e-reveal);
+  }
+
+  .dock[data-shown="true"],
+  .menu-btn[data-shown="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ---- Menu button ------------------------------------------------------- */
+  .menu-btn {
+    top: var(--sp-4);
+    right: var(--page-inline);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    transform: translateY(-140%);
+    /* No tint override here — it shares the dark glass above. A leftover
+       light-tint override on this rule alone was fighting that and nobody
+       noticed, because the bars painted in --c-ink read fine against a
+       light tint and only silently went dark-on-dark once the shared rule
+       changed underneath it. */
+  }
+
+  .menu-btn[data-shown="true"] { transform: none; }
+
+  .menu-btn i {
+    display: block;
+    width: 17px;
+    height: 1.5px;
+    background: var(--c-paper);
+    transition: transform var(--d-short) var(--e-overlay),
+                width var(--d-short) var(--e-attitude);
+  }
+
+  .menu-btn i:last-child { width: 11px; align-self: flex-end; }
+  .menu-btn:hover i:last-child { width: 17px; }
+
+  .menu-btn[aria-expanded="true"] i:last-child { width: 17px; align-self: center; }
+  .menu-btn[aria-expanded="true"] i:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] i:last-child  { transform: translateY(-3.25px) rotate(-45deg); }
+
+  /* ---- Dock --------------------------------------------------------------
+     Bottom centre. The translate property carries the centring *and* the
+     entrance, which is why it is animated separately from transform — the
+     sub-menu uses transform on the same element and the two would overwrite
+     each other otherwise.
+     --------------------------------------------------------------------- */
+  .dock {
+    left: 50%;
+    bottom: var(--sp-6);
+    translate: -50% 180%;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+    max-width: calc(100vw - var(--page-inline) * 2);
+    padding: var(--sp-1);
+  }
+
+  .dock[data-shown="true"] { translate: -50% 0; }
+
+  /* Progress, drawn on the pill's own edge. The dock is the page menu, so
+     how far through the page you are belongs to it. */
+  .dock::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      var(--c-accent) calc(var(--scroll-progress, 0) * 360deg),
+      transparent 0
+    );
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  .dock__link,
+  .dock__sublink {
+    display: block;
+    flex-shrink: 0;
+    padding: var(--sp-2) var(--sp-3);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-small);
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--dock-text);
+    transition: color var(--d-micro) var(--e-micro),
+                background var(--d-micro) var(--e-micro);
+  }
+
+  .dock__link:hover,
+  .dock__link:focus-visible,
+  .dock__sublink:hover,
+  .dock__sublink:focus-visible { color: var(--dock-text-strong); }
+
+  /* Set by modules/nav.js from whichever section is under the middle of the
+     screen. A table of contents that doesn't say where you are is a list.
+     A light wash, not the page's dark-on-light current-state fill — that
+     fill was built for --bg-raised and was invisible here for the same
+     reason the resting labels were. */
+  .dock__link[data-current="true"],
+  .dock__sublink[data-current="true"] {
+    color: var(--dock-text-strong);
+    background: rgb(255 255 255 / 0.16);
+  }
+
+  /* ---- Roll-over labels -----------------------------------------------
+     Built by modules/nav.js: two stacked copies of the same word. The label
+     leaves upward and its replacement arrives from below in the accent, so
+     the hover reads as a mechanism rather than as a colour change. Both
+     copies move on one curve, which is what stops it looking like two
+     separate animations.
+
+     Without the script this collapses to a plain link — the structure is
+     additive, and there is no styling here that a bare <a> would break.
+     --------------------------------------------------------------------- */
+  .roll {
+    display: inline-grid;
+    overflow: hidden;
+    padding-block: 0.18em;
+    margin-block: -0.18em;
+    vertical-align: bottom;
+  }
+
+  .roll__face {
+    grid-area: 1 / 1;
+    transition: transform var(--d-roll) var(--e-overlay);
+  }
+
+  .roll__face--in {
+    transform: translateY(110%);
+    color: var(--c-accent);
+  }
+
+  /* The dock's own version stays monochrome — the word swaps by motion, not
+     by colour. The dock already spends its accent elsewhere (the progress
+     ring, the current-section pill); repeating it on every hover competed
+     with those and made the accent mean less everywhere it appeared. Colour
+     still changes on hover, same as any resting link — it just comes from
+     the link's own --dock-text-strong rather than from the roll. */
+  :is(.dock__link, .dock__sublink) .roll__face--in {
+    color: inherit;
+  }
+
+  :is(.dock__link, .dock__sublink, .topbar__link):hover .roll__face,
+  :is(.dock__link, .dock__sublink, .topbar__link):focus-visible .roll__face {
+    transform: translateY(-110%);
+  }
+
+  :is(.dock__link, .dock__sublink, .topbar__link):hover .roll__face--in,
+  :is(.dock__link, .dock__sublink, .topbar__link):focus-visible .roll__face--in {
+    transform: none;
+  }
+
+  /* ==========================================================================
+     WORK GROUP — expands in place, on the same row
+
+     Hovering, focusing or simply reading one of Work's three sections widens
+     the pill so Content / Systems / Brand & web sit beside it, rather than
+     opening a second panel above the first. modules/nav.js measures the sub
+     row's natural width once (while it's clipped to zero, via scrollWidth —
+     an element with overflow: hidden still reports its content's full size)
+     and writes it as --dock-sub-w; this only ever animates that one number.
+
+     The group also carries its own faint wash the instant it opens — Work
+     plus its three children read as one cluster before you've picked one of
+     them, and the specific current child then sits inside that wash in its
+     own brighter pill (the [data-current="true"] rule above).
+     ========================================================================== */
+
+  .dock__group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: var(--r-pill);
+    transition: background var(--d-short) var(--e-micro);
+  }
+
+  .dock__group[data-open="true"] {
+    background: rgb(255 255 255 / 0.07);
+    padding: 2px;
+    margin: -2px;
+  }
+
+  .dock__link--parent {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  .dock__caret {
+    width: 5px;
+    height: 5px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    rotate: -135deg;
+    translate: 0 1px;
+    transition: rotate var(--d-short) var(--e-attitude);
+  }
+
+  .dock__group[data-open="true"] .dock__caret { rotate: 45deg; }
+
+  /* Bounce lives on both ends, but not from the same curve run backwards.
+     --e-attitude overshoots *past* its target and settles — closing to a
+     hard floor of zero has no room past zero to overshoot into, so the same
+     curve in reverse just clips flat. Each direction gets the easing that
+     actually has somewhere to overshoot: the OPEN state below claims
+     --e-attitude for growing past --dock-sub-w, and this base — closed —
+     rule claims --e-anticipate for a small growth-before-collapse on the
+     way back, since CSS runs whichever rule is the *target* of a change. */
+  .dock__sub {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    width: 0;
+    /* Clipped away at width: 0 along with everything else in the box —
+       shows up as the gap before "Content" only once the row opens. */
+    padding-left: var(--sp-2);
+    overflow: hidden;
+    transition: width var(--d-short) var(--e-anticipate);
+  }
+
+  /* 15rem is a fallback for the one frame before JS has measured, or for the
+     rare case it never runs — wide enough to read as intentional either way. */
+  .dock__group[data-open="true"] .dock__sub {
+    width: var(--dock-sub-w, 15rem);
+    transition-timing-function: var(--e-attitude);
+  }
+
+  /* A size step down from the links around it — Content / Systems / Brand &
+     web read as belonging to Work rather than sitting beside it as equals. */
+  .dock__sublink {
+    padding: var(--sp-1) var(--sp-2);
+    font-size: var(--fs-label);
+    white-space: nowrap;
+  }
+
+  /* Below 48rem the full set does not fit across the screen. The dock scrolls
+     sideways instead of wrapping — a two-row pill stops reading as a dock —
+     and the Work row is simply always open: touch has no hover, and a
+     scrolling strip has no popover to clip. */
+  @media (max-width: 48rem) {
+    .dock {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      justify-content: flex-start;
+    }
+
+    .dock::-webkit-scrollbar { display: none; }
+    .dock__link { padding-inline: var(--sp-3); }
+
+    .dock__caret { display: none; }
+
+    .dock__sub {
+      width: auto;
+      padding-left: 0;
+      gap: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dock, .menu-btn { transition: opacity var(--d-micro) linear; }
+    .dock__sub { transition: none; }
+  }
+
+  /* ==========================================================================
+     MENU CURTAIN
+     Expands out of the trigger with a clip-path circle, so the overlay reads
+     as coming from the button rather than appearing from nowhere.
+     ========================================================================== */
+
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-menu);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    background: var(--c-ink);
+    color: var(--c-paper);
+    padding: calc(var(--sp-24) + var(--sp-8)) var(--page-inline) var(--sp-16);
+    clip-path: circle(0% at var(--origin-x, 92%) var(--origin-y, 3rem));
+    visibility: hidden;
+    transition: clip-path var(--d-overlay) var(--e-overlay),
+                visibility 0s linear var(--d-overlay);
+
+    /* The curtain sits outside every [data-ground] but is unmistakably a dark
+       surface, so it adopts the dark ground's accent and rules by hand.
+       Without this the accent inside it resolves to raw cobalt, which is a
+       2.7:1 hole against near-black. */
+    --c-accent:     var(--c-accent-lift);
+    --c-accent-ink: var(--c-ink);
+    --line:         var(--line-invert);
+  }
+
+  /* Drawn as a construction grid rather than a flat black field. It is the
+     same language the particle canvas speaks everywhere else on the page, so
+     the overlay reads as another surface of the same design file instead of
+     as a modal dropped on top of one. */
+  .menu::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(90deg, var(--line-invert) 0 1px, transparent 1px var(--menu-grid-step)),
+      repeating-linear-gradient(0deg,  var(--line-invert) 0 1px, transparent 1px var(--menu-grid-step));
+    opacity: 0;
+    transition: opacity var(--d-reveal) var(--e-reveal) var(--d-micro);
+  }
+
+  /* ---- Close ---------------------------------------------------------------
+     Top left, diagonally opposite the hamburger that opened it. The trigger
+     turns into a cross as well, but it sits in the far corner from where the
+     eye lands once the curtain is open — and a menu should not make you hunt
+     for the way out.
+
+     It arrives a beat after the rows, so the curtain reads as opening rather
+     than as two things appearing at once.
+     --------------------------------------------------------------------- */
+  .menu__close {
+    position: absolute;
+    top: var(--sp-8);
+    left: var(--page-inline);
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--line);
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity var(--d-micro) var(--e-micro),
+                transform var(--d-short) var(--e-attitude),
+                border-color var(--d-micro) var(--e-micro);
+  }
+
+  .menu[data-open="true"] .menu__close {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--d-overlay) * 0.45);
+  }
+
+  .menu__close:hover { border-color: var(--c-paper); }
+
+  .menu__close span[aria-hidden] {
+    grid-area: 1 / 1;
+    width: 15px;
+    height: 1.5px;
+    background: var(--c-paper);
+    transition: transform var(--d-short) var(--e-attitude);
+  }
+
+  .menu__close span[aria-hidden]:first-child  { transform: rotate(45deg); }
+  .menu__close span[aria-hidden]:nth-child(2) { transform: rotate(-45deg); }
+
+  .menu__close:hover span[aria-hidden]:first-child  { transform: rotate(135deg); }
+  .menu__close:hover span[aria-hidden]:nth-child(2) { transform: rotate(45deg); }
+
+  .menu[data-open="true"] {
+    clip-path: circle(150% at var(--origin-x, 92%) var(--origin-y, 3rem));
+    visibility: visible;
+    transition: clip-path var(--d-overlay) var(--e-overlay),
+                visibility 0s;
+  }
+
+  .menu[data-open="true"]::before { opacity: 1; }
+
+  /* minmax(0, 1fr), not the implicit auto. A grid track sized to its
+     min-content is as wide as its longest unbreakable row — and here that
+     propagated all the way out to the fixed curtain, making it wider than the
+     viewport and giving the whole page a horizontal scrollbar. */
+  .menu__inner {
+    position: relative;
+    width: 100%;
+    max-width: var(--grid-max);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-16);
+    align-items: end;
+  }
+
+  /* Corner brackets, the way a selected frame reads in a design tool. Eight
+     gradient stops on one pseudo-element rather than four extra nodes. */
+  .menu__inner::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--sp-8) * -1);
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-image:
+      linear-gradient(var(--c-accent) 0 0), linear-gradient(var(--c-accent) 0 0),
+      linear-gradient(var(--c-accent) 0 0), linear-gradient(var(--c-accent) 0 0),
+      linear-gradient(var(--c-accent) 0 0), linear-gradient(var(--c-accent) 0 0),
+      linear-gradient(var(--c-accent) 0 0), linear-gradient(var(--c-accent) 0 0);
+    background-size:
+      1px var(--sp-6), var(--sp-6) 1px,
+      1px var(--sp-6), var(--sp-6) 1px,
+      1px var(--sp-6), var(--sp-6) 1px,
+      1px var(--sp-6), var(--sp-6) 1px;
+    background-position:
+      left top, left top,
+      right top, right top,
+      left bottom, left bottom,
+      right bottom, right bottom;
+    opacity: 0;
+    transition: opacity var(--d-reveal) var(--e-reveal) var(--d-short);
+  }
+
+  .menu[data-open="true"] .menu__inner::before { opacity: 0.7; }
+
+  @media (min-width: 64rem) {
+    .menu__inner { grid-template-columns: minmax(0, 1fr) auto; }
+  }
+
+  .menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu__item { overflow: hidden; }
+
+  /* A staircase, using the stagger index the markup already carries. Five
+     rows set flush left is the shape every full-screen menu has; stepping
+     them turns the list into a composition and gives the eye a diagonal to
+     travel instead of a wall to scan. Desktop only — on a narrow screen the
+     indent would eat the type, and the type is the whole reason for the
+     overlay. */
+  @media (min-width: 64rem) {
+    .menu__item { padding-left: calc(var(--i, 0) * var(--sp-6)); }
+  }
+
+  .menu__link {
+    position: relative;
+    display: block;
+    font-size: var(--fs-display-l);
+    line-height: 1.02;
+    letter-spacing: var(--tr-display-l);
+    font-weight: var(--fw-medium);
+    color: var(--c-paper);
+    transform: translateY(105%) rotate(var(--reveal-skew));
+    transform-origin: 0 0;
+    transition: transform var(--d-reveal) var(--e-reveal),
+                opacity var(--d-short) var(--e-micro),
+                color var(--d-micro) var(--e-micro);
+  }
+
+  .menu[data-open="true"] .menu__link { transform: none; }
+
+  /* Stagger is driven by --i set in the markup, not by a nth-child ladder. */
+  .menu[data-open="true"] .menu__item .menu__link {
+    transition-delay: calc(var(--i, 0) * var(--stagger-line));
+  }
+
+  /* ---- Row focus ----------------------------------------------------------
+     Pointing at one row pushes every other row back. It is the cheapest way
+     to make a menu feel like it is paying attention to you, and unlike a
+     hover colour it uses the whole list to express one hover. Keyboard focus
+     drives it too, so the behaviour is not pointer-only.
+     --------------------------------------------------------------------- */
+  .menu__list:hover .menu__link,
+  .menu__list:focus-within .menu__link { opacity: var(--menu-dim); }
+
+  .menu__list .menu__link:hover,
+  .menu__list .menu__link:focus-visible {
+    opacity: 1;
+    color: var(--c-accent);
+  }
+
+  /* ---- Row index ----------------------------------------------------------
+     Written by modules/menu.js. Sits in the margin the staircase opens up,
+     so it costs no width, and it is the mono face doing the job it is
+     reserved for: coordinates, not copy.
+     --------------------------------------------------------------------- */
+  .menu__index {
+    position: absolute;
+    top: 0.55em;
+    left: calc(var(--sp-8) * -1);
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--tr-micro);
+    color: var(--c-accent);
+    opacity: 0;
+    transform: translateX(var(--sp-2));
+    transition: opacity var(--d-short) var(--e-micro),
+                transform var(--d-short) var(--e-attitude);
+  }
+
+  .menu__link:hover .menu__index,
+  .menu__link:focus-visible .menu__index {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Below the staircase breakpoint there is no margin to hang an index in. */
+  @media (max-width: 63.99rem) {
+    .menu__index { display: none; }
+  }
+
+  .menu__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line-invert);
+    color: var(--text-invert-muted);
+  }
+
+  .menu__meta a:hover { color: var(--c-paper); }
+
+  /* Locks the page behind an open menu without the layout jumping. */
+  .is-menu-open body { overflow: hidden; }
+
+  /* ==========================================================================
+     Reduced motion
+     Durations are already near-zero and --reveal-skew is 0, so the only thing
+     left to neutralise is the blur on the nav's exit, which is a filter
+     rather than a transition and would otherwise persist.
+     ========================================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .nav[data-hidden="true"] { filter: none; transform: translateY(calc(-100% - var(--sp-4))); }
+  }
+}

@@ -1,0 +1,208 @@
+/* ==========================================================================
+   MOTION — the six signature moves, as CSS state
+   JS only ever adds `data-inview="true"`. Everything about how a thing moves
+   lives here, so the motion language can be tuned without touching scripts.
+   ========================================================================== */
+
+@layer components {
+
+  /* ---- 01 · Line mask ----------------------------------------------------
+     Headlines rise out of a clip. The wrapper crops, the inner span moves.
+
+     The line now swings up rather than sliding up. Transform origin is the
+     top-left of the line, so the far end starts dropped and lifts into
+     place: the near end barely moves, which means nothing can ever break the
+     top of the mask and the whole line still lands flat. Three degrees is
+     the point where it reads as weight rather than as a tilt effect —
+     enough that the eye notices the type had to travel to get there.
+
+     --reveal-skew is a token and it is 0 under reduced motion, so this rule
+     collapses to the plain rise without needing a second query.
+     --------------------------------------------------------------------- */
+  /* The mask and the pivot live here; the movement does not. modules/reveal.js
+     animates these spans with Motion on a spring, because a spring settles
+     where a cubic-bezier stops dead — and on a line of display type that is
+     the difference between type that has weight and type that was moved.
+
+     Nothing here hides the line. The starting position is written by the
+     script, so a heading whose script never arrives is just a heading. */
+  [data-reveal="lines"] .line { display: block; overflow: hidden; }
+
+  [data-reveal="lines"] .line > span {
+    display: block;
+    transform-origin: 0 0;
+  }
+
+  /* ---- 03 · Fade up ------------------------------------------------------ */
+  [data-reveal="fade"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--d-reveal) var(--e-reveal),
+                transform var(--d-reveal) var(--e-reveal);
+    transition-delay: calc(var(--i, 0) * var(--stagger-grid));
+  }
+
+  [data-reveal="fade"][data-inview="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---- 03 · Stagger children --------------------------------------------- */
+  [data-reveal="stagger"] > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--d-reveal) var(--e-reveal),
+                transform var(--d-reveal) var(--e-reveal);
+  }
+
+  [data-reveal="stagger"][data-inview="true"] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Delay comes from an index written by modules/reveal.js, so adding a
+     child never means editing an nth-child ladder. */
+  [data-reveal="stagger"] > * { transition-delay: calc(var(--i, 0) * var(--stagger-grid)); }
+
+  /* ---- Rule: media never animates its own box ---------------------------
+     Only transform and opacity. Nothing here triggers layout.
+     --------------------------------------------------------------------- */
+  [data-parallax] { will-change: transform; }
+
+  /* ---- 06 · Custom cursor ------------------------------------------------
+     Pointer-only, and additive: the real cursor is never hidden on touch or
+     for anyone who prefers reduced motion.
+
+     Three parts instead of one growing circle. The dot is the pointer and it
+     stretches along its own direction of travel — a circle that deforms
+     under speed reads as a physical object with weight, where a circle that
+     merely lags reads as a laggy circle. The ring is the target state. The
+     label says what the target *is*, which is the part that turns a cursor
+     from decoration into a piece of interface: by the time you have hovered
+     a link you already know it opens a case.
+
+     The element itself is a zero-size anchor; modules/cursor.js builds the
+     three children. If the script never runs, nothing is visible and nothing
+     is lost, because the real cursor was never hidden.
+     --------------------------------------------------------------------- */
+  .cursor {
+    --cursor-fg: var(--c-ink);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-cursor);
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--d-short) var(--e-micro);
+    will-change: transform;
+  }
+
+  .cursor[data-active="true"] { opacity: 1; }
+
+  /* The pointer floats over every ground on the page, so it reads which one
+     it is currently above and re-tints. Cobalt over near-black would be the
+     one place on the site where the accent is illegible. */
+  .cursor[data-ground="dark"] {
+    --c-accent:  var(--c-accent-lift);
+    --cursor-fg: var(--c-paper);
+  }
+
+  .cursor__dot,
+  .cursor__ring,
+  .cursor__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .cursor__dot {
+    width: var(--cursor-dot);
+    height: var(--cursor-dot);
+    border-radius: var(--r-pill);
+    background: var(--c-accent);
+    /* Centring lives in transform, not in a margin, so the box can change
+       size without the anchor drifting. modules/cursor.js rewrites this
+       whole string each frame — the leading translate is part of the
+       contract between the two files. */
+    transform: translate(-50%, -50%);
+    transition: width var(--d-short) var(--e-attitude),
+                height var(--d-short) var(--e-attitude),
+                background var(--d-micro) var(--e-micro);
+  }
+
+  .cursor[data-hover="true"] .cursor__dot {
+    width: var(--cursor-dot-hot);
+    height: var(--cursor-dot-hot);
+    background: var(--cursor-fg);
+  }
+
+  .cursor__ring {
+    width: var(--cursor-ring);
+    height: var(--cursor-ring);
+    translate: -50% -50%;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--c-accent);
+    background: color-mix(in oklab, var(--c-accent) 8%, transparent);
+    transform: scale(0.15);
+    opacity: 0;
+    transition: transform var(--d-short) var(--e-attitude),
+                opacity var(--d-micro) var(--e-micro);
+  }
+
+  .cursor[data-hover="true"] .cursor__ring {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .cursor__label {
+    translate: -50% -50%;
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--tr-micro);
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--c-accent);
+    white-space: nowrap;
+    /* Indent compensates for the tracking on the last character, which
+       otherwise pushes the optical centre left. */
+    text-indent: var(--tr-micro);
+    opacity: 0;
+    transform: translateY(0.4em);
+    transition: opacity var(--d-micro) var(--e-micro),
+                transform var(--d-short) var(--e-attitude);
+  }
+
+  .cursor[data-hover="true"] .cursor__label {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .cursor { display: none; }
+  }
+
+  /* ==========================================================================
+     Reduced motion
+     Durations are already near-zero via tokens. These rules remove the
+     starting offsets too, so nothing can be left mid-transition.
+     ========================================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    [data-reveal] > *,
+    [data-reveal="lines"] .line > span {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    [data-parallax] { transform: none !important; }
+
+    .process { transform: none !important; }
+    .process-pin { height: auto !important; }
+    .process-pin__viewport { position: static !important; height: auto !important; }
+  }
+}

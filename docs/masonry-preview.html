@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creative wall — scratch preview</title>
+
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<!-- main.css declares the layer order, so masonry.css joins the existing
+     `components` layer even though it is linked separately here. In index.html
+     it will be an @import inside main.css instead. -->
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components/masonry.css">
+
+<style>
+  /* Preview chrome only — none of this ships. */
+  .probe {
+    position: fixed;
+    z-index: 999;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    background: rgb(0 0 0 / 0.8);
+    color: #0f0;
+    font: 500 11px/1.5 ui-monospace, monospace;
+    white-space: pre;
+    pointer-events: none;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="probe" id="probe">booting…</div>
+
+<main id="main">
+
+  <section class="section" data-ground="dark">
+    <div class="shell">
+      <h1 class="t-h2">Scroll down — stand-in for the advertising case above the wall.</h1>
+    </div>
+  </section>
+
+  <div id="mount"></div>
+
+  <section class="statement-scene" data-ground="light">
+    <div class="shell">
+      <p class="statement-scene__text">Twenty versions.</p>
+    </div>
+  </section>
+
+  <section class="section" data-ground="dark">
+    <div class="shell"><p class="t-body-l muted">Stand-in for the systems case below the wall.</p></div>
+  </section>
+
+</main>
+
+<script type="module">
+  import * as smoothScroll from "../assets/js/modules/smooth-scroll.js";
+  import * as scene from "../assets/js/modules/scene.js";
+  import * as masonry from "../assets/js/modules/masonry.js";
+
+  // The preview injects the real snippet file rather than a copy of it, so
+  // what is verified here is exactly what gets pasted into index.html.
+  const markup = await fetch("./masonry-snippet.html").then((r) => r.text());
+  document.getElementById("mount").innerHTML = markup;
+
+  smoothScroll.init();
+  scene.init();
+  masonry.init();
+
+  document.documentElement.dataset.ready = "true";
+
+  /* ---- Frame cost probe -------------------------------------------------
+     Measures the scroll callback itself (all subscribers, of which masonry
+     is one) plus the resulting frame interval. */
+  const probe = document.getElementById("probe");
+  const items = document.querySelectorAll("[data-plane]").length;
+
+  let worst = 0;
+  let total = 0;
+  let samples = 0;
+  let frames = 0;
+  let lastFrame = performance.now();
+  let worstGap = 0;
+
+  smoothScroll.onScroll(() => {
+    const t = performance.now();
+    // Read back a value the write pass just set: forces the style/layout the
+    // browser would otherwise defer, so the number includes it.
+    void document.querySelector("[data-plane]")?.getBoundingClientRect().top;
+    const dt = performance.now() - t;
+    worst = Math.max(worst, dt);
+    total += dt;
+    samples++;
+  });
+
+  const tick = (now) => {
+    const gap = now - lastFrame;
+    lastFrame = now;
+    if (samples > 0) { frames++; worstGap = Math.max(worstGap, gap); }
+
+    probe.textContent =
+      `items   ${items}\n` +
+      `cb avg  ${samples ? (total / samples).toFixed(2) : "0.00"} ms\n` +
+      `cb max  ${worst.toFixed(2)} ms\n` +
+      `frame   ${worstGap.toFixed(1)} ms worst\n` +
+      `samples ${samples}`;
+
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+
+  window.__probe = () => ({
+    items,
+    samples,
+    avg: samples ? total / samples : 0,
+    max: worst,
+    worstFrameGap: worstGap,
+  });
+  window.__resetProbe = () => { worst = 0; total = 0; samples = 0; worstGap = 0; };
+</script>
+
+</body>
+</html>

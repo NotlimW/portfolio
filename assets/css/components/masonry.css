@@ -1,0 +1,245 @@
+/* ==========================================================================
+   MASONRY — the creative wall
+   A full-bleed grid of advertising work that never earned a case study.
+   No captions, no links, no reading order to protect: the point is volume.
+
+   Two things happen as it passes the viewport, and both are driven by a
+   single number, --pass (-1 → 0 → +1), written per item by
+   js/modules/masonry.js. Nothing in this file has its own script:
+
+     drift   each item travels at its own --speed, so the wall reads as
+             several planes rather than one sheet
+     focus   an item sharpens as it reaches the middle of the screen and
+             softens as it leaves, the way a subject crosses a focal plane
+
+   --pass falls back to scene.js's --progress, so the wall still works if it
+   is driven by <figure data-scene="cover"> instead of the module — and lands
+   at its resting state (level, sharp, opaque) if neither runs at all.
+
+   Rule, as everywhere else on the site: only transform, opacity and filter.
+   Nothing here can trigger layout, which is what lets thirty-odd items move
+   at once and still hold 60fps.
+   ========================================================================== */
+
+@layer components {
+
+  /* ==========================================================================
+     SECTION
+     Edge to edge on purpose. The heading keeps the page's max-width shell;
+     the wall itself does not — that break is the whole gesture.
+     ========================================================================== */
+
+  .creative-wall {
+    position: relative;
+    /* Drift moves frames a few dozen pixels sideways of nothing and a few
+       dozen down. Clipping the inline axis only: `clip` (unlike `hidden`) is
+       allowed to differ per axis, so vertical drift still shows and the page
+       still cannot scroll sideways. */
+    overflow-x: clip;
+    padding-block: var(--section-y);
+  }
+
+  .creative-wall__head { margin-bottom: var(--sp-12); }
+
+  /* ==========================================================================
+     GRID
+     Multi-column rather than CSS grid, for three reasons:
+
+     1. It is the only masonry that packs by height without JavaScript.
+     2. Column layout is computed from static positions, so per-item
+        transforms never reflow it — a grid built from row spans would.
+     3. Columns are filled in document order, so two items that sit next to
+        each other in a column are neighbours in the markup too. That is what
+        makes the drift safe: speeds are authored as a slow wave along the
+        markup, neighbours differ by at most ~0.03, and the vertical gap
+        between two stacked frames can never close.
+
+     The cost is that reading order runs down each column instead of across.
+     For a wall of pictures with no captions there is nothing to read.
+     ========================================================================== */
+
+  .creative-wall__grid {
+    /* ---- Layout ---- */
+    --masonry-cols: 2;
+    --masonry-gap: var(--sp-2);
+    /* Aligned with the page margin rather than run to the bleed. The wall is
+       still the widest thing on the site — it ignores the 1440 container —
+       but the outer columns had nothing to sit against, so the images read as
+       cropped by the window instead of placed on the page. */
+    --masonry-inline: var(--page-inline);
+
+    /* ---- Motion ----
+       Amplitudes, kept together so the whole effect is tuned from one place.
+       --drift is the travel at --speed 1 across a full crossing; real items
+       run 0.05–0.18, so the fastest moves about 40px against the slowest 11.
+       --band > 1 holds an item fully sharp through the middle of the screen
+       instead of only at the exact centre line — a linear falloff makes the
+       whole wall permanently slightly soft, which reads as a mistake. */
+    --masonry-drift: 110px;
+    --masonry-band: 2.1;
+    --masonry-dim: 0.46;
+    --masonry-lift: 0.05;
+    /* Frames clip their media, so the media has to be bigger than the frame:
+       the scale lift would show a hard edge inside the crop without it. */
+    --masonry-bleed: 7%;
+
+    /* Travel of the fastest column across a full crossing. Columns run
+       0.3–1.0 of this, so the spread between the slowest and fastest strip is
+       what the eye actually reads as depth — not the absolute distance. */
+    --masonry-col-drift: 150px;
+
+    /* Real columns, not CSS `columns`. A column-count layout has no element
+       per column, so there is nothing to transform — and the whole point here
+       is that each strip moves at its own rate. masonry.js builds the column
+       elements and packs the items into them. */
+    display: grid;
+    grid-template-columns: repeat(var(--masonry-cols), minmax(0, 1fr));
+    gap: var(--masonry-gap);
+    padding-inline: var(--masonry-inline);
+    /* The fastest column travels a full --masonry-col-drift in each
+       direction, so the grid has to reserve exactly that much at both ends.
+       Without it the leading column drifts up out of the wall and lands on
+       top of the heading above it. */
+    padding-block: var(--masonry-col-drift);
+    align-items: start;
+  }
+
+  /* Column counts. Two on the smallest phone — three at 375px would make
+     each creative about 120px wide, which is a thumbnail, not a portfolio.
+     Four is the ceiling: past that each strip gets too narrow for the drift
+     between columns to register as depth rather than as misalignment. */
+  @media (min-width: 30rem) { .creative-wall__grid { --masonry-cols: 3; } }
+
+  @media (min-width: 48rem) {
+    .creative-wall__grid {
+      --masonry-cols: 4;
+      --masonry-gap: var(--sp-3);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .creative-wall__grid { --masonry-gap: var(--sp-4); }
+  }
+
+  /* ==========================================================================
+     COLUMN
+     One strip, moving at its own rate. --col-speed is assigned by masonry.js
+     from a fixed table; --col-pass is the same -1 → +1 crossing value the
+     items use, written once per column per frame rather than once per item.
+     ========================================================================== */
+
+  .creative-wall__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--masonry-gap);
+    /* Negative: a column with a higher speed should lag *upward* as the page
+       scrolls down, which is what reads as "further away". */
+    transform: translate3d(
+      0,
+      calc(var(--col-pass, 0) * var(--col-speed, 0) * var(--masonry-col-drift) * -1),
+      0
+    );
+    will-change: transform;
+  }
+
+  /* The column owns the vertical rhythm now, so the item must not also carry
+     a bottom margin — that would double the gap. */
+  .creative-wall__col > .creative-wall__item { margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .creative-wall__col { transform: none; }
+  }
+
+  /* ==========================================================================
+     ITEM
+     The item box itself never moves. masonry.js measures it and writes
+     --pass to it; everything that animates is a descendant. Keeping the
+     measured element free of transforms is what stops the effect feeding
+     back into its own input.
+     ========================================================================== */
+
+  .creative-wall__item {
+    /* scene.js's cover progress runs 0 → 1 across the same crossing, so the
+       same choreography works with or without the module. Unset resolves to
+       0.5, i.e. dead centre: level, sharp, opaque. */
+    --pass: calc(2 * var(--progress, 0.5) - 1);
+
+    /* |--pass|. There is no portable abs() yet; max(n, -n) is the same thing
+       and has been supported everywhere for years. */
+    --pass-abs: max(var(--pass), calc(-1 * var(--pass)));
+    --sharp: clamp(0, calc((1 - var(--pass-abs)) * var(--masonry-band)), 1);
+
+    display: block;
+    margin: 0 0 var(--masonry-gap);
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  /* ---- Frame ------------------------------------------------------------
+     Carries the drift and the fade. Deliberately not .media: this needs its
+     own radius and aspect ratio, and a component that borrows another
+     component's box only to override half of it is worse than one that
+     states its own.
+     --------------------------------------------------------------------- */
+
+  .creative-wall__frame {
+    position: relative;
+    overflow: clip;
+    aspect-ratio: var(--ratio, 1);
+    border-radius: var(--r-sm);
+    background: var(--bg-warm);
+
+    transform: translate3d(
+      0,
+      calc(var(--pass) * var(--speed, 0.1) * var(--masonry-drift)),
+      0
+    );
+    opacity: calc(var(--masonry-dim) + var(--sharp) * (1 - var(--masonry-dim)));
+  }
+
+  /* ---- Media ------------------------------------------------------------
+     The layer that goes in and out of focus. Oversized by --masonry-bleed so
+     the blur has material to work with at the edges, and so the lift has
+     somewhere to grow into.
+     --------------------------------------------------------------------- */
+
+  .creative-wall__media {
+    position: absolute;
+    inset: calc(-1 * var(--masonry-bleed));
+    transform: scale(calc(1 + (1 - var(--sharp)) * var(--masonry-lift)));
+  }
+
+  .creative-wall__media picture { display: block; width: 100%; height: 100%; }
+
+  .creative-wall__media img,
+  .creative-wall__media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Blur used to be opt-in here on wide, fine-pointer screens — opacity and
+     the lift already sell the plane on their own, and the filter was the
+     one part of the effect actually expensive enough to lag on. Dropped
+     rather than re-gated, since a render surface per item was the cost even
+     at a laptop-class breakpoint. */
+
+  /* ==========================================================================
+     REDUCED MOTION
+     No drift, no defocus, no fade. A plain, legible, static wall — which is
+     most of what this section is anyway.
+     ========================================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .creative-wall__frame {
+      transform: none;
+      opacity: 1;
+    }
+
+    .creative-wall__media {
+      filter: none;
+      transform: none;
+    }
+  }
+}

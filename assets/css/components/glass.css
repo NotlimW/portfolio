@@ -1,0 +1,193 @@
+/* ==========================================================================
+   GLASS — etched, not glossy
+
+   A gradient across the face reads as a painted surface. Frosted glass reads
+   as four separate things:
+
+     1. a hard blur, so what is behind is present but unresolvable
+     2. a FLAT tint — no ramp, no sheen
+     3. a sprayed grain sitting on the face, which is the frost itself
+     4. hairline edges: bright along the top, dark along the bottom
+
+   Depth comes from the edges and the drop. Never from a gradient.
+   All of it resolves through --glass-* tokens that [data-ground] swaps, so a
+   panel never needs to know which ground it landed on.
+   ========================================================================== */
+
+@layer components {
+
+  .glass {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--glass-tint);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-line);
+    border-radius: var(--r-xl);
+    box-shadow: var(--glass-edge), var(--glass-drop);
+  }
+
+  /* The frost. Fine turbulence sprayed across the face at low opacity —
+     this is what stops the panel looking like tinted plastic. */
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: var(--glass-grain);
+    /* soft-light rather than overlay: overlay on a dark ground lifts the
+       whole panel to grey, which reads as opaque plastic instead of frost. */
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+    background-size: var(--glass-frost) var(--glass-frost);
+  }
+
+  .glass--flush { border-radius: 0; }
+
+  /* Small elements show grain at a much larger relative scale, so the pill
+     gets a lighter, finer spray than a full panel. */
+  .glass--pill {
+    border-radius: var(--r-pill);
+    --glass-grain: 0.12;
+    --glass-frost: 90px;
+  }
+
+  /* Heavier spray and blur for panels sitting directly over imagery, where
+     what's behind is busy enough to compete with the text on top. */
+  .glass--heavy {
+    --glass-blur: 52px;
+    --glass-frost: 120px;
+  }
+
+  /* ==========================================================================
+     LABEL CHIPS
+     Every bordered .t-label reads as the same glass as the dock, the media
+     captions and the footer address — not a second recipe, the same one.
+     Scoped to the pill form only: base.css already strips border and padding
+     from the "bare label" variants below for elements that shouldn't read as
+     a tag, and this in @layer components would otherwise win over that
+     regardless, since components sits after base. Border colour is left
+     alone on purpose — .t-label.accent's tinted border lives in base.css and
+     a components-layer override here would silently beat it even though it's
+     more specific, which is exactly the kind of bug layer order causes. */
+  .t-label:not(.section__num, .row-item__n, .rail, .hero__cue, .gfx__cap,
+                .footer__bottom, .media__chip) {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--glass-tint);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow: var(--glass-edge), var(--glass-drop);
+    --glass-grain: 0.12;
+    --glass-frost: 90px;
+  }
+
+  .t-label:not(.section__num, .row-item__n, .rail, .hero__cue, .gfx__cap,
+                .footer__bottom, .media__chip)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: var(--glass-grain);
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+    background-size: var(--glass-frost) var(--glass-frost);
+  }
+
+  /* .figures .t-label is bare for a different reason (see base.css: a
+     caption under a statistic, not a tag) — :not() above can't express "not
+     inside .figures", so it is cancelled back out here instead. */
+  .figures .t-label {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .figures .t-label::before { content: none; }
+
+  /* ==========================================================================
+     PARTICLE CANVAS
+     The halftone dot field. Sits behind content, never interactive, never
+     announced.
+     ========================================================================== */
+
+  .canvas-host {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Height is set by modules/particles.js, not here: the canvas is only ever
+     a viewport-sized window onto the section, and it translates down to
+     follow the scroll. Pinning it to inset: 0 would size the backing store to
+     the whole section, which on the tall sections is tens of megabytes to
+     clear and repaint every frame. */
+  .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    pointer-events: none;
+    /* No will-change. It would promote all thirteen of these to permanent
+       compositor layers, and a viewport-sized canvas is an expensive layer to
+       hold. The element already gets one while its transform is animating,
+       which is the only time it needs one. */
+  }
+
+  /* Content inside a canvas host has to sit above the canvas explicitly,
+     since the canvas is pulled behind on its own layer. The wall's grid is
+     the one content child that isn't a .shell — it deliberately breaks out
+     of the page's max-width, but it still needs the same lift. */
+  .canvas-host > .shell,
+  .canvas-host > .hero__inner,
+  .canvas-host > .creative-wall__grid { position: relative; z-index: 1; }
+
+  /* Same lift for the zoom scene's viewport, but z-index only — it is
+     already position: sticky (see scenes.css), and a heavier selector
+     setting position: relative here would win the cascade and quietly
+     downgrade it to non-sticky, un-pinning the whole scene. */
+  .canvas-host > .zoom__viewport { z-index: 1; }
+
+  /* ---- Rule marks --------------------------------------------------------
+     Corner brackets, the way a selected frame reads in a design tool. Used
+     sparingly — on statement sections, not on every box.
+     --------------------------------------------------------------------- */
+  .marks { position: relative; }
+
+  .marks::before,
+  .marks::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--c-accent);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .marks::before {
+    top: -10px;
+    left: -10px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .marks::after {
+    right: -10px;
+    bottom: -10px;
+    border-left: 0;
+    border-top: 0;
+  }
+
+  /* Backdrop-filter is well supported, but where it isn't the panel must not
+     become an unreadable transparent box. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass { background-color: var(--bg-raised); }
+    [data-ground="dark"] .glass { background-color: var(--c-ink-soft); }
+  }
+}

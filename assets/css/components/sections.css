@@ -1,0 +1,160 @@
+/* ==========================================================================
+   SECTIONS — statement, problems, capabilities, process, numbers, now
+   ========================================================================== */
+
+@layer components {
+
+  /* ==========================================================================
+     STATEMENT — words light up against scroll position
+     ========================================================================== */
+  .statement {
+    font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    font-weight: var(--fw-regular);
+    max-width: 26ch;
+  }
+
+  .statement .word {
+    color: var(--text-faint);
+    transition: color var(--d-short) var(--e-micro);
+  }
+
+  .statement .word[data-lit="true"] { color: var(--text); }
+
+  /* ==========================================================================
+     PROBLEMS
+     Layout lives in components/editorial.css (.problem-row). This is only
+     the container — the rows carry their own hairlines, so the set needs no
+     surface of its own.
+     ========================================================================== */
+  .problems { display: grid; }
+  .problems > :first-child { border-top: 0; padding-top: 0; }
+
+  /* ==========================================================================
+     CAPABILITIES
+     A split holding one graphic against a list of type rows. See .split and
+     .rows in components/editorial.css.
+     ========================================================================== */
+  .capabilities {
+    position: relative;
+    overflow: clip;
+  }
+
+  /* ==========================================================================
+     PROCESS — four steps
+     Horizontal track on desktop, driven by scroll progress written to
+     --track-progress. Vertical stack below 64rem, where a horizontal
+     hijack always costs more than it gives.
+     ========================================================================== */
+  .process { display: grid; gap: var(--sp-6); }
+
+  .process__step {
+    display: grid;
+    gap: var(--sp-4);
+    padding: var(--sp-8) 0;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 64rem) {
+    .process-pin { height: 240svh; }
+
+    .process-pin__viewport {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      display: flex;
+      align-items: center;
+      overflow: clip;
+    }
+
+    .process {
+      grid-auto-flow: column;
+      /* Wide enough that the horizontal travel is worth the vertical scroll
+         it costs — narrow cards make the track barely move. */
+      grid-auto-columns: 33rem;
+      gap: var(--sp-12);
+      padding-inline: var(--page-inline);
+      /* --progress comes from scene.js, --track-distance from process.js.
+         One drives the timing, the other only measures how far to travel. */
+      transform: translate3d(calc(var(--progress, 0) * -1 * var(--track-distance, 0px)), 0, 0);
+      will-change: transform;
+    }
+
+    /* Type on the ground, held by a rule at the top rather than by a box.
+       The step number does the work a card border used to. */
+    .process__step {
+      padding: var(--sp-8) var(--sp-8) var(--sp-8) 0;
+      align-content: start;
+      gap: var(--sp-6);
+      min-height: 22rem;
+    }
+  }
+
+  /* An oversized figure so the track reads as a sequence at a glance, even
+     when a step is only half on screen. */
+  .process__n {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-regular);
+    color: var(--c-accent);
+    text-transform: none;
+  }
+
+  /* ==========================================================================
+     NUMBERS
+     ========================================================================== */
+  .figures {
+    display: grid;
+    gap: var(--sp-8) var(--grid-gutter);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 48rem) {
+    .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .figure__value {
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: var(--tr-display-l);
+    font-weight: var(--fw-medium);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ==========================================================================
+     MARQUEE — tools
+     Duplicated track, translated by CSS. Direction and speed are nudged by
+     scroll in modules/marquee.js.
+     ========================================================================== */
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--sp-12);
+    padding-right: var(--sp-12);
+    min-width: 100%;
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+    animation-direction: var(--marquee-direction, normal);
+  }
+
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-100%, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { mask-image: none; overflow-x: auto; }
+    .marquee__track { animation: none; }
+  }
+}

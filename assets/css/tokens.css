@@ -1,0 +1,417 @@
+/* ==========================================================================
+   TOKENS — Milton Winroth Portfolio
+   The only file in the project allowed to contain raw values.
+   Everything else references these custom properties.
+   ========================================================================== */
+
+@layer tokens {
+  :root {
+    /* ---------------------------------------------------------------------
+       1. COLOUR — primitives
+       Near-black instead of #000, warm off-white instead of #fff.
+       --------------------------------------------------------------------- */
+    --c-ink:            #0B0B0C;
+    --c-ink-soft:       #1A1A1C;
+    --c-paper:          #F7F6F3;
+    --c-white:          #FFFFFF;
+
+    --c-sand:           #EDE8E1;   /* warm grouping surface */
+    --c-mist:           #E4E7E9;   /* cool grouping surface */
+
+    --c-grey-100:       #EFEEEB;
+    --c-grey-200:       #DEDCD8;
+    --c-grey-300:       #C4C2BD;
+    --c-grey-400:       #A3A19C;
+    --c-grey-500:       #82807B;
+    --c-grey-600:       #63615D;
+    --c-grey-700:       #474540;
+    --c-grey-800:       #2C2B28;
+    --c-grey-900:       #171716;
+
+    /* Accent — Cobalt, locked 2026-07-31. Reads as precision and systems,
+       and holds tension against the warm paper ground. The two candidates it
+       beat are kept here only so styleguide.html can still demo the choice. */
+    --c-cobalt:         #1B2CFF;
+    --c-signal:         #FF4A1C;
+    --c-forest:         #0F5132;
+
+    /* Cobalt as it has to appear on the near-black ground. Raw cobalt on
+       #0B0B0C is 2.7:1 — it fails AA for every accent label, figure and
+       section number sitting on a dark section. This is the same hue lifted
+       until it clears 5.8:1, which also makes the accent read electric on
+       dark instead of sinking into it. Ground-switched below, so nothing
+       downstream has to know which one it got. */
+    --c-accent-lift:    #6E80FF;
+
+    --c-accent:         var(--c-cobalt);
+    --c-accent-ink:     var(--c-white);   /* text sitting on the accent */
+
+    /* ---------------------------------------------------------------------
+       2. COLOUR — semantic
+       Components only ever reference these.
+       --------------------------------------------------------------------- */
+    --bg:               var(--c-paper);
+    --bg-raised:        var(--c-white);
+    --bg-warm:          var(--c-sand);
+    --bg-cool:          var(--c-mist);
+    --bg-invert:        var(--c-ink);
+
+    --text:             var(--c-ink);
+    --text-muted:       var(--c-grey-600);
+    --text-faint:       var(--c-grey-500);   /* 3.5:1 on paper. --c-grey-400 measured 2.4:1, which is below the 3:1 floor even for text that is only meant to whisper. */
+    --text-invert:      var(--c-paper);
+    --text-invert-muted:#8E8C87;
+
+    --line:             color-mix(in oklab, var(--c-ink) 12%, transparent);
+    --line-strong:      color-mix(in oklab, var(--c-ink) 22%, transparent);
+    --line-invert:      color-mix(in oklab, var(--c-paper) 16%, transparent);
+
+    --focus:            var(--c-accent);
+
+    /* Glass resolves against whichever ground the section sets, so a panel
+       never has to know which theme it landed in. */
+    --glass-tint:  var(--glass-light-tint);
+    --glass-line:  var(--glass-light-line);
+    --glass-grain: var(--glass-light-grain);
+    --glass-edge:  var(--glass-light-edge);
+    --glass-drop:  var(--glass-light-drop);
+
+    /* The halftone field reads its colour and weight from CSS. Channels, not
+       hex, because the canvas composes its own alpha.
+
+       Most of the separation between the resting field and the cursor's bloom
+       is carried by ALPHA, not size: the radius only has to travel from 0.9 to
+       2.0 because the dots are simultaneously going from nearly transparent to
+       nearly solid, and picking up a blue cast on the way. Growing them far
+       past that reads as bubbles rather than as a plate lighting up. */
+    --particle-ink:            11, 11, 12;
+    --particle-dot-min:        0.9;
+    --particle-dot-max:        2.0;
+    --particle-dot-alpha:      0.24;  /* at rest, out at the edges  */
+    --particle-dot-alpha-near: 0.57;  /* directly under the cursor  */
+    --particle-tint:           0.7;   /* how far toward the accent  */
+
+    /* The canvas stopped drawing rules and guides when it became a halftone
+       field, but components/graphics.css still builds its plates and guide
+       lines from these — same drawing language, different surface. */
+    --particle-accent:      27, 44, 255;
+    --particle-grid-alpha:  0.055;
+    --particle-guide-alpha: 0.3;
+
+    /* ---------------------------------------------------------------------
+       3. TYPE — Direction A, locked 2026-07-31.
+       Satoshi carries everything. Instrument Serif italic marks exactly one
+       word per headline. Mono is reserved for labels, years and figures.
+       Site language: English.
+       --------------------------------------------------------------------- */
+    --font-sans:  "Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+    --font-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* The hero headline must never wrap mid-line — the line-mask reveal
+       assumes one line per mask. 12.5vw keeps "problem solver." inside the
+       page margins down to a 320px viewport with room to spare. */
+    --fs-display-xl: clamp(2.75rem, 12.5vw, 11rem);
+    /* Between display-l and display-xl. The footer CTA is the second-loudest
+       moment on the page and was sharing a size with section subheads. */
+    --fs-display-m:  clamp(2.75rem,  9vw,   8rem);
+    --fs-display-l:  clamp(2.75rem,  7vw,   6rem);
+    --fs-h2:         clamp(2rem,    4.5vw,  3.5rem);
+    --fs-h3:         clamp(1.375rem, 2.4vw, 2rem);
+    --fs-body-l:     clamp(1.125rem, 1.6vw, 1.5rem);
+    --fs-body:       1rem;
+    --fs-small:      0.875rem;
+    --fs-label:      0.75rem;
+    /* 11px. Reserved for instrument readouts — the scroll percentage in the
+       nav, the cursor label, menu indices. Never for anything you have to
+       read, only for things you glance at. */
+    --fs-micro:      0.6875rem;
+
+    /* Display type gets tighter, not bigger. At 11rem the old 0.88/-0.04em
+       still had daylight between the lines and between the letters; a set
+       this large should read as one mass. Body sizes are untouched. */
+    --lh-tight:      0.86;
+    --lh-display:    0.9;
+    --lh-heading:    1.05;
+    --lh-body:       1.6;
+
+    --tr-display-xl: -0.046em;
+    --tr-display-l:  -0.036em;
+    --tr-heading:    -0.024em;
+    --tr-label:       0.12em;
+    /* Wider than --tr-label. Micro readouts need the extra air to stay
+       legible at 11px, and the openness is what makes them read technical. */
+    --tr-micro:       0.18em;
+
+    --fw-light:   300;
+    --fw-regular: 400;
+    --fw-medium:  500;
+    --fw-bold:    700;
+    --fw-black:   900;
+
+    --measure:       68ch;   /* desktop reading width */
+    --measure-tight: 46ch;
+
+    /* ---------------------------------------------------------------------
+       4. SPACE — 4px base
+       --------------------------------------------------------------------- */
+    --sp-1:   0.25rem;   /*   4 */
+    --sp-2:   0.5rem;    /*   8 */
+    --sp-3:   0.75rem;   /*  12 */
+    --sp-4:   1rem;      /*  16 */
+    --sp-6:   1.5rem;    /*  24 */
+    --sp-8:   2rem;      /*  32 */
+    --sp-12:  3rem;      /*  48 */
+    --sp-16:  4rem;      /*  64 */
+    --sp-24:  6rem;      /*  96 */
+    --sp-32:  8rem;      /* 128 */
+    --sp-48: 12rem;      /* 192 */
+    --sp-64: 16rem;      /* 256 */
+
+    --section-y: clamp(6rem, 12vw, 12.5rem);
+
+    /* ---------------------------------------------------------------------
+       5. LAYOUT
+       --------------------------------------------------------------------- */
+    --grid-max:    90rem;    /* 1440 */
+    --grid-cols:   12;
+    --grid-gutter: var(--sp-6);
+    --page-inline: clamp(1.25rem, 4vw, 4rem);
+
+    --bp-sm:  23.4375rem;  /*  375 */
+    --bp-md:  48rem;       /*  768 */
+    --bp-lg:  64rem;       /* 1024 */
+    --bp-xl:  90rem;       /* 1440 */
+
+    /* ---------------------------------------------------------------------
+       6. RADIUS & ELEVATION
+       Barely rounded. The corner should register as intentional, not soft —
+       at display sizes anything above ~12px starts reading as friendly
+       rather than precise.
+       --------------------------------------------------------------------- */
+    --r-xs:   0.125rem;  /*  2 */
+    --r-sm:   0.25rem;   /*  4 */
+    --r-md:   0.375rem;  /*  6 */
+    --r-lg:   0.5rem;    /*  8 */
+    --r-xl:   0.75rem;   /* 12 */
+    --r-pill: 100rem;
+
+    --shadow-card:  0 1px 2px color-mix(in oklab, var(--c-ink) 4%, transparent),
+                    0 12px 32px -12px color-mix(in oklab, var(--c-ink) 10%, transparent);
+    --shadow-float: 0 2px 6px color-mix(in oklab, var(--c-ink) 6%, transparent),
+                    0 24px 60px -20px color-mix(in oklab, var(--c-ink) 18%, transparent);
+
+    /* ---------------------------------------------------------------------
+       6b. GLASS — frosted, not glossy
+       No gradient fills. A gradient reads as a painted surface; etched glass
+       reads as a flat tint plus a sprayed grain, a hard blur behind it, and
+       two hairline edges that catch light. Depth comes from the edges and
+       the drop, never from a ramp across the face.
+       --------------------------------------------------------------------- */
+    --glass-blur:      36px;
+    --glass-saturate:  1.5;
+    --glass-frost:     180px;   /* grain tile size — smaller reads sprayed */
+
+    /* Flat tints. Past ~0.4 the panel stops transmitting what is behind it,
+       at which point it is a solid card with a blur it never uses. */
+    --glass-light-tint:  rgb(255 255 255 / 0.34);
+    --glass-light-line:  rgb(255 255 255 / 0.7);
+    /* Frost you notice, not a blanket. Much past 0.3 the grain starts eating
+       body copy, and the panel reads as sandpaper rather than glass. */
+    --glass-light-grain: 0.26;
+    --glass-light-edge:  inset 0 1px 0 rgb(255 255 255 / 0.95),
+                         inset 0 -1px 0 rgb(11 11 12 / 0.07),
+                         inset 1px 0 0 rgb(255 255 255 / 0.4);
+    --glass-light-drop:  0 1px 1px rgb(11 11 12 / 0.04),
+                         0 18px 44px -20px rgb(11 11 12 / 0.24);
+
+    --glass-dark-tint:   rgb(255 255 255 / 0.055);
+    --glass-dark-line:   rgb(255 255 255 / 0.14);
+    --glass-dark-grain:  0.2;
+    --glass-dark-edge:   inset 0 1px 0 rgb(255 255 255 / 0.22),
+                         inset 0 -1px 0 rgb(0 0 0 / 0.4),
+                         inset 1px 0 0 rgb(255 255 255 / 0.07);
+    --glass-dark-drop:   0 1px 1px rgb(0 0 0 / 0.4),
+                         0 28px 70px -30px rgb(0 0 0 / 0.85);
+
+    /* ---------------------------------------------------------------------
+       7. MOTION
+       Six signature moves, one shared rhythm.
+       --------------------------------------------------------------------- */
+    --d-fast:     0.12s;   /* the half of a swap that should feel instant */
+    --d-micro:    0.2s;
+    --d-short:    0.35s;
+    --d-roll:     0.45s;   /* label roll-overs in the nav */
+    --d-reveal:   0.8s;
+    --d-overlay:  0.7s;
+
+    --e-reveal:  cubic-bezier(0.16, 1, 0.30, 1);    /* expo.out — entrances */
+    --e-overlay: cubic-bezier(0.65, 0, 0.35, 1);    /* in-out — curtains */
+    --e-micro:   cubic-bezier(0.33, 1, 0.68, 1);    /* hover, press */
+    /* Overshoots by ~4%. Only for things a pointer is touching — a hover
+       that lands slightly past and settles reads confident; the same curve
+       on a scroll reveal reads bouncy, which is the opposite of the point. */
+    --e-attitude: cubic-bezier(0.34, 1.28, 0.42, 1);
+    /* The close-side twin of --e-attitude, for anything that bounces open
+       toward a hard floor of zero (a width, a scale). --e-attitude overshoots
+       *past* its target and settles back — that only reads as a bounce when
+       there's room past the target to overshoot into. Closing to zero has no
+       such room: the same curve run in reverse wants to overshoot *below*
+       zero, which a width can't do, so the browser clips it. This curve puts
+       the overshoot at the *start* instead — the element grows a touch before
+       it commits to collapsing — so the bounce stays visible whichever
+       direction the floor is on.
+       The second control point still overshoots past 1, same idea as
+       --e-attitude: the clipped tail of that overshoot is invisible (a width
+       can't go negative), but its shape is not — the curve is already at the
+       floor with room to spare instead of sprinting into it, so the landing
+       reads as a settle rather than a snap. */
+    --e-anticipate: cubic-bezier(0.6, -0.28, 0.74, 1.2);
+    /* Exits leave faster than they arrived. ~65% of the enter duration. */
+    --e-exit:    cubic-bezier(0.55, 0, 0.85, 0.35);
+
+    --stagger-line: 80ms;
+    --stagger-grid: 60ms;
+
+    /* Headlines swing up out of the mask instead of sliding straight up.
+       Origin is the top-left of the line, so the far end drops and lifts —
+       it never breaks the top of the mask. */
+    --reveal-skew: 3deg;
+
+    /* Each frame closes this fraction of the distance left to travel, so the
+       number sets how long a gesture keeps coasting after your fingers stop.
+       At 0.09 a single flick took 1.23s to settle — the frame rate was a
+       locked 60fps the whole time and the page still felt sluggish, because
+       what you feel is the input latency, not the frame budget. 0.16 halves
+       the tail and still reads as clearly smoothed. */
+    --lenis-lerp: 0.16;
+
+    /* ---------------------------------------------------------------------
+       7b. EDGE — cursor, instrument readouts, surface texture
+       --------------------------------------------------------------------- */
+    --cursor-dot:      9px;    /* resting dot */
+    --cursor-dot-hot:  4px;    /* dot when a ring has taken over */
+    --cursor-ring:     72px;   /* ring drawn around an interactive target */
+    --cursor-squash:   0.55;   /* how much pointer speed stretches the dot */
+
+    /* Full-page film grain. Sprayed once over everything so light and dark
+       sections share one surface. Past ~0.06 it starts fighting body copy. */
+    --edge-grain:      0.045;
+    --edge-grain-tile: 220px;
+
+    /* The menu curtain is drawn as a construction grid rather than a flat
+       black field — same language as the particle canvas, so the overlay
+       reads as part of the design file instead of a modal. */
+    --menu-grid-step:  4.5rem;
+    --menu-dim:        0.32;   /* unhovered menu rows recede to this opacity */
+
+    --magnet:          0.32;   /* default magnetic pull on primary actions */
+
+    /* ---------------------------------------------------------------------
+       8. Z-INDEX
+       --------------------------------------------------------------------- */
+    --z-base:    0;
+    --z-raised: 10;
+    --z-sticky: 20;
+    --z-nav:   100;
+    --z-menu:  200;
+    /* Above everything, including the curtain. A custom cursor that
+       disappears behind the nav pill or the open menu is worse than no
+       custom cursor — it makes the pointer look like it is falling through
+       the page. This was 40, i.e. under both. */
+    --z-cursor: 300;
+  }
+
+  /* ---------------------------------------------------------------------
+     Ground switching.
+     A section declares which ground it sits on and everything inside it —
+     text, rules, glass — resolves correctly without knowing anything about
+     its context. This is what makes alternating light and dark cheap.
+     --------------------------------------------------------------------- */
+  [data-ground="dark"] {
+    --bg:          var(--c-ink);
+    --bg-raised:   var(--c-ink-soft);
+    --bg-warm:     #16150F;
+    --bg-cool:     #101315;
+    --text:        var(--c-paper);
+    --text-muted:  var(--text-invert-muted);
+    --text-faint:  #6E6C66;   /* 3.4:1 on ink; #56544F measured 2.6:1 */
+    --line:        var(--line-invert);
+    --line-strong: color-mix(in oklab, var(--c-paper) 30%, transparent);
+
+    /* The accent lifts on dark. Raw cobalt is a 2.7:1 hole against #0B0B0C —
+       every section number, category tag and figure sitting on a dark
+       section was failing AA. Switching it here means no component has to
+       carry a second accent, and the label under it goes to ink because
+       white on the lifted blue is the weaker pairing. */
+    --c-accent:     var(--c-accent-lift);
+    --c-accent-ink: var(--c-ink);
+
+    --glass-tint:  var(--glass-dark-tint);
+    --glass-line:  var(--glass-dark-line);
+    --glass-grain: var(--glass-dark-grain);
+    --glass-edge:  var(--glass-dark-edge);
+    --glass-drop:  var(--glass-dark-drop);
+
+    /* The field has to work harder on a dark ground — the same alpha that
+       reads as a faint dot on paper disappears entirely against near-black. */
+    --particle-ink:            247, 246, 243;
+    --particle-dot-alpha:      0.28;
+    --particle-dot-alpha-near: 0.63;
+    --particle-accent:         110, 128, 255;
+    --particle-grid-alpha:     0.075;
+    --particle-guide-alpha:    0.4;
+
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  [data-ground="light"] {
+    --bg:          var(--c-paper);
+    --bg-raised:   var(--c-white);
+    --text:        var(--c-ink);
+    --text-muted:  var(--c-grey-600);
+    --text-faint:  var(--c-grey-500);
+    --line:        color-mix(in oklab, var(--c-ink) 12%, transparent);
+
+    /* Explicit, so a light section nested inside a dark one gets cobalt back
+       rather than inheriting the lifted variant. */
+    --c-accent:     var(--c-cobalt);
+    --c-accent-ink: var(--c-white);
+
+    --glass-tint:  var(--glass-light-tint);
+    --glass-line:  var(--glass-light-line);
+    --glass-grain: var(--glass-light-grain);
+    --glass-edge:  var(--glass-light-edge);
+    --glass-drop:  var(--glass-light-drop);
+
+    --particle-ink:            11, 11, 12;
+    --particle-dot-alpha:      0.24;
+    --particle-dot-alpha-near: 0.57;
+    --particle-accent:         27, 44, 255;
+
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* Accessibility: motion is a preference, not a decision we make for people. */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --d-fast: 0.01ms;
+      --d-micro: 0.01ms;
+      --d-short: 0.01ms;
+      --d-roll: 0.01ms;
+      --d-reveal: 0.01ms;
+      --d-overlay: 0.01ms;
+      --stagger-line: 0ms;
+      --stagger-grid: 0ms;
+
+      /* The tilt on the line reveal and the pointer-speed squash are motion,
+         not styling. Zeroing them here means every rule that reads these
+         lands on a valid resting state without needing its own query. */
+      --reveal-skew: 0deg;
+      --cursor-squash: 0;
+      --magnet: 0;
+    }
+  }
+}
