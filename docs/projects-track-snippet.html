@@ -1,0 +1,78 @@
+<!-- ==========================================================================
+     PROJECTS TRACK — copy-paste block (parked, not on the page)
+     ==========================================================================
+
+     Previous work as cards on the inside of a cylinder, in WebGL: the
+     section pins, the scroll drives the cards round in a loop, drag works,
+     and the cards move like cloth. Taken off the page on 2026-10-05 in
+     favour of the client logo carousel, kept here to come back.
+
+     TO PUT IT BACK
+     --------------
+     1. Paste the block below into index.html, directly after the closing
+        </section> of the "Hello" statement section (and before the client
+        logos, or in their place).
+     2. assets/css/main.css — add, next to the other components:
+            @import url("components/projects.css");
+     3. assets/js/main.js — import the module and add it to the list:
+            import * as projects from "./modules/projects.js";
+            …
+            projects,
+     The CSS and JS files themselves were left in place untouched:
+       assets/css/components/projects.css
+       assets/js/modules/projects.js
+     Tuning knobs (EASE, BEND, SETTLE, RADIUS) are at the top of the JS.
+
+     The cards are painted from the <ol>: data-image for a picture,
+     data-tone="ink" | "sun" for a typographic card, data-tags for the
+     readout in the corner.
+     ========================================================================== -->
+
+  <!-- ========================================================================
+       PROJECTS · light — the curved track
+       Previous work as cards on the inside of a huge cylinder, standing on
+       the same dot field as the rest of the page (modules/projects.js,
+       WebGL). The section pins and
+       the scroll drives the cards sideways; drag works too.
+       The <ol> is the real content: each card is drawn from its item —
+       data-image for the picture, data-tone for cards without one — and
+       the list is what screen readers and keyboards use, and what shows if
+       WebGL never starts.
+       ======================================================================== -->
+  <section class="projects canvas-host" id="projects" data-ground="light" data-projects
+           data-nav-section="work" aria-labelledby="projects-title">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="projects__sticky">
+      <canvas class="projects__canvas" aria-hidden="true"></canvas>
+
+      <div class="projects__hud" aria-hidden="true">
+        <div class="projects__row">
+          <span class="projects__label">Selected projects <span class="muted">/ Scroll or drag</span></span>
+          <span class="projects__count"><b data-projects-index>01</b> / <span data-projects-total>05</span></span>
+        </div>
+        <div class="projects__row">
+          <span class="projects__label" data-projects-current>Aros Auto</span>
+          <span class="projects__label muted" data-projects-tags>Brand · Web</span>
+        </div>
+      </div>
+
+      <h2 class="sr-only" id="projects-title">Selected projects</h2>
+      <ol class="projects__list">
+        <li class="projects__item" data-image="assets/media/aros-auto.jpg" data-tags="Brand · Web">
+          <a href="work/aros-auto/"><img src="assets/media/aros-auto.jpg" alt="" loading="lazy" decoding="async">Aros Auto</a>
+        </li>
+        <li class="projects__item" data-image="assets/media/logimark.jpg" data-tags="Identity · Web">
+          <a href="work/logimark/"><img src="assets/media/logimark.jpg" alt="" loading="lazy" decoding="async">Logimark</a>
+        </li>
+        <li class="projects__item" data-image="assets/media/friends-agenda.jpg" data-tags="Web · Editorial">
+          <a href="work/friends-agenda/"><img src="assets/media/friends-agenda.jpg" alt="" loading="lazy" decoding="async">Friends Agenda</a>
+        </li>
+        <li class="projects__item" data-tone="ink" data-tags="Systems · Strategy">
+          <a href="work/creative-strategy-hub/">Creative strategy hub</a>
+        </li>
+        <li class="projects__item" data-tone="sun" data-tags="AI · Content">
+          <a href="work/ai-production-system/">AI creation</a>
+        </li>
+      </ol>
+    </div>
+  </section>

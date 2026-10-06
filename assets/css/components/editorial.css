@@ -94,10 +94,10 @@
     .row-item:hover { padding-left: var(--sp-4); }
   }
 
-  .row-item__n { color: var(--c-accent); }
+  .row-item__n { color: var(--c-accent-text); }
 
   .row-item__title {
-    font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+    font-size: clamp(1.25rem, 2.2vw, 1.875rem);
     line-height: 1.05;
     letter-spacing: var(--tr-heading);
     font-weight: var(--fw-medium);

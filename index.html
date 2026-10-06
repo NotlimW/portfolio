@@ -10,14 +10,24 @@
 <meta property="og:title" content="Milton Winroth — A creative problem solver">
 <meta property="og:description" content="Designer working across content, brand, UX/UI and web — and building the AI systems and workflows that make creative work go further.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#F7F6F3">
+<meta name="theme-color" content="#17120E">
 
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 
+<!-- Park the headline lines below their masks before the first paint;
+     if main.js has not booted in 4s, give the headings back. -->
+<script>
+  document.documentElement.classList.add("reveal-ready");
+  setTimeout(function () {
+    if (!document.documentElement.dataset.ready) {
+      document.documentElement.classList.remove("reveal-ready");
+    }
+  }, 4000);
+</script>
 <link rel="stylesheet" href="assets/css/main.css">
 <script type="module" src="assets/js/main.js"></script>
 </head>
@@ -72,7 +82,7 @@
      only: this is where you are in the page, not where you can go on the site.
      ========================================================================== -->
 <nav class="dock glass glass--pill" data-dock data-late aria-label="Sections">
-  <a class="dock__link" href="#solve">What I solve</a>
+  <a class="dock__link" href="#capabilities">What I do</a>
 
   <div class="dock__group">
     <a class="dock__link dock__link--parent" href="#work"
@@ -88,7 +98,6 @@
     </div>
   </div>
 
-  <a class="dock__link" href="#capabilities">What I do</a>
   <a class="dock__link" href="#ai">AI</a>
   <a class="dock__link" href="#about">About me</a>
 </nav>
@@ -125,46 +134,71 @@
 <main id="main">
 
   <!-- ========================================================================
-       HERO · light
-       Type only. The motto has to land before a single image competes with it.
+       HERO · dark — the poster on the chair
+       One photograph, full bleed: the brand's own poster lying on a leather
+       chair in late sun. The motto is set over it as three giants placed
+       AROUND the poster rather than across it, read as a Z: "A creative"
+       top left, "problem" flush to the right margin,
+       "solver." in yellow bottom left. The face on the poster is never
+       covered.
+
+       Entrance: the photograph opens out of a smaller, darker, blurred
+       frame; then the letters rise out of their masks one by one, line by
+       line. All of it is CSS (hero.css), keyed off html[data-ready], so a
+       failed script leaves a finished hero, never a blank one.
        ======================================================================== -->
-  <section class="hero canvas-host" data-ground="light" data-hero>
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <span class="hero__rule" aria-hidden="true"></span>
+  <section class="hero" data-ground="dark" data-hero>
+    <div class="hero__media" aria-hidden="true" data-depth="0.45">
+      <img src="assets/media/hero-chair.jpg" width="2000" height="952" alt=""
+           fetchpriority="high" decoding="async">
+    </div>
+    <span class="hero__shade" aria-hidden="true"></span>
+
+    <h1 class="hero__title" aria-label="A creative problem solver.">
+      <span class="hero__word hero__word--a" data-fit="0.36" data-fit-sm="0.74" data-depth="-0.25">
+        <span class="line"><span class="t-bleed"><span class="g" style="--i: 0">A</span><span class="g" style="--i: 1">&nbsp;</span><span class="g" style="--i: 2">c</span><span class="g" style="--i: 3">r</span><span class="g" style="--i: 4">e</span><span class="g" style="--i: 5">a</span><span class="g" style="--i: 6">t</span><span class="g" style="--i: 7">i</span><span class="g" style="--i: 8">v</span><span class="g" style="--i: 9">e</span></span></span>
+      </span>
+      <span class="hero__word hero__word--b" data-fit="0.37" data-fit-sm="0.86" data-bleed="right" data-depth="-0.5">
+        <span class="line"><span class="t-bleed"><span class="g" style="--i: 0">p</span><span class="g" style="--i: 1">r</span><span class="g" style="--i: 2">o</span><span class="g" style="--i: 3">b</span><span class="g" style="--i: 4">l</span><span class="g" style="--i: 5">e</span><span class="g" style="--i: 6">m</span></span></span>
+      </span>
+      <span class="hero__word hero__word--c" data-fit="0.44" data-fit-sm="0.82" data-bleed="left" data-depth="0.8">
+        <span class="line"><span class="t-bleed"><span class="g" style="--i: 0">s</span><span class="g" style="--i: 1">o</span><span class="g" style="--i: 2">l</span><span class="g" style="--i: 3">v</span><span class="g" style="--i: 4">e</span><span class="g" style="--i: 5">r</span><span class="g" style="--i: 6">.</span></span></span>
+      </span>
+    </h1>
 
     <div class="shell hero__inner">
-      <p class="t-label" data-reveal="fade">Milton Winroth — Designer, Sweden</p>
-
-      <h1 class="hero__title" data-reveal="lines">
-        <span class="line"><span>A creative</span></span>
-        <span class="line"><span><em class="em">problem</em> solver.</span></span>
-      </h1>
-
-      <div class="hero__foot">
-        <p class="t-body-l hero__sub" data-reveal="fade" style="--i: 1">
-          I design brands, interfaces and advertising — and build the AI systems
-          that make creative work go further.
+      <div class="hero__band">
+        <p class="t-compact hero__sub">
+          I design brands, interfaces and advertising — and build the AI
+          systems that make creative work go further.
         </p>
 
-        <span class="hero__cue t-label" aria-hidden="true">
-          Scroll
-          <span></span>
-        </span>
-      </div>
-
-      <div class="hero__meta" data-reveal="fade" style="--i: 2">
-        <span class="t-label">Currently at SoScale Media</span>
-        <span class="t-label">Content · AI systems · Brand · UX/UI · Web</span>
-        <span class="t-label">Stockholm — <span data-clock class="tabular">--:--</span></span>
+        <dl class="hero__meta t-compact">
+          <div><dt>Now</dt><dd>Graphic designer at SoScale Media</dd></div>
+          <div><dt>Work</dt><dd>Content · AI systems · Brand · UX/UI · Web</dd></div>
+          <div><dt>Based</dt><dd>Stockholm — <span data-clock class="tabular">--:--</span></dd></div>
+        </dl>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       STATEMENT · dark
+       STATEMENT · light — who, before what
+       No bottom padding: the client logos follow straight on, and their own
+       (tight) padding is the only gap between the two.
        ======================================================================== -->
-  <section class="section canvas-host" data-ground="light">
+  <section class="section section--flush-bottom canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.48" data-bleed="left">
+        <span class="line"><span class="t-bleed">Hello</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">Who I am</h2>
+        <p class="t-compact muted">Grew up around advertising agencies. Still doing the same thing — mostly on screens.</p>
+        <span class="t-label section__num">01</span>
+      </div>
+    </header>
     <div class="shell">
       <div class="row row--between" style="align-items: flex-start">
         <p class="statement" data-statement>
@@ -174,29 +208,14 @@
           shape of the problem before I start making things. The making is the fun part.
           The finding is the job.
         </p>
-
-        <!-- The one photograph of a person on the page — moved here from the
-             closing "Right now" section so the reader has a face early. Set
-             down from the text's own baseline rather than aligned to it, so
-             the two don't read as one deliberately paired block. -->
-        <div class="media media--tall"
-             style="width: clamp(13rem, 20vw, 17rem); flex: none; margin-top: var(--sp-16)">
-          <picture>
-            <source srcset="assets/media/milton-portrait.webp" type="image/webp">
-            <img src="assets/media/milton-portrait.jpg"
-                 alt="Milton Winroth, seated, holding a copy of Typografisk handbok"
-                 width="1067" height="1600" loading="lazy" decoding="async"
-                 data-parallax="0.16">
-          </picture>
-        </div>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       SCENE · ZOOM — the page falls into an image, and comes out dark
+       SCENE · ZOOM — "A wide skill set", between hello and what I do
        ======================================================================== -->
-  <section class="zoom canvas-host" data-ground="light" data-scene data-scene-ease aria-label="Selected imagery">
+  <section class="zoom canvas-host" data-ground="light" data-scene data-scene-ease id="skills" aria-labelledby="skills-title">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
     <div class="zoom__viewport">
       <div class="zoom__frame">
@@ -209,432 +228,125 @@
         </div>
       </div>
 
-      <div class="zoom__caption">
-        <div class="shell">
-          <p class="t-label" style="color: rgb(255 255 255 / 0.6)">What I solve</p>
-          <p class="t-h2" data-reveal="lines" style="max-width: 18ch">
-            Content, systems and brands that have to <em class="em">earn</em> their place.
-          </p>
+      <!-- Set as a poster for this seam: "A wide" large in the top left
+           corner, "skill set" enormous in yellow along the bottom, flush to
+           the right margin, and one small line at the bottom left. -->
+      <div class="zoom__caption zoom__caption--giant">
+        <div class="zoom__layout">
+          <p class="t-compact zoom__note" data-reveal="fade">Content, brand, web, systems and AI — under one roof.</p>
+          <h2 class="zoom__title" id="skills-title">
+            <span class="zoom__kicker" data-reveal="lines"><span class="line"><span>A wide</span></span></span>
+            <span class="zoom__giant" data-fit="0.64" data-fit-sm="0.86" data-bleed="right" data-reveal="lines"><span class="line"><span class="t-bleed">skill set</span></span></span>
+          </h2>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       PROBLEMS · dark, sticky stack
+       CAPABILITIES · light, glass over an ambient field
+       Sits between the "Wide skill set" zoom and the client logos:
+       who → what I do → who for → the work.
        ======================================================================== -->
-  <!-- ========================================================================
-       03 · WHAT I SOLVE — four acts, four directions of travel
-       Each act carries its own vector: down-right, sideways, down-left, then
-       up-right. The graphics are scenery here, not figures — oversized,
-       cropped by the act's edges, and drifting against the copy so the two
-       read as separate planes.
-       ======================================================================== -->
-  <section class="section section--flush-top section--flush-bottom has-rail acts" id="solve" data-ground="light">
-    <span class="rail t-label" aria-hidden="true">Four sentences I hear often</span>
-
-    <!-- Same fix as the trailing spacer below, mirrored at the top: the
-         section's own padding-block-start (zeroed via section--flush-top)
-         moved here as a real element so it can carry a canvas — otherwise
-         the gap before Act 1 begins was wide enough at some viewports to
-         read as the field not starting until partway into the section. -->
-    <div class="canvas-host" style="height: var(--section-y)">
-      <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    </div>
-
-    <!-- ---- ACT 1 · down and to the right ---------------------------------- -->
-    <article class="act canvas-host" data-ground="light" data-scene="cover" data-scene-ease
-             style="--dx: .9; --dy: .5; --env-dx: -.7; --env-dy: -.35">
-      <!-- The same creative in three placements, drawn as empty format
-           frames on a measured baseline: 9:16, 1:1, 4:5, then the readout
-           they get judged against. Outline only, spread across the full
-           width so the composition survives being used as background. -->
-      <canvas class="particles" data-particles aria-hidden="true"></canvas>
-      <div class="act__env wire" aria-hidden="true">
-        <svg viewBox="0 0 2400 1000" preserveAspectRatio="xMidYMid meet"
-             xmlns="http://www.w3.org/2000/svg">
-
-          <path class="wire__mark" d="M 40 90 V 40 H 90"/>
-          <path class="wire__mark" d="M 2310 40 H 2360 V 90"/>
-          <path class="wire__mark" d="M 2360 910 V 960 H 2310"/>
-          <path class="wire__mark" d="M 90 960 H 40 V 910"/>
-
-          <!-- Measure line the three placements sit on -->
-          <g class="wire__plane" style="--depth: -0.18">
-            <path class="wire__rule" d="M 120 880 H 2280"/>
-            <path class="wire__rule" d="M 120 866 V 894"/>
-            <path class="wire__rule" d="M 700 866 V 894"/>
-            <path class="wire__rule" d="M 1280 866 V 894"/>
-            <path class="wire__rule" d="M 1860 866 V 894"/>
-            <path class="wire__rule" d="M 2280 866 V 894"/>
-            <text class="wire__label" x="120" y="932">One idea</text>
-            <text class="wire__label" x="2280" y="932" text-anchor="end">Three placements</text>
-          </g>
-
-          <!-- 9:16 -->
-          <g class="wire__plane" style="--depth: 0.85">
-            <text class="wire__label wire__label--accent" x="200" y="176">9:16</text>
-            <rect class="wire__rect" x="200" y="200" width="338" height="600"/>
-            <path class="wire__rule" d="M 218 226 H 268"/>
-            <path class="wire__rule" d="M 280 226 H 330"/>
-            <path class="wire__rule" d="M 342 226 H 392"/>
-            <path class="wire__rule wire__rule--accent" d="M 218 226 H 268"/>
-            <circle class="wire__rect" cx="369" cy="440" r="112"/>
-            <path class="wire__rule" d="M 240 660 H 452"/>
-            <path class="wire__rule" d="M 240 692 H 380"/>
-          </g>
-
-          <!-- 1:1 -->
-          <g class="wire__plane" style="--depth: -0.55">
-            <text class="wire__label" x="780" y="296">1:1</text>
-            <rect class="wire__rect" x="780" y="320" width="440" height="440"/>
-            <circle class="wire__rect" cx="1000" cy="500" r="128"/>
-            <path class="wire__dash" d="M 872 500 H 1128"/>
-            <path class="wire__dash" d="M 1000 372 V 628"/>
-            <path class="wire__rule" d="M 812 700 H 1024"/>
-          </g>
-
-          <!-- 4:5 -->
-          <g class="wire__plane" style="--depth: -0.15">
-            <text class="wire__label" x="1460" y="216">4:5</text>
-            <rect class="wire__rect wire__rect--accent" x="1460" y="240" width="440" height="550"/>
-            <circle class="wire__rect" cx="1680" cy="450" r="134"/>
-            <path class="wire__rule" d="M 1492 660 H 1780"/>
-            <path class="wire__rule" d="M 1492 692 H 1660"/>
-            <path class="wire__rule" d="M 1492 724 H 1720"/>
-          </g>
-
-          <!-- The accent route: one idea travelling across all three -->
-          <path class="wire__glyph wire__glyph--accent wire__draw" pathLength="1"
-                d="M 369 440 C 620 440 640 500 1000 500 C 1360 500 1420 450 1680 450"/>
-
-          <!-- Readout -->
-          <g class="wire__plane" style="--depth: -0.9">
-            <text class="wire__label" x="2000" y="416">Measured</text>
-            <rect class="wire__rect" x="2000" y="440" width="280" height="34"/>
-            <rect class="wire__rect wire__rect--accent" x="2000" y="440" width="212" height="34"/>
-            <rect class="wire__rect" x="2000" y="500" width="280" height="34"/>
-            <rect class="wire__rect wire__rect--accent" x="2000" y="500" width="134" height="34"/>
-            <rect class="wire__rect" x="2000" y="560" width="280" height="34"/>
-            <rect class="wire__rect wire__rect--accent" x="2000" y="560" width="86" height="34"/>
-          </g>
-        </svg>
-      </div>
-
-      <div class="shell">
-        <div class="act__body">
-          <span class="t-label accent">Content &amp; advertising</span>
-          <p class="act__quote" data-reveal="lines">“Our ads get seen, not remembered.”</p>
-          <p class="act__note t-body-l" data-reveal="fade">
-            Hooks tested against each other. Formats built for the platform they live on.
-          </p>
-        </div>
-      </div>
-    </article>
-
-    <!-- ---- ACT 2 · sideways ----------------------------------------------
-         The pipeline reads left to right, so the page does too. Pinned by CSS
-         sticky, distance measured by modules/track.js, timing from scene.js.
-         --------------------------------------------------------------------- -->
-    <article class="act-rail canvas-host" data-ground="light" data-scene>
-      <div class="act-rail__view">
-      <canvas class="particles" data-particles aria-hidden="true"></canvas>
-        <div class="act-rail__track" data-track>
-
-          <div class="act-rail__body">
-            <span class="t-label accent">AI systems &amp; workflows</span>
-            <p class="act__quote" data-reveal="lines">“The team spends its day doing this by hand.”</p>
-            <p class="act__note t-body-l" data-reveal="fade">
-              Built once, documented, handed over. Hours back without flattening the craft.
-            </p>
-          </div>
-
-          <div class="act-rail__env gfx gfx--bare nodes" aria-hidden="true">
-            <svg viewBox="0 0 2320 620" preserveAspectRatio="xMidYMid meet"
-                 xmlns="http://www.w3.org/2000/svg">
-
-              <!-- Wires first, so the boxes always sit on top of them. -->
-              <path class="nodes__wire" d="M 280 310 H 350 V 155 H 420"/>
-              <path class="nodes__wire" d="M 280 310 H 350 V 465 H 420"/>
-              <path class="nodes__wire nodes__wire--live" d="M 660 155 H 740 V 315 H 820"/>
-              <path class="nodes__wire" d="M 660 465 H 740 V 315 H 820"/>
-              <path class="nodes__wire" d="M 1100 315 H 1170 V 140 H 1240"/>
-              <path class="nodes__wire nodes__wire--live" d="M 1100 315 H 1240"/>
-              <path class="nodes__wire" d="M 1100 315 H 1170 V 470 H 1240"/>
-              <path class="nodes__wire" d="M 1440 140 H 1520 V 310 H 1600"/>
-              <path class="nodes__wire nodes__wire--live" d="M 1440 305 H 1600"/>
-              <path class="nodes__wire" d="M 1440 470 H 1520 V 310 H 1600"/>
-              <path class="nodes__wire nodes__wire--live" d="M 1840 310 H 1980"/>
-
-              <!-- Input -->
-              <text class="nodes__tag" x="40" y="240">Input</text>
-              <rect class="nodes__box" x="40" y="265" width="240" height="90" rx="6"/>
-              <text class="nodes__label" x="160" y="316" text-anchor="middle">Brief</text>
-              <rect class="nodes__port" x="275" y="305" width="10" height="10"/>
-
-              <!-- Branch -->
-              <rect class="nodes__box" x="420" y="110" width="240" height="90" rx="6"/>
-              <text class="nodes__label" x="540" y="161" text-anchor="middle">Research</text>
-              <rect class="nodes__port" x="415" y="150" width="10" height="10"/>
-              <rect class="nodes__port" x="655" y="150" width="10" height="10"/>
-
-              <rect class="nodes__box" x="420" y="420" width="240" height="90" rx="6"/>
-              <text class="nodes__label" x="540" y="471" text-anchor="middle">Reviews</text>
-              <rect class="nodes__port" x="415" y="460" width="10" height="10"/>
-              <rect class="nodes__port" x="655" y="460" width="10" height="10"/>
-
-              <!-- Generate -->
-              <text class="nodes__tag" x="820" y="240">Generate</text>
-              <rect class="nodes__fill" x="820" y="265" width="280" height="100" rx="6"/>
-              <rect class="nodes__box nodes__box--live" x="820" y="265" width="280" height="100" rx="6"/>
-              <text class="nodes__label nodes__label--live" x="960" y="321" text-anchor="middle">Variants</text>
-              <rect class="nodes__port" x="815" y="310" width="10" height="10"/>
-              <rect class="nodes__port" x="1095" y="310" width="10" height="10"/>
-
-              <!-- Formats -->
-              <text class="nodes__tag" x="1240" y="75">Formats</text>
-              <rect class="nodes__box" x="1240" y="100" width="200" height="80" rx="6"/>
-              <text class="nodes__label" x="1340" y="146" text-anchor="middle">1:1</text>
-              <rect class="nodes__box" x="1240" y="265" width="200" height="80" rx="6"/>
-              <text class="nodes__label" x="1340" y="311" text-anchor="middle">4:5</text>
-              <rect class="nodes__box" x="1240" y="430" width="200" height="80" rx="6"/>
-              <text class="nodes__label" x="1340" y="476" text-anchor="middle">9:16</text>
-
-              <!-- Measure -->
-              <rect class="nodes__box" x="1600" y="265" width="240" height="90" rx="6"/>
-              <text class="nodes__label" x="1720" y="316" text-anchor="middle">Measure</text>
-              <rect class="nodes__port" x="1595" y="305" width="10" height="10"/>
-              <rect class="nodes__port" x="1835" y="305" width="10" height="10"/>
-
-              <!-- Ship -->
-              <text class="nodes__tag" x="1980" y="240">Output</text>
-              <rect class="nodes__fill" x="1980" y="265" width="240" height="90" rx="6"/>
-              <rect class="nodes__box nodes__box--live" x="1980" y="265" width="240" height="90" rx="6"/>
-              <text class="nodes__label nodes__label--live" x="2100" y="316" text-anchor="middle">Ship</text>
-              <rect class="nodes__port" x="1975" y="305" width="10" height="10"/>
-            </svg>
-          </div>
-
-        </div>
-      </div>
-    </article>
-
-    <!-- ---- ACT 3 · down and to the left ------------------------------------ -->
-    <article class="act act--right canvas-host" data-ground="light" data-scene="cover" data-scene-ease
-             style="--dx: -.9; --dy: .45; --env-dx: .7; --env-dy: -.3">
-      <!-- A brand manual with the covers taken off: the baseline grid it is
-           built on, two glyphs sitting on it, the palette as empty swatches,
-           a monogram under construction on its module grid, and the spacing
-           scale. Outline only, laid out across the full width so it reads at
-           background scale instead of being sliced into a strip. -->
-      <canvas class="particles" data-particles aria-hidden="true"></canvas>
-      <div class="act__env wire" aria-hidden="true">
-        <svg viewBox="0 0 2400 1000" preserveAspectRatio="xMidYMid meet"
-             xmlns="http://www.w3.org/2000/svg">
-
-          <!-- Registration marks, one per corner -->
-          <path class="wire__mark" d="M 40 90 V 40 H 90"/>
-          <path class="wire__mark" d="M 2310 40 H 2360 V 90"/>
-          <path class="wire__mark" d="M 2360 910 V 960 H 2310"/>
-          <path class="wire__mark" d="M 90 960 H 40 V 910"/>
-
-          <!-- Type baselines, running the full width -->
-          <g class="wire__plane" style="--depth: -0.2">
-            <path class="wire__rule" d="M 120 210 H 2280"/>
-            <path class="wire__rule" d="M 120 290 H 2280"/>
-            <path class="wire__rule wire__rule--accent" d="M 120 490 H 2280"/>
-            <path class="wire__rule" d="M 120 570 H 2280"/>
-
-            <text class="wire__label" x="120" y="196">Cap</text>
-            <text class="wire__label" x="120" y="276">X</text>
-            <text class="wire__label wire__label--accent" x="120" y="476">Baseline</text>
-            <text class="wire__label" x="120" y="556">Desc</text>
-          </g>
-
-          <!-- Two glyphs, drawn as construction rather than as letters -->
-          <g class="wire__plane" style="--depth: 0.5">
-            <path class="wire__glyph" d="M 200 490 L 330 210 L 460 490"/>
-            <path class="wire__glyph" d="M 252 370 H 408"/>
-
-            <path class="wire__glyph" d="M 700 290 A 78 100 0 1 0 700 490 A 78 100 0 1 0 700 290"/>
-            <path class="wire__glyph" d="M 778 290 V 570 A 78 78 0 0 1 622 570"/>
-            <path class="wire__rule" d="M 622 290 H 778"/>
-          </g>
-
-          <!-- Palette, as empty swatches: outline plus the diagonal that means
-               "no colour assigned yet" in every drawing program there is. -->
-          <g class="wire__plane" style="--depth: -0.55">
-            <text class="wire__label" x="200" y="672">Palette</text>
-
-            <rect class="wire__rect wire__rect--accent" x="200" y="700" width="118" height="118"/>
-            <path class="wire__rule--accent wire__rule" d="M 200 818 L 318 700"/>
-
-            <rect class="wire__rect" x="338" y="700" width="118" height="118"/>
-            <path class="wire__rule" d="M 338 818 L 456 700"/>
-
-            <rect class="wire__rect" x="476" y="700" width="118" height="118"/>
-            <path class="wire__rule" d="M 476 818 L 594 700"/>
-
-            <rect class="wire__rect" x="614" y="700" width="118" height="118"/>
-            <path class="wire__rule" d="M 614 818 L 732 700"/>
-
-            <rect class="wire__rect" x="752" y="700" width="118" height="118"/>
-            <path class="wire__rule" d="M 752 818 L 870 700"/>
-
-            <rect class="wire__rect" x="890" y="700" width="118" height="118"/>
-            <path class="wire__rule" d="M 890 818 L 1008 700"/>
-          </g>
-
-          <!-- Monogram on its module grid -->
-          <g class="wire__plane" style="--depth: 0.7">
-            <text class="wire__label" x="1280" y="196">Mark — 3×3</text>
-
-            <rect class="wire__rect" x="1280" y="220" width="130" height="130"/>
-            <rect class="wire__rect" x="1410" y="220" width="130" height="130"/>
-            <rect class="wire__rect" x="1540" y="220" width="130" height="130"/>
-            <rect class="wire__rect" x="1280" y="350" width="130" height="130"/>
-            <rect class="wire__rect" x="1410" y="350" width="130" height="130"/>
-            <rect class="wire__rect" x="1540" y="350" width="130" height="130"/>
-            <rect class="wire__rect" x="1280" y="480" width="130" height="130"/>
-            <rect class="wire__rect" x="1410" y="480" width="130" height="130"/>
-            <rect class="wire__rect" x="1540" y="480" width="130" height="130"/>
-
-            <circle class="wire__rule" cx="1475" cy="415" r="195"/>
-            <path class="wire__dash" d="M 1280 220 L 1670 610"/>
-            <path class="wire__dash" d="M 1670 220 L 1280 610"/>
-
-            <path class="wire__glyph wire__glyph--accent wire__draw" pathLength="1"
-                  d="M 1330 560 V 270 L 1475 470 L 1620 270 V 560"/>
-          </g>
-
-          <!-- Spacing scale -->
-          <g class="wire__plane" style="--depth: -0.75">
-            <text class="wire__label" x="1820" y="672">Spacing</text>
-
-            <path class="wire__rule" d="M 1820 720 H 1900"/>
-            <path class="wire__rule" d="M 1820 706 V 734"/>
-            <path class="wire__rule" d="M 1900 706 V 734"/>
-            <text class="wire__label" x="1918" y="726">24</text>
-
-            <path class="wire__rule" d="M 1820 790 H 1980"/>
-            <path class="wire__rule" d="M 1820 776 V 804"/>
-            <path class="wire__rule" d="M 1980 776 V 804"/>
-            <text class="wire__label" x="1998" y="796">48</text>
-
-            <path class="wire__rule wire__rule--accent" d="M 1820 860 H 2140"/>
-            <path class="wire__rule" d="M 1820 846 V 874"/>
-            <path class="wire__rule" d="M 2140 846 V 874"/>
-            <text class="wire__label" x="2158" y="866">96</text>
-          </g>
-        </svg>
-      </div>
-
-      <div class="shell">
-        <div class="act__body">
-          <span class="t-label accent">Brand &amp; identity</span>
-          <p class="act__quote" data-reveal="lines">“Our brand doesn't look like anyone.”</p>
-          <p class="act__note t-body-l" data-reveal="fade">
-            Systems built to be used, not admired — and handed over so the team can keep building.
-          </p>
-        </div>
-      </div>
-    </article>
-
-    <!-- ---- ACT 4 · up and to the right ------------------------------------- -->
-    <article class="act canvas-host" data-scene="cover" data-scene-ease
-             style="--dx: .55; --dy: -.6; --env-dx: -.5; --env-dy: .5; --env-opacity: .4">
-      <canvas class="particles" data-particles aria-hidden="true"></canvas>
-      <div class="act__env nodes" aria-hidden="true">
-        <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice"
-             xmlns="http://www.w3.org/2000/svg">
-          <!-- An information architecture, abstracted to boxes and routes. -->
-          <path class="nodes__wire" d="M 600 110 V 170 H 220 V 230"/>
-          <path class="nodes__wire nodes__wire--live" d="M 600 110 V 230"/>
-          <path class="nodes__wire" d="M 600 110 V 170 H 980 V 230"/>
-          <path class="nodes__wire" d="M 220 330 V 390 H 100 V 450"/>
-          <path class="nodes__wire" d="M 220 330 V 450"/>
-          <path class="nodes__wire nodes__wire--live" d="M 600 330 V 450"/>
-          <path class="nodes__wire" d="M 980 330 V 390 H 1100 V 450"/>
-
-          <rect class="nodes__box nodes__box--live" x="480" y="20" width="240" height="90" rx="6"/>
-          <rect class="nodes__box" x="100" y="230" width="240" height="100" rx="6"/>
-          <rect class="nodes__box" x="480" y="230" width="240" height="100" rx="6"/>
-          <rect class="nodes__box" x="860" y="230" width="240" height="100" rx="6"/>
-
-          <rect class="nodes__box" x="20"  y="450" width="160" height="80" rx="6"/>
-          <rect class="nodes__box" x="200" y="450" width="160" height="80" rx="6"/>
-          <rect class="nodes__fill" x="520" y="450" width="160" height="80" rx="6"/>
-          <rect class="nodes__box nodes__box--live" x="520" y="450" width="160" height="80" rx="6"/>
-          <rect class="nodes__box" x="1020" y="450" width="160" height="80" rx="6"/>
-        </svg>
-      </div>
-
-      <div class="shell">
-        <div class="act__body">
-          <span class="t-label accent">UX &amp; UI</span>
-          <p class="act__quote" data-reveal="lines">“People can't find what they came for.”</p>
-          <p class="act__note t-body-l" data-reveal="fade">
-            Research, architecture and interfaces that get out of the way.
-          </p>
-        </div>
-      </div>
-    </article>
-
-    <!-- The section's own trailing padding-block-end (zeroed above via
-         section--flush-bottom) moved here as an explicit spacer instead —
-         it needs to be a real element so it can carry a canvas of its own.
-         Without this, the gap between the last act and the next section was
-         wide enough at wide viewports (--section-y clamps up to 12.5rem) to
-         read as the field visibly cutting off. -->
-    <div class="canvas-host" style="height: var(--section-y)">
-      <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       SEAM · ZOOM — out of the four problems and into the proof
-       ======================================================================== -->
-  <section class="zoom canvas-host" data-ground="light" data-scene data-scene-ease
-           aria-label="Selected work">
+  <section class="section capabilities canvas-host" id="capabilities" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="zoom__viewport">
-      <div class="zoom__frame">
-        <div class="zoom__media">
-          <div class="media__placeholder media__placeholder--filled">
-            <picture>
-              <source srcset="assets/media/aros-auto.webp" type="image/webp">
-              <img src="assets/media/aros-auto.jpg" alt="" loading="lazy" decoding="async">
-            </picture>
-          </div>
-        </div>
-      </div>
 
-      <div class="zoom__caption">
-        <div class="shell">
-          <p class="t-label" style="color: rgb(255 255 255 / 0.6)">The proof</p>
-          <p class="t-h2" data-reveal="lines" style="max-width: 16ch">
-            Four problems. Here's what <em class="em">happened</em> to them.
-          </p>
-        </div>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.44" data-bleed="left">
+        <span class="line"><span class="t-bleed">Craft</span></span>
       </div>
-    </div>
-  </section>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">What I do</h2>
+        <p class="t-compact muted">Involved from strategy to the last handover file. These are the parts I've gone deepest on.</p>
+        <span class="t-label section__num">02</span>
+      </div>
+    </header>
 
-  <!-- ========================================================================
-       BREATHER · light — the page stops talking
-       ======================================================================== -->
-  <section class="statement-scene canvas-host" data-ground="light" data-scene="cover">
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
     <div class="shell">
-      <p class="statement-scene__text marks">
-        <span class="statement-scene__line" style="--depth: 0.55">Design that works</span>
-        <span class="statement-scene__line" style="--depth: 0.2">harder than it <em class="em">looks</em>.</span>
-      </p>
-      <div class="statement-scene__foot">
-        <span class="t-label">Selected work</span>
-        <span class="t-label">2024 — now</span>
-        <span class="t-label">Content · Systems · Brand</span>
+
+      <!-- A list of short labels doesn't need seven boxes: type on the
+           ground, hairline separated, full width. Hovering a row floats a
+           picture beside the pointer (modules/preview.js). -->
+        <div class="rows" data-reveal="stagger">
+          <div class="row-item" data-preview="assets/media/logimark.webp">
+            <span class="t-label row-item__n">01</span>
+            <h3 class="row-item__title" data-reveal="lines">Content</h3>
+            <p class="t-small row-item__note">Static, motion and film. Built on real data, made to convert.</p>
+          </div>
+          <div class="row-item" data-preview="assets/media/friends-agenda.webp">
+            <span class="t-label row-item__n">02</span>
+            <h3 class="row-item__title" data-reveal="lines">AI systems &amp; workflows</h3>
+            <p class="t-small row-item__note">Pipelines that give a team hours back every week.</p>
+          </div>
+          <div class="row-item" data-preview="assets/media/aros-auto.webp">
+            <span class="t-label row-item__n">03</span>
+            <h3 class="row-item__title" data-reveal="lines">Brand &amp; identity</h3>
+            <p class="t-small row-item__note">Systems a team can keep building with.</p>
+          </div>
+          <div class="row-item" data-preview="assets/media/logimark.webp">
+            <span class="t-label row-item__n">04</span>
+            <h3 class="row-item__title" data-reveal="lines">UX &amp; UI design</h3>
+            <p class="t-small row-item__note">Research through to interface.</p>
+          </div>
+          <div class="row-item" data-preview="assets/media/friends-agenda.webp">
+            <span class="t-label row-item__n">05</span>
+            <h3 class="row-item__title" data-reveal="lines">Web design &amp; development</h3>
+            <p class="t-small row-item__note">I code what I design.</p>
+          </div>
+          <div class="row-item" data-preview="assets/media/aros-auto.webp">
+            <span class="t-label row-item__n">06</span>
+            <h3 class="row-item__title" data-reveal="lines">Print &amp; physical</h3>
+            <p class="t-small row-item__note">Posters, packaging, signage.</p>
+          </div>
+          <div class="row-item" data-preview="assets/media/logimark.webp">
+            <span class="t-label row-item__n">07</span>
+            <h3 class="row-item__title" data-reveal="lines">Strategy &amp; concept</h3>
+            <p class="t-small row-item__note">The part before anyone opens a design tool.</p>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       CLIENTS · light — two rows of marks running sideways
+       Both rows roll the same way, the second offset and lagging; scroll
+       speed throws them faster, and they lean into their speed like the
+       giant headlines do (modules/logos.js). The page never stops here.
+       No boxes.
+       Placeholder set: every name here already appears elsewhere on the
+       site. The marks are typographic stand-ins (logos.css) until the real
+       logo files arrive — swap each .logo__mark for an <img> or inline SVG.
+       TODO: replace with real client logos.
+       ======================================================================== -->
+  <section class="clients canvas-host" id="clients" data-ground="light"
+           data-clients aria-labelledby="clients-title">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="clients__stage">
+    <div class="shell clients__head">
+      <h2 class="t-title-compact" id="clients-title">Clients &amp; collaborators</h2>
+      <p class="t-compact muted">Brands I have designed for, alongside the teams that run them.</p>
+    </div>
+
+    <div class="clients__rows">
+      <div class="clients__row">
+        <ul class="clients__track" role="list">
+          <li class="logo logo--aros"><span class="logo__mark" aria-hidden="true">Aros Auto</span><span class="sr-only">Aros Auto</span></li>
+          <li class="logo logo--logimark"><span class="logo__mark" aria-hidden="true">logimark</span><span class="sr-only">Logimark</span></li>
+          <li class="logo logo--friends"><span class="logo__mark" aria-hidden="true">Friends Agenda</span><span class="sr-only">Friends Agenda</span></li>
+          <li class="logo logo--soscale"><span class="logo__mark" aria-hidden="true">SoScale/Media</span><span class="sr-only">SoScale Media</span></li>
+          <li class="logo logo--webbson"><span class="logo__mark" aria-hidden="true">webbson.</span><span class="sr-only">Webbson</span></li>
+        </ul>
       </div>
+      <div class="clients__row" aria-hidden="true">
+        <ul class="clients__track" role="list">
+          <li class="logo logo--soscale"><span class="logo__mark" aria-hidden="true">SoScale/Media</span><span class="sr-only">SoScale Media</span></li>
+          <li class="logo logo--webbson"><span class="logo__mark" aria-hidden="true">webbson.</span><span class="sr-only">Webbson</span></li>
+          <li class="logo logo--aros"><span class="logo__mark" aria-hidden="true">Aros Auto</span><span class="sr-only">Aros Auto</span></li>
+          <li class="logo logo--friends"><span class="logo__mark" aria-hidden="true">Friends Agenda</span><span class="sr-only">Friends Agenda</span></li>
+          <li class="logo logo--logimark"><span class="logo__mark" aria-hidden="true">logimark</span><span class="sr-only">Logimark</span></li>
+        </ul>
+      </div>
+    </div>
     </div>
   </section>
 
@@ -644,10 +356,21 @@
        ======================================================================== -->
   <section class="section canvas-host" id="work" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.69" data-bleed="left">
+        <span class="line"><span class="t-bleed">Content</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <span class="t-label section__num">03</span>
+      </div>
+    </header>
+
     <div class="shell">
 
       <article class="feature">
         <div class="feature__caption" data-reveal="stagger">
+          <h2 class="t-title-compact feature__title">Advertising that has to <em class="em">earn</em> its place.</h2>
+          <p class="t-compact muted feature__lede">Static and video built on customer research, tested against each other, rebuilt monthly against the numbers.</p>
           <div class="case__tags">
             <span class="t-label accent">Content</span>
             <span class="t-label">2025—</span>
@@ -655,7 +378,6 @@
             <span class="t-label">Motion</span>
             <span class="t-label">Film</span>
           </div>
-          <h3 class="t-h2" data-reveal="lines">Advertising that has to <em class="em">earn</em> its place</h3>
           <p class="t-body-l muted measure">
             Static and video creative built from customer research and review mining,
             hypothesis-tested against each other, and rebuilt monthly against what the
@@ -693,18 +415,16 @@
 <section class="creative-wall canvas-host" data-ground="light" data-nav-section="work" aria-labelledby="creative-wall-title">
   <canvas class="particles" data-particles aria-hidden="true"></canvas>
 
-  <div class="shell creative-wall__head">
-    <div class="section__head" style="margin-bottom: 0">
-      <span class="t-label accent">Creative</span>
-      <h2 class="t-h3" id="creative-wall-title" data-reveal="lines">
-        Most of it never becomes a <em class="em">case study</em>
-      </h2>
-      <p class="t-small muted section__aside" data-reveal="fade">
-        Static and motion, built to the format they ship in. No write-ups — this
-        part of the job is judged on sight.
-      </p>
-    </div>
-  </div>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.51" data-bleed="right">
+        <span class="line"><span class="t-bleed">Output</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact" id="creative-wall-title">Most of it never becomes a <em class="em">case study</em>.</h2>
+        <p class="t-compact muted">Static and motion, built to the format they ship in. No write-ups — this part of the job is judged on sight.</p>
+        <span class="t-label section__num">04</span>
+      </div>
+    </header>
 
   <!-- Edge to edge. No .shell here, deliberately: the wall is the one place on
        the page that ignores the 1440 grid. -->
@@ -975,7 +695,7 @@
   <section class="statement-scene canvas-host" data-ground="light" data-scene="cover">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
     <div class="shell">
-      <p class="statement-scene__text marks">
+      <p class="statement-scene__text">
         <span class="statement-scene__line" style="--depth: 0.45">Twenty versions.</span>
         <span class="statement-scene__line" style="--depth: 0.15">One that <em class="em">wins</em>.</span>
       </p>
@@ -987,16 +707,26 @@
 
   <section id="systems" class="section canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.7" data-bleed="left">
+        <span class="line"><span class="t-bleed">Systems</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <span class="t-label section__num">05</span>
+      </div>
+    </header>
+
     <div class="shell">
       <article class="feature feature--flip">
         <div class="feature__caption" data-reveal="stagger">
+          <h2 class="t-title-compact feature__title">Giving a production team its <em class="em">week</em> back.</h2>
+          <p class="t-compact muted feature__lede">An AI pipeline for generating, versioning and resizing creative — still running without me next to it.</p>
           <div class="case__tags">
             <span class="t-label accent">Systems</span>
             <span class="t-label">2025</span>
             <span class="t-label">AI workflow</span>
             <span class="t-label">Automation</span>
           </div>
-          <h3 class="t-h2" data-reveal="lines">Giving a production team its <em class="em">week</em> back</h3>
           <p class="t-body-l muted measure">
             An AI-driven pipeline for generating, versioning and resizing creative assets.
             Built once, documented, handed over — and still running without me standing
@@ -1024,7 +754,7 @@
   <section class="statement-scene canvas-host" data-ground="light" data-nav-section="systems" data-scene="cover">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
     <div class="shell">
-      <p class="statement-scene__text marks">
+      <p class="statement-scene__text">
         <span class="statement-scene__line" style="--depth: -0.5">Systems outlive</span>
         <span class="statement-scene__line" style="--depth: -0.2">the person who <em class="em">built</em> them.</span>
       </p>
@@ -1041,15 +771,18 @@
        ======================================================================== -->
   <section id="brand" class="section canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell">
-      <div class="section__head">
-        <span class="t-label section__num">02</span>
-        <h2 class="t-h2" data-reveal="lines">Brand &amp; web</h2>
-        <p class="t-small muted section__aside" data-reveal="fade">
-          Identity and interface work, mostly built end to end — research, design,
-          and the code that shipped it.
-        </p>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.45" data-bleed="right">
+        <span class="line"><span class="t-bleed">Brand</span></span>
       </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">Brand &amp; web</h2>
+        <p class="t-compact muted">Identity and interface work, mostly built end to end — research, design, and the code that shipped it.</p>
+        <span class="t-label section__num">06</span>
+      </div>
+    </header>
+
+    <div class="shell">
 
       <div class="work">
         <article class="case">
@@ -1108,73 +841,6 @@
   </section>
 
   <!-- ========================================================================
-       CAPABILITIES · light, glass over an ambient field
-       ======================================================================== -->
-  <section class="section capabilities canvas-host" id="capabilities" data-ground="light">
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
-
-    <div class="shell">
-      <div class="section__head">
-        <span class="t-label section__num">03</span>
-        <h2 class="t-h2" data-reveal="lines">What I do</h2>
-        <p class="t-small muted section__aside" data-reveal="fade">
-          I like being involved across a project — from strategy to the last handover
-          file. These are the parts I've gone deepest on.
-        </p>
-      </div>
-
-      <!-- A list of short labels doesn't need seven boxes. Type on the
-           ground, hairline separated, with one graphic holding the left. -->
-      <div class="split">
-        <div class="split__hold">
-          <div class="media media--tall">
-            <div class="media__placeholder media__placeholder--filled" data-parallax="0.18"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder — editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
-          </div>
-          <p class="t-small muted">Ordered by where the work actually is.</p>
-        </div>
-
-        <div class="rows" data-reveal="stagger">
-          <div class="row-item">
-            <span class="t-label row-item__n">01</span>
-            <h3 class="row-item__title" data-reveal="lines">Content</h3>
-            <p class="t-small row-item__note">Static, motion and film. Built on real data, made to convert.</p>
-          </div>
-          <div class="row-item">
-            <span class="t-label row-item__n">02</span>
-            <h3 class="row-item__title" data-reveal="lines">AI systems &amp; workflows</h3>
-            <p class="t-small row-item__note">Pipelines that give a team hours back every week.</p>
-          </div>
-          <div class="row-item">
-            <span class="t-label row-item__n">03</span>
-            <h3 class="row-item__title" data-reveal="lines">Brand &amp; identity</h3>
-            <p class="t-small row-item__note">Systems a team can keep building with.</p>
-          </div>
-          <div class="row-item">
-            <span class="t-label row-item__n">04</span>
-            <h3 class="row-item__title" data-reveal="lines">UX &amp; UI design</h3>
-            <p class="t-small row-item__note">Research through to interface.</p>
-          </div>
-          <div class="row-item">
-            <span class="t-label row-item__n">05</span>
-            <h3 class="row-item__title" data-reveal="lines">Web design &amp; development</h3>
-            <p class="t-small row-item__note">I code what I design.</p>
-          </div>
-          <div class="row-item">
-            <span class="t-label row-item__n">06</span>
-            <h3 class="row-item__title" data-reveal="lines">Print &amp; physical</h3>
-            <p class="t-small row-item__note">Posters, packaging, signage.</p>
-          </div>
-          <div class="row-item">
-            <span class="t-label row-item__n">07</span>
-            <h3 class="row-item__title" data-reveal="lines">Strategy &amp; concept</h3>
-            <p class="t-small row-item__note">The part before anyone opens a design tool.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
        SCENE · SLIDE — a panel arrives from the side and hands over to dark
        ======================================================================== -->
   <section class="slide" data-ground="light" data-nav-section="ai" data-scene data-scene-ease aria-hidden="true">
@@ -1185,7 +851,7 @@
              z-index: -1 is contained by it without needing .canvas-host. -->
         <canvas class="particles" data-particles aria-hidden="true"></canvas>
         <div class="statement-scene" style="position: relative; z-index: 1; height: 100%; min-height: 0">
-          <p class="statement-scene__text">It's still mostly made by <em class="em">hand</em>.</p>
+          <p class="statement-scene__text">Creative work made by <em class="em">human</em>.</p>
         </div>
       </div>
 
@@ -1209,218 +875,386 @@
   </section>
 
   <!-- ========================================================================
-       AI · dark — told as a short sequence rather than one static split.
-       Reused straight from the light sections: statement-scene for the
-       framing line, feature + sticky caption for each of the two cases.
+       AI · dark — three ways I use it: Context, Visuals, Tools.
+       Each part opens with a giant word as the divider, the real headline
+       and one line under it, a short block of copy, and an abstract line
+       drawing behind it that flows with the scroll (components/ai.css,
+       modules/ai-flow.js).
        ======================================================================== -->
-  <section class="statement-scene canvas-host" data-ground="dark" data-scene="cover" data-scene-ease>
+  <!-- ---- AI · 01 — concept & strategy ------------------------------------- -->
+  <section class="section canvas-host ai-part" id="ai" data-ground="dark" data-nav-section="ai">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell">
-      <p class="statement-scene__text marks">
-        <span class="statement-scene__line" style="--depth: -0.5">I test everything.</span>
-        <span class="statement-scene__line" style="--depth: -0.15">I keep what <em class="em">earns</em> its place.</span>
-      </p>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.56" data-bleed="right">
+        <span class="line"><span class="t-bleed">Context</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">Every source in the room, <em class="em">at once</em>.</h2>
+        <p class="t-compact muted">Concept &amp; strategy — better ideas, closer to the brand.</p>
+        <span class="t-label section__num">07</span>
+      </div>
+    </header>
+
+    <div class="shell ai-stage" data-ai-flow>
+      <div class="ai-stage__text" data-reveal="fade">
+        <div class="case__tags">
+          <span class="t-label accent">Concept &amp; strategy</span>
+          <span class="t-label">Research</span>
+          <span class="t-label">Brand context</span>
+        </div>
+        <p class="t-compact">
+          I collect and keep information from dozens of sources — briefs, research,
+          reviews, brand guidelines, past work — and work with all of it at the same time.
+        </p>
+        <p class="t-compact muted">
+          With that much context in the room, the concepts get sharper, and they fit the
+          brand from the first draft instead of the fifth.
+        </p>
+      </div>
+
+      <!-- Construction drawing, full width: a field of sources drifts on the
+           left; on view the circles fly into the dial and keep turning there;
+           out of it, a concept is drafted as outlines on a baseline grid.
+           Lines only — the sun is a stroke, never a fill. -->
+      <figure class="ai-fig ai-collect">
+        <svg viewBox="0 0 1200 440" role="img" aria-labelledby="ai-collect-title">
+          <title id="ai-collect-title">Dozens of sources are collected into one context held all at once, which writes a concept that fits the brand.</title>
+
+
+          <g class="ai-guides">
+            <path class="ai-guide" d="M 135.2 194.8 L 484.0 201.8"/>
+            <path class="ai-guide" d="M 60.0 252.4 L 484.5 217.7"/>
+            <path class="ai-guide" d="M 337.3 181.6 L 484.5 193.0"/>
+            <path class="ai-guide" d="M 220.5 299.1 L 487.8 239.1"/>
+            <path class="ai-guide" d="M 243.0 351.4 L 493.6 259.0"/>
+            <path class="ai-guide" d="M 298.2 275.4 L 487.2 236.5"/>
+            <path class="ai-guide" d="M 279.2 197.6 L 484.0 201.8"/>
+            <path class="ai-guide" d="M 79.5 244.6 L 484.4 216.0"/>
+          </g>
+          <g class="ai-ghosts">
+            <circle class="ai-ghost" cx="135.2" cy="194.8" r="3.9" style="--i: 0"/>
+            <circle class="ai-ghost" cx="144.8" cy="327.5" r="4.4" style="--i: 1"/>
+            <circle class="ai-ghost" cx="344.9" cy="273.6" r="4.2" style="--i: 2"/>
+            <circle class="ai-ghost" cx="226.9" cy="223.8" r="6.2" style="--i: 3"/>
+            <circle class="ai-ghost" cx="52.5" cy="235.0" r="4.8" style="--i: 4"/>
+            <circle class="ai-ghost" cx="249.3" cy="314.7" r="4.5" style="--i: 5"/>
+            <circle class="ai-ghost" cx="60.0" cy="252.4" r="6.5" style="--i: 6"/>
+            <circle class="ai-ghost" cx="243.8" cy="337.3" r="4.5" style="--i: 7"/>
+            <circle class="ai-ghost" cx="233.1" cy="302.5" r="4.2" style="--i: 8"/>
+            <circle class="ai-ghost" cx="301.2" cy="296.4" r="4.9" style="--i: 9"/>
+            <circle class="ai-ghost" cx="105.6" cy="270.3" r="3.9" style="--i: 10"/>
+            <circle class="ai-ghost" cx="322.7" cy="253.0" r="3.7" style="--i: 11"/>
+            <circle class="ai-ghost" cx="337.3" cy="181.6" r="5.9" style="--i: 12"/>
+            <circle class="ai-ghost" cx="304.4" cy="239.8" r="3.3" style="--i: 13"/>
+            <circle class="ai-ghost" cx="225.0" cy="181.9" r="3.3" style="--i: 14"/>
+            <circle class="ai-ghost" cx="194.8" cy="303.9" r="5.7" style="--i: 15"/>
+            <circle class="ai-ghost" cx="226.9" cy="261.7" r="7.0" style="--i: 16"/>
+            <circle class="ai-ghost" cx="286.5" cy="295.1" r="3.3" style="--i: 17"/>
+            <circle class="ai-ghost" cx="220.5" cy="299.1" r="4.8" style="--i: 18"/>
+            <circle class="ai-ghost" cx="219.7" cy="351.7" r="3.3" style="--i: 19"/>
+            <circle class="ai-ghost" cx="213.9" cy="228.4" r="4.1" style="--i: 20"/>
+            <circle class="ai-ghost" cx="121.1" cy="183.0" r="3.4" style="--i: 21"/>
+            <circle class="ai-ghost" cx="309.6" cy="335.8" r="4.7" style="--i: 22"/>
+            <circle class="ai-ghost" cx="353.9" cy="187.6" r="6.1" style="--i: 23"/>
+            <circle class="ai-ghost" cx="243.0" cy="351.4" r="5.9" style="--i: 24"/>
+            <circle class="ai-ghost" cx="203.2" cy="229.6" r="3.4" style="--i: 25"/>
+            <circle class="ai-ghost" cx="93.2" cy="188.7" r="5.4" style="--i: 26"/>
+            <circle class="ai-ghost" cx="293.2" cy="250.3" r="4.6" style="--i: 27"/>
+            <circle class="ai-ghost" cx="247.2" cy="239.2" r="3.7" style="--i: 28"/>
+            <circle class="ai-ghost" cx="98.4" cy="247.3" r="6.5" style="--i: 29"/>
+            <circle class="ai-ghost" cx="298.2" cy="275.4" r="3.9" style="--i: 30"/>
+            <circle class="ai-ghost" cx="148.2" cy="190.2" r="6.0" style="--i: 31"/>
+            <circle class="ai-ghost" cx="76.2" cy="189.4" r="5.7" style="--i: 32"/>
+            <circle class="ai-ghost" cx="284.6" cy="252.5" r="4.0" style="--i: 33"/>
+            <circle class="ai-ghost" cx="252.9" cy="288.6" r="6.7" style="--i: 34"/>
+            <circle class="ai-ghost" cx="53.2" cy="220.8" r="3.4" style="--i: 35"/>
+            <circle class="ai-ghost" cx="279.2" cy="197.6" r="5.3" style="--i: 36"/>
+            <circle class="ai-ghost" cx="268.0" cy="360.1" r="6.0" style="--i: 37"/>
+            <circle class="ai-ghost" cx="56.2" cy="357.3" r="3.8" style="--i: 38"/>
+            <circle class="ai-ghost" cx="308.6" cy="316.3" r="4.2" style="--i: 39"/>
+            <circle class="ai-ghost" cx="220.1" cy="230.7" r="4.3" style="--i: 40"/>
+            <circle class="ai-ghost" cx="111.8" cy="234.8" r="3.3" style="--i: 41"/>
+            <circle class="ai-ghost" cx="79.5" cy="244.6" r="5.0" style="--i: 42"/>
+            <circle class="ai-ghost" cx="135.9" cy="296.1" r="5.9" style="--i: 43"/>
+            <circle class="ai-ghost" cx="246.6" cy="249.0" r="6.2" style="--i: 44"/>
+            <circle class="ai-ghost" cx="258.5" cy="188.4" r="4.0" style="--i: 45"/>
+          </g>
+
+          <g class="ai-dialface">
+            <path class="ai-dial ai-dial--sun" d="M 640.0 47.0 L 640.0 33.0"/>
+            <path class="ai-dial" d="M 656.5 47.9 L 657.1 41.9"/>
+            <path class="ai-dial" d="M 672.9 50.5 L 674.1 44.6"/>
+            <path class="ai-dial" d="M 688.8 54.7 L 690.7 49.0"/>
+            <path class="ai-dial" d="M 704.3 60.7 L 706.7 55.2"/>
+            <path class="ai-dial ai-dial--long" d="M 719.0 68.2 L 726.0 56.0"/>
+            <path class="ai-dial" d="M 732.9 77.2 L 736.4 72.3"/>
+            <path class="ai-dial" d="M 745.7 87.6 L 749.7 83.1"/>
+            <path class="ai-dial" d="M 757.4 99.3 L 761.9 95.3"/>
+            <path class="ai-dial" d="M 767.8 112.1 L 772.7 108.6"/>
+            <path class="ai-dial ai-dial--long" d="M 776.8 126.0 L 789.0 119.0"/>
+            <path class="ai-dial" d="M 784.3 140.7 L 789.8 138.3"/>
+            <path class="ai-dial" d="M 790.3 156.2 L 796.0 154.3"/>
+            <path class="ai-dial" d="M 794.5 172.1 L 800.4 170.9"/>
+            <path class="ai-dial" d="M 797.1 188.5 L 803.1 187.9"/>
+            <path class="ai-dial ai-dial--long" d="M 798.0 205.0 L 812.0 205.0"/>
+            <path class="ai-dial" d="M 797.1 221.5 L 803.1 222.1"/>
+            <path class="ai-dial" d="M 794.5 237.9 L 800.4 239.1"/>
+            <path class="ai-dial" d="M 790.3 253.8 L 796.0 255.7"/>
+            <path class="ai-dial" d="M 784.3 269.3 L 789.8 271.7"/>
+            <path class="ai-dial ai-dial--long" d="M 776.8 284.0 L 789.0 291.0"/>
+            <path class="ai-dial" d="M 767.8 297.9 L 772.7 301.4"/>
+            <path class="ai-dial" d="M 757.4 310.7 L 761.9 314.7"/>
+            <path class="ai-dial" d="M 745.7 322.4 L 749.7 326.9"/>
+            <path class="ai-dial" d="M 732.9 332.8 L 736.4 337.7"/>
+            <path class="ai-dial ai-dial--long" d="M 719.0 341.8 L 726.0 354.0"/>
+            <path class="ai-dial" d="M 704.3 349.3 L 706.7 354.8"/>
+            <path class="ai-dial" d="M 688.8 355.3 L 690.7 361.0"/>
+            <path class="ai-dial" d="M 672.9 359.5 L 674.1 365.4"/>
+            <path class="ai-dial" d="M 656.5 362.1 L 657.1 368.1"/>
+            <path class="ai-dial ai-dial--long" d="M 640.0 363.0 L 640.0 377.0"/>
+            <path class="ai-dial" d="M 623.5 362.1 L 622.9 368.1"/>
+            <path class="ai-dial" d="M 607.1 359.5 L 605.9 365.4"/>
+            <path class="ai-dial" d="M 591.2 355.3 L 589.3 361.0"/>
+            <path class="ai-dial" d="M 575.7 349.3 L 573.3 354.8"/>
+            <path class="ai-dial ai-dial--long" d="M 561.0 341.8 L 554.0 354.0"/>
+            <path class="ai-dial" d="M 547.1 332.8 L 543.6 337.7"/>
+            <path class="ai-dial" d="M 534.3 322.4 L 530.3 326.9"/>
+            <path class="ai-dial" d="M 522.6 310.7 L 518.1 314.7"/>
+            <path class="ai-dial" d="M 512.2 297.9 L 507.3 301.4"/>
+            <path class="ai-dial ai-dial--long" d="M 503.2 284.0 L 491.0 291.0"/>
+            <path class="ai-dial" d="M 495.7 269.3 L 490.2 271.7"/>
+            <path class="ai-dial" d="M 489.7 253.8 L 484.0 255.7"/>
+            <path class="ai-dial" d="M 485.5 237.9 L 479.6 239.1"/>
+            <path class="ai-dial" d="M 482.9 221.5 L 476.9 222.1"/>
+            <path class="ai-dial ai-dial--long" d="M 482.0 205.0 L 468.0 205.0"/>
+            <path class="ai-dial" d="M 482.9 188.5 L 476.9 187.9"/>
+            <path class="ai-dial" d="M 485.5 172.1 L 479.6 170.9"/>
+            <path class="ai-dial" d="M 489.7 156.2 L 484.0 154.3"/>
+            <path class="ai-dial" d="M 495.7 140.7 L 490.2 138.3"/>
+            <path class="ai-dial ai-dial--long" d="M 503.2 126.0 L 491.0 119.0"/>
+            <path class="ai-dial" d="M 512.2 112.1 L 507.3 108.6"/>
+            <path class="ai-dial" d="M 522.6 99.3 L 518.1 95.3"/>
+            <path class="ai-dial" d="M 534.3 87.6 L 530.3 83.1"/>
+            <path class="ai-dial" d="M 547.1 77.2 L 543.6 72.3"/>
+            <path class="ai-dial ai-dial--long" d="M 561.0 68.2 L 554.0 56.0"/>
+            <path class="ai-dial" d="M 575.7 60.7 L 573.3 55.2"/>
+            <path class="ai-dial" d="M 591.2 54.7 L 589.3 49.0"/>
+            <path class="ai-dial" d="M 607.1 50.5 L 605.9 44.6"/>
+            <path class="ai-dial" d="M 623.5 47.9 L 622.9 41.9"/>
+          </g>
+          <circle class="ai-held" cx="640" cy="205" r="150"/>
+          <circle class="ai-inner" cx="640" cy="205" r="82.5"/>
+          <path class="ai-cross" d="M 490 205 H 790 M 640 55 V 355"/>
+          <circle class="ai-pulse" cx="640" cy="205" r="150"/>
+          <g class="ai-orbit" style="transform-origin: 640px 205px">
+              <circle class="ai-fly ai-fly--sun" cx="564.5" cy="101.2" r="3.9" style="--i: 0; --sx: -429.3px; --sy: 93.5px"/>
+              <circle class="ai-fly" cx="644.1" cy="135.9" r="4.4" style="--i: 1; --sx: -499.3px; --sy: 191.5px"/>
+              <circle class="ai-fly" cx="548.6" cy="120.4" r="4.2" style="--i: 2; --sx: -203.7px; --sy: 153.2px"/>
+              <circle class="ai-fly" cx="548.7" cy="232.6" r="6.2" style="--i: 3; --sx: -321.9px; --sy: -8.8px"/>
+              <circle class="ai-fly" cx="729.1" cy="286.1" r="4.8" style="--i: 4; --sx: -676.6px; --sy: -51.2px"/>
+              <circle class="ai-fly" cx="536.1" cy="177.7" r="4.5" style="--i: 5; --sx: -286.8px; --sy: 137.0px"/>
+              <circle class="ai-fly" cx="661.2" cy="170.4" r="6.5" style="--i: 6; --sx: -601.3px; --sy: 82.1px"/>
+              <circle class="ai-fly" cx="743.9" cy="266.0" r="4.5" style="--i: 7; --sx: -500.1px; --sy: 71.3px"/>
+              <circle class="ai-fly" cx="652.4" cy="84.6" r="4.2" style="--i: 8; --sx: -419.3px; --sy: 217.9px"/>
+              <circle class="ai-fly ai-fly--sun" cx="730.4" cy="126.5" r="4.9" style="--i: 9; --sx: -429.1px; --sy: 169.9px"/>
+              <circle class="ai-fly" cx="636.8" cy="125.9" r="3.9" style="--i: 10; --sx: -531.2px; --sy: 144.5px"/>
+              <circle class="ai-fly" cx="567.4" cy="274.7" r="3.7" style="--i: 11; --sx: -244.7px; --sy: -21.7px"/>
+              <circle class="ai-fly" cx="592.2" cy="99.0" r="5.9" style="--i: 12; --sx: -254.9px; --sy: 82.6px"/>
+              <circle class="ai-fly" cx="678.2" cy="283.5" r="3.3" style="--i: 13; --sx: -373.8px; --sy: -43.7px"/>
+              <circle class="ai-fly" cx="519.8" cy="235.8" r="3.3" style="--i: 14; --sx: -294.9px; --sy: -53.9px"/>
+              <circle class="ai-fly" cx="591.3" cy="328.0" r="5.7" style="--i: 15; --sx: -396.5px; --sy: -24.1px"/>
+              <circle class="ai-fly" cx="586.2" cy="214.8" r="7.0" style="--i: 16; --sx: -359.3px; --sy: 46.9px"/>
+              <circle class="ai-fly" cx="743.5" cy="275.6" r="3.3" style="--i: 17; --sx: -457.1px; --sy: 19.5px"/>
+              <circle class="ai-fly ai-fly--sun" cx="704.8" cy="117.8" r="4.8" style="--i: 18; --sx: -484.3px; --sy: 181.3px"/>
+              <circle class="ai-fly" cx="611.2" cy="101.8" r="3.3" style="--i: 19; --sx: -391.4px; --sy: 249.9px"/>
+              <circle class="ai-fly" cx="565.2" cy="287.8" r="4.1" style="--i: 20; --sx: -351.3px; --sy: -59.5px"/>
+              <circle class="ai-fly" cx="549.8" cy="278.6" r="3.4" style="--i: 21; --sx: -428.7px; --sy: -95.6px"/>
+              <circle class="ai-fly" cx="766.2" cy="178.9" r="4.7" style="--i: 22; --sx: -456.5px; --sy: 156.9px"/>
+              <circle class="ai-fly" cx="588.3" cy="268.8" r="6.1" style="--i: 23; --sx: -234.4px; --sy: -81.1px"/>
+              <circle class="ai-fly" cx="729.6" cy="211.5" r="5.9" style="--i: 24; --sx: -486.5px; --sy: 139.9px"/>
+              <circle class="ai-fly" cx="607.3" cy="258.6" r="3.4" style="--i: 25; --sx: -404.1px; --sy: -29.0px"/>
+              <circle class="ai-fly" cx="713.2" cy="310.2" r="5.4" style="--i: 26; --sx: -620.0px; --sy: -121.6px"/>
+              <circle class="ai-fly ai-fly--sun" cx="672.7" cy="95.9" r="4.6" style="--i: 27; --sx: -379.5px; --sy: 154.4px"/>
+              <circle class="ai-fly" cx="712.3" cy="151.8" r="3.7" style="--i: 28; --sx: -465.1px; --sy: 87.4px"/>
+              <circle class="ai-fly" cx="691.7" cy="117.1" r="6.5" style="--i: 29; --sx: -593.3px; --sy: 130.2px"/>
+              <circle class="ai-fly" cx="694.7" cy="103.6" r="3.9" style="--i: 30; --sx: -396.6px; --sy: 171.8px"/>
+              <circle class="ai-fly" cx="630.1" cy="90.5" r="6.0" style="--i: 31; --sx: -481.9px; --sy: 99.7px"/>
+              <circle class="ai-fly" cx="563.7" cy="211.7" r="5.7" style="--i: 32; --sx: -487.5px; --sy: -22.3px"/>
+              <circle class="ai-fly" cx="676.2" cy="300.4" r="4.0" style="--i: 33; --sx: -391.6px; --sy: -47.9px"/>
+              <circle class="ai-fly" cx="700.8" cy="177.4" r="6.7" style="--i: 34; --sx: -447.9px; --sy: 111.2px"/>
+              <circle class="ai-fly" cx="664.4" cy="267.3" r="3.4" style="--i: 35; --sx: -611.2px; --sy: -46.5px"/>
+              <circle class="ai-fly ai-fly--sun" cx="712.8" cy="191.2" r="5.3" style="--i: 36; --sx: -433.6px; --sy: 6.4px"/>
+              <circle class="ai-fly" cx="524.1" cy="150.1" r="6.0" style="--i: 37; --sx: -256.1px; --sy: 210.1px"/>
+              <circle class="ai-fly" cx="727.4" cy="222.6" r="3.8" style="--i: 38; --sx: -671.2px; --sy: 134.7px"/>
+              <circle class="ai-fly" cx="643.5" cy="333.8" r="4.2" style="--i: 39; --sx: -334.9px; --sy: -17.5px"/>
+              <circle class="ai-fly" cx="626.8" cy="73.9" r="4.3" style="--i: 40; --sx: -406.7px; --sy: 156.8px"/>
+              <circle class="ai-fly" cx="748.6" cy="276.5" r="3.3" style="--i: 41; --sx: -636.8px; --sy: -41.7px"/>
+              <circle class="ai-fly" cx="729.0" cy="271.6" r="5.0" style="--i: 42; --sx: -649.6px; --sy: -26.9px"/>
+              <circle class="ai-fly" cx="545.6" cy="201.1" r="5.9" style="--i: 43; --sx: -409.7px; --sy: 95.0px"/>
+              <circle class="ai-fly" cx="514.7" cy="239.8" r="6.2" style="--i: 44; --sx: -268.1px; --sy: 9.2px"/>
+              <circle class="ai-fly ai-fly--sun" cx="567.6" cy="134.3" r="4.0" style="--i: 45; --sx: -309.1px; --sy: 54.0px"/>
+          </g>
+
+          <path class="ai-draw" pathLength="1" d="M 816 205 C 870 205, 830 113, 880 113"/>
+
+          <g class="ai-baselines">
+            <path class="ai-baseline" d="M 880 113 H 1190"/>
+            <path class="ai-baseline" d="M 880 143 H 1190"/>
+            <path class="ai-baseline" d="M 880 173 H 1190"/>
+            <path class="ai-baseline" d="M 880 203 H 1190"/>
+            <path class="ai-baseline" d="M 880 233 H 1190"/>
+            <path class="ai-baseline" d="M 880 263 H 1190"/>
+            <path class="ai-baseline" d="M 880 293 H 1190"/>
+          </g>
+          <g class="ai-written">
+            <rect class="ai-write ai-write--sun" x="890" y="106.0" width="290" height="14" rx="7" style="--i: 0"/>
+            <rect class="ai-write" x="890" y="139.0" width="250" height="8" rx="4" style="--i: 1"/>
+            <rect class="ai-write" x="890" y="169.0" width="270" height="8" rx="4" style="--i: 2"/>
+            <rect class="ai-write" x="890" y="199.0" width="180" height="8" rx="4" style="--i: 3"/>
+            <rect class="ai-write" x="890" y="229.0" width="230" height="8" rx="4" style="--i: 4"/>
+            <rect class="ai-write" x="890" y="259.0" width="140" height="8" rx="4" style="--i: 5"/>
+          </g>
+          <path class="ai-bracket" d="M 1196 106 H 1190 V 278 H 1196"/>
+
+          <text class="ai-step" x="180" y="420">01 — Collect</text>
+          <text class="ai-step" x="640" y="420" text-anchor="middle">02 — Hold</text>
+          <text class="ai-step" x="1020" y="420" text-anchor="end">03 — Write</text>
+        </svg>
+      </figure>
     </div>
   </section>
 
-  <section class="section canvas-host has-rail" id="ai" data-ground="dark">
+  <!-- ---- AI · 02 — content creation --------------------------------------- -->
+  <section class="section canvas-host ai-part" id="ai-content" data-ground="dark" data-nav-section="ai">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <span class="rail t-label" aria-hidden="true">Taste is mine · Volume is the machine's</span>
-    <div class="shell">
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.54" data-bleed="left">
+        <span class="line"><span class="t-bleed">Visuals</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">What used to stay on the <em class="em">sketch</em> table.</h2>
+        <p class="t-compact muted">Content creation — image and video models in production.</p>
+        <span class="t-label section__num">08</span>
+      </div>
+    </header>
 
-      <!-- ---- Case 1 · content ------------------------------------------------- -->
-      <article class="feature">
-        <div class="feature__caption" data-reveal="stagger">
-          <div class="case__tags">
-            <span class="t-label accent">AI for content</span>
-            <span class="t-label">Image</span>
-            <span class="t-label">Video</span>
-            <span class="t-label">Voice</span>
-            <span class="t-label">Graphics</span>
-          </div>
-          <h3 class="t-h2" data-reveal="lines">More of it, without lowering the bar</h3>
-          <p class="t-body-l muted measure" data-reveal="fade">
-            I keep close to what's actually possible right now, not what's hyped — new
-            models, new tools, tested as they land. Used well, that means a version that
-            used to be too expensive to produce, or too slow to justify, is suddenly worth
-            making. I generate the assets myself — images, video effects, voiceovers,
-            graphics — then direct, edit, and lay them out by hand, so the same material
-            keeps working across the next iteration, or an entirely different format.
-          </p>
+    <div class="shell ai-stage ai-stage--end" data-ai-flow>
+      <div class="ai-stage__text" data-reveal="fade">
+        <div class="case__tags">
+          <span class="t-label accent">Content creation</span>
+          <span class="t-label">Image</span>
+          <span class="t-label">Video</span>
+          <span class="t-label">VFX</span>
+          <span class="t-label">Animation</span>
         </div>
+        <p class="t-compact">
+          Image and video models let me make on-brand graphics and visuals — and push into
+          VFX and animation that used to be out of reach for the budget or the timeline.
+        </p>
+        <p class="t-compact muted">
+          Production goes up, and the ideas that never got made, get made.
+        </p>
+        <p class="t-label">Brief 1 → frames, many → picked 1 · directed, edited and finished by hand</p>
+      </div>
 
-        <div class="feature__media">
-          <figure class="gfx gfx--wire" data-scene="cover" data-scene-ease>
-            <div class="gfx__stage">
-              <span class="gfx__grid" data-parallax="0.08" aria-hidden="true"></span>
-
-              <svg class="gfx__art" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet"
-                   aria-hidden="true" focusable="false">
-
-                <g class="gfx-plane" style="--depth: -0.08">
-                  <path class="gfx-wire" d="M 296 102 L 296 140 L 115 140 L 115 200"/>
-                  <path class="gfx-wire gfx-wire--live" d="M 300 102 L 300 200"/>
-                  <path class="gfx-wire" d="M 304 102 L 304 140 L 485 140 L 485 200"/>
-
-                  <path class="gfx-wire" d="M 115 262 L 115 320 L 296 320 L 296 360"/>
-                  <path class="gfx-wire gfx-wire--live" d="M 300 262 L 300 360"/>
-                  <path class="gfx-wire" d="M 485 262 L 485 320 L 304 320 L 304 360"/>
-                </g>
-
-                <!-- ---- Direction, held by a person, not handed to the model ---- -->
-                <text class="gfx-t" x="30" y="30">DIRECTION</text>
-
-                <rect class="gfx-box gfx-box--live" x="214" y="40" width="172" height="62" rx="6"
-                      style="--dx: 0; --dy: -1.1"/>
-                <text class="gfx-label gfx-label--live" x="300" y="72" text-anchor="middle">Brief</text>
-                <rect class="gfx-port" x="296" y="98" width="8" height="8"/>
-
-                <!-- ---- Assets, generated, three different kinds --------------- -->
-                <text class="gfx-t" x="30" y="192">ASSETS</text>
-
-                <rect class="gfx-box" x="40" y="200" width="150" height="62" rx="6"
-                      style="--dx: -1.2; --dy: -0.3"/>
-                <text class="gfx-label" x="115" y="232" text-anchor="middle">Image</text>
-                <rect class="gfx-port" x="111" y="196" width="8" height="8"/>
-                <rect class="gfx-port" x="111" y="258" width="8" height="8"/>
-
-                <rect class="gfx-box gfx-box--fill" x="225" y="200" width="150" height="62" rx="6"
-                      style="--dx: 0; --dy: -0.3"/>
-                <text class="gfx-label" x="300" y="232" text-anchor="middle">Video</text>
-                <rect class="gfx-port" x="296" y="196" width="8" height="8"/>
-                <rect class="gfx-port" x="296" y="258" width="8" height="8"/>
-
-                <rect class="gfx-box" x="410" y="200" width="150" height="62" rx="6"
-                      style="--dx: 1.2; --dy: -0.3"/>
-                <text class="gfx-label" x="485" y="232" text-anchor="middle">Voice</text>
-                <rect class="gfx-port" x="481" y="196" width="8" height="8"/>
-                <rect class="gfx-port" x="481" y="258" width="8" height="8"/>
-
-                <!-- ---- Ship, edited and laid out by hand ----------------------- -->
-                <rect class="gfx-box gfx-box--live" x="214" y="360" width="172" height="62" rx="6"
-                      style="--dx: 0; --dy: 1.1"/>
-                <text class="gfx-label gfx-label--live" x="300" y="392" text-anchor="middle">Ship</text>
-                <rect class="gfx-port" x="296" y="356" width="8" height="8"/>
-
-                <text class="gfx-t gfx-t--minor" x="40"  y="480">3 ASSET TYPES</text>
-                <text class="gfx-t gfx-t--minor" x="410" y="480">1 DIRECTION</text>
-              </svg>
-            </div>
-
-            <figcaption class="gfx__cap t-label">
-              <span>Direction, still mine</span>
-              <span>Image · video · voice</span>
-            </figcaption>
-          </figure>
+      <!-- Wireframe reel, full bleed: two rows of frame outlines on a tilted
+           plane, running in opposite directions. Each frame holds a sketch —
+           placeholder, subject, horizon, thirds, keyframes, a bezier — that
+           stands for output, not anyone's real work. One is picked. -->
+      <figure class="ai-reel" aria-label="One brief becomes many frames across image, VFX and animation; one is picked.">
+        <div class="ai-reel__tilt" aria-hidden="true">
+          <div class="ai-reel__row"><div class="ai-reel__track"><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 01</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 02</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 10 92 H 90"/><path d="M 22 86 L 28 92 L 22 98 L 16 92 Z M 50 86 L 56 92 L 50 98 L 44 92 Z M 78 86 L 84 92 L 78 98 L 72 92 Z"/><path d="M 22 66 C 36 30, 64 30, 78 66"/></svg><i>ANIM 03</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 04</i></span><span class="ai-frame is-pick"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 05</i><b>Pick</b></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 33.3 0 V 125 M 66.6 0 V 125 M 0 41.6 H 100 M 0 83.3 H 100"/><circle cx="66.6" cy="41.6" r="5"/></svg><i>IMG 06</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 07</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 08</i></span></div><div class="ai-reel__track" aria-hidden="true"><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 01</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 02</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 10 92 H 90"/><path d="M 22 86 L 28 92 L 22 98 L 16 92 Z M 50 86 L 56 92 L 50 98 L 44 92 Z M 78 86 L 84 92 L 78 98 L 72 92 Z"/><path d="M 22 66 C 36 30, 64 30, 78 66"/></svg><i>ANIM 03</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 04</i></span><span class="ai-frame is-pick"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 05</i><b>Pick</b></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 33.3 0 V 125 M 66.6 0 V 125 M 0 41.6 H 100 M 0 83.3 H 100"/><circle cx="66.6" cy="41.6" r="5"/></svg><i>IMG 06</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 07</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 08</i></span></div></div>
+          <div class="ai-reel__row ai-reel__row--back"><div class="ai-reel__track"><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 04</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 05</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 33.3 0 V 125 M 66.6 0 V 125 M 0 41.6 H 100 M 0 83.3 H 100"/><circle cx="66.6" cy="41.6" r="5"/></svg><i>IMG 06</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 07</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 08</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 10 92 H 90"/><path d="M 22 86 L 28 92 L 22 98 L 16 92 Z M 50 86 L 56 92 L 50 98 L 44 92 Z M 78 86 L 84 92 L 78 98 L 72 92 Z"/><path d="M 22 66 C 36 30, 64 30, 78 66"/></svg><i>ANIM 09</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 10</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 11</i></span></div><div class="ai-reel__track" aria-hidden="true"><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 04</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 05</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 33.3 0 V 125 M 66.6 0 V 125 M 0 41.6 H 100 M 0 83.3 H 100"/><circle cx="66.6" cy="41.6" r="5"/></svg><i>IMG 06</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 07</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 08</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 10 92 H 90"/><path d="M 22 86 L 28 92 L 22 98 L 16 92 Z M 50 86 L 56 92 L 50 98 L 44 92 Z M 78 86 L 84 92 L 78 98 L 72 92 Z"/><path d="M 22 66 C 36 30, 64 30, 78 66"/></svg><i>ANIM 09</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 10</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 11</i></span></div></div>
         </div>
-      </article>
+      </figure>
     </div>
   </section>
 
-  <!-- ========================================================================
-       AI · bridge — the other half of the job, said in one line
-       ======================================================================== -->
+  <!-- ---- AI · 03 — workflows & apps --------------------------------------- -->
+  <section class="section canvas-host ai-part" id="ai-tools" data-ground="dark" data-nav-section="ai">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.44" data-bleed="right">
+        <span class="line"><span class="t-bleed">Tools</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">Tools I build, own and shape to the <em class="em">job</em>.</h2>
+        <p class="t-compact muted">Workflows &amp; apps — the repetitive half, taken off the table.</p>
+        <span class="t-label section__num">09</span>
+      </div>
+    </header>
+
+    <div class="shell ai-stage ai-stage--stack" data-ai-flow>
+      <div class="ai-stage__text" data-reveal="fade">
+        <div class="case__tags">
+          <span class="t-label accent">Workflows &amp; apps</span>
+          <span class="t-label">Automations</span>
+          <span class="t-label">Custom tools</span>
+        </div>
+        <p class="t-compact">
+          I build workflows and small apps that take the repetitive work off the table, so
+          the time goes to the creative part.
+        </p>
+        <p class="t-compact muted">
+          Building your own also saves money — no paying for features you don't need, and
+          tools that fit exactly how the team works.
+        </p>
+      </div>
+
+      <!-- Wireframe, full width, behind the copy: twelve repeated tasks feed a
+           pipeline (trigger → workflow → app) that hands the time to the
+           creative work. -->
+      <figure class="ai-fig ai-tools">
+        <svg viewBox="0 0 1200 300" role="img" aria-labelledby="ai-tools-title">
+          <title id="ai-tools-title">Repeated tasks run through a workflow and an app, and the time goes back to creative work.</title>
+
+          <defs>
+            <pattern id="ai-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <path class="ai-hatch" d="M 0 0 V 8"/>
+            </pattern>
+          </defs>
+
+
+          <!-- Repeated tasks -->
+          <text class="ai-step" x="330" y="62" text-anchor="end">Repeated tasks</text>
+          <rect class="ai-task" x="40" y="78" width="60" height="40" rx="4" style="--i: 0"/>
+          <rect class="ai-task" x="112" y="78" width="60" height="40" rx="4" style="--i: 1"/>
+          <rect class="ai-task" x="184" y="78" width="60" height="40" rx="4" style="--i: 2"/>
+          <rect class="ai-task" x="256" y="78" width="60" height="40" rx="4" style="--i: 3"/>
+          <rect class="ai-task" x="40" y="130" width="60" height="40" rx="4" style="--i: 4"/>
+          <rect class="ai-task" x="112" y="130" width="60" height="40" rx="4" style="--i: 5"/>
+          <rect class="ai-task" x="184" y="130" width="60" height="40" rx="4" style="--i: 6"/>
+          <rect class="ai-task" x="256" y="130" width="60" height="40" rx="4" style="--i: 7"/>
+          <rect class="ai-task" x="40" y="182" width="60" height="40" rx="4" style="--i: 8"/>
+          <rect class="ai-task" x="112" y="182" width="60" height="40" rx="4" style="--i: 9"/>
+          <rect class="ai-task" x="184" y="182" width="60" height="40" rx="4" style="--i: 10"/>
+          <rect class="ai-task" x="256" y="182" width="60" height="40" rx="4" style="--i: 11"/>
+
+          <!-- Pipeline -->
+          <path class="ai-wire" d="M 334 150 H 430 M 550 150 H 610 M 730 150 H 790"/>
+          <path class="ai-flowdash" d="M 334 150 H 430 M 550 150 H 610 M 730 150 H 790"/>
+          <g class="ai-node" style="--i: 0"><rect x="430" y="122" width="120" height="56" rx="8"/><text x="490" y="155">Trigger</text></g>
+          <g class="ai-node ai-node--sun" style="--i: 1"><rect x="610" y="122" width="120" height="56" rx="8"/><text x="670" y="155">Workflow</text></g>
+          <g class="ai-node" style="--i: 2"><rect x="790" y="122" width="120" height="56" rx="8"/><text x="850" y="155">App</text></g>
+
+          <!-- Handed to the creative work -->
+          <path class="ai-draw" pathLength="1" d="M 910 150 H 960"/>
+          <rect class="ai-canvas" x="960" y="80" width="210" height="140" rx="6"/>
+          <path class="ai-sketch" pathLength="1" d="M 985 190 C 1020 122, 1060 202, 1095 132 S 1140 162, 1150 112"/>
+          <circle class="ai-sketch-dot" cx="1150" cy="112" r="4"/>
+          <text class="ai-step ai-step--sun" x="1040" y="246" text-anchor="end">Creative work</text>
+        </svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ---- AI · close ------------------------------------------------------- -->
   <section class="statement-scene canvas-host" data-ground="dark" data-scene="cover" data-scene-ease data-nav-section="ai">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
     <div class="shell">
-      <p class="statement-scene__text marks">
-        <span class="statement-scene__line" style="--depth: -0.5">Half the week was</span>
-        <span class="statement-scene__line" style="--depth: -0.15">never the <em class="em">creative</em> half.</span>
-      </p>
-    </div>
-  </section>
-
-  <section class="section canvas-host" data-ground="dark" data-nav-section="ai">
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell">
-
-      <!-- ---- Case 2 · systems --------------------------------------------------- -->
-      <article class="feature feature--flip">
-        <div class="feature__caption" data-reveal="stagger">
-          <div class="case__tags">
-            <span class="t-label accent">AI for systems</span>
-            <span class="t-label">Workflows</span>
-            <span class="t-label">Automations</span>
-            <span class="t-label">Apps</span>
-          </div>
-          <h3 class="t-h2" data-reveal="lines">The boring half of the week, automated</h3>
-          <p class="t-body-l muted measure" data-reveal="fade">
-            The research comes first — sitting with the actual work until the real
-            bottleneck shows itself, not the one that's easiest to blame. From there it's
-            a plan: a workflow stitched together from existing tools, an automation that
-            runs on its own, or, when neither fits, a small app built specifically for
-            that one repetitive job. None of it is the interesting part of the work —
-            which is exactly why it's worth removing. What's left is more time on the
-            half that actually moves things forward.
-          </p>
-        </div>
-
-        <div class="feature__media">
-          <figure class="gfx gfx--wire" data-scene="cover" data-scene-ease>
-            <div class="gfx__stage">
-              <span class="gfx__grid" data-parallax="0.08" aria-hidden="true"></span>
-
-              <svg class="gfx__art" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid meet"
-                   aria-hidden="true" focusable="false">
-
-                <g class="gfx-plane" style="--depth: -0.08">
-                  <path class="gfx-wire" d="M 115 96 L 115 160 L 296 160 L 296 220"/>
-                  <path class="gfx-wire gfx-wire--live" d="M 300 96 L 300 220"/>
-                  <path class="gfx-wire" d="M 485 96 L 485 160 L 304 160 L 304 220"/>
-
-                  <path class="gfx-wire gfx-wire--live" d="M 300 286 L 300 400"/>
-                </g>
-
-                <!-- ---- The repeated, manual half of the job ------------------- -->
-                <text class="gfx-t" x="30" y="30">TASKS</text>
-
-                <rect class="gfx-box" x="40" y="40" width="150" height="56" rx="6"
-                      style="--dx: -1.2; --dy: -1.1"/>
-                <text class="gfx-label" x="115" y="69" text-anchor="middle">Task</text>
-                <rect class="gfx-port" x="111" y="92" width="8" height="8"/>
-
-                <rect class="gfx-box" x="225" y="40" width="150" height="56" rx="6"
-                      style="--dx: 0; --dy: -1.1"/>
-                <text class="gfx-label" x="300" y="69" text-anchor="middle">Task</text>
-                <rect class="gfx-port" x="296" y="92" width="8" height="8"/>
-
-                <rect class="gfx-box" x="410" y="40" width="150" height="56" rx="6"
-                      style="--dx: 1.2; --dy: -1.1"/>
-                <text class="gfx-label" x="485" y="69" text-anchor="middle">Task</text>
-                <rect class="gfx-port" x="481" y="92" width="8" height="8"/>
-
-                <!-- ---- The one workflow, automation or small app -------------- -->
-                <text class="gfx-t" x="30" y="212">AUTOMATE</text>
-
-                <rect class="gfx-box gfx-box--live gfx-box--fill" x="214" y="220" width="172" height="66" rx="6"
-                      style="--dx: 0; --dy: 0"/>
-                <text class="gfx-label gfx-label--live" x="300" y="254" text-anchor="middle">Workflow</text>
-                <rect class="gfx-port" x="296" y="216" width="8" height="8"/>
-                <rect class="gfx-port" x="296" y="282" width="8" height="8"/>
-
-                <!-- ---- Time, spent on the work that actually matters ---------- -->
-                <rect class="gfx-box gfx-box--live" x="214" y="400" width="172" height="62" rx="6"
-                      style="--dx: 0; --dy: 1.1"/>
-                <text class="gfx-label gfx-label--live" x="300" y="432" text-anchor="middle">Time back</text>
-                <rect class="gfx-port" x="296" y="396" width="8" height="8"/>
-
-                <text class="gfx-t gfx-t--minor" x="40"  y="520">3 REPEATED TASKS</text>
-                <text class="gfx-t gfx-t--minor" x="410" y="520">1 WORKFLOW</text>
-              </svg>
-            </div>
-
-            <figcaption class="gfx__cap t-label">
-              <span>Workflows &amp; small apps</span>
-              <span>Bottleneck · build · time back</span>
-            </figcaption>
-          </figure>
-        </div>
-      </article>
-
-      <p class="t-body-l measure" style="margin-top: var(--sp-24); padding-top: var(--sp-8); border-top: 1px solid var(--line)">
-        The read I keep coming back to, after trying most of what comes out: AI is the
-        fastest way I've found to reach a good decision — never a shortcut around
-        making one.
+      <p class="statement-scene__text">
+        <span class="statement-scene__line" style="--depth: -0.5">Not a threat.</span>
+        <span class="statement-scene__line" style="--depth: -0.15">An <em class="em">opportunity</em>.</span>
       </p>
     </div>
   </section>
@@ -1430,93 +1264,128 @@
        ======================================================================== -->
   <section id="process" class="canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell section section--tight">
-      <div class="section__head" style="margin-bottom: 0">
-        <span class="t-label section__num">05</span>
-        <h2 class="t-h2" data-reveal="lines">How I work</h2>
+    <div class="section section--tight section--flush-bottom">
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.62" data-bleed="left">
+        <span class="line"><span class="t-bleed">Process</span></span>
       </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">Six steps, one <em class="em">thread</em>.</h2>
+        <p class="t-compact muted">The same order every time — follow the line. The last step writes the brief for the next.</p>
+        <span class="t-label section__num">10</span>
+      </div>
+    </header>
     </div>
 
     <div class="process-pin" data-process-pin data-scene>
       <div class="process-pin__viewport">
         <div class="process shell" data-process-track data-track>
           <article class="process__step">
-            <span class="process__n">01</span>
-            <h3 class="t-h3" data-reveal="lines">Understand</h3>
-            <p class="t-small muted">
-              Interviews, data, competitors, and a lot of questions. I want the real
-              problem, not the stated one — they are rarely the same sentence.
-            </p>
+            <svg class="process__art" viewBox="0 0 600 640" aria-hidden="true" data-thread>
+            <circle class="pw-faint" cx="89.8" cy="171.2" r="5.5"/><circle class="pw-faint" cx="196.2" cy="70" r="5.2"/><circle class="pw-faint" cx="554.4" cy="430.9" r="3"/><circle class="pw-faint" cx="107" cy="405.5" r="6.1"/><circle class="pw-faint" cx="425.8" cy="65.2" r="6.5"/><circle class="pw-faint" cx="517.2" cy="56.2" r="6.4"/><circle class="pw-faint" cx="624.9" cy="117.4" r="2.7"/><circle class="pw-faint" cx="-15.6" cy="391.6" r="2.7"/><circle class="pw-faint" cx="407.1" cy="-24.1" r="3.4"/><circle class="pw-faint" cx="143.6" cy="319.5" r="6.8"/><circle class="pw-faint" cx="340.4" cy="4.7" r="5.1"/><circle class="pw-faint" cx="409.9" cy="409.3" r="5.3"/><circle class="pw-faint" cx="536.3" cy="488.7" r="4.5"/><circle class="pw-faint" cx="630.8" cy="353.8" r="4.8"/><circle class="pw-faint" cx="176.4" cy="415" r="3.4"/><circle class="pw-faint" cx="70.1" cy="409.1" r="2.1"/><circle class="pw-faint" cx="44.4" cy="61.1" r="3.3"/><circle class="pw-faint" cx="-16.3" cy="302.9" r="3.8"/><circle class="pw-faint" cx="193.6" cy="408.9" r="5.9"/><circle class="pw-faint" cx="213.6" cy="141.6" r="6.6"/><circle class="pw-faint" cx="468" cy="42.2" r="2.9"/><circle class="pw-faint" cx="309.6" cy="396.8" r="2"/><circle class="pw-faint" cx="137.1" cy="342.5" r="6"/><circle class="pw-faint" cx="200.8" cy="124.1" r="6.9"/><circle class="pw-faint" cx="58.5" cy="347.5" r="6.8"/><circle class="pw-faint" cx="532.2" cy="418.2" r="2.9"/><circle class="pw-faint" cx="411.5" cy="488.9" r="2.1"/><circle class="pw-faint" cx="622.4" cy="333.7" r="6.5"/><circle class="pw-faint" cx="543.9" cy="363.2" r="3.4"/><circle class="pw-faint" cx="337.3" cy="30.7" r="4.6"/><circle class="pw-faint" cx="39" cy="346.3" r="2.4"/><circle class="pw-faint" cx="-23.9" cy="175" r="3.7"/><circle class="pw-faint" cx="-28" cy="212.7" r="5.8"/><circle class="pw-faint" cx="388.9" cy="-1.6" r="5.6"/><circle class="pw-faint" cx="278" cy="61.4" r="5.3"/><circle class="pw-faint" cx="381.5" cy="1.1" r="6.9"/><circle class="pw-faint" cx="138.6" cy="430.4" r="2.5"/><circle class="pw-faint" cx="439.3" cy="170.8" r="4.2"/><circle class="pw-faint" cx="332.4" cy="1.2" r="4.1"/><circle class="pw-faint" cx="0.9" cy="403.8" r="4.3"/><circle class="pw-faint" cx="325.5" cy="431.8" r="6.8"/><circle class="pw-faint" cx="229.9" cy="-10.9" r="3.7"/><circle class="pw-faint" cx="443.2" cy="447.7" r="2.2"/><circle class="pw-faint" cx="514.6" cy="360.4" r="4.3"/><circle class="pw-faint" cx="598.2" cy="105.5" r="2"/><circle class="pw-faint" cx="533.7" cy="206.6" r="2.5"/><circle class="pw-faint" cx="267.4" cy="108.7" r="2.9"/><circle class="pw-faint" cx="-42.5" cy="145.7" r="5.2"/><circle class="pw-faint" cx="580.9" cy="187" r="6.5"/><circle class="pw-faint" cx="295.3" cy="432.4" r="3.9"/><circle class="pw-faint" cx="620.6" cy="192.4" r="4.5"/><circle class="pw-faint" cx="130.6" cy="330.6" r="5.3"/><circle class="pw-faint" cx="677.9" cy="361.4" r="3.5"/><circle class="pw-faint" cx="252.9" cy="347.7" r="6.2"/><circle class="pw-faint" cx="32.1" cy="63.4" r="5.3"/><circle class="pw-faint" cx="182.7" cy="399.7" r="3.1"/><circle class="pw-faint" cx="535.4" cy="186.3" r="6.5"/><circle class="pw-faint" cx="391.3" cy="107.7" r="2.8"/><circle class="pw-faint" cx="130.6" cy="436.9" r="3.8"/><circle class="pw-faint" cx="722.3" cy="277" r="6.8"/><circle class="pw-faint" cx="427.8" cy="485.2" r="3.8"/><circle class="pw-faint" cx="211.1" cy="386.3" r="6.9"/><circle class="pw-faint" cx="501.1" cy="24.4" r="3.2"/><circle class="pw-faint" cx="660.7" cy="402.5" r="4.7"/><circle class="pw-faint" cx="97.4" cy="196" r="3.6"/><circle class="pw-faint" cx="55.4" cy="74.9" r="7"/><circle class="pw-faint" cx="264.1" cy="69.9" r="6.8"/><circle class="pw-faint" cx="342.9" cy="524.1" r="5.3"/><circle class="pw-faint" cx="146.4" cy="99.5" r="4.4"/><circle class="pw-faint" cx="202" cy="489.2" r="6.3"/><circle class="pw-ring" cx="330" cy="250" r="40" style="--i:0"/><circle class="pw-ring" cx="330" cy="250" r="80" style="--i:1"/><circle class="pw-ring" cx="330" cy="250" r="125" style="--i:2"/><circle class="pw-ring" cx="330" cy="250" r="175" style="--i:3"/>
+            <path class="pw-faint-line" d="M 130 250 H 530 M 330 50 V 450"/>
+            <circle class="pw-dot" cx="330" cy="250" r="7"/>
+            <text class="pw-label" x="346" y="236">The real problem</text>
+            <path class="pw-thread" pathLength="1" d="M 0 300 C 140 300, 200 330, 260 290 C 320 250, 380 190, 330 160 C 270 125, 250 250, 330 250 C 410 250, 460 300, 600 300"/>
+            </svg>
+            <div class="process__text">
+              <span class="process__n">01</span>
+              <h3 class="t-h3" data-reveal="lines">Frame</h3>
+              <p class="process__lede">Find the real problem.</p>
+              <p class="t-small muted">Before any pixels: the brief questioned, stakeholders interviewed, data and competitors read. Out of it comes one problem statement — and the number we'll judge the work by.</p>
+              <p class="process__out t-label"><span>Output</span> Problem statement · Success metric</p>
+            </div>
           </article>
 
           <article class="process__step">
-            <span class="process__n">02</span>
-            <h3 class="t-h3" data-reveal="lines">Explore</h3>
-            <p class="t-small muted">
-              Wide and fast. Directions on the table before anything gets precious,
-              so we're choosing between options rather than defending the first one.
-            </p>
+            <svg class="process__art" viewBox="0 0 600 640" aria-hidden="true" data-thread>
+            <path class="pw-line" d="M 70 80 V 420"/><path class="pw-faint-line" d="M 90 110 H 270"/><path class="pw-faint-line" d="M 90 142 H 367"/><path class="pw-faint-line" d="M 90 174 H 464"/><path class="pw-faint-line" d="M 90 206 H 341"/><path class="pw-faint-line" d="M 90 238 H 438"/><path class="pw-faint-line" d="M 90 270 H 315"/><path class="pw-faint-line" d="M 90 334 H 289"/><path class="pw-faint-line" d="M 90 366 H 386"/><path class="pw-faint-line" d="M 90 398 H 483"/>
+            <rect class="pw-faint-line" x="40" y="60" width="500" height="380" rx="6"/>
+            <text class="pw-label" x="90" y="52">One-page brief</text>
+            <text class="pw-label pw-label--sun" x="420" y="290">Insight</text>
+            <path class="pw-thread" pathLength="1" d="M 0 300 C 40 300, 60 302, 90 302 L 400 302 C 470 302, 520 300, 600 300"/>
+            </svg>
+            <div class="process__text">
+              <span class="process__n">02</span>
+              <h3 class="t-h3" data-reveal="lines">Define</h3>
+              <p class="process__lede">Choose the angle.</p>
+              <p class="t-small muted">Audience, insight, positioning and constraints, narrowed into a one-page brief everyone has signed off — so later debates are about the work, not the goal.</p>
+              <p class="process__out t-label"><span>Output</span> Creative brief · Insight</p>
+            </div>
           </article>
 
           <article class="process__step">
-            <span class="process__n">03</span>
-            <h3 class="t-h3" data-reveal="lines">Build</h3>
-            <p class="t-small muted">
-              Figma libraries, components, code. Made to be handed over and lived with,
-              which usually means less clever and more maintainable.
-            </p>
+            <svg class="process__art" viewBox="0 0 600 640" aria-hidden="true" data-thread>
+            <path class="pw-faint-line pw-dash" d="M 80 300 C 200 60, 400 60, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 130, 400 130, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 200, 400 200, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 260, 400 260, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 360, 400 360, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 430, 400 430, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 500, 400 500, 520 300"/><path class="pw-faint-line pw-dash" d="M 80 300 C 200 560, 400 560, 520 300"/><rect class="pw-faint-line" x="282" y="104" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="156.5" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="209" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="254" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="329" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="381.5" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="434" width="36" height="28" rx="3"/><rect class="pw-faint-line" x="282" y="479" width="36" height="28" rx="3"/>
+            <circle class="pw-faint-line" cx="80" cy="300" r="5"/><circle class="pw-faint-line" cx="520" cy="300" r="5"/>
+            <text class="pw-label" x="80" y="334" text-anchor="middle">Go wide</text>
+            <text class="pw-label" x="520" y="334" text-anchor="middle">Narrow</text>
+            <path class="pw-thread" pathLength="1" d="M 0 300 L 80 300 C 200 130, 400 130, 520 300 L 600 300"/>
+            </svg>
+            <div class="process__text">
+              <span class="process__n">03</span>
+              <h3 class="t-h3" data-reveal="lines">Explore</h3>
+              <p class="process__lede">Go wide, then narrow.</p>
+              <p class="t-small muted">Several territories, sketched fast and kept cheap. Put side by side, judged against the brief, and most of them killed on purpose.</p>
+              <p class="process__out t-label"><span>Output</span> Territories · One direction</p>
+            </div>
           </article>
 
           <article class="process__step">
-            <span class="process__n">04</span>
-            <h3 class="t-h3" data-reveal="lines">Prove</h3>
-            <p class="t-small muted">
-              Ship, measure, adjust. Design that performs is the only kind worth
-              defending in a room full of people with different opinions.
-            </p>
+            <svg class="process__art" viewBox="0 0 600 640" aria-hidden="true" data-thread>
+            <rect class="pw-line" x="70" y="50" width="210" height="220" rx="6"/>
+            <rect class="pw-line" x="320" y="70" width="210" height="220" rx="6"/>
+            <path class="pw-faint-line" d="M 96 82 H 230 M 96 104 H 200 M 96 240 H 250 M 346 102 H 480 M 346 124 H 450 M 346 260 H 500"/>
+            <circle class="pw-faint-line" cx="175" cy="170" r="42"/><rect class="pw-faint-line" x="380" y="150" width="90" height="70" rx="4"/>
+            <text class="pw-label" x="70" y="40">A</text>
+            <text class="pw-label pw-label--sun" x="320" y="60">B — kept</text>
+            <path class="pw-thread" pathLength="1" d="M 0 300 C 90 300, 130 365, 210 365 C 300 365, 300 312, 255 312 C 200 312, 215 382, 320 382 C 420 382, 420 322, 385 322 C 340 322, 355 388, 460 378 C 530 370, 550 300, 600 300"/>
+            </svg>
+            <div class="process__text">
+              <span class="process__n">04</span>
+              <h3 class="t-h3" data-reveal="lines">Test</h3>
+              <p class="process__lede">Prove it early.</p>
+              <p class="t-small muted">Prototypes and variants in front of real people and real numbers before anything is polished. What doesn't hold up changes now, while it's still cheap.</p>
+              <p class="process__out t-label"><span>Output</span> Prototypes · Test results</p>
+            </div>
           </article>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ========================================================================
-       BREATHER · light
-       ======================================================================== -->
-  <section class="statement-scene canvas-host" data-ground="light" data-scene="cover">
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell">
-      <p class="statement-scene__text marks">
-        <span class="statement-scene__line" style="--depth: -0.5">I'd rather prove it</span>
-        <span class="statement-scene__line" style="--depth: -0.15">than <em class="em">claim</em> it.</span>
-      </p>
-    </div>
-  </section>
+          <article class="process__step">
+            <svg class="process__art" viewBox="0 0 600 640" aria-hidden="true" data-thread>
+            <rect class="pw-faint-line" x="70" y="90" width="108" height="34" rx="3"/><rect class="pw-faint-line" x="130" y="90" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="190" y="90" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="310" y="90" width="108" height="34" rx="3"/><rect class="pw-faint-line" x="370" y="90" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="70" y="136" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="130" y="136" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="190" y="136" width="108" height="34" rx="3"/><rect class="pw-faint-line" x="250" y="136" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="370" y="136" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="70" y="182" width="108" height="34" rx="3"/><rect class="pw-faint-line" x="130" y="182" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="190" y="182" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="250" y="182" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="310" y="182" width="108" height="34" rx="3"/><rect class="pw-faint-line" x="70" y="228" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="130" y="228" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="190" y="228" width="108" height="34" rx="3"/><rect class="pw-faint-line" x="250" y="228" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="310" y="228" width="48" height="34" rx="3"/><rect class="pw-faint-line" x="370" y="228" width="48" height="34" rx="3"/><rect class="pw-line" x="420" y="110" width="120" height="150" rx="4"/><rect class="pw-line" x="434" y="124" width="120" height="150" rx="4"/><rect class="pw-line" x="448" y="138" width="120" height="150" rx="4"/>
+            <path class="pw-faint-line" d="M 70 332 V 322 M 116 332 V 322 M 162 332 V 322 M 208 332 V 322 M 254 332 V 322 M 300 332 V 322 M 346 332 V 322 M 392 332 V 322 M 438 332 V 322 M 484 332 V 322 M 530 332 V 322"/>
+            <text class="pw-label" x="70" y="78">System</text>
+            <text class="pw-label" x="420" y="100">Handover</text>
+            <path class="pw-thread" pathLength="1" d="M 0 300 C 30 300, 40 327, 70 327 L 530 327 C 570 327, 580 300, 600 300"/>
+            </svg>
+            <div class="process__text">
+              <span class="process__n">05</span>
+              <h3 class="t-h3" data-reveal="lines">Build</h3>
+              <p class="process__lede">Made to last.</p>
+              <p class="t-small muted">Full craft, built as a system — components, templates, documentation — so the team can keep making it long after I hand it over.</p>
+              <p class="process__out t-label"><span>Output</span> Design system · Handover</p>
+            </div>
+          </article>
 
-  <!-- ========================================================================
-       NUMBERS · light
-       TBC — figures marked data-tbc need confirming. Only "70+ pages" is
-       currently backed by documented case data (Aros 50+, Logimark 20+).
-       ======================================================================== -->
-  <section class="section section--tight section--flush-top canvas-host" data-ground="light">
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell">
-      <div class="figures" data-reveal="stagger">
-        <div class="stack-3">
-          <span class="figure__value"><span data-count="70">70</span>+</span>
-          <span class="t-label">Pages designed and shipped</span>
-        </div>
-        <div class="stack-3" data-tbc>
-          <span class="figure__value"><span data-count="20">20</span>+</span>
-          <span class="t-label">Projects delivered</span>
-        </div>
-        <div class="stack-3" data-tbc>
-          <span class="figure__value"><span data-count="5">5</span></span>
-          <span class="t-label">Years in the industry</span>
-        </div>
-        <div class="stack-3">
-          <span class="figure__value"><span data-count="6">6</span></span>
-          <span class="t-label">Disciplines I work across</span>
+          <article class="process__step">
+            <svg class="process__art" viewBox="0 0 600 640" aria-hidden="true" data-thread>
+            <path class="pw-faint-line" d="M 60 390 H 560 M 60 390 V 70"/>
+            <path class="pw-faint-line" d="M 60 110 H 560" stroke-dasharray="2 8"/><path class="pw-faint-line" d="M 60 166 H 560" stroke-dasharray="2 8"/><path class="pw-faint-line" d="M 60 222 H 560" stroke-dasharray="2 8"/><path class="pw-faint-line" d="M 60 278 H 560" stroke-dasharray="2 8"/><path class="pw-faint-line" d="M 60 334 H 560" stroke-dasharray="2 8"/>
+            <path class="pw-line pw-dash" d="M 60 170 H 560"/>
+            <text class="pw-label" x="68" y="160">Goal from step 01</text>
+            <path class="pw-faint-line pw-dash" d="M 560 90 C 420 10, 200 0, 60 56"/>
+            <text class="pw-label" x="310" y="22" text-anchor="middle">Next brief ↺</text>
+            <path class="pw-thread" pathLength="1" d="M 0 300 C 40 300, 60 340, 110 335 L 170 320 L 220 296 L 270 305 L 330 236 L 390 204 L 440 156 L 500 128 L 560 104"/>
+            <circle class="pw-dot pw-head" cx="560" cy="104" r="7"/>
+            </svg>
+            <div class="process__text">
+              <span class="process__n">06</span>
+              <h3 class="t-h3" data-reveal="lines">Prove</h3>
+              <p class="process__lede">Measure, learn, repeat.</p>
+              <p class="t-small muted">Shipped, then measured against the goal from step one. What we learn becomes the brief for the next round.</p>
+              <p class="process__out t-label"><span>Output</span> Results · Next brief</p>
+            </div>
+          </article>
         </div>
       </div>
     </div>
@@ -1527,12 +1396,19 @@
        ======================================================================== -->
   <section id="about" class="section canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.37" data-bleed="right">
+        <span class="line"><span class="t-bleed">Now.</span></span>
+      </div>
+      <div class="shell poster-head__band">
+        <h2 class="t-title-compact">Right <em class="em">now</em></h2>
+        <p class="t-compact muted">Graphic designer at SoScale Media — and building the AI workflows around the work.</p>
+        <span class="t-label section__num">11</span>
+      </div>
+    </header>
+
     <div class="shell stack-12">
       <div class="stack-6">
-        <div class="stack-4">
-          <span class="t-label section__num">06</span>
-          <h2 class="t-h2" data-reveal="lines">Right <em class="em">now</em></h2>
-        </div>
         <p class="t-body-l measure">
           I'm a graphic designer at
           <a class="link" href="https://www.soscalemedia.se/" target="_blank" rel="noopener">SoScale Media</a>,
@@ -1548,12 +1424,45 @@
       </div>
     </div>
 
-    <div class="marquee" data-marquee aria-label="Tools I work in" style="margin-top: var(--sp-16)">
-      <div class="marquee__track t-h3">
-        <span>Figma</span><span>After Effects</span><span>Illustrator</span>
-        <span>Photoshop</span><span>Premiere Pro</span><span>WordPress</span>
-        <span>HTML &amp; CSS</span><span>JavaScript</span><span>GSAP</span>
-        <span>Claude</span><span>Midjourney</span><span>n8n</span>
+    <!-- The tools, as a ribbon that rolls like the client marks near the top
+         (same modules/logos.js): two rows, same way, offset; scroll throws
+         them and they lean into the speed. -->
+    <div class="clients clients--tools" data-clients aria-label="Tools I work in">
+      <div class="clients__stage">
+        <div class="clients__rows">
+          <div class="clients__row">
+            <ul class="clients__track" role="list">
+            <li class="logo tool"><span class="logo__mark">Figma</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">After Effects</span></li>
+            <li class="logo tool"><span class="logo__mark">Illustrator</span></li>
+            <li class="logo tool"><span class="logo__mark">Photoshop</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">Premiere Pro</span></li>
+            <li class="logo tool"><span class="logo__mark">WordPress</span></li>
+            <li class="logo tool"><span class="logo__mark">HTML &amp; CSS</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">JavaScript</span></li>
+            <li class="logo tool"><span class="logo__mark">GSAP</span></li>
+            <li class="logo tool"><span class="logo__mark">Claude</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">Midjourney</span></li>
+            <li class="logo tool"><span class="logo__mark">n8n</span></li>
+            </ul>
+          </div>
+          <div class="clients__row" aria-hidden="true">
+            <ul class="clients__track" role="list">
+            <li class="logo tool"><span class="logo__mark">HTML &amp; CSS</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">JavaScript</span></li>
+            <li class="logo tool"><span class="logo__mark">GSAP</span></li>
+            <li class="logo tool"><span class="logo__mark">Claude</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">Midjourney</span></li>
+            <li class="logo tool"><span class="logo__mark">n8n</span></li>
+            <li class="logo tool"><span class="logo__mark">Figma</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">After Effects</span></li>
+            <li class="logo tool"><span class="logo__mark">Illustrator</span></li>
+            <li class="logo tool"><span class="logo__mark">Photoshop</span></li>
+            <li class="logo tool tool--serif"><span class="logo__mark">Premiere Pro</span></li>
+            <li class="logo tool"><span class="logo__mark">WordPress</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1621,6 +1530,12 @@
       <span>© <span class="tabular">2026</span> Milton Winroth</span>
       <span>A creative problem solver</span>
     </div>
+  </div>
+
+  <!-- The sign-off. The surname set too big for the page and sunk through
+       the floor, with the last drop of glass on the site lying across it. -->
+  <div class="footer__bleed" aria-hidden="true" data-fit="0.72" data-bleed="right">
+    <span class="t-bleed">Winroth</span>
   </div>
 </footer>
 

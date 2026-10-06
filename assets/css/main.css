@@ -21,12 +21,18 @@
 @import url("components/scenes.css");
 @import url("components/graphics.css");
 @import url("components/masonry.css");
-@import url("components/acts.css");
+@import url("components/poster.css");
 @import url("components/editorial.css");
 @import url("components/sections.css");
 @import url("components/cards.css");
 @import url("components/footer.css");
 @import url("components/motion.css");
 @import url("components/edge-blur.css");
+@import url("components/preview.css");
+@import url("components/logos.css");
+@import url("components/ai.css");
+/* Last of the components: it is the one place that says what a headline is
+   made of, and has to win over each component's own font-weight. */
+@import url("components/display.css");
 
 @import url("utilities.css");

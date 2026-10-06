@@ -8,43 +8,50 @@
   :root {
     /* ---------------------------------------------------------------------
        1. COLOUR — primitives
-       Near-black instead of #000, warm off-white instead of #fff.
+       "Leather & lamplight", locked 2026-10-04, revised twice the same day.
+       Read off one photograph: a white poster in a dark room with a single
+       shaft of sun across it. The room is the dark ground, the poster is
+       the light ground, and the sun is the only colour in the system —
+       yellow, not amber, not brown. Everything else is ink and paper.
        --------------------------------------------------------------------- */
-    --c-ink:            #0B0B0C;
-    --c-ink-soft:       #1A1A1C;
-    --c-paper:          #F7F6F3;
-    --c-white:          #FFFFFF;
+    --c-ink:            #17120E;   /* espresso — never #000 */
+    --c-ink-soft:       #241C15;   /* walnut, raised on dark */
+    --c-paper:          #FBFAF7;   /* poster white — a breath of warmth */
+    --c-white:          #FFFFFF;   /* raised on light */
 
-    --c-sand:           #EDE8E1;   /* warm grouping surface */
-    --c-mist:           #E4E7E9;   /* cool grouping surface */
+    --c-sand:           #F1EEE8;   /* grouping surface */
+    --c-mist:           #EFEDE9;   /* the quieter, greyer neighbour */
 
-    --c-grey-100:       #EFEEEB;
-    --c-grey-200:       #DEDCD8;
-    --c-grey-300:       #C4C2BD;
-    --c-grey-400:       #A3A19C;
-    --c-grey-500:       #82807B;
-    --c-grey-600:       #63615D;
-    --c-grey-700:       #474540;
-    --c-grey-800:       #2C2B28;
-    --c-grey-900:       #171716;
+    --c-grey-100:       #EFECE6;
+    --c-grey-200:       #DEDAD2;
+    --c-grey-300:       #B7AC9C;
+    --c-grey-400:       #9D9182;
+    --c-grey-500:       #857A6E;
+    --c-grey-600:       #6B6157;
+    --c-grey-700:       #4D453D;
+    --c-grey-800:       #2F2821;
+    --c-grey-900:       #1D1712;
 
-    /* Accent — Cobalt, locked 2026-07-31. Reads as precision and systems,
-       and holds tension against the warm paper ground. The two candidates it
-       beat are kept here only so styleguide.html can still demo the choice. */
-    --c-cobalt:         #1B2CFF;
-    --c-signal:         #FF4A1C;
-    --c-forest:         #0F5132;
+    /* Accent — the sun, and nothing else. No brown, no amber.
+       Yellow is 12:1 on espresso, so on the dark ground it is text. On
+       white it is 1.4:1, so on the light ground it NEVER carries text: it
+       is a surface — the highlighter stroke under the signature word, the
+       fill buttons wipe to, rules, dots, the lens caustic. Accent TEXT on
+       the light ground (labels, section numbers) is simply ink. Two tokens
+       keep that honest:
+         --c-accent       fills, rules, graphics — yellow on both grounds
+         --c-accent-text  anything you read — ink on light, yellow on dark
+       --c-sun-deep is the same yellow a step denser, for thin strokes and
+       dots on white, where full-strength sun would wash out. */
+    --c-sun:            #FFD21A;
+    --c-sun-deep:       #F2C100;
+    --c-amber:          var(--c-sun);   /* alias — older rules name it */
 
-    /* Cobalt as it has to appear on the near-black ground. Raw cobalt on
-       #0B0B0C is 2.7:1 — it fails AA for every accent label, figure and
-       section number sitting on a dark section. This is the same hue lifted
-       until it clears 5.8:1, which also makes the accent read electric on
-       dark instead of sinking into it. Ground-switched below, so nothing
-       downstream has to know which one it got. */
-    --c-accent-lift:    #6E80FF;
+    --c-accent-lift:    var(--c-sun);
 
-    --c-accent:         var(--c-cobalt);
-    --c-accent-ink:     var(--c-white);   /* text sitting on the accent */
+    --c-accent:         var(--c-sun-deep);
+    --c-accent-text:    var(--c-ink);
+    --c-accent-ink:     var(--c-ink);   /* text sitting on the accent */
 
     /* ---------------------------------------------------------------------
        2. COLOUR — semantic
@@ -58,9 +65,9 @@
 
     --text:             var(--c-ink);
     --text-muted:       var(--c-grey-600);
-    --text-faint:       var(--c-grey-500);   /* 3.5:1 on paper. --c-grey-400 measured 2.4:1, which is below the 3:1 floor even for text that is only meant to whisper. */
+    --text-faint:       var(--c-grey-500);   /* 4:1 on paper — whisper text only, never body. */
     --text-invert:      var(--c-paper);
-    --text-invert-muted:#8E8C87;
+    --text-invert-muted:#A39686;
 
     --line:             color-mix(in oklab, var(--c-ink) 12%, transparent);
     --line-strong:      color-mix(in oklab, var(--c-ink) 22%, transparent);
@@ -82,9 +89,9 @@
        Most of the separation between the resting field and the cursor's bloom
        is carried by ALPHA, not size: the radius only has to travel from 0.9 to
        2.0 because the dots are simultaneously going from nearly transparent to
-       nearly solid, and picking up a blue cast on the way. Growing them far
+       nearly solid, and picking up a gold cast on the way. Growing them far
        past that reads as bubbles rather than as a plate lighting up. */
-    --particle-ink:            11, 11, 12;
+    --particle-ink:            23, 18, 14;
     --particle-dot-min:        0.9;
     --particle-dot-max:        2.0;
     --particle-dot-alpha:      0.24;  /* at rest, out at the edges  */
@@ -94,19 +101,53 @@
     /* The canvas stopped drawing rules and guides when it became a halftone
        field, but components/graphics.css still builds its plates and guide
        lines from these — same drawing language, different surface. */
-    --particle-accent:      27, 44, 255;
+    --particle-accent:      242, 193, 0;
     --particle-grid-alpha:  0.055;
     --particle-guide-alpha: 0.3;
 
     /* ---------------------------------------------------------------------
-       3. TYPE — Direction A, locked 2026-07-31.
-       Satoshi carries everything. Instrument Serif italic marks exactly one
-       word per headline. Mono is reserved for labels, years and figures.
-       Site language: English.
+       3. TYPE — Direction B, "Poster", locked 2026-10-04.
+       Bricolage Grotesque at ExtraBold carries every headline. It is set at
+       its smallest optical size on purpose: at opsz 12 the face cuts deep
+       ink traps into every joint — the crotch of the W, the arm of the k,
+       the shoulder of the r — and that is what stops a black grotesk at
+       20vw reading as a slab. Set this large, the traps become the texture.
+       Satoshi carries body and the compact poster copy. Mono is reserved for
+       labels, years and figures. Site language: English.
        --------------------------------------------------------------------- */
-    --font-sans:  "Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-    --font-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-display: "Bricolage Grotesque", "Satoshi", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans:    "Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    /* The signature word. Instrument Serif italic — the one soft, old
+       letterform in a set of hard modern ones, same job as the lens. */
+    --font-serif:   "Instrument Serif", Georgia, "Times New Roman", serif;
+
+    --fw-display:   800;
+    /* Everything that is not a giant: subheads, small headlines, quotes.
+       Semibold, so the ExtraBold giants are the only black-weight thing on
+       the page and the contrast reads as a decision. */
+    --fw-sub:       600;
+    --fv-display:   "opsz" 12, "wdth" 100;
+    /* The bleed words go narrower. Condensed, a word can be set bigger
+       before it runs out of page — and the point is that it doesn't fit. */
+    --fv-display-tight: "opsz" 12, "wdth" 82;
+    /* Giants are set in sentence case and sized by modules/fit.js to a
+       fraction of the frame (data-fit), and held inside the page margins
+       on whichever side data-bleed names — they never leave the frame. */
+
+    /* Bleed type. Sized off the viewport WIDTH and deliberately too big for
+       it: the word is cropped by the frame, like the poster it came from. */
+    --fs-bleed:      clamp(6.5rem, 31.5vw, 36rem);
+    --lh-bleed:      0.78;
+    --tr-bleed:      -0.035em;
+
+    /* Compact poster copy — the small, dense block that sits against the
+       bleed type. The contrast in SIZE is the design: it only works if this
+       stays genuinely small and set tight. */
+    --fs-compact:    clamp(0.8125rem, 0.9vw, 0.9375rem);
+    --lh-compact:    1.18;
+    --tr-compact:    -0.012em;
+    --measure-compact: 28ch;
 
     /* The hero headline must never wrap mid-line — the line-mask reveal
        assumes one line per mask. 12.5vw keeps "problem solver." inside the
@@ -116,10 +157,12 @@
        moment on the page and was sharing a size with section subheads. */
     --fs-display-m:  clamp(2.75rem,  9vw,   8rem);
     --fs-display-l:  clamp(2.75rem,  7vw,   6rem);
-    --fs-h2:         clamp(2rem,    4.5vw,  3.5rem);
-    --fs-h3:         clamp(1.375rem, 2.4vw, 2rem);
-    --fs-body-l:     clamp(1.125rem, 1.6vw, 1.5rem);
-    --fs-body:       1rem;
+    /* Magazine scale: the giants are enormous, so everything else drops a
+       long way. h2/h3 are now subheads, not headlines. */
+    --fs-h2:         clamp(1.375rem, 2.2vw, 2rem);
+    --fs-h3:         clamp(1.0625rem, 1.4vw, 1.25rem);
+    --fs-body-l:     clamp(0.9375rem, 1vw, 1.0625rem);
+    --fs-body:       0.9375rem;
     --fs-small:      0.875rem;
     --fs-label:      0.75rem;
     /* 11px. Reserved for instrument readouts — the scroll percentage in the
@@ -130,14 +173,14 @@
     /* Display type gets tighter, not bigger. At 11rem the old 0.88/-0.04em
        still had daylight between the lines and between the letters; a set
        this large should read as one mass. Body sizes are untouched. */
-    --lh-tight:      0.86;
-    --lh-display:    0.9;
-    --lh-heading:    1.05;
+    --lh-tight:      0.84;
+    --lh-display:    0.88;
+    --lh-heading:    1.0;
     --lh-body:       1.6;
 
-    --tr-display-xl: -0.046em;
-    --tr-display-l:  -0.036em;
-    --tr-heading:    -0.024em;
+    --tr-display-xl: -0.05em;
+    --tr-display-l:  -0.042em;
+    --tr-heading:    -0.03em;
     --tr-label:       0.12em;
     /* Wider than --tr-label. Micro readouts need the extra air to stay
        legible at 11px, and the openness is what makes them read technical. */
@@ -214,18 +257,18 @@
 
     /* Flat tints. Past ~0.4 the panel stops transmitting what is behind it,
        at which point it is a solid card with a blur it never uses. */
-    --glass-light-tint:  rgb(255 255 255 / 0.34);
-    --glass-light-line:  rgb(255 255 255 / 0.7);
+    --glass-light-tint:  rgb(244 239 230 / 0.36);
+    --glass-light-line:  rgb(255 250 240 / 0.62);
     /* Frost you notice, not a blanket. Much past 0.3 the grain starts eating
        body copy, and the panel reads as sandpaper rather than glass. */
     --glass-light-grain: 0.26;
     --glass-light-edge:  inset 0 1px 0 rgb(255 255 255 / 0.95),
-                         inset 0 -1px 0 rgb(11 11 12 / 0.07),
+                         inset 0 -1px 0 rgb(23 18 14 / 0.08),
                          inset 1px 0 0 rgb(255 255 255 / 0.4);
-    --glass-light-drop:  0 1px 1px rgb(11 11 12 / 0.04),
-                         0 18px 44px -20px rgb(11 11 12 / 0.24);
+    --glass-light-drop:  0 1px 1px rgb(23 18 14 / 0.05),
+                         0 18px 44px -20px rgb(58 34 14 / 0.3);
 
-    --glass-dark-tint:   rgb(255 255 255 / 0.055);
+    --glass-dark-tint:   rgb(255 236 210 / 0.06);
     --glass-dark-line:   rgb(255 255 255 / 0.14);
     --glass-dark-grain:  0.2;
     --glass-dark-edge:   inset 0 1px 0 rgb(255 255 255 / 0.22),
@@ -233,6 +276,25 @@
                          inset 1px 0 0 rgb(255 255 255 / 0.07);
     --glass-dark-drop:   0 1px 1px rgb(0 0 0 / 0.4),
                          0 28px 70px -30px rgb(0 0 0 / 0.85);
+
+    /* ---------------------------------------------------------------------
+       6c. LENS — the poster's glass drop
+       The one soft thing in a hard system. A free-form drop of frosted glass
+       laid over the display type: everything else on the site is cropped,
+       black and square-shouldered; this is round, wet and catches the sun.
+       It is the contrast, so it is rationed — one per scene, never a card.
+       Unlike .glass it IS allowed light ramps, because a drop is curved and
+       a curved surface has a highlight. Flat, it would read as a sticker.
+       --------------------------------------------------------------------- */
+    --lens-size:      clamp(11rem, 36vw, 36rem);
+    --lens-blur:      3.5px;
+    --lens-saturate:  1.4;
+    --lens-bright:    1.02;
+    --lens-tint:      rgb(255 248 236 / 0.07);
+    --lens-rim:       rgb(255 252 245 / 0.8);
+    --lens-caustic:   rgb(255 210 26 / 0.34);   /* the sun, focused through it */
+    --lens-shadow:    rgb(23 18 14 / 0.16);
+    --lens-morph:     24s;
 
     /* ---------------------------------------------------------------------
        7. MOTION
@@ -331,21 +393,18 @@
   [data-ground="dark"] {
     --bg:          var(--c-ink);
     --bg-raised:   var(--c-ink-soft);
-    --bg-warm:     #16150F;
-    --bg-cool:     #101315;
+    --bg-warm:     #1E1611;
+    --bg-cool:     #1A1613;
     --text:        var(--c-paper);
     --text-muted:  var(--text-invert-muted);
-    --text-faint:  #6E6C66;   /* 3.4:1 on ink; #56544F measured 2.6:1 */
+    --text-faint:  #7A6E61;   /* 3.8:1 on espresso */
     --line:        var(--line-invert);
     --line-strong: color-mix(in oklab, var(--c-paper) 30%, transparent);
 
-    /* The accent lifts on dark. Raw cobalt is a 2.7:1 hole against #0B0B0C —
-       every section number, category tag and figure sitting on a dark
-       section was failing AA. Switching it here means no component has to
-       carry a second accent, and the label under it goes to ink because
-       white on the lifted blue is the weaker pairing. */
-    --c-accent:     var(--c-accent-lift);
-    --c-accent-ink: var(--c-ink);
+    /* On dark the sun is legible, so it is both the fill and the text. */
+    --c-accent:      var(--c-sun);
+    --c-accent-text: var(--c-sun);
+    --c-accent-ink:  var(--c-ink);
 
     --glass-tint:  var(--glass-dark-tint);
     --glass-line:  var(--glass-dark-line);
@@ -355,10 +414,10 @@
 
     /* The field has to work harder on a dark ground — the same alpha that
        reads as a faint dot on paper disappears entirely against near-black. */
-    --particle-ink:            247, 246, 243;
+    --particle-ink:            232, 226, 214;
     --particle-dot-alpha:      0.28;
     --particle-dot-alpha-near: 0.63;
-    --particle-accent:         110, 128, 255;
+    --particle-accent:         255, 210, 26;
     --particle-grid-alpha:     0.075;
     --particle-guide-alpha:    0.4;
 
@@ -374,10 +433,11 @@
     --text-faint:  var(--c-grey-500);
     --line:        color-mix(in oklab, var(--c-ink) 12%, transparent);
 
-    /* Explicit, so a light section nested inside a dark one gets cobalt back
-       rather than inheriting the lifted variant. */
-    --c-accent:     var(--c-cobalt);
-    --c-accent-ink: var(--c-white);
+    /* Explicit, so a light section nested inside a dark one gets ink text
+       accents back rather than inheriting the yellow. */
+    --c-accent:      var(--c-sun-deep);
+    --c-accent-text: var(--c-ink);
+    --c-accent-ink:  var(--c-ink);
 
     --glass-tint:  var(--glass-light-tint);
     --glass-line:  var(--glass-light-line);
@@ -385,10 +445,10 @@
     --glass-edge:  var(--glass-light-edge);
     --glass-drop:  var(--glass-light-drop);
 
-    --particle-ink:            11, 11, 12;
+    --particle-ink:            23, 18, 14;
     --particle-dot-alpha:      0.24;
     --particle-dot-alpha-near: 0.57;
-    --particle-accent:         27, 44, 255;
+    --particle-accent:         242, 193, 0;
 
     background: var(--bg);
     color: var(--text);

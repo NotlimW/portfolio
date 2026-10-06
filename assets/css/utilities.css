@@ -23,7 +23,7 @@
     margin-left: calc(50% - 50vw);
   }
 
-  .accent { color: var(--c-accent); }
+  .accent { color: var(--c-accent-text); }
   .nowrap { white-space: nowrap; }
   .tabular { font-variant-numeric: tabular-nums; }
 

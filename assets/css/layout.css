@@ -37,7 +37,7 @@
     margin-bottom: var(--sp-16);
   }
 
-  .section__num { color: var(--c-accent); }
+  .section__num { color: var(--c-accent-text); }
   .section__aside { margin-left: auto; max-width: 26rem; }
 
   /* ---- Twelve columns ---------------------------------------------------- */

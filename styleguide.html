@@ -3,14 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Milton Winroth — Brand manual v0.1</title>
+<title>Milton Winroth — Brand manual v0.2</title>
+<meta name="theme-color" content="#17120E">
 
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300..700&family=Archivo:wght@300..700&family=Instrument+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 
+<!-- Layer order first, before any sheet that names a layer — otherwise
+     a component sheet would register "components" ahead of "reset" and lose to it. -->
+<style>@layer tokens, reset, base, layout, components;</style>
 <link rel="stylesheet" href="assets/css/tokens.css">
 
 <style>
@@ -23,12 +27,13 @@
   *, *::before, *::after { box-sizing: border-box; }
   * { margin: 0; }
   html { -webkit-text-size-adjust: 100%; }
-  body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip; }
   img, svg { display: block; max-width: 100%; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 
 /* ========================================================================
@@ -45,31 +50,82 @@
     transition: background var(--d-short) var(--e-micro), color var(--d-short) var(--e-micro);
   }
 
-  h1, h2, h3 { font-weight: var(--fw-medium); text-wrap: balance; }
+  /* Subheads are set in the body face; the display face is for giants. */
+  .h2, .h3, .masthead__title {
+    font-family: var(--font-sans) !important;
+    font-variation-settings: normal !important;
+    font-weight: var(--fw-medium) !important;
+    letter-spacing: -0.025em !important;
+  }
 
-  .display-xl { font-size: var(--fs-display-xl); line-height: var(--lh-tight);   letter-spacing: var(--tr-display-xl); font-weight: var(--fw-medium); }
-  .display-l  { font-size: var(--fs-display-l);  line-height: var(--lh-display); letter-spacing: var(--tr-display-l);  font-weight: var(--fw-medium); }
-  .h2         { font-size: var(--fs-h2);         line-height: var(--lh-heading); letter-spacing: var(--tr-heading);    font-weight: var(--fw-medium); }
-  .h3         { font-size: var(--fs-h3);         line-height: var(--lh-heading); letter-spacing: var(--tr-heading);    font-weight: var(--fw-medium); }
+  h1, h2, h3,
+  .display-xl, .display-l, .h2, .h3 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display);
+    text-wrap: balance;
+  }
+
+  .display-xl { font-size: var(--fs-display-xl); line-height: var(--lh-tight);   letter-spacing: var(--tr-display-xl); }
+  .display-l  { font-size: var(--fs-display-l);  line-height: var(--lh-display); letter-spacing: var(--tr-display-l); }
+  .h2         { font-size: var(--fs-h2);         line-height: var(--lh-heading); letter-spacing: var(--tr-heading); }
+  .h3         { font-size: var(--fs-h3);         line-height: var(--lh-heading); letter-spacing: var(--tr-heading); }
   .body-l     { font-size: var(--fs-body-l);     line-height: 1.5; }
   .small      { font-size: var(--fs-small); color: var(--text-muted); }
 
-  .label {
-    font-family: var(--font-mono);
-    font-size: var(--fs-label);
-    font-weight: var(--fw-medium);
-    letter-spacing: var(--tr-label);
-    text-transform: uppercase;
-    color: var(--text-muted);
-    line-height: 1.2;
+  .bleed {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display-tight);
+    font-size: var(--fs-bleed);
+    line-height: var(--lh-bleed);
+    letter-spacing: var(--tr-bleed);
+    white-space: nowrap;
+    width: max-content;
+    /* Centred on its container whatever its width, so the 4% overrun is
+       split between the two edges. */
+    margin-left: 50%;
+    translate: -50% 0;
+    flex-shrink: 0;
   }
 
-  /* The signature: one italic serif word inside an otherwise plain headline. */
-  .em { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+  /* Pinned to one edge and pushed past it, as on the site. */
+  .bleed--left  { margin-left: -6vw; translate: none; }
+  .bleed--right { margin-left: auto; margin-right: -6vw; translate: none; align-self: flex-end; }
+
+  .compact {
+    font-size: var(--fs-compact);
+    line-height: var(--lh-compact);
+    letter-spacing: var(--tr-compact);
+    font-weight: var(--fw-medium);
+    max-width: var(--measure-compact);
+  }
+  .compact strong { font-weight: var(--fw-bold); }
+
+  .label {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.005em;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+
+  /* The signature: one word per headline, in the accent. Same face. */
+  .em {
+    font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.08em;
+    font-variation-settings: normal; letter-spacing: 0; color: var(--text);
+    background: linear-gradient(var(--c-sun), var(--c-sun)) 0 88% / 100% 0.5em no-repeat;
+    padding-inline: 0.06em; margin-inline: -0.06em;
+    -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  }
+  [data-ground="dark"] .em { color: var(--c-sun); background: none; }
 
   .prose { max-width: var(--measure); }
   .prose + .prose { margin-top: var(--sp-4); }
-  a { color: var(--c-accent); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+  a { color: var(--c-accent-text); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+  code { font-family: var(--font-mono); font-size: 0.8125rem; }
 }
 
 /* ========================================================================
@@ -86,7 +142,6 @@
     padding-block: clamp(4rem, 8vw, 7.5rem);
     border-top: 1px solid var(--line);
   }
-  .section:first-of-type { border-top: 0; }
 
   .section__head {
     display: flex;
@@ -95,12 +150,15 @@
     gap: var(--sp-4) var(--sp-8);
     margin-bottom: var(--sp-12);
   }
-  .section__num { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--c-accent); letter-spacing: 0.1em; }
+  .section__num { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--c-accent-text); letter-spacing: 0.1em; }
 
   .stack   { display: flex; flex-direction: column; }
-  .stack-2 { gap: var(--sp-2); }  .stack-3 { gap: var(--sp-3); }
-  .stack-4 { gap: var(--sp-4); }  .stack-6 { gap: var(--sp-6); }
-  .stack-8 { gap: var(--sp-8); }  .stack-12{ gap: var(--sp-12); }
+  .stack-2 { display: flex; flex-direction: column; gap: var(--sp-2); }
+  .stack-3 { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .stack-4 { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .stack-6 { display: flex; flex-direction: column; gap: var(--sp-6); }
+  .stack-8 { display: flex; flex-direction: column; gap: var(--sp-8); }
+  .stack-12{ display: flex; flex-direction: column; gap: var(--sp-12); }
 
   .cols {
     display: grid;
@@ -117,26 +175,21 @@
    ======================================================================== */
 @layer components {
 
-  /* --- Top bar with the two live decisions ------------------------------ */
+  /* --- Top bar --------------------------------------------------------- */
   .bar {
     position: sticky; top: 0; z-index: var(--z-nav);
     display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) var(--sp-8);
     padding: var(--sp-3) var(--page-inline);
     background: color-mix(in oklab, var(--bg) 82%, transparent);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--line);
   }
-  .bar__mark { font-weight: var(--fw-bold); letter-spacing: -0.03em; font-size: var(--fs-body); }
-  .bar__group { display: flex; align-items: center; gap: var(--sp-2); margin-left: auto; }
-  .bar__group + .bar__group { margin-left: 0; }
-
-  .swatch-btn {
-    width: 1.75rem; height: 1.75rem; border-radius: var(--r-pill);
-    border: 1px solid var(--line-strong);
-    transition: transform var(--d-micro) var(--e-micro), box-shadow var(--d-micro) var(--e-micro);
+  .bar__mark {
+    font-family: var(--font-display); font-weight: var(--fw-display); font-variation-settings: var(--fv-display);
+    letter-spacing: -0.035em; font-size: var(--fs-body);
   }
-  .swatch-btn:hover { transform: scale(1.12); }
-  .swatch-btn[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--text); }
+  .bar__group { display: flex; align-items: center; gap: var(--sp-2); margin-left: auto; }
 
   .chip {
     padding: var(--sp-2) var(--sp-3);
@@ -149,9 +202,32 @@
   .chip:hover { color: var(--text); border-color: var(--text); }
   .chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-  /* --- Hero of the manual ---------------------------------------------- */
-  .masthead { padding-block: clamp(4rem, 10vw, 9rem) clamp(3rem, 6vw, 5rem); }
-  .masthead__meta { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-6); margin-bottom: var(--sp-8); }
+  /* --- Masthead: the poster, in miniature ------------------------------ */
+  .masthead {
+    position: relative;
+    overflow: clip;
+    min-height: min(92svh, 60rem);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding-top: var(--sp-12);
+  }
+  .masthead__sun {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+    background:
+      radial-gradient(48% 52% at 82% 14%, rgb(232 162 60 / 0.26), transparent 70%),
+      linear-gradient(118deg, transparent 34%, rgb(232 162 60 / 0.07) 42%, rgb(232 162 60 / 0.11) 47%, transparent 56%);
+  }
+  .masthead__top { position: relative; color: var(--c-paper); }
+  .masthead__bottom { position: relative; margin-bottom: -0.14em; color: var(--c-sun); }
+  .masthead__band {
+    position: relative; z-index: 3;
+    display: grid; gap: var(--sp-8); padding-block: var(--sp-8);
+  }
+  @media (min-width: 48rem) { .masthead__band { grid-template-columns: 1fr auto; } }
+  .masthead__title { font-size: clamp(1.375rem, 2.2vw, 2rem); line-height: 0.98; letter-spacing: -0.03em; }
+
+  .meta-list { display: grid; gap: var(--sp-2); }
+  .meta-list > div { display: grid; grid-template-columns: 5em auto; gap: var(--sp-3); }
+  .meta-list dt { color: var(--text-faint); }
 
   /* --- Cards ------------------------------------------------------------ */
   .card {
@@ -168,28 +244,57 @@
   /* --- Type specimen rows ---------------------------------------------- */
   .spec {
     display: grid; gap: var(--sp-3);
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding-block: var(--sp-6);
     border-top: 1px solid var(--line);
   }
   .spec:first-child { border-top: 0; padding-top: 0; }
   .spec__meta { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-6); }
-  .spec__sample { overflow-wrap: anywhere; }
+  .spec__sample { overflow-wrap: anywhere; min-width: 0; }
+  .spec__sample--bleed { overflow: clip; }
   @media (min-width: 64rem) {
-    .spec { grid-template-columns: 12rem 1fr; gap: var(--sp-8); align-items: baseline; }
+    .spec { grid-template-columns: 12rem minmax(0, 1fr); gap: var(--sp-8); align-items: baseline; }
     .spec__meta { flex-direction: column; gap: var(--sp-1); }
   }
+
+  /* Ink-trap comparison: the same word at the two ends of the opsz axis. */
+  .traps { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr)); }
+  .traps figure { display: grid; gap: var(--sp-3); }
+  .traps p {
+    font-family: var(--font-display); font-weight: var(--fw-display);
+    font-size: clamp(4rem, 11vw, 9rem); line-height: 0.9; letter-spacing: -0.04em;
+  }
+
+  /* Scale contrast: bleed word against compact copy. */
+  .contrast {
+    position: relative; overflow: clip;
+    border-radius: var(--r-lg);
+    padding: var(--sp-8) 0 0 var(--sp-8);
+    display: grid; gap: var(--sp-6);
+  }
+  .contrast .bleed { margin-bottom: -0.14em; }
 
   /* --- Colour ----------------------------------------------------------- */
   .swatches { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr)); }
   .sw { border-radius: var(--r-md); border: 1px solid var(--line); overflow: hidden; }
   .sw__chip { height: 5.5rem; }
   .sw__body { padding: var(--sp-3); background: var(--bg-raised); display: flex; flex-direction: column; gap: var(--sp-1); }
-  .sw__name { font-size: var(--fs-small); font-weight: var(--fw-medium); }
+  .sw__name { font-size: var(--fs-small); font-weight: var(--fw-bold); }
   .sw__hex  { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--text-muted); }
 
   .ramp { display: flex; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
   .ramp > div { flex: 1; height: 3.5rem; }
+
+  /* The photograph the palette was read off, as proportions: mostly room,
+     one poster, a strip of leather, a sliver of sun. */
+  .mood { display: flex; height: 6rem; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+  .mood > div { height: 100%; }
+
+
+  .anatomy { counter-reset: a; display: grid; gap: 0; }
+  .anatomy li { list-style: none; display: grid; grid-template-columns: 2rem 1fr; gap: var(--sp-3); padding-block: var(--sp-3); border-top: 1px solid var(--line); }
+  .anatomy li::before { counter-increment: a; content: "0" counter(a); font-family: var(--font-mono); font-size: var(--fs-label); color: var(--c-accent-text); padding-top: 0.3em; }
+  .anatomy { padding: 0; }
 
   /* --- Space scale ------------------------------------------------------ */
   .space-row { display: grid; grid-template-columns: 4.5rem 1fr; gap: var(--sp-4); align-items: center; }
@@ -197,7 +302,7 @@
 
   /* --- Grid demo -------------------------------------------------------- */
   .grid-demo { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gutter); }
-  .grid-demo > span { height: 4.5rem; background: color-mix(in oklab, var(--c-accent) 12%, transparent); border-radius: var(--r-sm); }
+  .grid-demo > span { height: 4.5rem; background: color-mix(in oklab, var(--c-accent) 14%, transparent); border-radius: var(--r-sm); }
   @media (max-width: 48rem) { .grid-demo { grid-template-columns: repeat(6, 1fr); } .grid-demo > span:nth-child(n+7) { display: none; } }
 
   /* --- Bento demo ------------------------------------------------------- */
@@ -205,7 +310,6 @@
   .bento > * { display: flex; flex-direction: column; justify-content: space-between; gap: var(--sp-8); min-height: 9rem; grid-column: span 12; }
   @media (min-width: 48rem) {
     .bento > .b-8 { grid-column: span 8; }  .bento > .b-4 { grid-column: span 4; }
-    .bento > .b-6 { grid-column: span 6; }
   }
 
   /* --- Radius ----------------------------------------------------------- */
@@ -218,12 +322,12 @@
     display: inline-flex; align-items: center; gap: var(--sp-3);
     padding: var(--sp-3) var(--sp-6);
     border-radius: var(--r-pill);
-    font-weight: var(--fw-medium); font-size: var(--fs-small);
+    font-weight: var(--fw-bold); font-size: var(--fs-small);
     background: var(--text); color: var(--bg);
     transition: transform var(--d-micro) var(--e-micro), background var(--d-micro) var(--e-micro);
     will-change: transform;
   }
-  .btn:hover { background: var(--c-accent); color: var(--c-accent-ink); }
+  .btn:hover { background: var(--c-sun); color: var(--c-ink); }
   .btn--ghost { background: transparent; color: var(--text); border: 1px solid var(--line-strong); }
   .btn--ghost:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
 
@@ -233,16 +337,16 @@
     max-width: 100%; flex-wrap: wrap;
     padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-6);
     border-radius: var(--r-pill);
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
+    background: rgb(23 18 14 / 0.86);
+    color: var(--c-paper);
     box-shadow: var(--shadow-float);
   }
-  .pill__links { display: flex; gap: var(--sp-5, 1.25rem); font-size: var(--fs-small); }
-  .pill__links span { color: var(--text-muted); transition: color var(--d-micro) var(--e-micro); }
-  .pill__links span:first-child { color: var(--text); }
-  .pill__links span:hover { color: var(--c-accent); }
-  .pill__btn { display: flex; flex-direction: column; gap: 4px; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-pill); background: var(--text); }
-  .pill__btn i { display: block; width: 16px; height: 1.5px; background: var(--bg); }
+  .pill__links { display: flex; gap: 1.25rem; font-size: var(--fs-small); }
+  .pill__links span { color: var(--text-invert-muted); transition: color var(--d-micro) var(--e-micro); }
+  .pill__links span:first-child { color: var(--c-paper); }
+  .pill__links span:hover { color: var(--c-amber); }
+  .pill__btn { display: flex; flex-direction: column; gap: 4px; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-pill); background: var(--c-paper); }
+  .pill__btn i { display: block; width: 16px; height: 1.5px; background: var(--c-ink); }
   @media (max-width: 30rem) {
     .pill { gap: var(--sp-3); padding-left: var(--sp-4); }
     .pill__links { gap: var(--sp-3); font-size: var(--fs-label); }
@@ -261,13 +365,14 @@
   }
   .demo__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); }
 
-  .mask { display: block; overflow: hidden; }
+  .mask { display: block; overflow: hidden; padding-block: 0.08em 0.1em; margin-block: -0.08em -0.1em; }
   .mask > span {
     display: block;
-    transform: translateY(105%);
+    transform: translateY(110%) rotate(var(--reveal-skew));
+    transform-origin: 0 0;
     transition: transform var(--d-reveal) var(--e-reveal);
   }
-  .is-on .mask > span { transform: translateY(0); }
+  .is-on .mask > span { transform: none; }
   .is-on .mask:nth-child(2) > span { transition-delay: var(--stagger-line); }
   .is-on .mask:nth-child(3) > span { transition-delay: calc(var(--stagger-line) * 2); }
 
@@ -277,12 +382,11 @@
   .stag { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-2); }
   .stag i {
     display: block; height: 3rem; border-radius: var(--r-sm);
-    background: color-mix(in oklab, var(--c-accent) 16%, transparent);
+    background: color-mix(in oklab, var(--c-accent) 18%, transparent);
     opacity: 0; transform: translateY(24px);
     transition: opacity var(--d-reveal) var(--e-reveal), transform var(--d-reveal) var(--e-reveal);
   }
   .is-on .stag i { opacity: 1; transform: none; }
-  .is-on .stag i:nth-child(1) { transition-delay: 0ms; }
   .is-on .stag i:nth-child(2) { transition-delay: var(--stagger-grid); }
   .is-on .stag i:nth-child(3) { transition-delay: calc(var(--stagger-grid) * 2); }
   .is-on .stag i:nth-child(4) { transition-delay: calc(var(--stagger-grid) * 3); }
@@ -303,69 +407,68 @@
   .flow { display: grid; gap: var(--sp-3); }
   .flow__row { display: grid; grid-template-columns: 1.5rem 1fr; gap: var(--sp-4); align-items: start; padding-block: var(--sp-3); border-top: 1px solid var(--line); }
   .flow__row:first-child { border-top: 0; }
-  .flow__n { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--c-accent); padding-top: 0.35em; }
+  .flow__n { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--c-accent-text); padding-top: 0.35em; }
 
   table { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: var(--fs-small); }
   th, td { text-align: left; padding: var(--sp-3) var(--sp-4) var(--sp-3) 0; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--text-muted); font-weight: var(--fw-medium); }
-  td code { font-family: var(--font-mono); font-size: 0.8125rem; }
+  th { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--text-muted); font-weight: var(--fw-medium); }
 
-  .foot { padding-block: var(--sp-16) var(--sp-24); border-top: 1px solid var(--line); }
+  .foot { position: relative; overflow: clip; padding-top: var(--sp-16); border-top: 1px solid var(--line); }
+  .foot .bleed { margin-top: var(--sp-12); margin-bottom: -0.14em; }
 }
-
-/* Typeface direction switching — applied on :root so tokens cascade. */
-:root[data-type="b"] { --font-sans: "Instrument Sans", "Satoshi", sans-serif; }
-:root[data-type="c"] { --font-sans: "Space Grotesk", sans-serif; --font-serif: "Archivo", sans-serif; }
 </style>
 </head>
-<body>
+<body data-ground="light">
 
 <header class="bar">
   <span class="bar__mark">Milton Winroth</span>
-  <span class="label" style="color:var(--text-faint)">Brand manual v0.1</span>
+  <span class="label" style="color:var(--text-faint)">Brand manual v0.2 — Poster</span>
 
-  <div class="bar__group" role="group" aria-label="Accent colour">
-    <span class="label">Accent</span>
-    <button class="swatch-btn" data-accent="var(--c-cobalt)" style="background:#1B2CFF" aria-pressed="true"  title="Cobalt #1B2CFF"><span class="sr-only"></span></button>
-    <button class="swatch-btn" data-accent="var(--c-signal)" style="background:#FF4A1C" aria-pressed="false" title="Signal #FF4A1C"></button>
-    <button class="swatch-btn" data-accent="var(--c-forest)" style="background:#0F5132" aria-pressed="false" title="Forest #0F5132"></button>
-  </div>
-
-  <div class="bar__group" role="group" aria-label="Typeface direction">
-    <span class="label">Type</span>
-    <button class="chip" data-type="a" aria-pressed="true">A Satoshi</button>
-    <button class="chip" data-type="b" aria-pressed="false">B Instrument</button>
-    <button class="chip" data-type="c" aria-pressed="false">C Grotesk</button>
+  <div class="bar__group" role="group" aria-label="Page ground">
+    <span class="label">Ground</span>
+    <button class="chip" data-set-ground="light" aria-pressed="true">Paper</button>
+    <button class="chip" data-set-ground="dark" aria-pressed="false">Espresso</button>
   </div>
 </header>
+
+<!-- ======================================================================
+     MASTHEAD — the manual opens the way the site does
+     ====================================================================== -->
+<section class="masthead" data-ground="dark" aria-labelledby="manual-title">
+  <span class="masthead__sun" aria-hidden="true"></span>
+  <span class="bleed bleed--right masthead__top" data-fit="0.92" aria-hidden="true">Brand</span>
+
+  <div class="shell masthead__band" style="width:100%">
+    <div class="stack-3">
+      <h1 id="manual-title" class="masthead__title">Brand manual.<br>Leather &amp; lamplight.</h1>
+      <p class="compact" style="color:var(--text-muted)">
+        One motto, set like a poster: type too big for its frame, small dense copy
+        beside it, and one drop of glass to soften the edges.
+      </p>
+    </div>
+    <dl class="meta-list compact">
+      <div><dt>Version</dt><dd>0.2 — 2026-10-04</dd></div>
+      <div><dt>Replaces</dt><dd>0.1, Cobalt / Instrument Serif</dd></div>
+      <div><dt>Source</dt><dd>assets/css/tokens.css</dd></div>
+    </dl>
+  </div>
+
+  <span class="bleed bleed--left masthead__bottom" data-fit="0.72" aria-hidden="true">manual.</span>
+</section>
 
 <main class="shell">
 
   <!-- ============================================================ -->
-  <section class="masthead">
-    <div class="masthead__meta">
-      <span class="label">Portfolio 2026</span>
-      <span class="label">Design system &amp; graphic direction</span>
-      <span class="label">Proposal</span>
-    </div>
-    <h1 class="display-xl">A creative<br><span class="em">problem</span> solver.</h1>
-    <p class="body-l prose" style="margin-top:var(--sp-8); max-width:var(--measure-tight); color:var(--text-muted)">
-      One motto, carried by everything on the page. The type is quiet so the work can be loud.
-      The accent appears roughly twice per screen. Motion is six moves, repeated with discipline.
-    </p>
-  </section>
-
-  <!-- ============================================================ -->
-  <section class="section" id="voice">
+  <section class="section" id="voice" style="border-top:0">
     <div class="section__head">
       <span class="section__num">01</span>
       <h2 class="h2">Voice</h2>
     </div>
 
     <div class="cols cols--2">
-      <div class="card card--ink stack-6">
+      <div class="card card--ink stack-6" data-ground="dark">
         <span class="label">The rule</span>
-        <p class="h3">The evidence brags.<br>The voice stays calm.</p>
+        <p class="h3">The evidence brags.<br>The voice stays <span class="em">calm</span>.</p>
         <p class="small" style="color:var(--text-invert-muted)">
           Adjectives come out of the copy and go into the work. Numbers and process carry the
           confidence, which frees the writing to be plain, curious and generous.
@@ -374,7 +477,7 @@
 
       <div class="stack-6">
         <div class="card stack-3">
-          <span class="label" style="color:var(--c-accent)">Yes</span>
+          <span class="label" style="color:var(--c-accent-text)">Yes</span>
           <p>“50+ pages, a new identity, four people, WordPress. Here's how we thought about it.”</p>
           <p class="small">Specific. Credits the team. Lets the reader draw the conclusion.</p>
         </div>
@@ -392,35 +495,58 @@
     <div class="section__head">
       <span class="section__num">02</span>
       <h2 class="h2">Typography</h2>
-      <p class="small" style="margin-left:auto; max-width:26rem">
-        Switch direction in the bar above — every specimen below updates live.
+      <p class="small" style="margin-left:auto; max-width:28rem">
+        Two jobs, two sizes, nothing in between: a headline too big for its frame, and copy small
+        enough to make it look even bigger. The gap in scale is the design.
       </p>
     </div>
 
     <div class="cols" style="margin-bottom:var(--sp-16)">
       <div class="card stack-3">
-        <span class="label">Display &amp; UI</span>
-        <p class="h3">Satoshi</p>
-        <p class="small">Inter's clarity with a face of its own — more geometric, more open, less default. Variable, nine weights, free for commercial use.</p>
+        <span class="label">Display</span>
+        <p class="h3">Bricolage Grotesque</p>
+        <p class="small">ExtraBold, optical size 12, width 82 for the giants — one word per section, sentence case, sized to a share of the frame and run off one edge. Used for nothing else: every subhead is Satoshi. Set at the smallest optical size on purpose — that is where the face cuts its deepest ink traps. Free, variable, Google Fonts.</p>
       </div>
       <div class="card stack-3">
-        <span class="label">Accent</span>
-        <p class="h3"><span class="em">Instrument Serif</span></p>
-        <p class="small">Italic only, one word per headline, never more. This is the signature — it costs nothing and it is the thing people remember.</p>
+        <span class="label">Body &amp; compact</span>
+        <p class="h3" style="font-family:var(--font-sans); font-variation-settings:normal; font-weight:var(--fw-bold)">Satoshi</p>
+        <p class="small">Body, compact copy and every subhead (Medium). Quiet next to the giants, which is the point. The signature word is <span class="em">Instrument Serif</span> italic, on a yellow highlighter.</p>
       </div>
       <div class="card stack-3">
         <span class="label">Meta</span>
-        <p class="h3" style="font-family:var(--font-mono); font-size:1.5rem">JetBrains Mono</p>
-        <p class="small">Uppercase labels, years, tags and figures only. It signals systems and code — which happens to be true about the work.</p>
+        <p class="h3" style="font-family:var(--font-mono); font-variation-settings:normal; font-weight:500; font-size:1.5rem">JetBrains Mono</p>
+        <p class="small">Technical readouts inside the graphics only — node labels, counters. Labels are no longer set in it: they are small Satoshi on the page, the naming one marked with a small dot of sun.</p>
+      </div>
+    </div>
+
+    <div class="stack-4" style="margin-bottom:var(--sp-16)">
+      <span class="label">Ink traps — the same word at both ends of the optical-size axis</span>
+      <div class="traps">
+        <figure class="card">
+          <p style="font-variation-settings:'opsz' 12, 'wdth' 100">Wkrm</p>
+          <figcaption class="label" style="color:var(--c-accent-text)">opsz 12 — used. Deep traps in every joint.</figcaption>
+        </figure>
+        <figure class="card card--warm">
+          <p style="font-variation-settings:'opsz' 96, 'wdth' 100; color:var(--text-muted)">Wkrm</p>
+          <figcaption class="label">opsz 96 — the default at this size. Smooth, and forgettable.</figcaption>
+        </figure>
       </div>
     </div>
 
     <div class="stack">
       <div class="spec">
         <div class="spec__meta">
+          <span class="label">bleed</span>
+          <span class="label" style="color:var(--text-faint)">clamp(6.5rem, 31.5vw, 36rem)</span>
+          <span class="label" style="color:var(--text-faint)">lh .8 · −.055em · wdth 82</span>
+        </div>
+        <div class="spec__sample spec__sample--bleed"><span class="bleed bleed--left" data-fit="0.9">Problem</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__meta">
           <span class="label">display-xl</span>
-          <span class="label" style="color:var(--text-faint)">clamp(3.5rem, 11vw, 11rem)</span>
-          <span class="label" style="color:var(--text-faint)">lh .88 · −.04em</span>
+          <span class="label" style="color:var(--text-faint)">clamp(2.75rem, 12.5vw, 11rem)</span>
+          <span class="label" style="color:var(--text-faint)">lh .84 · −.05em</span>
         </div>
         <p class="display-xl spec__sample">Problem<br>solver</p>
       </div>
@@ -428,7 +554,7 @@
         <div class="spec__meta">
           <span class="label">display-l</span>
           <span class="label" style="color:var(--text-faint)">clamp(2.75rem, 7vw, 6rem)</span>
-          <span class="label" style="color:var(--text-faint)">lh .92 · −.03em</span>
+          <span class="label" style="color:var(--text-faint)">lh .88 · −.042em</span>
         </div>
         <p class="display-l spec__sample">Got something<br>worth <span class="em">solving?</span></p>
       </div>
@@ -438,6 +564,14 @@
           <span class="label" style="color:var(--text-faint)">clamp(2rem, 4.5vw, 3.5rem)</span>
         </div>
         <p class="h2 spec__sample">Selected work</p>
+      </div>
+      <div class="spec">
+        <div class="spec__meta">
+          <span class="label">compact</span>
+          <span class="label" style="color:var(--text-faint)">clamp(.875rem, 1vw, 1rem) · lh 1.16</span>
+          <span class="label" style="color:var(--text-faint)">Medium · 28ch</span>
+        </div>
+        <p class="compact spec__sample"><strong>A creative problem solver.</strong> I design brands, interfaces and advertising — and build the AI systems that make creative work go further.</p>
       </div>
       <div class="spec">
         <div class="spec__meta">
@@ -456,9 +590,17 @@
       <div class="spec">
         <div class="spec__meta">
           <span class="label">label</span>
-          <span class="label" style="color:var(--text-faint)">0.75rem · .12em · caps</span>
+          <span class="label" style="color:var(--text-faint)">0.875rem Satoshi Medium · no chip · ● marks the naming label</span>
         </div>
         <p class="spec__sample"><span class="label">Art direction</span> &nbsp; <span class="label">UX design</span> &nbsp; <span class="label">Web development</span> &nbsp; <span class="label">2025</span></p>
+      </div>
+    </div>
+
+    <div class="stack-4" style="margin-top:var(--sp-16)">
+      <span class="label">Scale contrast — the two sizes together, nothing in between</span>
+      <div class="contrast card--ink" data-ground="dark">
+        <p class="compact" style="color:var(--text-muted)"><strong style="color:var(--text)">Every element placed on purpose.</strong><br>Nothing medium-sized. Nothing to split the difference.</p>
+        <span class="bleed bleed--right" data-fit="0.85" aria-hidden="true" style="color:var(--c-amber)">Contrast</span>
       </div>
     </div>
   </section>
@@ -468,36 +610,47 @@
     <div class="section__head">
       <span class="section__num">03</span>
       <h2 class="h2">Colour</h2>
-      <p class="small" style="margin-left:auto; max-width:26rem">
-        Near-black instead of black, warm off-white instead of white. Two grouping surfaces.
-        One accent, used on about two percent of the page.
+      <p class="small" style="margin-left:auto; max-width:28rem">
+        Read off one photograph: a white poster in a dark room, one shaft of sun across it.
+        Ink, paper and yellow. No brown, no amber — one colour, and it is the sun.
       </p>
     </div>
 
+    <div class="stack-3" style="margin-bottom:var(--sp-12)">
+      <span class="label">Proportion — mostly room, one poster, a sliver of sun</span>
+      <div class="mood" aria-hidden="true">
+        <div style="flex:46; background:#17120E"></div>
+        <div style="flex:14; background:#241C15"></div>
+        <div style="flex:24; background:#FBFAF7"></div>
+        <div style="flex:6;  background:#FFD21A"></div>
+      </div>
+    </div>
+
     <div class="swatches" style="margin-bottom:var(--sp-12)">
-      <div class="sw"><div class="sw__chip" style="background:#0B0B0C"></div><div class="sw__body"><span class="sw__name">Ink</span><span class="sw__hex">#0B0B0C</span><span class="label" style="letter-spacing:.04em;text-transform:none">Text, inverted sections</span></div></div>
-      <div class="sw"><div class="sw__chip" style="background:#F7F6F3"></div><div class="sw__body"><span class="sw__name">Paper</span><span class="sw__hex">#F7F6F3</span><span class="label" style="letter-spacing:.04em;text-transform:none">Page ground</span></div></div>
-      <div class="sw"><div class="sw__chip" style="background:#FFFFFF"></div><div class="sw__body"><span class="sw__name">White</span><span class="sw__hex">#FFFFFF</span><span class="label" style="letter-spacing:.04em;text-transform:none">Cards on paper</span></div></div>
-      <div class="sw"><div class="sw__chip" style="background:#EDE8E1"></div><div class="sw__body"><span class="sw__name">Sand</span><span class="sw__hex">#EDE8E1</span><span class="label" style="letter-spacing:.04em;text-transform:none">Warm grouping</span></div></div>
-      <div class="sw"><div class="sw__chip" style="background:#E4E7E9"></div><div class="sw__body"><span class="sw__name">Mist</span><span class="sw__hex">#E4E7E9</span><span class="label" style="letter-spacing:.04em;text-transform:none">Cool grouping</span></div></div>
-      <div class="sw"><div class="sw__chip" style="background:var(--c-accent)"></div><div class="sw__body"><span class="sw__name">Accent</span><span class="sw__hex" id="accent-hex">#1B2CFF</span><span class="label" style="letter-spacing:.04em;text-transform:none">Links, CTA, active state</span></div></div>
+      <div class="sw"><div class="sw__chip" style="background:#17120E"></div><div class="sw__body"><span class="sw__name">Espresso</span><span class="sw__hex">#17120E · --c-ink</span><span class="label">Text, dark ground</span></div></div>
+      <div class="sw"><div class="sw__chip" style="background:#241C15"></div><div class="sw__body"><span class="sw__name">Walnut</span><span class="sw__hex">#241C15 · --c-ink-soft</span><span class="label">Raised on dark</span></div></div>
+      <div class="sw"><div class="sw__chip" style="background:#FBFAF7"></div><div class="sw__body"><span class="sw__name">Paper</span><span class="sw__hex">#FBFAF7 · --c-paper</span><span class="label">Light ground — poster white</span></div></div>
+      <div class="sw"><div class="sw__chip" style="background:#FFFFFF"></div><div class="sw__body"><span class="sw__name">White</span><span class="sw__hex">#FFFFFF · --c-white</span><span class="label">Raised on light</span></div></div>
+      <div class="sw"><div class="sw__chip" style="background:#F1EEE8"></div><div class="sw__body"><span class="sw__name">Sand</span><span class="sw__hex">#F1EEE8 · --c-sand</span><span class="label">Grouping surface</span></div></div>
+            <div class="sw"><div class="sw__chip" style="background:#F2C100"></div><div class="sw__body"><span class="sw__name">Sun, deep</span><span class="sw__hex">#F2C100 · --c-sun-deep</span><span class="label">Thin rules and dots on paper</span></div></div>
+      <div class="sw"><div class="sw__chip" style="background:#FFD21A"></div><div class="sw__body"><span class="sw__name">Sun</span><span class="sw__hex">#FFD21A · --c-sun</span><span class="label">The only colour. Text on espresso; highlighter and fill on paper</span></div></div>
     </div>
 
     <div class="stack-3" style="margin-bottom:var(--sp-12)">
-      <span class="label">Grey ramp — borders, meta, disabled</span>
+      <span class="label">Warm grey ramp — borders, meta, disabled</span>
       <div class="ramp">
-        <div style="background:#EFEEEB"></div><div style="background:#DEDCD8"></div><div style="background:#C4C2BD"></div>
-        <div style="background:#A3A19C"></div><div style="background:#82807B"></div><div style="background:#63615D"></div>
-        <div style="background:#474540"></div><div style="background:#2C2B28"></div><div style="background:#171716"></div>
+        <div style="background:#EFECE6"></div><div style="background:#DEDAD2"></div><div style="background:#B7AC9C"></div>
+        <div style="background:#9D9182"></div><div style="background:#857A6E"></div><div style="background:#6B6157"></div>
+        <div style="background:#4D453D"></div><div style="background:#2F2821"></div><div style="background:#1D1712"></div>
       </div>
     </div>
 
     <div class="cols cols--2">
       <div class="card stack-4">
-        <span class="label">Accent candidates</span>
-        <p class="small">Cobalt reads as precision and systems, and holds real tension against warm paper — the recommendation. Signal is energy and advertising. Forest is calm and premium. Pick one in the bar and live with it for a minute.</p>
+        <span class="label">One accent, two exposures</span>
+        <p class="small">The accent is the sun and only the sun. On espresso it is text. On paper yellow text would be 1.4:1, so there it is only ever a surface — a highlighter stroke under the signature word, the fill every button wipes to, rules and dots. Accent text on paper (labels, numbers) is plain ink. Two tokens keep it honest: <code>--c-accent</code> for fills, <code>--c-accent-text</code> for anything you read.</p>
       </div>
-      <div class="card card--ink stack-4">
+      <div class="card card--ink stack-4" data-ground="dark">
         <span class="label">Rule</span>
         <p>Accent never carries meaning on its own. Every state it marks also changes weight, position or wording, so the page still works without colour.</p>
       </div>
@@ -507,7 +660,7 @@
   <!-- ============================================================ -->
   <section class="section" id="space">
     <div class="section__head">
-      <span class="section__num">04</span>
+      <span class="section__num">05</span>
       <h2 class="h2">Space, grid &amp; radius</h2>
     </div>
 
@@ -530,24 +683,24 @@
 
       <div class="stack-8">
         <div class="stack-3">
-          <span class="label">Radius</span>
+          <span class="label">Radius — barely rounded</span>
           <div class="radii">
-            <figure><div style="border-radius:8px"></div><figcaption class="label">sm · 8</figcaption></figure>
-            <figure><div style="border-radius:12px"></div><figcaption class="label">md · 12</figcaption></figure>
-            <figure><div style="border-radius:16px"></div><figcaption class="label">lg · 16</figcaption></figure>
-            <figure><div style="border-radius:24px"></div><figcaption class="label">xl · 24</figcaption></figure>
-            <figure><div style="border-radius:100px"></div><figcaption class="label">pill</figcaption></figure>
+            <figure><div style="border-radius:var(--r-sm)"></div><figcaption class="label">sm · 4</figcaption></figure>
+            <figure><div style="border-radius:var(--r-md)"></div><figcaption class="label">md · 6</figcaption></figure>
+            <figure><div style="border-radius:var(--r-lg)"></div><figcaption class="label">lg · 8</figcaption></figure>
+            <figure><div style="border-radius:var(--r-xl)"></div><figcaption class="label">xl · 12</figcaption></figure>
+            <figure><div style="border-radius:var(--r-pill)"></div><figcaption class="label">pill</figcaption></figure>
           </div>
         </div>
         <div class="stack-3">
           <span class="label">Section rhythm</span>
-          <p class="small">Vertical padding is <code style="font-family:var(--font-mono)">clamp(96px, 12vw, 200px)</code>. Air is the loudest thing on the page — sections never touch.</p>
+          <p class="small">Vertical padding is <code>clamp(96px, 12vw, 200px)</code>. Air is the loudest thing on the page — sections never touch.</p>
         </div>
       </div>
     </div>
 
     <div class="stack-4" style="margin-bottom:var(--sp-16)">
-      <span class="label">12 columns · max 1440 · gutter 24 · margin clamp(20, 4vw, 64)</span>
+      <span class="label">12 columns · max 1440 · gutter 24 · margin clamp(20, 4vw, 64) — bleed type ignores all of it</span>
       <div class="grid-demo">
         <span></span><span></span><span></span><span></span><span></span><span></span>
         <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -560,7 +713,7 @@
         <div class="card b-8"><span class="label">Capability</span><p class="h3">Brand &amp; identity</p></div>
         <div class="card card--warm b-4"><span class="label">Capability</span><p class="h3">UX &amp; UI</p></div>
         <div class="card card--cool b-4"><span class="label">Capability</span><p class="h3">Web design<br>&amp; development</p></div>
-        <div class="card card--ink b-4"><span class="label">Capability</span><p class="h3">Ads: static,<br>motion, film</p></div>
+        <div class="card card--ink b-4" data-ground="dark"><span class="label">Capability</span><p class="h3">Ads: static,<br>motion, film</p></div>
         <div class="card b-4"><span class="label">Capability</span><p class="h3">AI systems<br>&amp; workflows</p></div>
       </div>
     </div>
@@ -569,11 +722,10 @@
   <!-- ============================================================ -->
   <section class="section" id="motion">
     <div class="section__head">
-      <span class="section__num">05</span>
+      <span class="section__num">06</span>
       <h2 class="h2">Motion</h2>
       <p class="small" style="margin-left:auto; max-width:28rem">
-        Six moves and no more. Discipline is what separates award-winning from busy.
-        Every demo below is running the real tokens — press replay.
+        Six moves. Every demo below is running the real tokens — press replay.
       </p>
     </div>
 
@@ -582,11 +734,11 @@
       <div class="demo" data-demo>
         <div>
           <span class="mask"><span class="h3">Line mask</span></span>
-          <span class="mask"><span class="h3" style="color:var(--text-muted)">rises out of a clip</span></span>
+          <span class="mask"><span class="h3" style="color:var(--text-muted)">swings up out of a clip</span></span>
           <span class="mask"><span class="h3" style="color:var(--text-faint)">80ms per line</span></span>
         </div>
         <div class="demo__foot">
-          <span class="label">01 · headlines · 0.8s expo.out</span>
+          <span class="label">01 · headlines · spring</span>
           <button class="btn btn--ghost" data-replay>Replay</button>
         </div>
       </div>
@@ -621,7 +773,7 @@
         <div class="stack-2">
           <div class="card" style="padding:var(--sp-4)"><span class="label">Aros Auto</span></div>
           <div class="card card--warm" style="padding:var(--sp-4); margin-top:-8px"><span class="label">Logimark</span></div>
-          <div class="card card--ink" style="padding:var(--sp-4); margin-top:-8px"><span class="label">Friends Agenda</span></div>
+          <div class="card card--ink" data-ground="dark" style="padding:var(--sp-4); margin-top:-8px"><span class="label">Friends Agenda</span></div>
         </div>
         <div class="demo__foot">
           <span class="label">05 · sticky stack · CSS position: sticky</span>
@@ -647,8 +799,8 @@
           <tr><td><code>--d-overlay</code></td><td><code>0.7s</code></td><td>Menu curtain, page transition</td></tr>
           <tr><td><code>--e-reveal</code></td><td><code>cubic-bezier(0.16, 1, 0.30, 1)</code></td><td>Everything that enters</td></tr>
           <tr><td><code>--e-overlay</code></td><td><code>cubic-bezier(0.65, 0, 0.35, 1)</code></td><td>Everything that covers</td></tr>
-          <tr><td><code>--lenis-lerp</code></td><td><code>0.09</code></td><td>Smooth scroll weight. Touch stays native.</td></tr>
-          <tr><td><code>prefers-reduced-motion</code></td><td><code>all durations → 0.01ms</code></td><td>Built in from the first commit, not bolted on</td></tr>
+          <tr><td><code>--lenis-lerp</code></td><td><code>0.16</code></td><td>Smooth scroll weight. Touch stays native.</td></tr>
+          <tr><td><code>prefers-reduced-motion</code></td><td><code>all durations → 0.01ms</code></td><td>Everything is shown finished and still</td></tr>
         </tbody>
       </table>
     </div>
@@ -657,13 +809,13 @@
   <!-- ============================================================ -->
   <section class="section" id="components">
     <div class="section__head">
-      <span class="section__num">06</span>
+      <span class="section__num">07</span>
       <h2 class="h2">Components</h2>
     </div>
 
     <div class="stack-12">
       <div class="stack-4">
-        <span class="label">Floating nav — doubles as the scroll progress indicator</span>
+        <span class="label">Floating dock — espresso glass, amber on hover</span>
         <div class="pill">
           <span class="bar__mark">MW</span>
           <span class="pill__links"><span>Work</span><span>About</span><span>Lab</span><span>Contact</span></span>
@@ -682,7 +834,7 @@
       <div class="stack-4">
         <span class="label">Case card</span>
         <article class="card" style="padding:0; overflow:hidden; max-width:34rem">
-          <div style="aspect-ratio:16/10; background:linear-gradient(135deg,var(--c-sand),var(--c-mist))"></div>
+          <div style="aspect-ratio:16/10; background:linear-gradient(135deg,var(--c-ink),var(--c-ink-soft))"></div>
           <div class="stack-3" style="padding:var(--sp-6)">
             <div style="display:flex; gap:var(--sp-4); flex-wrap:wrap">
               <span class="label">2025</span><span class="label">Art direction</span><span class="label">UX</span><span class="label">Web</span>
@@ -698,57 +850,56 @@
   <!-- ============================================================ -->
   <section class="section" id="flow">
     <div class="section__head">
-      <span class="section__num">07</span>
+      <span class="section__num">08</span>
       <h2 class="h2">Home page flow</h2>
-      <p class="small" style="margin-left:auto; max-width:26rem">Four acts: who → what I solve → the proof → the invitation.</p>
+      <p class="small" style="margin-left:auto; max-width:26rem">Four acts: who → what I do → the proof → the invitation.</p>
     </div>
 
     <div class="flow">
-      <div class="flow__row"><span class="flow__n">00</span><div><p><strong>Intro</strong> — masked wordmark, 1.2s, skippable, first visit only.</p></div></div>
-      <div class="flow__row"><span class="flow__n">01</span><div><p><strong>Hero</strong> — the motto at display scale. On scroll it shrinks and docks into the nav.</p></div></div>
+      <div class="flow__row"><span class="flow__n">01</span><div><p><strong>Hero</strong> — the poster. “Problem” and “solver.” as bleed type cropped by the frame, the motto as compact copy between them. Espresso ground, one shaft of sun.</p></div></div>
       <div class="flow__row"><span class="flow__n">02</span><div><p><strong>Statement</strong> — who he is, lit word by word as you scroll.</p></div></div>
-      <div class="flow__row"><span class="flow__n">03</span><div><p><strong>Problems I solve</strong> — four problems in the client's own words, sticky-stacked. Not a service list.</p></div></div>
-      <div class="flow__row"><span class="flow__n">04</span><div><p><strong>Selected work</strong> — four cases, big media, parallax.</p></div></div>
-      <div class="flow__row"><span class="flow__n">05</span><div><p><strong>What I do</strong> — bento of six capabilities, each tile with its own small interaction.</p></div></div>
-      <div class="flow__row"><span class="flow__n">06</span><div><p><strong>How I work</strong> — Understand → Explore → Build → Prove. Pinned horizontally on desktop.</p></div></div>
-      <div class="flow__row"><span class="flow__n">07</span><div><p><strong>Numbers</strong> — true figures only, set quietly.</p></div></div>
-      <div class="flow__row"><span class="flow__n">08</span><div><p><strong>Now</strong> — SoScale Media, and a tool marquee that follows scroll direction.</p></div></div>
-      <div class="flow__row"><span class="flow__n">09</span><div><p><strong>Footer</strong> — an enormous headline as the CTA, local time in Stockholm, and a wordmark that fills the viewport.</p></div></div>
+      <div class="flow__row"><span class="flow__n">02b</span><div><p><strong>Selected projects</strong> — previous work as cards on the inside of a cylinder, standing on the page's own dot field (WebGL). The section pins and the scroll drives the cards round in a loop; drag works too, and speed bends the cards.</p></div></div>
+      <div class="flow__row"><span class="flow__n">03</span><div><p><strong>Wide skill set</strong> — a zoom into a photograph between the hello and the client marks: “Wide” large top left, “skill set” enormous in yellow along the bottom, flush right.</p></div></div>
+      <div class="flow__row"><span class="flow__n">04</span><div><p><strong>Statement scenes</strong> — one enormous sentence each.</p></div></div>
+      <div class="flow__row"><span class="flow__n">05</span><div><p><strong>Every section after that</strong> — introduced by a poster head: one word run off the page edge (Content, Systems, Brand, Craft, Machine, Process, Now.), the real headline and one line of explanation small beneath it. Crops alternate sides down the page.</p></div></div>
+      <div class="flow__row"><span class="flow__n">06</span><div><p><strong>What I do · AI · How I work</strong> — the dark half of the page lit in amber.</p></div></div>
+      <div class="flow__row"><span class="flow__n">07</span><div><p><strong>Footer</strong> — the headline is the CTA, and the surname sinks through the bottom of the page.</p></div></div>
     </div>
   </section>
 
-  <footer class="foot stack-6">
-    <p class="display-l">Got something<br>worth <span class="em">solving?</span></p>
-    <p class="small">Brand manual v0.1 · Next: tokens ship as <code style="font-family:var(--font-mono)">assets/css/tokens.css</code>, then the static shell.</p>
-  </footer>
-
 </main>
+
+<footer class="foot shell" data-ground="dark" style="max-width:none">
+  <div class="stack-6" style="max-width:var(--grid-max); margin-inline:auto">
+    <p class="display-l">Got something<br>worth <span class="em">solving?</span></p>
+    <p class="small">Brand manual v0.2 · Tokens live in <code>assets/css/tokens.css</code>.</p>
+  </div>
+  <span class="bleed bleed--right" data-fit="0.9" aria-hidden="true">Winroth</span>
+</footer>
 
 <script type="module">
 /* ------------------------------------------------------------------
    Styleguide interactions. Vanilla, no dependencies — the real site
    layers Motion + Lenis on top of exactly these tokens.
    ------------------------------------------------------------------ */
-const root = document.documentElement;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-/* --- Accent switcher ---------------------------------------------- */
-const HEX = { 'var(--c-cobalt)': '#1B2CFF', 'var(--c-signal)': '#FF4A1C', 'var(--c-forest)': '#0F5132' };
-const accentHex = document.getElementById('accent-hex');
-
-document.querySelectorAll('[data-accent]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-accent]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-    root.style.setProperty('--c-accent', btn.dataset.accent);
-    accentHex.textContent = HEX[btn.dataset.accent];
-  });
+/* --- Giants: each bleed word at its own share of the frame, as on the site --- */
+const fitAll = () => document.querySelectorAll('.bleed').forEach((w) => {
+  const box = w.parentElement;
+  const size = parseFloat(getComputedStyle(w).fontSize);
+  const ratio = w.offsetWidth / size;
+  const share = parseFloat(w.dataset.fit) || 0.8;
+  if (ratio) w.style.fontSize = (box.clientWidth * share / ratio).toFixed(1) + 'px';
 });
+document.fonts.ready.then(fitAll);
+addEventListener('resize', () => requestAnimationFrame(fitAll));
 
-/* --- Typeface direction switcher ----------------------------------- */
-document.querySelectorAll('[data-type]').forEach((btn) => {
+/* --- Ground switcher: proves every token resolves on both grounds -- */
+document.querySelectorAll('[data-set-ground]').forEach((btn) => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-type]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-    root.dataset.type = btn.dataset.type;
+    document.querySelectorAll('[data-set-ground]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    document.body.dataset.ground = btn.dataset.setGround;
   });
 });
 

@@ -20,8 +20,71 @@
   .t-display-l,
   .t-h2,
   .t-h3 {
-    font-weight: var(--fw-medium);
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display);
     text-wrap: balance;
+  }
+
+  /* h2 and h3 are subheads now, and subheads are set in the body face:
+     the display face is reserved for the giants, so the jump between the
+     two is a jump in face, size and weight at once. */
+  .t-h2,
+  .t-h3 {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.025em;
+  }
+
+  /* ---- Bleed --------------------------------------------------------------
+     A word set too big for its frame. The parent clips it; the word never
+     wraps and never shrinks to fit — the crop is the point. Pair it with
+     .t-compact and nothing in between: the gap in scale is the design.
+     --------------------------------------------------------------------- */
+  .t-bleed {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display-tight);
+    font-size: var(--fs-bleed);
+    line-height: var(--lh-bleed);
+    letter-spacing: var(--tr-bleed);
+    white-space: nowrap;
+    /* Shrink-wrapped to the word so modules/fit.js can measure it. */
+    width: max-content;
+  }
+
+  /* ---- Compact ------------------------------------------------------------
+     The poster's small print: medium weight, tight leading, short measure.
+     Dense enough to read as one block from across the room, and small
+     enough that the bleed type next to it looks even bigger.
+     --------------------------------------------------------------------- */
+  .t-compact {
+    font-size: var(--fs-compact);
+    line-height: var(--lh-compact);
+    letter-spacing: var(--tr-compact);
+    font-weight: var(--fw-medium);
+    max-width: var(--measure-compact);
+    text-wrap: pretty;
+  }
+
+  /* The small headline. Display face at caption size: sits under a bleed
+     word and carries the actual meaning of the section in a sentence. */
+  .t-title-compact {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+    max-width: 22ch;
+  }
+
+  .t-compact strong,
+  .t-compact--lead {
+    font-weight: var(--fw-bold);
+    color: var(--text);
   }
 
   .t-display-xl {
@@ -59,46 +122,44 @@
   }
 
   /* ---- Label ---------------------------------------------------------------
-     A small chip, not a line of tracked-out capitals.
+     Editorial, not a UI chip. Small medium-weight text in the body face, on
+     the page — no pill, no border, no glass. The glass chip and the mono
+     face both read as interface furniture; next to giant poster type a
+     label should read like a magazine's kicker instead.
 
-     Tiny uppercase with wide letter-spacing is the default reflex for an
-     eyebrow, and it costs more than it looks: caps remove the word-shapes the
-     eye reads by, and the tracking that makes caps legible is what makes the
-     line read as texture rather than as a word. A bordered chip does the same
-     job — mark this as meta, separate it from the heading — while staying a
-     readable word at a readable size.
-
-     Mono stays. It is what gives the site its technical texture, and it is
-     the caps and the tracking that were the problem, not the face.
+     .accent marks the one label in a group that names the thing: it goes to
+     ink and gets a small dot of sun in front. Every other label in the
+     row (year, format, medium) stays quiet grey with no marker, so a row of
+     tags reads as one name and some facts, not five buttons.
      --------------------------------------------------------------------- */
   .t-label {
     display: inline-flex;
     align-items: center;
-    /* A flex item has its display blockified, so `inline-flex` becomes `flex`
-       and the chip stretches to the full column width. fit-content is what
-       actually keeps it the size of its own word — and most of these labels
-       do sit inside a flex stack. */
+    gap: 0.45em;
+    /* A flex item is blockified; fit-content keeps it the size of its own
+       words inside a flex stack. */
     width: fit-content;
     max-width: 100%;
-    padding: 0.34em 0.72em;
-    border: 1px solid var(--line);
-    border-radius: var(--r-pill);
-    font-family: var(--font-mono);
-    font-size: var(--fs-label);
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
     font-weight: var(--fw-medium);
-    line-height: 1.35;
-    letter-spacing: 0.01em;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
     text-transform: none;
+    font-variant-numeric: tabular-nums;
     color: var(--text-muted);
-    /* Deliberately not nowrap. A chip that refuses to wrap will happily grow
-       past a narrow grid cell and take the whole document's width with it —
-       which is exactly what the figures row did at 375px. Wrapping inside the
-       pill is the lesser evil, and at these lengths it almost never happens. */
     text-wrap: balance;
   }
 
-  .t-label.accent {
-    border-color: color-mix(in oklab, var(--c-accent) 34%, transparent);
+  .t-label.accent { color: var(--text); }
+
+  .t-label.accent::before {
+    content: "";
+    flex: none;
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: var(--c-sun);
   }
 
   /* ---- Bare label ----------------------------------------------------------
@@ -138,23 +199,39 @@
     border-color: rgb(255 255 255 / 0.32);
   }
 
-  /* The signature: exactly one italic serif word inside a plain headline.
-     Used no more than once per section — that is what keeps it a signature.
+  /* The signature: exactly one word per headline, picked out in the sun.
+     Used no more than once per section — that is what keeps it a
+     signature.
 
-     Instrument Serif runs small: at the same font-size its cap height lands
-     well under Satoshi's, so the accent word was reading as a footnote
-     inside its own headline instead of as the emphasis. The size bump is an
-     optical correction, not a shout — it makes the two faces sit on the same
-     line. The negative side bearings close the gap an italic leaves after
-     itself, so `problem solver.` reads as one phrase rather than two words
-     with a seam between them. */
+     Same face, same weight — the poster this system came from never
+     switches face. On the dark ground the word simply turns yellow. On the
+     light ground yellow text would be 1.6:1, so the yellow goes behind the
+     word instead: a highlighter stroke across the lower two thirds of the
+     x-height, the ink stays black. It pops harder than coloured text ever
+     did, and it stays readable. */
   .em {
+    /* Instrument Serif runs small next to a grotesk; the bump puts its
+       x-height on the same line. */
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
-    font-size: 1.06em;
-    letter-spacing: -0.005em;
-    margin-inline: -0.02em -0.03em;
+    font-size: 1.08em;
+    letter-spacing: 0;
+    font-variation-settings: normal;
+    color: var(--text);
+    background-image: linear-gradient(var(--c-sun), var(--c-sun));
+    background-repeat: no-repeat;
+    background-size: 100% 0.5em;
+    background-position: 0 88%;
+    padding-inline: 0.06em;
+    margin-inline: -0.06em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  [data-ground="dark"] .em {
+    color: var(--c-sun);
+    background-image: none;
   }
 
   .muted { color: var(--text-muted); }
@@ -185,9 +262,9 @@
 
   .link:hover,
   .link:focus-visible {
-    color: var(--c-accent);
+    color: var(--c-accent-text);
     background-position: 0 100%;
-    background-size: 100% 1.5px;
+    background-size: 100% 3px;
   }
 
   /* ---- Skip link --------------------------------------------------------- */
@@ -220,9 +297,11 @@
      it paints over the button's background but under its label. Same trick
      .glass uses for its frost.
      --------------------------------------------------------------------- */
+  /* Buttons wipe to the sun with espresso text on it — the one place the
+     yellow is a large solid field on the light ground. */
   .btn {
-    --btn-fill:     var(--c-accent);
-    --btn-fill-ink: var(--c-accent-ink);
+    --btn-fill:     var(--c-sun);
+    --btn-fill-ink: var(--c-ink);
 
     position: relative;
     isolation: isolate;
@@ -234,7 +313,7 @@
     min-height: 2.75rem;               /* 44px touch target */
     border-radius: var(--r-pill);
     font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
+    font-weight: var(--fw-bold);
     letter-spacing: -0.005em;
     background: var(--text);
     color: var(--bg);
@@ -272,13 +351,13 @@
   .btn:focus-visible > [aria-hidden] { transform: translateX(0.3em); }
 
   .btn--ghost {
-    --btn-fill:     var(--text);
-    --btn-fill-ink: var(--bg);
+    --btn-fill:     var(--c-sun);
+    --btn-fill-ink: var(--c-ink);
     background: transparent;
     color: var(--text);
     border: 1px solid var(--line-strong);
   }
 
   .btn--ghost:hover,
-  .btn--ghost:focus-visible { border-color: var(--text); }
+  .btn--ghost:focus-visible { border-color: var(--c-sun); }
 }

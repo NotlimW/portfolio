@@ -1,0 +1,402 @@
+/* ==========================================================================
+   AI — three ways I use it, drawn as wireframes
+   Three dark parts, each opened by a poster head (Context, Visuals, Tools).
+   In each, the drawing is the background of the part: full bleed, dimmed,
+   faded out at its edges, and the copy sits in front of it.
+
+   Everything is drawn in line: hairline strokes, no fills, no gradients,
+   no glow. The sun appears only as a stroke, on the one or two marks that
+   matter. The language is the construction drawing — rulers, dials, crosshairs, baselines — the same family as the
+   wireframes in "What I solve".
+
+   Motion follows the scroll. modules/ai-flow.js writes, on each
+   [data-ai-flow] stage: --p (0 → 1, eased progress through the viewport)
+   for gathering and drawing; --v (smoothed scroll velocity) for lean; and
+   --run, a drive that ticks slowly on its own and jumps with every pixel
+   scrolled, for currents, dials and the reel. Without the module — or
+   under reduced motion — --p stays 1 and the rest 0: complete and still.
+   ========================================================================== */
+
+@layer components {
+
+  /* ---- Layouts -------------------------------------------------------------- */
+
+  .ai-part { overflow-x: clip; }
+
+  /* The three parts read as one run: tighter between them (the gap is both
+     sections' padding added together), normal before the first and after
+     the last. */
+  .ai-part:has(+ .ai-part) { padding-bottom: calc(var(--section-y) * 0.4); }
+  .ai-part + .ai-part      { padding-top: calc(var(--section-y) * 0.4); }
+  .ai-part .poster-head    { margin-bottom: clamp(var(--sp-8), 4vw, var(--sp-12)); }
+
+  /* The stage stacks copy and drawing in one grid cell: the drawing behind,
+     the copy in front, vertically centred on it. */
+  .ai-stage {
+    --p: 1;
+    --v: 0;
+    --run: 0;
+    --loop: 0;
+    --loop2: 0;
+    position: relative;
+    display: grid;
+    grid-template-areas: "stage";
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    min-height: clamp(22rem, 42vw, 40rem);
+    margin-top: var(--sp-8);
+  }
+
+  .ai-stage > * { grid-area: stage; }
+
+  .ai-stage__text {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--sp-4);
+    max-width: 34ch;
+  }
+
+  .ai-stage--end .ai-stage__text { justify-self: end; }
+
+  /* Stacked: the copy above, the drawing below it — for a drawing whose
+     left edge carries meaning the copy would cover. */
+  .ai-stage--stack {
+    grid-template-areas: "text" "fig";
+    min-height: 0;
+    row-gap: var(--sp-8);
+  }
+  .ai-stage--stack > .ai-stage__text { grid-area: text; }
+  .ai-stage--stack > .ai-fig { grid-area: fig; }
+
+  /* Desktop: the copy sits right above the pipeline, lined up with
+     Trigger (430 / 1200 of the drawing), its two paragraphs side by side. */
+  @media (min-width: 64rem) {
+    .ai-stage--stack { row-gap: 0; }
+    .ai-stage--stack > .ai-stage__text {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--sp-8);
+      max-width: none;
+      width: min(46%, 44rem);
+      margin-left: calc(50% - min(50vw, 55rem) + min(100vw, 110rem) * 0.358 - 0.5rem);
+      margin-bottom: calc(min(100vw, 110rem) * -0.025);
+    }
+    .ai-stage--stack .case__tags { grid-column: 1 / -1; }
+    .ai-stage--stack > .ai-stage__text p { margin: 0; }
+  }
+
+  /* The drawing: full bleed, dim, faded to nothing at its edges so it sits
+     in the page rather than on it. It drifts a little against the scroll. */
+  .ai-stage > .ai-fig,
+  .ai-stage > .ai-reel {
+    /* Mixed from --text, so the same drawing reads on espresso and paper. */
+    --line:        color-mix(in oklab, var(--text) 26%, transparent);
+    --line-strong: color-mix(in oklab, var(--text) 48%, transparent);
+    --text-faint:  color-mix(in oklab, var(--text) 55%, transparent);
+    z-index: 0;
+    margin-inline: calc(50% - 50vw);
+    pointer-events: none;
+    opacity: calc(0.9 * min(1, var(--p) * 4));
+    /* A long fade out to the sides; the labels sit inside the solid part. */
+    --fade-x: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
+    --fade-y: linear-gradient(transparent, #000 8%, #000 92%, transparent);
+    mask-image: var(--fade-x), var(--fade-y);
+    mask-composite: intersect;
+    -webkit-mask-image: var(--fade-x), var(--fade-y);
+    -webkit-mask-composite: source-in;
+  }
+
+  /* Drifts against the scroll and leans a touch with its speed. */
+  .ai-stage > .ai-fig {
+    display: flex;
+    justify-content: center;
+    transform:
+      translate3d(0, calc((0.5 - var(--p)) * 10rem), 0)
+      skewY(calc(var(--v) * -1.5deg));
+  }
+
+  .ai-stage > .ai-fig svg {
+    flex: none;
+    width: min(100vw, 110rem);
+    min-width: 760px;
+  }
+
+  /* Phones: the copy needs the room, so the drawing steps further back. */
+  @media (max-width: 47.99rem) {
+    .ai-stage { min-height: 0; padding-block: var(--sp-12); }
+    .ai-stage > .ai-fig,
+    .ai-stage > .ai-reel { opacity: calc(0.5 * min(1, var(--p) * 4)); }
+  }
+
+  /* ---- Shared figure language --------------------------------------------- */
+  .ai-fig { margin: 0; }
+  .ai-fig svg { display: block; height: auto; overflow: visible; }
+
+  .ai-fig text {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: var(--fw-medium);
+    fill: var(--text-muted);
+  }
+
+  .ai-fig .ai-step { font-size: 15px; fill: var(--text-muted); letter-spacing: 0.01em; }
+
+  .ai-pulse {
+    fill: none;
+    stroke: var(--c-sun);
+    stroke-width: 1;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ai-pulse 3s var(--e-reveal) infinite;
+  }
+
+  @keyframes ai-pulse {
+    0%   { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0;   transform: scale(1.35); }
+  }
+
+  .ai-draw {
+    fill: none;
+    stroke: var(--c-sun);
+    stroke-width: 1.25;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--d, 1));
+  }
+
+  /* ---- Context · collect → hold → write --------------------------------------
+     A field of empty circles drifts on the left. As the part scrolls in,
+     the circles fly into the dial one after another (--a), the dial turns
+     with the scroll, and out of it a concept is drafted as outlined lines
+     on a baseline grid (--b). */
+  .ai-collect {
+    --a: clamp(0, calc((var(--p) - 0.08) * 2.2), 1);
+    --d: clamp(0, calc((var(--p) - 0.4) * 5), 1);
+    --b: clamp(0, calc((var(--p) - 0.42) * 2.6), 1);
+  }
+
+  .ai-baseline,
+  .ai-bracket,
+  .ai-guide,
+  .ai-cross,
+  .ai-inner,
+  .ai-dial {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .ai-baseline { stroke: var(--line); }
+  .ai-guide    { stroke: var(--line); stroke-dasharray: 3 6; }
+  .ai-cross    { stroke: var(--line); }
+  .ai-inner    { stroke-dasharray: 2 6; }
+  .ai-dial--long { stroke: var(--text-faint); }
+  .ai-dial--sun  { stroke: var(--c-sun); stroke-width: 1.5; }
+
+  .ai-guides { opacity: calc(1 - var(--a) * 0.8); }
+  .ai-ghosts { opacity: calc(1 - var(--a) * 0.7); }
+
+  .ai-ghost {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    animation: ai-drift 9s ease-in-out infinite alternate;
+    animation-delay: calc(var(--i, 0) * -0.41s);
+  }
+
+  @keyframes ai-drift {
+    from { transform: translate(-6px, -4px); }
+    to   { transform: translate(6px, 4px); }
+  }
+
+  .ai-held { fill: none; stroke: var(--text-faint); stroke-width: 1; }
+
+  /* The dial face turns slowly on its own and races when you scroll. */
+  .ai-dialface {
+    transform-origin: 640px 205px;
+    rotate: calc(var(--run) * 0.05deg);
+  }
+
+  /* The held circles turn only once they have all arrived, so each one
+     flies in along a straight line from its place in the field. */
+  .ai-orbit { rotate: calc(max(0, var(--p) - 0.5) * 300deg); }
+
+  .ai-fly {
+    --k: clamp(0, calc(var(--a) * 1.5 - var(--i, 0) * 0.011), 1);
+    --e: calc(var(--k) * var(--k) * (3 - 2 * var(--k)));
+    fill: none;
+    stroke: var(--text-muted);
+    stroke-width: 1;
+    transform: translate(calc(var(--sx) * (1 - var(--e))), calc(var(--sy) * (1 - var(--e))));
+  }
+
+  .ai-fly--sun { stroke: var(--c-sun); }
+
+  .ai-write {
+    fill: none;
+    stroke: var(--text-muted);
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(clamp(0, calc(var(--b) * 1.6 - var(--i, 0) * 0.12), 1));
+  }
+
+  .ai-write--sun { stroke: var(--c-sun); }
+
+  /* ---- Visuals · the reel ----------------------------------------------------
+     Two rows of frame outlines on a tilted plane, running in opposite
+     directions forever (each track is doubled so the loop has no seam).
+     The scroll slides the plane sideways and the rows against each other,
+     so the reel keeps moving with the page. */
+  .ai-reel { position: relative; min-width: 0; margin-block: 0; overflow-x: clip; }
+
+  .ai-reel__tilt {
+    display: grid;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    padding-block: var(--sp-12);
+    transform:
+      translate3d(calc((0.5 - var(--p)) * 30vw), 0, 0)
+      perspective(1400px) rotateX(18deg) rotateZ(calc(-6deg + var(--v) * 2deg)) scale(1.12);
+    transform-origin: 50% 50%;
+  }
+
+  .ai-reel__row {
+    display: flex;
+    width: max-content;
+  }
+
+  .ai-reel__row--back {
+    opacity: 0.6;
+    transform: translate3d(calc((var(--p) - 0.5) * 20vw), 0, 0);
+  }
+
+  .ai-reel__track {
+    display: flex;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    padding-right: clamp(0.75rem, 1.5vw, 1.25rem);
+    transform: translate3d(calc(var(--loop) * -1%), 0, 0);
+  }
+
+  .ai-reel__row--back .ai-reel__track { transform: translate3d(calc(var(--loop2) * 1% - 100%), 0, 0); }
+
+  /* Frames as wireframes: an outline holding a line sketch. They stand for
+     output — they are not anyone's real work. */
+  .ai-frame {
+    position: relative;
+    flex: none;
+    width: clamp(9rem, 15vw, 15rem);
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm);
+    color: var(--text-faint);
+  }
+
+  .ai-frame svg {
+    position: absolute;
+    inset: 12%;
+    width: 76%;
+    height: 76%;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+  }
+
+  .ai-frame svg * { vector-effect: non-scaling-stroke; }
+
+  .ai-frame i {
+    position: absolute;
+    left: 0.6em;
+    bottom: 0.45em;
+    font-style: normal;
+    font-size: 11px;
+    font-weight: var(--fw-medium);
+    color: var(--text-faint);
+  }
+
+  .ai-frame.is-pick { border-color: var(--c-sun); color: var(--c-sun); }
+
+  .ai-frame.is-pick b {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    padding: 0.15em 0.55em;
+    border: 1px solid var(--c-sun);
+    border-radius: var(--r-pill);
+    color: var(--c-sun);
+    font-size: 11px;
+    font-weight: var(--fw-medium);
+  }
+
+  /* ---- Tools · tasks → pipeline → creative work ------------------------------
+     Twelve hatched task boxes feed a pipeline of three nodes; a dashed
+     current runs through the wires, faster while you scroll. As the part
+     scrolls in, the tasks appear (--a), the nodes light up one by one
+     (--b), and a sketch is drawn on the sun-outlined canvas (--c). */
+  .ai-tools {
+    --a: clamp(0, calc((var(--p) - 0.08) * 2.5), 1);
+    --b: clamp(0, calc((var(--p) - 0.2) * 2.5), 1);
+    --c: clamp(0, calc((var(--p) - 0.32) * 2.5), 1);
+    --d: var(--c);
+  }
+
+  .ai-hatch { stroke: var(--line-strong); stroke-width: 1; }
+
+  .ai-task {
+    fill: url(#ai-hatch);
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    opacity: clamp(0, calc(var(--a) * 1.6 - var(--i, 0) * 0.05), 1);
+  }
+
+  .ai-wire { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+
+  /* The current: dashes that keep moving along the wires. */
+  .ai-flowdash {
+    fill: none;
+    stroke: var(--c-sun);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 9;
+    stroke-dashoffset: calc(var(--run) * -0.12);
+    opacity: var(--b);
+  }
+
+  .ai-node {
+    --n: clamp(0, calc(var(--b) * 1.6 - var(--i, 0) * 0.3), 1);
+    opacity: var(--n);
+    transform: translateY(calc((1 - var(--n)) * 12px));
+  }
+
+  .ai-node rect { fill: var(--bg); stroke: var(--line-strong); stroke-width: 1; }
+  .ai-fig .ai-node text { text-anchor: middle; fill: var(--text); font-size: 15px; }
+  .ai-node--sun rect { stroke: var(--c-sun); }
+  .ai-fig .ai-node--sun text { fill: var(--c-sun); }
+
+  .ai-fig .ai-step--sun { fill: var(--c-sun); }
+
+  .ai-canvas { fill: none; stroke: var(--c-sun); stroke-width: 1; }
+
+  .ai-sketch {
+    fill: none;
+    stroke: var(--c-sun);
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--c));
+  }
+
+  .ai-sketch-dot {
+    fill: none;
+    stroke: var(--c-sun);
+    opacity: clamp(0, calc((var(--c) - 0.9) * 10), 1);
+  }
+
+  /* ---- Reduced motion: complete and still ---------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-stage { --p: 1 !important; }
+    .ai-stage > .ai-fig { transform: none; }
+    .ai-ghost, .ai-pulse { animation: none; }
+    .ai-reel__tilt { transform: perspective(1400px) rotateX(18deg) rotateZ(-6deg) scale(1.12); }
+    .ai-reel__row--back { transform: none; }
+  }
+}

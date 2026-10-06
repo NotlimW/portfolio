@@ -7,12 +7,14 @@
   /* ==========================================================================
      STATEMENT — words light up against scroll position
      ========================================================================== */
+  /* Was set at 2.75rem. Under a giant poster word it is body copy again —
+     a large, calm paragraph, not a second headline competing with it. */
   .statement {
-    font-size: clamp(1.5rem, 3.4vw, 2.75rem);
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-    font-weight: var(--fw-regular);
-    max-width: 26ch;
+    font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+    line-height: 1.32;
+    letter-spacing: -0.012em;
+    font-weight: var(--fw-medium);
+    max-width: 34ch;
   }
 
   .statement .word {
@@ -42,22 +44,108 @@
   }
 
   /* ==========================================================================
-     PROCESS — four steps
-     Horizontal track on desktop, driven by scroll progress written to
-     --track-progress. Vertical stack below 64rem, where a horizontal
-     hijack always costs more than it gives.
+     PROCESS — six steps, one thread
+     Each step is a large, abstract line drawing (600 × 640) with its text
+     laid over the foot of it. One yellow line runs through every drawing —
+     in at (0,300), out at (600,300) — and on desktop the steps sit edge to
+     edge on a pinned horizontal track, so the six stretches read as one
+     line you follow to the right. modules/thread.js draws each stretch
+     (--d) just ahead of where you are looking; the drawing around it stays
+     in the background and comes up a little as the line arrives.
+     Stacked below 64rem: drawing, then text.
      ========================================================================== */
-  .process { display: grid; gap: var(--sp-6); }
+  .process { display: grid; gap: var(--sp-12); }
 
   .process__step {
+    position: relative;
     display: grid;
-    gap: var(--sp-4);
-    padding: var(--sp-8) 0;
-    border-top: 1px solid var(--line);
+    align-content: start;
   }
 
+  .process__art {
+    --d: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .process__art * { vector-effect: non-scaling-stroke; }
+
+  /* Stacked: the foot of each drawing is left empty for the text to sit
+     on (desktop), so below the track layout the text is pulled up into it
+     — 200 of the 600 units, as a share of the width. */
+  @media (max-width: 63.99rem) {
+    .process__art { margin-bottom: calc(-200 / 600 * 100%); }
+  }
+
+  /* The drawing is scenery: faint, and only a little less so once the
+     line has reached it. The line itself is always at full strength. */
+  .process__art > :not(.pw-thread):not(.pw-dot) {
+    opacity: calc(0.35 + var(--d) * 0.4);
+  }
+
+  .pw-faint,
+  .pw-faint-line { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+  .pw-line       { fill: none; stroke: color-mix(in oklab, var(--text) 45%, transparent); stroke-width: 1.25; }
+  .pw-dash       { stroke-dasharray: 4 7; }
+
+  .pw-ring {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    stroke-dasharray: 3 8;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pw-turn calc(40s + var(--i) * 12s) linear infinite;
+  }
+
+  .pw-ring:nth-of-type(even) { animation-direction: reverse; }
+
+  @keyframes pw-turn { to { rotate: 360deg; } }
+
+  .pw-label {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: var(--fw-medium);
+    fill: var(--text-muted);
+  }
+
+  .pw-label--sun { fill: var(--c-accent-text); }
+
+  .pw-thread {
+    fill: none;
+    stroke: var(--c-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--d));
+  }
+
+  .pw-dot { fill: var(--c-accent); stroke: none; }
+  .pw-head { opacity: clamp(0, calc((var(--d) - 0.95) * 20), 1); }
+
+  .process__text {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--sp-4);
+    max-width: 28rem;
+  }
+
+  .process__lede {
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .process__out { color: var(--text); }
+  .process__out span { color: var(--text-muted); margin-right: 0.5em; }
+
   @media (min-width: 64rem) {
-    .process-pin { height: 240svh; }
+    .process-pin { height: 380svh; }
 
     .process-pin__viewport {
       position: sticky;
@@ -69,38 +157,33 @@
     }
 
     .process {
+      /* One column per drawing, as large as the screen height allows. */
+      --col: min(37.5rem, 76svh * 600 / 640);
       grid-auto-flow: column;
-      /* Wide enough that the horizontal travel is worth the vertical scroll
-         it costs — narrow cards make the track barely move. */
-      grid-auto-columns: 33rem;
-      gap: var(--sp-12);
+      /* Edge to edge, no gap: the drawings have to touch for the line to
+         read as one. A trailing margin column so the measured track width
+         includes it and the last drawing lands clear of the edge. */
+      grid-template-columns: repeat(6, var(--col)) calc(var(--page-inline) * 2);
+      gap: 0;
       padding-inline: var(--page-inline);
-      /* --progress comes from scene.js, --track-distance from process.js.
+      /* --progress comes from scene.js, --track-distance from track.js.
          One drives the timing, the other only measures how far to travel. */
       transform: translate3d(calc(var(--progress, 0) * -1 * var(--track-distance, 0px)), 0, 0);
       will-change: transform;
     }
 
-    /* Type on the ground, held by a rule at the top rather than by a box.
-       The step number does the work a card border used to. */
-    .process__step {
-      padding: var(--sp-8) var(--sp-8) var(--sp-8) 0;
-      align-content: start;
-      gap: var(--sp-6);
-      min-height: 22rem;
-    }
-  }
+    .process::after { content: ""; }
 
-  /* An oversized figure so the track reads as a sequence at a glance, even
-     when a step is only half on screen. */
-  .process__n {
-    font-size: clamp(2.5rem, 4vw, 3.5rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    font-family: var(--font-mono);
-    font-weight: var(--fw-regular);
-    color: var(--c-accent);
-    text-transform: none;
+    /* Drawing and text share one cell: the text sits over the foot of the
+       drawing. */
+    .process__step { grid-template-areas: "step"; }
+    .process__art,
+    .process__text { grid-area: step; }
+    .process__text {
+      align-self: end;
+      padding: 0 var(--sp-12) var(--sp-4) 0;
+      max-width: 26rem;
+    }
   }
 
   /* ==========================================================================
@@ -156,5 +239,47 @@
   @media (prefers-reduced-motion: reduce) {
     .marquee { mask-image: none; overflow-x: auto; }
     .marquee__track { animation: none; }
+  }
+
+  /* ---- Statement portrait ------------------------------------------------
+     Centred in the right half of the page, not in whatever space the
+     paragraph happens to leave — the paragraph ends at a different point at
+     every width, and centring on it made the photo drift left. 25% of the
+     row is the middle of its right half; half the photo's width comes off
+     that. On phones the row wraps and the photo centres under the text. */
+  .statement-portrait {
+    --portrait-w: clamp(14rem, 25vw, 23rem);
+    flex: none;
+    width: var(--portrait-w);
+    margin-top: var(--sp-16);
+    margin-left: auto;
+    margin-right: max(0px, calc(25% - var(--portrait-w) / 2));
+  }
+
+  @media (max-width: 47.99rem) {
+    .statement-portrait { margin-inline: auto; }
+  }
+
+  /* ---- Capabilities in two columns ---------------------------------------
+     On desktop the list splits into two columns, read across in pairs.
+     Half a page is too narrow for number | title | note side by side, so
+     each row stacks: number in its gutter, the note under the title. */
+  @media (min-width: 64rem) {
+    .capabilities .rows {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2.5rem, 5vw, 5rem);
+      border-top: 0;
+    }
+
+    .capabilities .row-item {
+      grid-template-columns: 3rem minmax(0, 1fr);
+      row-gap: var(--sp-2);
+    }
+
+    .capabilities .row-item__note { grid-column: 2; }
+
+    /* The first pair carries the top rule the list used to have. */
+    .capabilities .row-item:nth-child(-n + 2) { border-top: 1px solid var(--line); }
   }
 }

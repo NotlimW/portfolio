@@ -140,7 +140,7 @@ function readColours(instance) {
   };
 
   const ink = channels("--particle-ink", [11, 11, 12]);
-  const accent = channels("--particle-accent", [27, 44, 255]);
+  const accent = channels("--particle-accent", [138, 93, 0]);
 
   const alphaFar = num("--particle-dot-alpha", 0.22);
   const alphaNear = num("--particle-dot-alpha-near", 0.9);
@@ -152,7 +152,7 @@ function readColours(instance) {
 
   // One style per influence band, from the outer edge of the cursor's reach
   // (near-invisible ink) to directly under it (bright, and pulled toward the
-  // accent so the bloom picks up a blue cast rather than just getting darker).
+  // accent so the bloom picks up a gold cast rather than just getting darker).
   instance.nearStyle = Array.from({ length: NEAR_STEPS }, (_, i) => {
     const t = (i + 0.5) / NEAR_STEPS;
     const mix = tint * t;

@@ -1,0 +1,170 @@
+/* ==========================================================================
+   CLIENTS — the logo rows
+   Two rows of large client marks running sideways, the same way, offset.
+   The page never stops for them: modules/logos.js keeps them rolling and
+   turns scroll speed into a surge, and leans the rows into the speed the
+   way the giant headlines do. No boxes, no rules. Kept tight top and
+   bottom — it is a breath between sections, not a section of its own.
+
+   Until the real logo files arrive, each mark is a typographic stand-in,
+   one treatment per client so the rows read as different brands rather
+   than a list of names. Swap .logo__mark for an <img>/<svg> and everything
+   else carries over.
+   ========================================================================== */
+
+@layer components {
+
+  .clients {
+    position: relative;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  /* Above the section's dot field (the particle canvas sits at z -1). */
+  .clients__stage {
+    position: relative;
+    z-index: 1;
+    overflow-x: clip;
+  }
+
+  .clients__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-3) var(--sp-8);
+    margin-bottom: var(--sp-8);
+  }
+
+  .clients__rows {
+    display: grid;
+    gap: clamp(0.5rem, 2vw, 1.5rem);
+    overflow-x: clip;
+  }
+
+  .clients__row {
+    display: flex;
+    overflow: hidden;
+    padding-block: 0.15em;   /* room for the lean to clear descenders */
+    user-select: none;
+    /* The ribbon fades in and out at the page edges instead of being cut. */
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    transform-origin: 50% 50%;
+  }
+
+  .clients__track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: clamp(3rem, 7vw, 7rem);
+    padding: 0 clamp(1.5rem, 3.5vw, 3.5rem);
+    margin: 0;
+    list-style: none;
+    will-change: transform;
+  }
+
+  /* Without the script (or with reduced motion) the rows are still: they
+     scroll by hand instead of hiding half the marks. */
+  .clients:not([data-flow="on"]) .clients__row {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  /* ---- A mark ------------------------------------------------------------ */
+  .logo {
+    flex: none;
+    color: var(--text-muted);
+    transition: color var(--d-short) var(--e-micro);
+  }
+
+  .logo:hover { color: var(--text); }
+
+  .logo__mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  /* ---- Stand-in marks, one voice per client ------------------------------- */
+  .logo--aros .logo__mark {
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display-tight);
+    font-size: clamp(2.6rem, 6.5vw, 6.5rem);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .logo--logimark .logo__mark {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-bold);
+    font-size: clamp(2.4rem, 6vw, 6rem);
+    letter-spacing: -0.045em;
+  }
+
+  .logo--logimark .logo__mark::before {
+    content: "";
+    width: 0.62em;
+    height: 0.62em;
+    border-radius: 0.14em;
+    background: currentColor;
+  }
+
+  .logo--friends .logo__mark {
+    gap: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(2.8rem, 7vw, 7rem);
+    letter-spacing: -0.01em;
+  }
+
+  .logo--friends .logo__mark::after {
+    content: "°";
+    margin-left: 0.04em;
+    font-size: 0.7em;
+    align-self: flex-start;
+  }
+
+  .logo--soscale .logo__mark {
+    font-family: var(--font-mono);
+    font-weight: var(--fw-medium);
+    font-size: clamp(1.6rem, 3.6vw, 3.6rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .logo--webbson .logo__mark {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-black);
+    font-size: clamp(2.6rem, 6.5vw, 6.5rem);
+    letter-spacing: -0.06em;
+  }
+}
+
+/* ==========================================================================
+   TOOLS — the same ribbon, for the tools in "Now"
+   Runs on modules/logos.js like the client rows. One voice for all of them
+   (they are tools, not brands): the body face, large, with every third one
+   in the serif italic for rhythm. A touch smaller than the client marks.
+   ========================================================================== */
+@layer components {
+  .clients--tools { padding-block: clamp(2rem, 5vw, 4rem) 0; }
+
+  .tool .logo__mark {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: clamp(2rem, 5vw, 4.75rem);
+    letter-spacing: -0.04em;
+  }
+
+  .tool--serif .logo__mark {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(2.3rem, 5.6vw, 5.4rem);
+    letter-spacing: -0.01em;
+  }
+}

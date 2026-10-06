@@ -44,11 +44,17 @@ function indexChildren(el) {
 
 const linesOf = (el) => Array.from(el.querySelectorAll(":scope > .line > span"));
 
+/* How far below its mask a line waits. Not 110%: the masks are padded so
+   ascenders and descenders survive, and at 110% the tops of the letters
+   showed in that padding before the line had moved. motion.css parks the
+   lines at the same offset before this script runs. */
+const PARKED = "translateY(135%)";
+
 /** Park the lines below their mask, tilted. Read from the token, not hardcoded. */
 function prime(el) {
   const skew = getComputedStyle(el).getPropertyValue("--reveal-skew").trim() || "0deg";
   linesOf(el).forEach((line) => {
-    line.style.transform = `translateY(110%) rotate(${skew})`;
+    line.style.transform = `${PARKED} rotate(${skew})`;
   });
 }
 
@@ -58,7 +64,7 @@ function play(el) {
 
   animate(
     lines,
-    { transform: ["translateY(110%) rotate(var(--reveal-skew))", "translateY(0%) rotate(0deg)"] },
+    { transform: [`${PARKED} rotate(var(--reveal-skew))`, "translateY(0%) rotate(0deg)"] },
     { ...SPRING, delay: stagger(0.075) }
   );
 }
@@ -76,12 +82,16 @@ export function init(root = document) {
     // animates in rather than snapping to its end state.
     if (mode === "lines" && !reduced) prime(el);
 
-    const stop = inView(
+    // One-way: the observer is dropped the first time the element is seen,
+    // so scrolling back up past it never plays the entrance again.
+    let stop = null;
+    stop = inView(
       el,
       () => {
+        if (el.dataset.inview === "true") return;
         el.dataset.inview = "true";
         if (mode === "lines" && !reduced) play(el);
-        return () => {};       // no exit handler: reveals are one-way
+        queueMicrotask(() => stop?.());
       },
       // Was -12%, which held everything back until it was well inside the
       // viewport — so on a fast scroll the page was always a beat behind you.

@@ -24,13 +24,23 @@
      where a cubic-bezier stops dead — and on a line of display type that is
      the difference between type that has weight and type that was moved.
 
-     Nothing here hides the line. The starting position is written by the
-     script, so a heading whose script never arrives is just a heading. */
+     The lines are parked below their masks from the very first paint, not
+     from when the script starts — otherwise every heading in view flashed
+     whole and then dropped out of sight. The parking is keyed on
+     html.reveal-ready, which an inline script in <head> sets before
+     anything renders and takes back off if main.js has not booted within
+     a few seconds, so a heading whose script never arrives still shows. */
   [data-reveal="lines"] .line { display: block; overflow: hidden; }
 
   [data-reveal="lines"] .line > span {
     display: block;
     transform-origin: 0 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-ready [data-reveal="lines"]:not([data-inview]) .line > span {
+      transform: translateY(135%) rotate(var(--reveal-skew));
+    }
   }
 
   /* ---- 03 · Fade up ------------------------------------------------------ */

@@ -12,10 +12,17 @@
 import * as smoothScroll from "./modules/smooth-scroll.js";
 import * as scene from "./modules/scene.js";
 import * as particles from "./modules/particles.js";
+import * as fit from "./modules/fit.js";
 import * as split from "./modules/split.js";
 import * as reveal from "./modules/reveal.js";
 import * as statement from "./modules/statement.js";
 import * as parallax from "./modules/parallax.js";
+import * as aiFlow from "./modules/ai-flow.js";
+import * as thread from "./modules/thread.js";
+import * as giants from "./modules/giants.js";
+import * as preview from "./modules/preview.js";
+import * as depth from "./modules/depth.js";
+import * as logos from "./modules/logos.js";
 import * as masonry from "./modules/masonry.js";
 import * as nav from "./modules/nav.js";
 import * as menu from "./modules/menu.js";
@@ -30,12 +37,19 @@ const modules = [
   smoothScroll,
   scene,
   particles,
+  fit,
   nav,
   menu,
   split,
   reveal,
   statement,
   parallax,
+  aiFlow,
+  thread,
+  giants,
+  preview,
+  depth,
+  logos,
   masonry,
   track,
   marquee,

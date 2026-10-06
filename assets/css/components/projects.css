@@ -1,0 +1,134 @@
+/* ==========================================================================
+   PROJECTS — the curved track
+   Previous work as cards standing on the inside of a huge cylinder, on the
+   page's own dot field rather than a stage of their own: the card in front
+   of you bows away, the ones to the side swing round to face you and fade. The section pins while you scroll and the
+   scroll drives the cards sideways; drag works too. Speed bends the cards
+   further, so the track feels like it has momentum. Built in WebGL by
+   modules/projects.js (three.js, loaded only when the section is near).
+
+   The ordered list of links underneath is the real content. It is what a
+   screen reader reads, what a keyboard tabs through, and what shows if
+   WebGL never starts — the canvas is decoration over it.
+   ========================================================================== */
+
+@layer components {
+
+  .projects {
+    position: relative;
+    /* Scroll distance the track takes to run end to end. */
+    height: calc(100svh + var(--projects-travel, 260vh));
+  }
+
+  /* Above the section's dot field (the particle canvas sits at z -1). */
+  .projects__sticky {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    height: 100svh;
+    overflow: clip;
+  }
+
+  .projects__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 1s var(--e-reveal);
+    touch-action: pan-y;
+  }
+
+  .projects[data-gl="ready"] .projects__canvas { opacity: 1; }
+  .projects[data-gl="ready"] .projects__canvas[data-hover="true"] { cursor: pointer; }
+  .projects[data-gl="ready"] .projects__canvas[data-drag="true"] { cursor: grabbing; }
+
+  /* ---- Corner readouts -------------------------------------------------- */
+  .projects__hud {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: clamp(1.25rem, 5vh, 3rem) var(--page-inline);
+    pointer-events: none;
+    color: var(--text);
+  }
+
+  .projects__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-6);
+  }
+
+  .projects__row:last-child { grid-row: 3; }
+
+  /* The menu button sits in the top right corner on small screens. */
+  @media (max-width: 47.99rem) {
+    .projects__hud { padding-top: 5.5rem; padding-bottom: 6rem; }
+  }
+
+  .projects__label {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-small);
+    letter-spacing: -0.01em;
+  }
+
+  .projects__label .muted { color: var(--text-muted); }
+
+  .projects__count {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    color: var(--text-muted);
+  }
+
+  .projects__count b {
+    font-weight: var(--fw-medium);
+    color: var(--text);
+  }
+
+  /* ---- The list: content first, fallback second ------------------------- */
+  .projects__list {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-6);
+    margin: 0;
+    padding: 0 var(--page-inline);
+    list-style: none;
+    overflow-x: auto;
+  }
+
+  .projects__item a {
+    display: grid;
+    gap: var(--sp-3);
+    width: min(70vw, 28rem);
+    color: var(--text);
+  }
+
+  .projects__item img {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--r-xl);
+  }
+
+  /* Once the canvas is drawing, the list steps out of sight but stays in
+     the accessibility tree and the tab order; a focused link brings its
+     card to the middle (modules/projects.js). */
+  .projects[data-gl="ready"] .projects__list {
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .projects__canvas { transition: none; }
+  }
+}

@@ -33,7 +33,14 @@
     justify-content: space-between;
     gap: var(--sp-8);
     padding-inline: var(--page-inline);
-    /* No background by design. It sits on the hero's own ground. */
+    /* No background by design. It sits over the hero photograph, which is
+       dark, and it lives outside every [data-ground], so it takes the dark
+       ground's text colours by hand — a data-ground would also paint a
+       background over the photo. */
+    --text:       var(--c-paper);
+    --text-muted: var(--text-invert-muted);
+    --c-accent:   var(--c-accent-lift);
+    color: var(--text);
   }
 
   .topbar__mark {
@@ -111,14 +118,14 @@
        on top of the shared 1.5 in tokens.css, because more of the backdrop
        is now showing through and it's the colour bleeding through a blur
        that reads as looking *through* something, not just at it. */
-    --glass-tint:     rgb(11 11 12 / 0.68);
+    --glass-tint:     rgb(23 18 14 / 0.68);
     --glass-saturate: 2.1;
     --glass-line:     rgb(255 255 255 / 0.2);
     --glass-grain:    0.16;
     --glass-edge:     inset 0 1px 0 rgb(255 255 255 / 0.3),
                       inset 0 -1px 0 rgb(0 0 0 / 0.5);
-    --glass-drop:     0 2px 6px rgb(11 11 12 / 0.16),
-                      0 24px 56px -20px rgb(11 11 12 / 0.45);
+    --glass-drop:     0 2px 6px rgb(23 18 14 / 0.16),
+                      0 24px 56px -20px rgb(23 18 14 / 0.45);
 
     /* Text tokens of the dock's own, not the page's --text-muted / --c-ink.
        Those are calibrated for whichever ground a *section* declares; the
@@ -127,10 +134,10 @@
        mid-grey built for paper, sitting on near-black glass. Alpha nudged up
        from 0.8 to 0.85 alongside the thinner tint, so resting labels keep
        the same comfortable margin they had before either changed. */
-    --dock-text:        rgb(247 246 243 / 0.85);
+    --dock-text:        rgb(232 226 214 / 0.85);
     --dock-text-strong: var(--c-paper);
 
-    /* Same move the cursor already makes on a dark ground: raw cobalt reads
+    /* Same move the cursor already makes on a dark ground: raw ochre reads
        heavy on near-black, so anything inside — the progress ring, the roll's
        incoming word — resolves to the lifted tint instead. The tint is
        lower now too, so without this the accent would be reading against
@@ -442,7 +449,7 @@
 
     /* The curtain sits outside every [data-ground] but is unmistakably a dark
        surface, so it adopts the dark ground's accent and rules by hand.
-       Without this the accent inside it resolves to raw cobalt, which is a
+       Without this the accent inside it resolves to raw ochre, which is a
        2.7:1 hole against near-black. */
     --c-accent:     var(--c-accent-lift);
     --c-accent-ink: var(--c-ink);

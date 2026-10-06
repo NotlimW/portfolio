@@ -57,8 +57,8 @@
     --gfx-spread: var(--sp-4);   /* elements redistributing */
     --gfx-drift:  var(--sp-3);   /* per-index lag           */
 
-    /* Accent that already knows its ground: cobalt on paper, lifted to a
-       brighter blue on near-black, exactly like the canvas marks. */
+    /* Accent that already knows its ground: ochre on paper, lifted to the
+       yellow sun on espresso, exactly like the canvas marks. */
     --gfx-accent:      rgb(var(--particle-accent));
     --gfx-accent-soft: rgb(var(--particle-accent), 0.4);
 

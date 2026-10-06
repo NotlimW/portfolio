@@ -7,12 +7,12 @@
   .footer {
     background: var(--bg-invert);
     color: var(--text-invert);
-    padding-block: var(--section-y) var(--sp-8);
+    padding-block: var(--section-y) 0;
     overflow: clip;
   }
 
   .footer__cta {
-    font-size: var(--fs-display-l);
+    font-size: var(--fs-display-m);
     line-height: var(--lh-display);
     letter-spacing: var(--tr-display-l);
     font-weight: var(--fw-medium);
@@ -87,7 +87,29 @@
     flex-wrap: wrap;
     gap: var(--sp-4) var(--sp-8);
     justify-content: space-between;
+    /* .t-label shrink-wraps to fit-content; the rule has to run the full
+       width of the column like every other rule on the page. */
+    width: 100%;
     padding-top: var(--sp-6);
     border-top: 1px solid var(--line-invert);
   }
+
+  /* ---- Sign-off -----------------------------------------------------------
+     The surname as bleed type, sinking through the bottom of the page — the
+     last crop on the site mirrors the first one in the hero. White on
+     espresso, with a drop of glass resting on it.
+     --------------------------------------------------------------------- */
+  .footer__bleed {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    overflow-x: clip;
+    margin-top: var(--sp-16);
+    margin-bottom: -0.14em;
+    font-size: var(--fs-bleed);   /* fallback; modules/fit.js measures */
+    color: var(--c-paper);
+    user-select: none;
+  }
+
+  .footer__bleed .t-bleed { font-size: 1em; flex-shrink: 0; }
 }

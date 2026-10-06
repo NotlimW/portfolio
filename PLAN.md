@@ -160,53 +160,89 @@ Nästa case  Alltid en väg vidare.
 
 ## 5. Grafisk manual (kort)
 
-### 5.1 Typografi
+> **Riktning B — "Poster", låst 2026-10-04.** Ersätter v0.1 (Satoshi + Instrument Serif + Cobalt). Läst ur två referenser: en ljus poster på en konjaksfärgad läderfåtölj i ett mörkt rum med ett solstråk över, och en poster där rubriken är så stor att den beskärs av ramen. Hela systemet bygger på tre kontraster: **jättestor rubrik mot liten kompakt copy**, **hård, kantig typ mot en mjuk glasdroppe**, **mörkt rum mot ljus poster och varmt ljus**.
 
-**Rekommenderad riktning — "Quiet Confidence"**
+### 5.1 Typografi
 
 | Roll | Typsnitt | Varför |
 |---|---|---|
-| Display & UI | **Satoshi** (Fontshare, gratis kommersiellt) | Inters renhet men med egen karaktär — lite mer geometrisk, öppnare, mindre "default". Variabel, 9 vikter. |
-| Accent | **Instrument Serif Italic** (Google) | Används på **ett ord per rubrik**, aldrig mer. `A creative *problem* solver.` Ger sidan en signatur utan att bli tung. |
-| Meta & etiketter | **JetBrains Mono** (Google) | Endast 11–13 px versaler för labels, år, siffror, taggar. Signalerar system och kod — vilket är sant om honom. |
+| Rubriker | **Bricolage Grotesque** ExtraBold 800 (Google, variabel) | Sätts på optisk storlek 12 även i jättestorlek — där skär snittet djupa **inktraps** i varje fog (W, k, r, m). Det är det som gör att en svart grotesk på 30vw läser som textur, inte som en klump. Bredd 100 för rubriker, 82 för utfallande ord. |
+| Brödtext & kompakt copy | **Satoshi** (Fontshare) | Regular för läsning, Medium/Bold för postercopyn. Tyst bredvid rubrikerna — det är poängen. |
+| Meta | **JetBrains Mono** (Google) | Bara för tekniska avläsningar i grafiken (nod-etiketter, räknare). Inte längre för etiketter. |
 
-Alternativ som är förberedda i `/styleguide`: **B — Editorial Edge** (Instrument Sans + Instrument Serif — samma superfamilj, tätare och mer redaktionellt) · **C — Technical Grotesk** (Space Grotesk + Archivo, mer grafiskt studio-uttryck).
+**Signaturordet** var en kursiv serif. Mot en ExtraBold med inktraps läste ett andra snitt som ett kostymbyte — postern byter aldrig snitt, den byter färg. Nu: **samma snitt, ett ord i accentfärgen**. Fortfarande max ett per rubrik.
+
+**Heron är fotot av postern på fåtöljen** (`assets/media/hero-chair.jpg`) i helbild på mörk yta. Mottot är satt som tre jättar runt postern, aldrig över ansiktet: läst som ett Z: *A creative* uppe till vänster, *problem* till höger, *solver.* i gult nere till vänster (`data-fit` desktop, `data-fit-sm` mobil). Laddningsanimering i ren CSS: fotot öppnar sig ur en mindre, mörk, suddig ram, sedan reser sig bokstäverna en och en rad för rad, sist tonar den lilla texten upp. Fotot och orden glider i olika djup med pekaren (`modules/depth.js`).
+
+**Varje sektion är en egen poster — som ett magasin.** Jätteordet är i meningsform (versal + gemener), ExtraBold. `modules/fit.js` storleksanpassar det till en andel av ramen per sektion (`data-fit`, 0,37–0,75) och placerar det: `data-bleed="right"` ställer ordet mot högermarginalen, `data-bleed="left"` mot vänstermarginalen. Inga ord går utanför skärmen — skalan kommer från storleken, inte från beskärning. Storlek och sida varierar sektion för sektion. Allt annat är litet. **Underrubriker är Satoshi Medium**, samma typsnitt som brödtexten — display-snittet används bara till jättarna. **Signaturordet** är Instrument Serif kursiv på gul överstrykning.
+
+**Utfallande typ (`.t-bleed`)** — ett ord satt för stort för sin ram och beskuret av den. Bryts aldrig, krymper aldrig. Används i heron (*Problem* / *solver.*), footern (*Winroth*) och som **poster-head** överst i varje sektion (*Hello, Content, Output, Systems, Brand, Craft, Machine, Process, Now.*); *What I solve* sätts i stället stort över zoom-bilden före akterna (*What I* litet, *solve* jättestort i gult) med den riktiga rubriken och en förklarande rad i liten kompakt text under. Den lilla raden under (rubrik + förklaring + nummer) växlar sida nedför sidan. Paras alltid med **kompakt copy (`.t-compact`)** och inget däremellan.
 
 **Skala (flytande, clamp):**
 
 | Token | Storlek | Radavstånd | Tracking |
 |---|---|---|---|
-| `display-xl` | `clamp(3.5rem, 11vw, 11rem)` | 0.88 | −0.04em |
-| `display-l` | `clamp(2.75rem, 7vw, 6rem)` | 0.92 | −0.03em |
-| `h2` | `clamp(2rem, 4.5vw, 3.5rem)` | 1.0 | −0.02em |
-| `h3` | `clamp(1.375rem, 2.4vw, 2rem)` | 1.15 | −0.01em |
+| `bleed` | `clamp(6.5rem, 31.5vw, 36rem)` | 0.8 | −0.055em · wdth 82 |
+| `display-xl` | `clamp(2.75rem, 12.5vw, 11rem)` | 0.84 | −0.05em |
+| `display-l` | `clamp(2.75rem, 7vw, 6rem)` | 0.88 | −0.042em |
+| `h2` | `clamp(2rem, 4.5vw, 3.5rem)` | 1.0 | −0.03em |
+| `h3` | `clamp(1.375rem, 2.4vw, 2rem)` | 1.0 | −0.03em |
+| `compact` | `clamp(0.875rem, 1vw, 1rem)` | 1.16 | −0.012em · Medium · 28ch |
 | `body-l` | `clamp(1.125rem, 1.6vw, 1.5rem)` | 1.5 | 0 |
 | `body` | `1rem` | 1.6 | 0 |
-| `label` | `0.75rem` | 1.35 | 0.01em, gemener — **chip, inte versaler** |
+| `label` | `0.875rem` | 1.3 | Satoshi Medium, ingen ram — `.accent` = svart text med en liten gul prick framför |
 
-**Om etiketterna.** Liten versaltext med brett teckenmellanrum är standardreflexen för en överrubrik, och den kostar mer än den ser ut att göra: versaler tar bort de ordformer ögat läser efter, och spärrningen som gör versaler läsbara är det som får raden att läsa som *textur* istället för som ett ord. En ramad chip gör samma jobb — markera som meta, skilj från rubriken — och förblir ett läsbart ord. Monon är kvar; det var versalerna och spärrningen som var problemet, inte snittet.
+**Om etiketterna (ändrat 2026-10-05).** Inte chips längre. Glaspillret och monotypsnittet läste som gränssnittsdetaljer; bredvid jättetyp ska en etikett läsa som en magasinsöverrubrik. Etiketter är liten Satoshi Medium direkt på ytan, grå. Den etikett i en grupp som *namnger* saken (`.accent`) blir svart och får en liten gul prick framför; resten (år, format) förblir grå utan markör. Bara `.media__chip`, som ligger på foton, behåller glaset.
 
-Undantagen är utan ram: roterade kantetiketter, scroll-ledtråden, bildtexter i figurer, sifferkolumner, och bildtexter under statistik (en pill runt "Pages designed and shipped" läser som en kategori siffran tillhör, vilket är fel relation).
+Radlängd: 60–72 tecken desktop, 38–55 mobil. Kompakt copy: max 28 tecken.
 
-Radlängd: 60–72 tecken desktop, 38–55 mobil.
+### 5.2 Färg — "Leather & lamplight"
 
-### 5.2 Färg
-
-Nästan allt är svart och vitt. Sekundära ytor grupperar. Accenten är sällsynt — max ~2 % av ytan.
+Rummet är den mörka ytan, postern är den ljusa, läder och sol är de enda två färger som får vara högljudda. Varje neutral lutar varm — det finns ingen kall grå kvar.
 
 | Token | Värde | Användning |
 |---|---|---|
-| `--ink` | `#0B0B0C` | All text, inverterade sektioner. Inte ren svart — mjukare, dyrare. |
-| `--paper` | `#F7F6F3` | Sidbakgrund. Varmvitt, som Friends Agenda. |
-| `--white` | `#FFFFFF` | Kort ovanpå paper |
-| `--sand` | `#EDE8E1` | Varm grupperingsyta |
-| `--mist` | `#E4E7E9` | Sval grupperingsyta |
-| `--grey-100…900` | härledd skala | Ramar, meta, disabled |
-| `--accent` | *att välja* | Länkar, CTA, hover, aktiv nav, ett understruket ord |
+| `--c-ink` Espresso | `#17120E` | Text, mörk yta. Aldrig #000. |
+| `--c-ink-soft` Walnut | `#241C15` | Upphöjt på mörkt |
+| `--c-paper` Paper | `#FBFAF7` | Ljus yta — nästan vitt |
+| `--c-white` White | `#FFFFFF` | Upphöjt på ljust |
+| `--c-sand` | `#F1EEE8` | Grupperingsyta |
+| `--c-leather` | `#B9732F` | Fyllnader och sken, aldrig text |
+| `--c-sun` | `#FFD21A` | **Accenten** — solen. Text på mörkt (11,5:1). På ljust: överstrykning bakom signaturordet och knappfyllnad, aldrig text (1,6:1) |
+| `--grey-100…900` | varm härledd skala | Ramar, meta, disabled |
 
-Accentkandidater (växlingsbara live i `/styleguide`): **Cobalt `#1B2CFF`** (precision, system — rekommenderad mot varmt papper) · **Signal `#FF4A1C`** (energi, annons) · **Forest `#0F5132`** (lugn, premium).
+**Ingen brun accent.** Gult är den enda färgen. Två tokens: `--c-accent` (ytor, linjer, prickar — alltid gul; `#F2C100` på vitt) och `--c-accent-text` (allt man läser — svart på ljust, gul på mörkt). Accenten byter själv via `[data-ground]`: på mörkt blir signaturordet gult, på ljust får det en gul överstrykning med svart text. Heron, AI-sektionerna och footern är mörka; resten är bone.
 
 Kontrastkrav: allt textbärande ≥ 4.5:1. Accenten används aldrig ensam som betydelsebärare.
+
+### 5.2b Linsen — glasdroppen (borttagen 2026-10-05)
+
+**Borttagen överallt.** Glasdropparna är tagna bort från sidan och styleguiden; `lens.css` och `modules/lens.js` ligger kvar men är urkopplade (inte importerade/registrerade), om de skulle behövas igen. Texten nedan beskriver hur den fungerade.
+
+
+Det enda mjuka i ett hårt system: en frostad glasdroppe som ligger över rubriktypen (`.lens`, `components/lens.css`, `modules/lens.js`). Fem lager på ett element — frost (backdrop-blur), highlight uppe till vänster, varm kaustik nere till höger, kantljus, varm skugga. Morfar långsamt mellan fyra konturer och lutar sig mot pekaren; båda stannar vid reduced motion.
+
+**Formen är levande.** `modules/lens.js` bygger varje droppe av 14 punkter med fjädrar och en långsamt drivande grundform (övertoner per variant `.lens--a/b/c`, så ingen droppe är rund eller lik en annan). Pekaren drar i ytan: utanför sträcker sig kanten mot den, inuti trycks den in, och snabba drag skickar vågor runt kanten. Konturen skrivs varje bildruta som `clip-path: path()` på glaset och som SVG på kant och skugga. Statisk SVG-mask i `lens.css` är reserv utan JS.
+
+**Kundlogor** (`#clients`, efter Craft/What I do — ordning: Hello → Wide skill set → Craft → kundlogor → Work; `components/logos.css`) + `modules/logos.js`) — två rader med jättestora logor, inga rutor. Sidan stannar inte här. Båda raderna åker åt samma håll (höger till vänster) och rullar av sig själva; scrollfart kastar dem snabbare (ner = vänster, upp = tillbaka) och de glider sedan tillbaka till sin takt. Andra raden startar förskjuten och följer scrollen med mer eftersläpning, så raderna glider isär vid snabb scroll och hittar tillbaka; varje rad lutar in i sin egen fart som de stora rubrikerna, så lutningen går som en våg genom blocket. Saktar nästan till stopp när man pekar på en rad. Platshållare tills riktiga logofiler finns: typografiska ordmärken för kunder som redan nämns på sajten (Aros Auto, Logimark, Friends Agenda, SoScale Media, Webbson). Byt `.logo__mark` mot `<img>`/`<svg>`.
+
+**Projektspåret — parkerat 2026-10-05** (låg tidigare direkt efter Hello; markup i `docs/projects-track-snippet.html` med instruktioner, `modules/projects.js` + `components/projects.css`) — tidigare projekt som kort på insidan av en cylinder, på sidans vanliga prickrutnät (ingen egen bakgrund), byggt i WebGL med three.js (laddas från CDN först när sektionen närmar sig). Sektionen pinnas och scrollen driver korten i sidled i en loop; man kan också dra. Hastighet böjer korten mer. Korten målas från `<ol>`-listan i markupen (`data-image` eller `data-tone`), som också är det skärmläsare och tangentbord använder och det som visas om WebGL inte startar. Idé från jesperlandberg.com.
+
+**What I solve — borttagen (2026-10-05).** De fyra meningarna/delarna är borttagna, liksom länken i docken och `solve.css`. Zoom-effekten som tidigare rubricerade sektionen ligger kvar men säger nu **"A wide skill set"** ("A wide" stort uppe till vänster, "skill set" enormt i gult längs nederkanten, högerjusterat; `#skills`) och sitter mellan Hello-sektionen och kundloggorna. Zoom-sömmen in i Work ("The proof") och mellanspelet "Design that works harder than it looks." är borttagna (2026-10-06); kundlogorna går nu direkt in i *Content*.
+
+**Case-rubriken följer med (2026-10-06).** I Content och Systems ligger rubriken (`h2.feature__title`) och dess korta rad (`.feature__lede`) överst i `.feature__caption`, som redan är sticky medan bilderna scrollar förbi — rubriken åker alltså med texten och knappen. Poster-rubrikens rad behåller bara numret, längst till höger.
+
+**Borttaget (2026-10-06):** mellanspelet "I'd rather prove it than claim it." och siffersektionen (70+ / 20+ / 5 / 6) — process-delen går nu direkt in i About.
+
+**Verktygen i Now (2026-10-06)** rullar nu som kundlogorna: två rader åt samma håll, förskjutna, som scrollen kastar och som lutar med farten (`.clients--tools`, samma `modules/logos.js`, som nu kör alla `[data-clients]`-block). En röst för alla — Satoshi stort, var tredje i serif kursiv. Den gamla `.marquee` används inte längre.
+
+**Process — sex steg, en tråd (2026-10-06, `sections.css`, `modules/thread.js`).** Byggd på vad rekryterare letar efter hos seniora: problem­inramning och framgångsmått före pixlar, förankring, gå brett/smalna av (Double Diamond), testa tidigt, bygga för överlämning, och mäta mot målet. Stegen: 01 Frame (problemformulering + mått), 02 Define (en-sides brief, insikt), 03 Explore (territorier, de flesta dödade med flit), 04 Test (prototyper, A/B), 05 Build (system + överlämning), 06 Prove (mäta mot målet från 01; lärdomen blir nästa brief). Varje steg är en stor, abstrakt linjeritning i bakgrunden (600×640) med texten ovanpå i foten, och en "Output"-rad; en gul tråd går in vid (0,300) och ut vid (600,300) i varje scen, så de sex binds ihop till en linje på det fastnålade horisontella spåret. `thread.js` ritar varje bit (`--d`) strax före där man tittar; scenen tänds när tråden kommer fram. Rubrik: "Six steps, one thread."
+
+**AI-delen (omskriven 2026-10-05, `components/ai.css`)** — mörk, i tre delar med jätteord som avdelare. *Context* (koncept & strategi: samla och spara info från dussintals källor, hålla allt samtidigt, bättre koncept som passar brandet) och *Visuals* (contentskapande: bild/video-modeller, VFX och animation) är abstrakta och går över hela bredden — grafiken är sektionen och texten sitter liten i ett hörn. Context: ett fält av källprickar som driver, prickarna flyger in i en ring och fortsätter kretsa, och ett koncept skrivs ut som rader i brandets färger. Visuals: en lutad filmremsa i två rader som rullar åt var sitt håll, en ruta vald. *Tools* (workflows & appar) är också en ritning över hela bredden: tolv skrafferade uppgifter → Trigger → Workflow → App (med en streckad ström i ledningarna) → en gul ram "Creative work" där en skiss ritas.  Avslutas med *Not a threat. An opportunity.* (Multitool-delen borttagen; Context bär nu ankaret `#ai`.) **All AI-grafik är ren wireframe** (ändrat 2026-10-05): tunna linjer, inga fyllningar, inga gradienter eller sken; gult bara som linje på det viktigaste. Samma konstruktionsspråk som trådgrafikerna i *What I solve*: urtavla med gradskala, hårkors, baslinjer, trådramar med skisser. **Grafiken är bakgrund och flödar med scrollen** (2026-10-05): varje ritning ligger i full bredd bakom texten, dämpad och uttonad mot kanterna; `modules/ai-flow.js` ger `--p` (0→1, mjukt eftersläpande) på varje `[data-ai-flow]`-scen och allt — prickarna som samlas, urtavlan som vrids, raderna som ritas, noderna som tänds, filmremsan som glider i sidled — styrs av det värdet, plus några långsamma tomgångsloopar. Utan JS eller med reducerad rörelse är ritningarna färdiga och stilla. På mobil ligger ritningen ännu svagare bakom texten (ingen sidledssvep längre). Utöver `--p` skriver modulen `--v` (utjämnad scrollhastighet, ritningarna lutar lätt med farten) och `--run`, en drivkraft som tickar långsamt av sig själv och ökar med varje scrollad pixel: strömmen i Tools, urtavlan i Context och filmremsan i Visuals går fortare när man scrollar. Ritningarna går kant i kant och tonas ut långt mot sidorna; etiketterna ligger inom den heltäckande delen. Inga hörnvinklar runt ritningarna. Linjerna är förstärkta inne i scenerna (tydligare men fortfarande bakgrund). Tools är förenklad till bara flödet: uppgifter → Trigger → Workflow → App → Creative work (veckostaplar, anteckningar och portar borttagna); texten ligger direkt ovanför flödet (`.ai-stage--stack`), på desktop i linje med Trigger och med de två styckena i två spalter, så ingen tom yta uppstår.
+
+**Interaktion (idéer från 21st.dev, byggda i vanilla JS):** jättarnas bokstäver vidgas längs bredd-axeln nära pekaren och lutar med scrollhastigheten (`modules/giants.js`); listan i "What I do" visar en bild som följer pekaren (`modules/preview.js`).
+
+**Regler:** en per scen · alltid över rubriktyp · aldrig över brödtext · aldrig som behållare. På bone ska ordet under fortfarande läsas som ett ord — blir droppen en vit skiva har den slutat vara glas.
 
 ### 5.3 Rum, radie, raster
 
@@ -457,12 +493,13 @@ node "Portfolio Milton/dev-server.js"
 
 ## 9. Beslut
 
-**Låsta 2026-07-31:**
+**Låsta 2026-07-31, reviderade 2026-10-04:**
 
 | Beslut | Val |
 |---|---|
-| Accentfärg | **Cobalt `#1B2CFF`** |
-| Typsnitt | **Riktning A** — Satoshi + Instrument Serif Italic + JetBrains Mono |
+| Accentfärg | **Sol `#FFD21A`** — enda färgen. Text på mörkt, överstrykning/fyllnad på ljust. Accenttext på ljust är svart (ersätter Cobalt 2026-10-04) |
+| Typsnitt | **Riktning B "Poster"** — Bricolage Grotesque 800 (opsz 12) bara för jättarna, Satoshi för brödtext och underrubriker, Instrument Serif kursiv för signaturordet, JetBrains Mono bara i grafikens avläsningar |
+| Signaturelement | ~~Linsen~~ (borttagen 2026-10-05) — jättetypen bär nu scenerna själv |
 | Språk | **Engelska** |
 | Avsändare | **Milton Winroth** (wordmark), **MW** (monogram, favicon) |
 | Stack | Vanilla HTML/CSS/JS, inget byggsteg, Motion + Lenis |

@@ -161,6 +161,9 @@
     }
   }
 
+  /* The case headline lives in the caption, so it rides along with it. */
+  .feature__title { font-size: clamp(1.5rem, 2.4vw, 2.25rem); line-height: 1.08; }
+
   .feature__media {
     display: grid;
     gap: var(--sp-6);
@@ -219,8 +222,8 @@
     text-align: center;
     background-color: var(--c-mist);
     background-image:
-      repeating-linear-gradient(90deg, rgb(11 11 12 / 0.07) 0 1px, transparent 1px 44px),
-      repeating-linear-gradient(0deg,  rgb(11 11 12 / 0.07) 0 1px, transparent 1px 44px);
+      repeating-linear-gradient(90deg, rgb(23 18 14 / 0.07) 0 1px, transparent 1px 44px),
+      repeating-linear-gradient(0deg,  rgb(23 18 14 / 0.07) 0 1px, transparent 1px 44px);
   }
 
   /* Centre crosshair, two hard rules rather than an image. */
@@ -301,7 +304,7 @@
        works over imagery you control; this has to stay legible over a white
        screenshot and a night shot alike, so the tint goes dark and the text
        stays light. */
-    --glass-tint: rgb(11 11 12 / 0.55);
+    --glass-tint: rgb(23 18 14 / 0.55);
     --glass-line: rgb(255 255 255 / 0.22);
     --glass-grain: 0.14;
     color: var(--c-paper);
@@ -312,10 +315,10 @@
   .media [data-parallax] { inset: -14%; }
 
   .media__placeholder--dark {
-    background-color: #121215;
+    background-color: #1D1611;
     background-image:
-      repeating-linear-gradient(90deg, rgb(247 246 243 / 0.08) 0 1px, transparent 1px 44px),
-      repeating-linear-gradient(0deg,  rgb(247 246 243 / 0.08) 0 1px, transparent 1px 44px);
+      repeating-linear-gradient(90deg, rgb(232 226 214 / 0.08) 0 1px, transparent 1px 44px),
+      repeating-linear-gradient(0deg,  rgb(232 226 214 / 0.08) 0 1px, transparent 1px 44px);
     color: var(--c-paper);
   }
 
@@ -370,5 +373,78 @@
     justify-content: center;
     gap: var(--sp-3) var(--sp-8);
     opacity: clamp(0, calc((var(--progress, 1) - 0.28) * 2.6), 1);
+  }
+}
+
+/* ==========================================================================
+   ZOOM TITLE — "What I solve" as the poster for the seam
+   Set across the whole frame, corner to corner: "What I" large in the top
+   left, "solve" a giant in the sun colour along the bottom, pinned to the
+   right page margin, and a
+   small note at the bottom left on the giant's baseline. The two halves
+   of the title bracket the photograph instead of sitting in a block on it.
+   ========================================================================== */
+@layer components {
+  .zoom__caption--giant {
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-inline: 0;
+    padding-bottom: clamp(0.75rem, 3vh, 2rem);
+  }
+
+  /* Shade at both ends of the frame, where the type sits; the middle of
+     the photograph stays clean. */
+  .zoom__caption--giant::before {
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.55) 0%, transparent 32%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.6) 0%, transparent 42%);
+  }
+
+  .zoom__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--sp-8);
+  }
+
+  .zoom__note {
+    padding-left: var(--page-inline);
+    /* Sits on the same line as the foot of the giant. */
+    padding-bottom: 0.6em;
+    max-width: calc(22ch + var(--page-inline));
+    color: rgb(251 250 247 / 0.8);
+  }
+
+  .zoom__title { margin: 0; }
+
+  /* Top left corner of the frame, clear of the menu button on the right. */
+  .zoom__kicker {
+    position: absolute;
+    top: clamp(1.25rem, 5vh, 3.5rem);
+    left: calc(var(--page-inline) - 0.04em);
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display-tight);
+    font-size: clamp(4rem, 13vw, 13rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: var(--c-paper);
+  }
+
+  .zoom__giant {
+    display: flex;
+    font-size: var(--fs-bleed);   /* fallback; modules/fit.js measures */
+    color: var(--c-sun);
+  }
+
+  .zoom__giant .t-bleed { font-size: 1em; }
+
+  /* Phones: the note above the giant, one column. */
+  @media (max-width: 47.99rem) {
+    .zoom__layout { grid-template-columns: 1fr; gap: var(--sp-4); }
+    .zoom__note   { padding-bottom: 0; }
   }
 }
