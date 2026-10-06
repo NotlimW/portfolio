@@ -19,6 +19,14 @@
 
 @layer components {
 
+  /* ---- Ground ---------------------------------------------------------------
+     The AI stretch (the panel that slides in, the three parts and the close)
+     sits on a deeper black than the site's espresso. */
+  .ai-ground {
+    --c-ink-ai: #0C0A08;
+    --bg: var(--c-ink-ai);
+  }
+
   /* ---- Layouts -------------------------------------------------------------- */
 
   .ai-part { overflow-x: clip; }
@@ -96,7 +104,7 @@
     z-index: 0;
     margin-inline: calc(50% - 50vw);
     pointer-events: none;
-    opacity: calc(0.9 * min(1, var(--p) * 4));
+    opacity: min(1, var(--p) * 4);
     /* A long fade out to the sides; the labels sit inside the solid part. */
     --fade-x: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
     --fade-y: linear-gradient(transparent, #000 8%, #000 92%, transparent);

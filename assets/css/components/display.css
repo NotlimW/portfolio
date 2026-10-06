@@ -38,6 +38,16 @@
     margin-block: -0.08em -0.1em;
   }
 
+  /* Sideways too, for the giants: their tight tracking (--tr-bleed) is
+     applied after the last letter as well, so the last glyph's ink runs
+     past the end of its own box and the mask was shaving its right edge
+     ("Now." lost the side of its full stop). Room on both sides, taken
+     straight back, so the word still sits exactly where fit.js put it. */
+  [data-fit] > .line {
+    padding-inline: 0.08em;
+    margin-inline: -0.08em;
+  }
+
   .topbar__mark { letter-spacing: -0.035em; }
 
   /* Subheads are set in the body face — the display face belongs to the

@@ -23,6 +23,7 @@ import * as giants from "./modules/giants.js";
 import * as preview from "./modules/preview.js";
 import * as depth from "./modules/depth.js";
 import * as logos from "./modules/logos.js";
+import * as projects from "./modules/projects.js";
 import * as masonry from "./modules/masonry.js";
 import * as nav from "./modules/nav.js";
 import * as menu from "./modules/menu.js";
@@ -50,6 +51,7 @@ const modules = [
   preview,
   depth,
   logos,
+  projects,
   masonry,
   track,
   marquee,

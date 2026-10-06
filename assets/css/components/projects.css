@@ -1,8 +1,8 @@
 /* ==========================================================================
-   PROJECTS — the curved track
-   Previous work as cards standing on the inside of a huge cylinder, on the
-   page's own dot field rather than a stage of their own: the card in front
-   of you bows away, the ones to the side swing round to face you and fade. The section pins while you scroll and the
+   PROJECTS — the flowing ribbon
+   Previous work as cards on one long, gently curved band, on the page's
+   own dot field rather than a stage of their own. A wave runs through the
+   whole band — not card by card — and speed swells and leans it. The section pins while you scroll and the
    scroll drives the cards sideways; drag works too. Speed bends the cards
    further, so the track feels like it has momentum. Built in WebGL by
    modules/projects.js (three.js, loaded only when the section is near).
@@ -17,7 +17,7 @@
   .projects {
     position: relative;
     /* Scroll distance the track takes to run end to end. */
-    height: calc(100svh + var(--projects-travel, 260vh));
+    height: calc(100svh + var(--projects-travel, 200vh));
   }
 
   /* Above the section's dot field (the particle canvas sits at z -1). */
@@ -65,6 +65,11 @@
 
   .projects__row:last-child { grid-row: 3; }
 
+  /* Keep the count clear of the menu button in the top right corner. */
+  @media (min-width: 48rem) {
+    .projects__row:first-child { padding-right: 3.75rem; }
+  }
+
   /* The menu button sits in the top right corner on small screens. */
   @media (max-width: 47.99rem) {
     .projects__hud { padding-top: 5.5rem; padding-bottom: 6rem; }
@@ -80,6 +85,7 @@
   .projects__label .muted { color: var(--text-muted); }
 
   .projects__count {
+    white-space: nowrap;
     font-family: var(--font-mono);
     font-size: var(--fs-label);
     color: var(--text-muted);

@@ -1,34 +1,41 @@
 /**
- * projects.js — previous work on a curved track (WebGL).
+ * projects.js — previous work on a flowing ribbon (WebGL).
  *
- * The cards stand on the inside of a large cylinder with the camera at its
- * centre: the card in front of you bows away, and the ones to the side
- * swing round to face you and fade into the page. There is no stage of its
- * own — the canvas is transparent over the section's dot field, so the
- * track stands on the same ground as everything else. Idea from
- * jesperlandberg.com, rebuilt here from scratch.
+ * Large cards laid side by side on one band, standing on the page's own
+ * dot field (the canvas is transparent). The band is the thing that moves,
+ * not the cards: every displacement is a function of where a point sits
+ * along the WHOLE band, so neighbouring cards always share one shape and
+ * the carousel flows as one ribbon. Idea from jesperlandberg.com, rebuilt
+ * here from scratch.
  *
  * How it moves
  *   The section is tall and its stage is sticky, so the page scroll is the
- *   input: progress through the section maps to a position along the
- *   track. The track eases toward that position, and the gap between where
- *   it is and where it is going — its speed — bows the cards further and
- *   leans them, so a fast flick reads as momentum. The cards behave like
- *   cloth rather than board: edges trail the middle, the bottom trails the
- *   top, speed sends a wave through them, the bend lets go slowly after
- *   the track stops, and at rest they still breathe. The track is a loop:
- *   positions wrap round the cylinder, so there are cards on both sides
- *   from the first frame and the last card hands back to the first.
- *   Dragging the canvas
- *   moves the page scroll, so drag and scroll are one input, never two
- *   that disagree.
+ *   input: progress through the section maps to a position along the band.
+ *   The band eases toward that position; the gap between where it is and
+ *   where it is going is its speed, and speed
+ *     - bows the whole band into one long curve, trailing the way it moves,
+ *     - swells a slow wave that always runs through the band,
+ *     - draws the cards in a touch, the way a strip tightens when pulled,
+ *     - and slides each picture inside its frame (parallax), so the image
+ *       lags behind the card that carries it.
+ *   The pointer touches the band rather than lighting up a card: where it
+ *   rests the band gives way like cloth under a fingertip and a ripple
+ *   runs out from it, and moving it sideways drags the whole band along a
+ *   little, the same way a scroll does.
+ *   The swell rises quickly and lets go slowly, so the band keeps moving a
+ *   beat after the scroll stops. At rest it still breathes. The band is a
+ *   loop: positions wrap, with the far ends faded out, so there are cards
+ *   on both sides from the first frame and the last hands back to the first.
+ *   Dragging the canvas moves the page scroll, so drag and scroll are one
+ *   input, never two that disagree.
  *
  * How it is drawn
- *   One plane per card, 48 segments wide. The vertex shader wraps it onto
- *   the cylinder, so the curve is real geometry rather than a CSS trick.
- *   Each card's face is a 2D canvas painted from its <li>: the image (or a
- *   flat tone), a shade, the title and an arrow. Rounded corners are cut in
- *   the fragment shader with a rounded-box distance field.
+ *   One plane per card, 64 × 24 segments. Each card has two faces painted
+ *   from its <li>: the picture (or a flat tone with the title set large),
+ *   and an overlay with the shade, number, tags, title and arrow. The
+ *   picture is sampled zoomed in, so it has room to slide; the overlay is
+ *   not, so the type stays put while the image moves under it. Rounded
+ *   corners are cut in the fragment shader with a rounded-box distance.
  *
  * Content
  *   The <ol> in the markup is the source of truth. The canvas is
@@ -39,42 +46,43 @@
 
 import { onScroll, scrollTo } from "./smooth-scroll.js";
 import { prefersReducedMotion } from "./motion-prefs.js";
+import { refresh as refreshParticles } from "./particles.js";
 
 const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 
-const CARD_W = 4.2;
-const CARD_H = 2.75;
-const GAP = 0.5;
+const CARD_W = 6;
+const CARD_H = 3.15;       // wide: about 1.9 : 1
+const GAP = 0.24;
 const STEP = CARD_W + GAP;
-const RADIUS = 6.2;        // of the cylinder the cards stand on
-const CORNER = 0.16;       // corner radius, world units
-const EASE = 0.05;         // how quickly the track catches the scroll — low = glides
-const BEND = 0.85;         // how much speed bows a card
-const SETTLE = 0.06;       // how slowly the bend lets go once the track slows
-const TEX_W = 1024;
+const VIEW = 8;            // camera distance in front of the band
+const CORNER = 0.13;       // corner radius, world units
+const GLOW = 0.7;          // room around each card for its hover glow
+const ZOOM = 1.16;         // how far the picture is zoomed in, for room to slide
+const EASE = 0.065;        // how quickly the band catches the scroll — low = glides
+const RISE = 0.22;         // how quickly the swell answers speed
+const SETTLE = 0.045;      // how slowly it lets go
+const TEX_W = 1280;
+const TEX_H = Math.round(TEX_W * (CARD_H / CARD_W));
 
 let section, stage, canvas, items;
 let THREE, renderer, scene, camera, cards = [];
-let current = 0, target = 0, speed = 0;
+let current = 0, target = 0, speed = 0, swell = 0;
+let edge = 10;             // half the visible width of the band, world units
+let calm = 1;              // 1 on wide screens, less where one card fills the width
+let pxPerUnit = 100;       // CSS px per world unit at the band, for the dot field
+const DOTS_DEPTH = 0.6;    // the dot field slides at this share of the cards' speed — it sits behind them
 let frame = 0, visible = false, unsubscribe = null, observer = null;
 let pointer = { x: 0, y: 0, inside: false, down: false, startX: 0, startScroll: 0, moved: 0 };
 let hovered = -1;
+let touch = 0;                         // eased 0 … 1 while the pointer is over the band
+const touchAt = { x: 0, y: 0 };        // where, on the band's plane
+let pointerLastX = 0, pointerPush = 0; // sideways pointer movement, as a push
 const cleanups = [];
 
 /* ---- Card faces --------------------------------------------------------- */
 
 function cssVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
-
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
 }
 
 function loadImage(src) {
@@ -87,68 +95,164 @@ function loadImage(src) {
   });
 }
 
-/** Paints one card face: picture (or tone), shade, title, arrow. */
-async function paint(item) {
-  const w = TEX_W;
-  const h = Math.round(TEX_W * (CARD_H / CARD_W));
+function surface() {
   const c = document.createElement("canvas");
-  c.width = w;
-  c.height = h;
-  const ctx = c.getContext("2d");
+  c.width = TEX_W;
+  c.height = TEX_H;
+  return [c, c.getContext("2d")];
+}
 
+/** The picture layer: the image (cover), or a flat tone. */
+async function paintPicture(item, title) {
+  const [c, ctx] = surface();
+  const w = TEX_W, h = TEX_H;
   const ink = cssVar("--c-ink") || "#17120E";
   const paper = cssVar("--c-paper") || "#FBFAF7";
-  const sun = cssVar("--c-sun") || "#FFD21A";
+  const sun = cssVar("--c-sun") || "#FFD900";
   const tone = item.dataset.tone;
-  const title = item.querySelector("a").textContent.trim();
   const img = item.dataset.image ? await loadImage(item.dataset.image) : null;
 
   if (img) {
-    // object-fit: cover
     const s = Math.max(w / img.width, h / img.height);
     const iw = img.width * s, ih = img.height * s;
     ctx.drawImage(img, (w - iw) / 2, (h - ih) / 2, iw, ih);
-    const shade = ctx.createLinearGradient(0, h * 0.45, 0, h);
-    shade.addColorStop(0, "rgba(0,0,0,0)");
-    shade.addColorStop(1, "rgba(0,0,0,0.6)");
-    ctx.fillStyle = shade;
-    ctx.fillRect(0, 0, w, h);
   } else {
-    // No picture: the card is a poster in its own right — a flat field and
-    // the title set large, the way the rest of the site sets its giants.
-    ctx.fillStyle = tone === "sun" ? sun : "#241C15";
+    // A flat field carrying the page's own dot grid; the title is set
+    // large on the overlay, which does not zoom or slide.
+    ctx.fillStyle = tone === "sun" ? sun : "#1E1813";
     ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = tone === "sun" ? ink : paper;
-    ctx.font = `800 ${Math.round(h * 0.2)}px "Bricolage Grotesque", sans-serif`;
-    ctx.textBaseline = "top";
-    const words = title.split(" ");
-    words.forEach((word, i) => ctx.fillText(word, w * 0.06, h * 0.08 + i * h * 0.19));
+    ctx.fillStyle = tone === "sun" ? "rgba(23,18,14,0.14)" : "rgba(251,250,247,0.09)";
+    const step = Math.round(h * 0.06);
+    for (let y = step / 2; y < h; y += step) {
+      for (let x = step / 2; x < w; x += step) {
+        ctx.beginPath();
+        ctx.arc(x, y, h * 0.0035, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+  return c;
+}
+
+/** The overlay: everything that should NOT slide with the picture. */
+function paintOverlay(item, title, index, total) {
+  const [c, ctx] = surface();
+  const w = TEX_W, h = TEX_H, pad = w * 0.04;
+  const ink = cssVar("--c-ink") || "#17120E";
+  const paper = cssVar("--c-paper") || "#FBFAF7";
+  const sun = cssVar("--c-sun") || "#FFD900";
+  const onSun = item.dataset.tone === "sun";
+  const hasPicture = Boolean(item.dataset.image);
+  const fg = onSun ? ink : paper;
+  const radius = (CORNER / CARD_W) * w;
+
+  // A light shade at the foot and a lighter one at the head, only on
+  // pictures — enough for the type, not enough to dull the image.
+  if (hasPicture) {
+    const foot = ctx.createLinearGradient(0, h * 0.55, 0, h);
+    foot.addColorStop(0, "rgba(12,9,7,0)");
+    foot.addColorStop(1, "rgba(12,9,7,0.5)");
+    ctx.fillStyle = foot;
+    ctx.fillRect(0, 0, w, h);
+    const head = ctx.createLinearGradient(0, 0, 0, h * 0.2);
+    head.addColorStop(0, "rgba(12,9,7,0.22)");
+    head.addColorStop(1, "rgba(12,9,7,0)");
+    ctx.fillStyle = head;
+    ctx.fillRect(0, 0, w, h);
   }
 
-  const onTone = tone === "sun" ? ink : paper;
+  if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
 
-  // Title, bottom left — the body face, like every other subhead.
-  ctx.fillStyle = onTone;
-  ctx.font = `500 ${Math.round(h * 0.075)}px Satoshi, sans-serif`;
-  ctx.textBaseline = "alphabetic";
-  ctx.fillText(title, w * 0.05, h * 0.9);
-
-  // Arrow button, bottom right.
-  const r = h * 0.055;
-  const cx = w - w * 0.05 - r, cy = h * 0.9 - r * 0.35;
-  ctx.fillStyle = tone === "sun" ? ink : sun;
+  // Head, left: the label the site uses — a small sun dot, then the tags.
+  const label = Math.round(h * 0.042);
+  ctx.textBaseline = "middle";
+  const headY = pad + label * 0.55;
+  ctx.fillStyle = onSun ? ink : sun;
   ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.arc(pad + label * 0.22, headY, label * 0.2, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = tone === "sun" ? sun : ink;
-  ctx.lineWidth = r * 0.14;
-  ctx.lineCap = "round";
+  ctx.fillStyle = fg;
+  ctx.font = `500 ${label}px Satoshi, sans-serif`;
+  ctx.fillText(item.dataset.tags || "", pad + label * 0.75, headY);
+
+  // Head, right: the index, in mono.
+  ctx.textAlign = "right";
+  ctx.font = `400 ${label}px "JetBrains Mono", monospace`;
+  ctx.globalAlpha = 0.85;
+  ctx.fillText(`${String(index + 1).padStart(2, "0")} — ${String(total).padStart(2, "0")}`, w - pad, headY);
+  ctx.globalAlpha = 1;
+  ctx.textAlign = "left";
+
+  // Cards without a picture: the title set large, the way the site sets its
+  // giants, closed with a sun full stop.
+  if (!hasPicture) {
+    const size = Math.round(h * 0.17);
+    ctx.font = `800 ${size}px "Bricolage Grotesque", sans-serif`;
+    if ("letterSpacing" in ctx) ctx.letterSpacing = `${-size * 0.02}px`;
+    ctx.textBaseline = "alphabetic";
+    const words = title.split(" ");
+    const top = h - pad * 1.2 - (words.length - 1) * size * 0.95;
+    words.forEach((word, i) => {
+      const y = top + i * size * 0.95;
+      ctx.fillStyle = fg;
+      ctx.fillText(word, pad, y);
+      if (i === words.length - 1) {
+        ctx.fillStyle = onSun ? ink : sun;
+        ctx.fillText(".", pad + ctx.measureText(word).width, y);
+      }
+    });
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+  } else {
+    // Pictures: the title at the foot, large and light.
+    const size = Math.round(h * 0.105);
+    ctx.font = `500 ${size}px Satoshi, sans-serif`;
+    if ("letterSpacing" in ctx) ctx.letterSpacing = `${-size * 0.03}px`;
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = fg;
+    ctx.fillText(title, pad, h - pad * 1.15);
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+  }
+
+  // Foot, right: "View case" as a quiet text link — the label face, a
+  // hairline under it and a small arrow, no button.
+  const ctaSize = Math.round(h * 0.042);
+  ctx.font = `500 ${ctaSize}px Satoshi, sans-serif`;
+  ctx.textBaseline = "alphabetic";
+  ctx.textAlign = "right";
+  const arrow = ctaSize * 0.7;
+  const baseX = w - pad - arrow - ctaSize * 0.4;
+  const baseY = h - pad * 1.15;
+  ctx.fillStyle = fg;
+  ctx.fillText("View case", baseX, baseY);
+  const textW = ctx.measureText("View case").width;
+  ctx.textAlign = "left";
+  ctx.strokeStyle = fg;
+  ctx.globalAlpha = 0.55;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(cx - r * 0.38, cy);
-  ctx.lineTo(cx + r * 0.38, cy);
-  ctx.moveTo(cx + r * 0.08, cy - r * 0.3);
-  ctx.lineTo(cx + r * 0.38, cy);
-  ctx.lineTo(cx + r * 0.08, cy + r * 0.3);
+  ctx.moveTo(baseX - textW, baseY + ctaSize * 0.35);
+  ctx.lineTo(w - pad, baseY + ctaSize * 0.35);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+  // ↗ in the sun (ink on the sun card).
+  const ax = w - pad - arrow, ay = baseY - ctaSize * 0.15;
+  ctx.strokeStyle = onSun ? ink : sun;
+  ctx.lineWidth = ctaSize * 0.12;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(ax, ay);
+  ctx.lineTo(ax + arrow, ay - arrow);
+  ctx.moveTo(ax + arrow * 0.35, ay - arrow);
+  ctx.lineTo(ax + arrow, ay - arrow);
+  ctx.lineTo(ax + arrow, ay - arrow * 0.35);
+  ctx.stroke();
+
+  // A hairline just inside the edge, following the rounded corners.
+  ctx.strokeStyle = onSun ? "rgba(23,18,14,0.12)" : "rgba(251,250,247,0.16)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(1.5, 1.5, w - 3, h - 3, radius);
   ctx.stroke();
 
   return c;
@@ -157,59 +261,70 @@ async function paint(item) {
 /* ---- Shaders ------------------------------------------------------------ */
 
 const vertex = /* glsl */ `
-  uniform float uX;        // card centre along the track, minus the track offset
-  uniform float uRadius;
-  uniform float uBend;     // speed-driven bow, signed
-  uniform float uHover;
+  uniform float uX;        // card centre along the band, minus the band offset
+  uniform float uSwell;    // signed speed, -1 … 1
   uniform float uTime;
-  uniform float uPhase;    // per card, so no two cards wave in step
+  uniform float uCalm;
+  uniform float uEdge;
+  uniform vec2 uPointer;   // the pointer on the band's plane, world units
+  uniform float uTouch;    // 0 … 1, eased in while the pointer is over the band
   varying vec2 vUv;
-  varying float vSide;
+  varying float vFade;
 
   void main() {
     vUv = uv;
     vec3 p = position;
-    p.xy *= 1.0 + uHover * 0.035;
+    float s = uSwell * uCalm;
+    float drift = abs(s);
 
-    float across = p.x / ${(CARD_W / 2).toFixed(3)};   // -1 … 1, left to right
-    float down = p.y / ${(CARD_H / 2).toFixed(3)};     // -1 … 1, bottom to top
-    float drift = abs(uBend);
+    // Pulled cards draw in a touch.
+    p.xy *= 1.0 - drift * 0.03;
 
-    // Cloth, not board. In motion the middle of the card leads and its
-    // edges trail behind it, and the bottom trails further than the top —
-    // the way a hung sheet moves when it is carried.
+    // Where this point sits along the whole band.
     float x = uX + p.x;
-    x -= uBend * 0.38 * (1.0 - across * across);
-    x += uBend * 0.22 * (1.0 - down) * 0.5;
+    float u = x / uEdge;                 // -1 … 1 across the screen
 
-    // Distance along the track becomes an angle round the cylinder.
-    float theta = x / uRadius;
-    vec3 w = vec3(uRadius * sin(theta), p.y, -uRadius * cos(theta));
+    float y = p.y;
+    float z = 0.0;
 
-    // Speed bows the card toward the camera across its width, and sends a
-    // wave running through it in the direction of travel.
-    w.z += drift * (1.0 - across * across) * 1.1;
-    w.z += drift * 0.32 * sin(across * 3.2 - uTime * 5.0 + uPhase);
-    w.y += uBend * 0.1 * sin(across * 2.4 + uTime * 3.6 + uPhase);
-    w.y += uBend * across * 0.12;
+    // At rest: a very shallow dish, and a slow wave breathing through it.
+    z -= 0.55 * u * u;
+    y += 0.025 * uCalm * sin(x * 0.32 - uTime * 0.55);
+    z += 0.06 * uCalm * sin(x * 0.26 - uTime * 0.4 + 1.3);
 
-    // At rest the cards still breathe — a slow swell across each one.
-    w.z += 0.07 * sin(uTime * 0.7 + uPhase + across * 1.6 + down * 0.6);
-    w.y += 0.035 * sin(uTime * 0.55 + uPhase * 1.3 + across * 1.2);
+    // In motion: the whole band bows into one curve, its ends trailing the
+    // way it travels, and the wave swells and quickens.
+    y -= s * 0.37 * u * u;
+    z -= drift * 0.45 * u * u;
+    y += drift * 0.1 * sin(x * 0.42 - uTime * 1.5);
+    z += drift * 0.16 * sin(x * 0.34 - uTime * 1.2 + 0.7);
+    // …and leans, tops first, like the giant headlines.
+    x += s * 0.09 * (p.y / ${(CARD_H / 2).toFixed(3)});
 
-    vSide = clamp(abs(theta) / 0.9, 0.0, 1.0);
-    gl_Position = projectionMatrix * viewMatrix * vec4(w, 1.0);
+    // The pointer: the band gives way under it and a ripple runs out.
+    vec2 toPointer = vec2(x, y) - uPointer;
+    float dist = length(toPointer);
+    float press = exp(-dist * dist / 2.6) * uTouch;
+    z -= press * 0.22;
+    z += uTouch * 0.035 * exp(-dist * 0.45) * sin(dist * 2.4 - uTime * 2.4);
+    y += press * 0.025 * sin(dist * 2.0 - uTime * 2.0);
+
+    vFade = 1.0 - smoothstep(0.82, 1.18, abs(u));
+    gl_Position = projectionMatrix * viewMatrix * vec4(x, y, z, 1.0);
   }
 `;
 
 const fragment = /* glsl */ `
-  uniform sampler2D uMap;
+  uniform sampler2D uPicture;
+  uniform sampler2D uOverlay;
   uniform vec2 uSize;
   uniform float uCorner;
-  uniform float uHover;
+  uniform float uShift;    // how far the picture has slid inside its frame
+  uniform float uHover;    // 0 … 1, eased, while the pointer is on this card
+  uniform vec3 uSun;
   uniform float uReady;
   varying vec2 vUv;
-  varying float vSide;
+  varying float vFade;
 
   float roundBox(vec2 p, vec2 b, float r) {
     vec2 q = abs(p) - b + r;
@@ -217,17 +332,31 @@ const fragment = /* glsl */ `
   }
 
   void main() {
-    vec2 p = (vUv - 0.5) * uSize;
+    // The plane is larger than the card by GLOW on every side, so the glow
+    // has somewhere to fall. cuv is the card's own 0 … 1.
+    vec2 full = uSize + 2.0 * ${GLOW.toFixed(3)};
+    vec2 p = (vUv - 0.5) * full;
+    vec2 cuv = p / uSize + 0.5;
     float d = roundBox(p, uSize * 0.5, uCorner);
     float edge = fwidth(d);
-    float alpha = 1.0 - smoothstep(-edge, edge, d);
+    float card = 1.0 - smoothstep(-edge, edge, d);
 
-    vec3 color = texture2D(uMap, vUv).rgb;
-    color *= 0.94 + uHover * 0.06;
-    // Cards fade into the page as they swing away from the middle.
-    alpha *= mix(1.0, 0.25, smoothstep(0.3, 1.0, vSide));
+    // The picture, zoomed in and slid sideways: it lags the card.
+    float zoom = ${ZOOM.toFixed(3)} + uHover * 0.05;   // a touch closer on hover
+    vec2 puv = (cuv - 0.5) / zoom + 0.5 + vec2(uShift, 0.0);
+    vec3 color = texture2D(uPicture, puv).rgb;
+    color *= 1.0 + uHover * 0.06;
 
-    gl_FragColor = vec4(color, alpha * uReady);
+    vec4 over = texture2D(uOverlay, cuv);
+    color = mix(color, over.rgb, over.a);
+
+    // Hover: a soft, warm glow behind the card, falling off outside it.
+    float outside = max(d, 0.0);
+    float glow = exp(-outside / 0.12) * (1.0 - card) * uHover * 0.16;
+
+    vec3 rgb = mix(uSun, color, card);
+    float alpha = max(card, glow);
+    gl_FragColor = vec4(rgb, alpha * vFade * uReady);
     #include <colorspace_fragment>
   }
 `;
@@ -238,13 +367,20 @@ function size() {
   const w = stage.clientWidth, h = stage.clientHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
-  // On wide screens the height sets the framing. On narrow ones the card
-  // has to fit across: work back from the horizontal angle the centre
-  // card needs (plus a margin) to the vertical field of view three wants.
-  const across = Math.atan((CARD_W / 2) / RADIUS) / 0.8;
-  const fitWidth = (2 * Math.atan(Math.tan(across) / camera.aspect) * 180) / Math.PI;
-  camera.fov = Math.max(42, fitWidth);
+  // The middle card takes about 40 % of a wide screen and most of a narrow
+  // one; the field of view is worked back from that.
+  const share = camera.aspect >= 1 ? 0.4 : 0.78;
+  const halfWidth = CARD_W / share / 2;
+  const fovH = 2 * Math.atan(halfWidth / VIEW);
+  camera.fov = (2 * Math.atan(Math.tan(fovH / 2) / camera.aspect) * 180) / Math.PI;
   camera.updateProjectionMatrix();
+  edge = halfWidth + CARD_W * 0.35;
+  pxPerUnit = w / (2 * halfWidth);
+  calm = Math.min(1, Math.max(0.4, camera.aspect / 1.4));
+  cards.forEach(({ material }) => {
+    material.uniforms.uEdge.value = edge;
+    material.uniforms.uCalm.value = calm;
+  });
 }
 
 function build() {
@@ -252,14 +388,11 @@ function build() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  camera.position.set(0, 0, VIEW);
+  camera.lookAt(0, 0, 0);
 
-  camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(0, 0.55, 0);
-  camera.lookAt(0, -0.15, -RADIUS);
-
-  // Segmented both ways: the waves and the trailing bottom edge bend the
-  // card vertically as well as across.
-  const geometry = new THREE.PlaneGeometry(CARD_W, CARD_H, 48, 24);
+  const geometry = new THREE.PlaneGeometry(CARD_W + GLOW * 2, CARD_H + GLOW * 2, 72, 28);
 
   cards = items.map((item, i) => {
     const material = new THREE.ShaderMaterial({
@@ -268,13 +401,18 @@ function build() {
       transparent: true,
       depthWrite: false,
       uniforms: {
-        uMap: { value: null },
+        uPicture: { value: null },
+        uOverlay: { value: null },
         uX: { value: 0 },
-        uRadius: { value: RADIUS },
-        uBend: { value: 0 },
-        uHover: { value: 0 },
+        uSwell: { value: 0 },
         uTime: { value: 0 },
-        uPhase: { value: i * 1.7 },
+        uCalm: { value: 1 },
+        uPointer: { value: new THREE.Vector2(0, 0) },
+        uTouch: { value: 0 },
+        uEdge: { value: edge },
+        uShift: { value: 0 },
+        uHover: { value: 0 },
+        uSun: { value: new THREE.Color(cssVar("--c-sun") || "#FFD900").convertSRGBToLinear() },
         uReady: { value: 0 },
         uSize: { value: new THREE.Vector2(CARD_W, CARD_H) },
         uCorner: { value: CORNER },
@@ -285,11 +423,16 @@ function build() {
     mesh.frustumCulled = false;
     scene.add(mesh);
 
-    paint(item).then((face) => {
-      const texture = new THREE.CanvasTexture(face);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      material.uniforms.uMap.value = texture;
+    const title = item.querySelector("a").textContent.trim();
+    const texture = (face) => {
+      const t = new THREE.CanvasTexture(face);
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      return t;
+    };
+    material.uniforms.uOverlay.value = texture(paintOverlay(item, title, i, items.length));
+    paintPicture(item, title).then((face) => {
+      material.uniforms.uPicture.value = texture(face);
       material.uniforms.uReady.value = 1;
     });
 
@@ -328,7 +471,7 @@ function scrollToProgress(p, immediate = true) {
   }
 }
 
-/** Which card is under the pointer: project each card's edges to screen. */
+/** Which card is under the pointer: project each card's resting corners. */
 function hitTest() {
   if (!pointer.inside) return -1;
   const rect = canvas.getBoundingClientRect();
@@ -337,19 +480,109 @@ function hitTest() {
   const v = new THREE.Vector3();
   for (let i = 0; i < cards.length; i++) {
     const x = wrap(cards[i].base - current);
-    const a0 = (x - CARD_W / 2) / RADIUS, a1 = (x + CARD_W / 2) / RADIUS;
-    if (Math.abs(x) > RADIUS * 1.4) continue;
-    const left = v.set(RADIUS * Math.sin(a0), 0, -RADIUS * Math.cos(a0)).project(camera).x;
-    const right = v.set(RADIUS * Math.sin(a1), 0, -RADIUS * Math.cos(a1)).project(camera).x;
-    const top = v.set(RADIUS * Math.sin(x / RADIUS), CARD_H / 2, -RADIUS * Math.cos(x / RADIUS)).project(camera).y;
-    const bottom = v.set(RADIUS * Math.sin(x / RADIUS), -CARD_H / 2, -RADIUS * Math.cos(x / RADIUS)).project(camera).y;
+    if (Math.abs(x) > edge) continue;
+    const z = (u) => -0.55 * (u / edge) ** 2;
+    const left = v.set(x - CARD_W / 2, 0, z(x - CARD_W / 2)).project(camera).x;
+    const right = v.set(x + CARD_W / 2, 0, z(x + CARD_W / 2)).project(camera).x;
+    const top = v.set(x, CARD_H / 2, z(x)).project(camera).y;
+    const bottom = v.set(x, -CARD_H / 2, z(x)).project(camera).y;
     if (nx > left && nx < right && ny < top && ny > bottom) return i;
   }
   return -1;
 }
 
+/* ---- Loop --------------------------------------------------------------- */
+
+const hud = {};
+let shown = -1;
+
+function updateHud(index) {
+  if (index === shown) return;
+  shown = index;
+  const item = items[index];
+  hud.index.textContent = String(index + 1).padStart(2, "0");
+  hud.current.textContent = item.querySelector("a").textContent.trim();
+  hud.tags.textContent = item.dataset.tags || "";
+}
+
+function tick() {
+  frame = requestAnimationFrame(tick);
+  if (!visible) return;
+
+  const reduced = prefersReducedMotion();
+  const time = reduced ? 0 : performance.now() / 1000;
+  // Read the scroll every frame rather than only on scroll events, so a
+  // jump (anchor link, resize, restored position) can never strand the band.
+  target = progressFromScroll() * maxOffset();
+  const prev = current;
+  current += (target - current) * (reduced ? 1 : EASE);
+  const v = reduced ? 0 : current - prev;
+  // Rises fast, lets go slowly: the band keeps flowing a beat after the
+  // scroll has stopped, which is most of what reads as "flowing".
+  speed += (v - speed) * (Math.abs(v) > Math.abs(speed) ? RISE : SETTLE);
+  // Moving the pointer sideways over the band drags it along a little.
+  pointerPush *= 0.9;
+  const goal = Math.max(-1, Math.min(1, speed * 4 + pointerPush));
+  swell += (goal - swell) * 0.12;
+
+  hovered = pointer.down ? hovered : hitTest();
+  canvas.dataset.hover = String(hovered >= 0);
+
+  // Where the pointer meets the band's plane (z = 0), in world units.
+  if (pointer.inside) {
+    const rect = canvas.getBoundingClientRect();
+    const nx = ((pointer.x - rect.left) / rect.width) * 2 - 1;
+    const ny = -((pointer.y - rect.top) / rect.height) * 2 + 1;
+    const halfH = Math.tan((camera.fov * Math.PI) / 360) * VIEW;
+    const px = nx * halfH * camera.aspect, py = ny * halfH;
+    touchAt.x += (px - touchAt.x) * 0.18;
+    touchAt.y += (py - touchAt.y) * 0.18;
+  }
+  touch += ((pointer.inside && !reduced ? 1 : 0) - touch) * 0.06;
+
+  cards.forEach((card, i) => {
+    const x = wrap(card.base - current);
+    const u = card.material.uniforms;
+    card.hover += ((i === hovered && !pointer.down ? 1 : 0) - card.hover) * 0.12;
+    card.mesh.renderOrder = card.hover > 0.01 ? -1 : 0;   // glowing card first, under its neighbours
+    u.uHover.value = card.hover;
+    u.uX.value = x;
+    u.uSwell.value = swell;
+    u.uTime.value = time;
+    u.uPointer.value.set(touchAt.x, touchAt.y);
+    u.uTouch.value = touch * calm;
+    // The picture slides against the card's own position on screen, plus
+    // a little more against its speed — it lags what carries it.
+    const room = (1 - 1 / ZOOM) / 2;
+    u.uShift.value = Math.max(-room, Math.min(room, (x / edge) * room * 0.85 + swell * room * 0.35));
+  });
+
+  // The section's dot field travels sideways with the band, a little slower,
+  // so the ground the cards stand on moves too.
+  // While the section is pinned the page still scrolls under it; hold the
+  // dots still vertically so they only travel sideways.
+  const shift = current * pxPerUnit * DOTS_DEPTH;
+  const hold = Math.min(travel(), Math.max(0, -section.getBoundingClientRect().top));
+  if (Math.abs(shift - (section.particleShiftX || 0)) > 0.25 || hold !== section.particleHoldY) {
+    section.particleShiftX = shift;
+    section.particleHoldY = hold;
+    refreshParticles();
+  }
+
+  const n = cards.length;
+  updateHud(((Math.round(current / STEP) % n) + n) % n);
+  renderer.render(scene, camera);
+}
+
+/* ---- Input bindings ------------------------------------------------------ */
+
 function bindInput() {
   const onMove = (e) => {
+    if (pointer.inside && !pointer.down) {
+      pointerPush += Math.max(-0.18, Math.min(0.18, -(e.clientX - pointerLastX) * 0.0015));
+      pointerPush = Math.max(-0.22, Math.min(0.22, pointerPush));
+    }
+    pointerLastX = e.clientX;
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     if (pointer.down) {
@@ -362,7 +595,7 @@ function bindInput() {
       scrollToProgress(Math.min(1, Math.max(0, p)));
     }
   };
-  const onEnter = () => { pointer.inside = true; };
+  const onEnter = (e) => { pointer.inside = true; pointerLastX = e.clientX; };
   const onLeave = () => { pointer.inside = false; };
   const onDown = (e) => {
     pointer.down = true;
@@ -405,53 +638,6 @@ function bindInput() {
   });
 }
 
-/* ---- Loop --------------------------------------------------------------- */
-
-const hud = {};
-let shown = -1;
-
-function updateHud(index) {
-  if (index === shown) return;
-  shown = index;
-  const item = items[index];
-  hud.index.textContent = String(index + 1).padStart(2, "0");
-  hud.current.textContent = item.querySelector("a").textContent.trim();
-  hud.tags.textContent = item.dataset.tags || "";
-}
-
-function tick() {
-  frame = requestAnimationFrame(tick);
-  if (!visible) return;
-
-  const reduced = prefersReducedMotion();
-  const now = performance.now() / 1000;
-  const prev = current;
-  current += (target - current) * (reduced ? 1 : EASE);
-  const v = current - prev;
-  // Rises fast, lets go slowly: the cloth keeps moving a beat after the
-  // track has stopped, which is most of what reads as "flowing".
-  const k = Math.abs(v) > Math.abs(speed) ? 0.25 : SETTLE;
-  speed += ((reduced ? 0 : v) - speed) * k;
-  const bend = Math.max(-1, Math.min(1, speed * 12)) * BEND;
-  const time = reduced ? 0 : now;
-
-  hovered = pointer.down ? hovered : hitTest();
-  canvas.dataset.hover = String(hovered >= 0);
-
-  cards.forEach((card, i) => {
-    card.hover += ((i === hovered ? 1 : 0) - card.hover) * 0.15;
-    card.material.uniforms.uX.value = wrap(card.base - current);
-    card.material.uniforms.uBend.value = bend;
-    card.material.uniforms.uHover.value = card.hover;
-    card.material.uniforms.uTime.value = time;
-  });
-
-  const n = cards.length;
-  updateHud(((Math.round(current / STEP) % n) + n) % n);
-  renderer.render(scene, camera);
-}
-
-/* ---- Lifecycle ---------------------------------------------------------- */
 
 export function init(root = document) {
   section = root.querySelector("[data-projects]");
@@ -510,7 +696,8 @@ export function destroy() {
   cleanups.forEach((fn) => fn());
   cleanups.length = 0;
   cards.forEach(({ material }) => {
-    material.uniforms.uMap.value?.dispose();
+    material.uniforms.uPicture.value?.dispose();
+    material.uniforms.uOverlay.value?.dispose();
     material.dispose();
   });
   renderer?.dispose();

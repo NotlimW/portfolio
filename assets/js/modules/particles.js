@@ -9,6 +9,14 @@
  *
  *   <canvas data-particles></canvas>            the field
  *   <canvas data-particles data-density="0.6">  wider spacing, fewer dots
+ *   host.particleShiftX = 120                     slide this host's dots sideways
+ *   host.particleHoldY = 300                      cancel 300px of scroll (a pinned host)
+ *   <section data-particles-hold[="selector"]      the same, worked out for every canvas
+ *            data-particles-slide="0.4">        inside a pinned scene; slide = how far the
+ *                                                 dots travel sideways over the pin, as a
+ *                                                 share of the viewport width;
+ *                                                 data-particles-hold-media limits it
+ *                                                 to when the scene is actually pinned
  *
  * Ink is read from CSS rather than hardcoded, so a canvas inside a dark
  * section draws itself light without knowing anything about the section.
@@ -96,12 +104,31 @@ let frame = null;
  */
 const cursor = { targetX: -9999, targetY: -9999, x: -9999, y: -9999, seen: false };
 
+/**
+ * The pinned scene a canvas belongs to. data-particles-hold on an ancestor
+ * either IS the pinned element, or names it with a selector (for a canvas
+ * that sits beside the pinned part rather than inside it).
+ */
+function findPin(canvas) {
+  const owner = canvas.closest("[data-particles-hold]");
+  if (!owner) return null;
+  const selector = owner.dataset.particlesHold;
+  const pin = (selector && owner.querySelector(selector)) || owner;
+  pin.particlesSlide = parseFloat(owner.dataset.particlesSlide) || 0;
+  // Only while the scene is actually pinned: some unpin below a width.
+  pin.particlesMedia = owner.dataset.particlesHoldMedia || null;
+  return pin;
+}
+
 function build(canvas) {
   const density = parseFloat(canvas.dataset.density) || 1;
 
   return {
     canvas,
     host: canvas.parentElement,
+    // A pinned scene this canvas sits in, if it asks for its dots to hold
+    // still vertically (and, optionally, to slide sideways) while pinned.
+    pin: findPin(canvas),
     ctx: canvas.getContext("2d", { alpha: true }),
     // Denser means a tighter lattice, so density divides the pitch.
     spacing: SPACING / density,
@@ -312,13 +339,20 @@ function render(instance, rect) {
   // Kept for the cursor's local-space conversion inside drawField().
   instance.rectLeft = rect.left;
   instance.rectTop = rect.top;
-  instance.left = rect.left + window.scrollX;
+  // A host can slide its own slice of the field sideways (the projects
+  // ribbon does, so the dots travel with the cards): host.particleShiftX,
+  // in CSS px, moves the lattice phase left by that much.
+  instance.left = rect.left + window.scrollX + (instance.host.particleShiftX || 0);
 
   // Page-space y of this canvas's top edge, minus the parallax lag. Because
   // every canvas subtracts the same lag from the same page axis, the field
   // stays continuous across section seams while it drifts.
   const pageTop = rect.top + window.scrollY + slide;
-  const originY = pageTop - window.scrollY * PARALLAX;
+  // A pinned host can hold its dots still vertically while it is pinned:
+  // host.particleHoldY is how far the page has scrolled through the pin, and
+  // the field is moved back up by exactly the distance that scroll carried it.
+  const originY = pageTop - window.scrollY * PARALLAX
+    - (instance.host.particleHoldY || 0) * (1 - PARALLAX);
 
   ctx.clearRect(0, 0, w, h);
   drawField(instance, originY);
@@ -328,8 +362,21 @@ const draw = () => {
   // Read phase: every host's box, before any instance below is allowed to
   // touch a style or a canvas attribute. See render()'s doc comment.
   const rects = instances.map((instance) => instance.host.getBoundingClientRect());
+  const pins = instances.map((instance) => instance.pin?.getBoundingClientRect() || null);
   // Write phase.
-  instances.forEach((instance, i) => render(instance, rects[i]));
+  instances.forEach((instance, i) => {
+    const pin = pins[i];
+    const media = instance.pin?.particlesMedia;
+    if (pin && (!media || window.matchMedia(media).matches)) {
+      // How far the page has scrolled through the pin, and what share of it.
+      const travel = Math.max(1, pin.height - window.innerHeight);
+      const hold = Math.min(travel, Math.max(0, -pin.top));
+      instance.host.particleHoldY = hold;
+      const slide = instance.pin.particlesSlide;
+      instance.host.particleShiftX = (hold / travel) * window.innerWidth * slide;
+    }
+    render(instance, rects[i]);
+  });
 };
 
 /**
@@ -413,6 +460,11 @@ export function init(root = document) {
   window.addEventListener("resize", onResize, { passive: true });
 
   return destroy;
+}
+
+/** Redraw now — for a host that changed its particleShiftX between scrolls. */
+export function refresh() {
+  if (instances.length) draw();
 }
 
 export function destroy() {

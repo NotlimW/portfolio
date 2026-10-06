@@ -43,8 +43,8 @@
          --c-accent-text  anything you read — ink on light, yellow on dark
        --c-sun-deep is the same yellow a step denser, for thin strokes and
        dots on white, where full-strength sun would wash out. */
-    --c-sun:            #FFD21A;
-    --c-sun-deep:       #F2C100;
+    --c-sun:            #FFD900;
+    --c-sun-deep:       #F2CE00;
     --c-amber:          var(--c-sun);   /* alias — older rules name it */
 
     --c-accent-lift:    var(--c-sun);
@@ -101,7 +101,7 @@
     /* The canvas stopped drawing rules and guides when it became a halftone
        field, but components/graphics.css still builds its plates and guide
        lines from these — same drawing language, different surface. */
-    --particle-accent:      242, 193, 0;
+    --particle-accent:      242, 206, 0;
     --particle-grid-alpha:  0.055;
     --particle-guide-alpha: 0.3;
 
@@ -417,7 +417,7 @@
     --particle-ink:            232, 226, 214;
     --particle-dot-alpha:      0.28;
     --particle-dot-alpha-near: 0.63;
-    --particle-accent:         255, 210, 26;
+    --particle-accent:         255, 217, 0;
     --particle-grid-alpha:     0.075;
     --particle-guide-alpha:    0.4;
 
@@ -448,7 +448,7 @@
     --particle-ink:            23, 18, 14;
     --particle-dot-alpha:      0.24;
     --particle-dot-alpha-near: 0.57;
-    --particle-accent:         242, 193, 0;
+    --particle-accent:         242, 206, 0;
 
     background: var(--bg);
     color: var(--text);
