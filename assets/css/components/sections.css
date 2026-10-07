@@ -134,11 +134,38 @@
     max-width: 28rem;
   }
 
-  .process__lede {
-    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  /* Step label: the number in mono, a short sun rule, the step's name —
+     small, so the line under it can be the real headline. */
+  .process__label {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: var(--fs-small);
     font-weight: var(--fw-medium);
-    line-height: 1.2;
-    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+
+  .process__n {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-regular);
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+  }
+
+  .process__rule {
+    width: 1.75em;
+    height: 1.5px;
+    background: var(--c-accent);
+  }
+
+  .process__title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 2.7vw, 2.6rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
 
   .process__out { color: var(--text); }
@@ -282,4 +309,162 @@
     /* The first pair carries the top rule the list used to have. */
     .capabilities .row-item:nth-child(-n + 2) { border-top: 1px solid var(--line); }
   }
+
+  /* ==========================================================================
+     NOW — the text, and a small card: where the thinking goes public
+     ========================================================================== */
+  .now-grid {
+    display: grid;
+    gap: var(--sp-12);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .now-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: var(--sp-24); }
+  }
+
+  /* A small TikTok profile, drawn in the site's language: hairline card,
+     the label face, the sun for the follow button and the active tab. */
+  .tt-card {
+    display: grid;
+    gap: var(--sp-4);
+    padding: var(--sp-6);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-md);
+    background: var(--bg);
+  }
+
+  .tt-card__head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+
+  .tt-card__avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 47% 12%;
+    background: color-mix(in oklab, var(--text) 6%, var(--bg));
+    outline: 1px solid var(--line);
+    outline-offset: 2px;
+    transform: scale(1);
+  }
+
+  .tt-card__who { display: grid; gap: 0.1rem; }
+
+  .tt-card__name {
+    font-weight: var(--fw-medium);
+    font-size: 1.05rem;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  .tt-card__handle {
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    color: var(--text-muted);
+  }
+
+  .tt-card__follow {
+    padding: 0.5em 1.1em;
+    border-radius: var(--r-pill);
+    background: var(--c-sun);
+    color: var(--c-ink);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    text-decoration: none;
+    transition: transform var(--d-short) var(--e-micro);
+  }
+
+  .tt-card__follow:hover,
+  .tt-card__follow:focus-visible { transform: translateY(-1px); }
+
+  .tt-card__bio {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  .tt-card__tabs {
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+  }
+
+  .tt-card__tabs span {
+    display: inline-block;
+    padding-bottom: 0.5em;
+    margin-bottom: -1px;
+    border-bottom: 2px solid var(--c-accent);
+  }
+
+  .tt-card__videos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* A tile: the thumbnail if there is one (style="--thumb: url(...)"), a
+     drawn placeholder if not — a tone, a few caption lines, a play mark. */
+  .tt-card__video {
+    position: relative;
+    display: block;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--r-sm);
+    background:
+      var(--thumb, none) center / cover no-repeat,
+      linear-gradient(transparent 55%, rgb(0 0 0 / 0.35)),
+      #241C15;
+    transition: transform var(--d-short) var(--e-micro);
+  }
+
+  li:nth-child(2) > .tt-card__video { background-color: #3A3029; }
+  li:nth-child(3) > .tt-card__video { background-color: var(--c-sun); }
+
+  .tt-card__video:not([style*="--thumb"])::before {
+    content: "";
+    position: absolute;
+    inset: 22% 14% auto;
+    height: 18%;
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 90% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 50% / 70% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 100% / 80% 2px no-repeat;
+    color: rgb(251 250 247 / 0.5);
+  }
+
+  li:nth-child(3) > .tt-card__video:not([style*="--thumb"])::before { color: rgb(23 18 14 / 0.45); }
+
+  .tt-card__video:hover,
+  .tt-card__video:focus-visible { transform: scale(0.97); }
+
+  .tt-card__play {
+    position: absolute;
+    left: 0.5rem;
+    bottom: 0.5rem;
+    width: 0;
+    height: 0;
+    border-left: 0.55rem solid rgb(251 250 247 / 0.95);
+    border-top: 0.35rem solid transparent;
+    border-bottom: 0.35rem solid transparent;
+  }
+
+  li:nth-child(3) .tt-card__play { border-left-color: var(--c-ink); }
+
+  .tt-card__more {
+    justify-self: start;
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .tt-card__more span { color: var(--c-accent-text); }
 }
