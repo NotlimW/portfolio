@@ -24,8 +24,13 @@ let lists = [];
 let frame = 0;
 const state = { x: 0, y: 0, tx: 0, ty: 0, vx: 0, active: false };
 
+/** Run the follow loop only while the picture is still catching up. */
+function wake() {
+  if (!frame) frame = requestAnimationFrame(tick);
+}
+
 function tick() {
-  frame = requestAnimationFrame(tick);
+  frame = 0;
   const px = state.x;
   state.x += (state.tx - state.x) * FOLLOW;
   state.y += (state.ty - state.y) * FOLLOW;
@@ -36,6 +41,9 @@ function tick() {
   // it reads as the pointer and still leaves the row's title uncovered.
   figure.style.transform =
     `translate3d(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px, 0) translate(0.5rem, -50%) rotate(${lean.toFixed(2)}deg)`;
+  if (Math.abs(state.tx - state.x) > 0.1 || Math.abs(state.ty - state.y) > 0.1 || Math.abs(state.vx) > 0.01) {
+    frame = requestAnimationFrame(tick);
+  }
 }
 
 /* Scrolling with a still pointer moves the list out from under it without
@@ -64,6 +72,7 @@ function show(src, x, y) {
   // The picture becomes the cursor: preview.css hides the dot while this
   // is set, so there is one thing following the pointer, not two.
   document.documentElement.dataset.preview = "on";
+  wake();
 }
 
 function hide() {
@@ -109,17 +118,19 @@ export function init(root = document) {
     list.addEventListener("pointermove", (e) => {
       state.tx = e.clientX;
       state.ty = e.clientY;
+      wake();
     });
     list.addEventListener("pointerleave", hide);
   });
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  frame = requestAnimationFrame(tick);
+  wake();
   return destroy;
 }
 
 export function destroy() {
   cancelAnimationFrame(frame);
+  frame = 0;
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("pointermove", onWindowMove);
   delete document.documentElement.dataset.preview;

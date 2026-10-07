@@ -42,6 +42,8 @@ let velocity = 0;
 let last = 0;
 
 function tick(now) {
+  // Sleep while no row is on screen; the observer wakes the loop again.
+  if (!groups.some((g) => g.visible)) { frame = 0; last = 0; return; }
   frame = requestAnimationFrame(tick);
   const dt = Math.min(0.05, (now - (last || now)) / 1000);
   last = now;
@@ -102,6 +104,7 @@ export function init(root = document) {
       const group = groups.find((g) => g.section === entry.target);
       if (group) group.visible = entry.isIntersecting;
     });
+    if (!frame && groups.some((g) => g.visible)) frame = requestAnimationFrame(tick);
   });
   groups.forEach(({ section }) => observer.observe(section));
 

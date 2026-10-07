@@ -22,14 +22,23 @@ const pos = { x: 0, y: 0, tx: 0, ty: 0 };
 function onPointer(e) {
   pos.tx = (e.clientX / window.innerWidth) * 2 - 1;
   pos.ty = (e.clientY / window.innerHeight) * 2 - 1;
+  if (!frame) frame = requestAnimationFrame(tick);
 }
 
+/* Runs only while the hero is easing toward the pointer, and only writes
+   while the hero is near the screen: --px/--py on the hero re-resolve its
+   whole subtree, which was a cost on every frame of the page, forever. */
 function tick() {
-  frame = requestAnimationFrame(tick);
+  frame = 0;
   pos.x += (pos.tx - pos.x) * EASE;
   pos.y += (pos.ty - pos.y) * EASE;
-  host.style.setProperty("--px", pos.x.toFixed(4));
-  host.style.setProperty("--py", pos.y.toFixed(4));
+  if (host.getBoundingClientRect().bottom > 0) {
+    host.style.setProperty("--px", pos.x.toFixed(4));
+    host.style.setProperty("--py", pos.y.toFixed(4));
+  }
+  if (Math.abs(pos.tx - pos.x) > 0.0005 || Math.abs(pos.ty - pos.y) > 0.0005) {
+    frame = requestAnimationFrame(tick);
+  }
 }
 
 export function init(root = document) {
@@ -41,12 +50,12 @@ export function init(root = document) {
   });
 
   window.addEventListener("pointermove", onPointer, { passive: true });
-  frame = requestAnimationFrame(tick);
   return destroy;
 }
 
 export function destroy() {
   cancelAnimationFrame(frame);
+  frame = 0;
   window.removeEventListener("pointermove", onPointer);
   host?.style.removeProperty("--px");
   host?.style.removeProperty("--py");

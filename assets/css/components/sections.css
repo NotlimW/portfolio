@@ -97,12 +97,7 @@
     stroke-dasharray: 3 8;
     transform-box: fill-box;
     transform-origin: center;
-    animation: pw-turn calc(40s + var(--i) * 12s) linear infinite;
   }
-
-  .pw-ring:nth-of-type(even) { animation-direction: reverse; }
-
-  @keyframes pw-turn { to { rotate: 360deg; } }
 
   .pw-label {
     font-family: var(--font-sans);

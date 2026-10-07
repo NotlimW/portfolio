@@ -31,8 +31,7 @@ const clamp = (n) => (n < 0 ? 0 : n > 1 ? 1 : n);
 /** Smooth start and end so scrubbed motion never begins or stops abruptly. */
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
-function progressFor(el, mode, viewportH) {
-  const rect = el.getBoundingClientRect();
+function progressFor(rect, mode, viewportH) {
 
   if (mode === "cover") {
     // The element travelling fully across the viewport, top to bottom.
@@ -67,21 +66,24 @@ export function init(root = document) {
   const update = () => {
     const viewportH = window.innerHeight;
 
-    scenes.forEach((scene) => {
-      const { el, mode, eased } = scene;
-      const rect = el.getBoundingClientRect();
+    // Read every scene's box first, then write. Reading after a write forces
+    // the browser to lay the whole page out again before it can answer, so
+    // interleaving the two cost one full layout per scene per frame.
+    const rects = scenes.map(({ el }) => el.getBoundingClientRect());
 
-      // Skip anything comfortably off-screen — on a long page this is the
-      // difference between measuring three elements a frame and thirty.
+    scenes.forEach((scene, i) => {
+      const rect = rects[i];
+
+      // Skip anything comfortably off-screen.
       if (rect.bottom < -viewportH || rect.top > viewportH * 2) return;
 
-      const raw = progressFor(el, mode, viewportH);
-      const value = eased ? easeInOut(raw) : raw;
+      const raw = progressFor(rect, scene.mode, viewportH);
+      const value = scene.eased ? easeInOut(raw) : raw;
 
       // Writing the same value again still invalidates style, so don't.
       if (Math.abs(value - scene.last) < 0.0005) return;
       scene.last = value;
-      el.style.setProperty("--progress", value.toFixed(4));
+      scene.el.style.setProperty("--progress", value.toFixed(4));
     });
   };
 

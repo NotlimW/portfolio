@@ -82,12 +82,14 @@ function loop() {
     `translate(-50%, -50%) rotate(${angle.toFixed(1)}deg) ` +
     `scale(${(1 + amount).toFixed(3)}, ${(1 - amount * 0.6).toFixed(3)})`;
 
-  rafId = requestAnimationFrame(loop);
+  // Sleep once the dot has caught the pointer; pointermove wakes it.
+  rafId = Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05 ? requestAnimationFrame(loop) : 0;
 }
 
 function onPointerMove(event) {
   target.x = event.clientX + OFFSET_X;
   target.y = event.clientY + OFFSET_Y;
+  if (!rafId) rafId = requestAnimationFrame(loop);
   root.dataset.active = "true";
 
   const node = event.target;

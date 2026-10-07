@@ -506,8 +506,9 @@ function updateHud(index) {
 }
 
 function tick() {
+  // Sleep while the section is far away; the observer wakes the loop again.
+  if (!visible) { frame = 0; return; }
   frame = requestAnimationFrame(tick);
-  if (!visible) return;
 
   const reduced = prefersReducedMotion();
   const time = reduced ? 0 : performance.now() / 1000;
@@ -660,6 +661,8 @@ export function init(root = document) {
       if (visible && !started) {
         started = true;
         start();
+      } else if (visible && renderer && !frame) {
+        frame = requestAnimationFrame(tick);
       }
     });
   }, { rootMargin: "100% 0px" });

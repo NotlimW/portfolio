@@ -54,21 +54,46 @@ function split(word) {
   });
 }
 
+/*
+ * The loop only runs while something is moving: the lean settling, or
+ * letters easing toward the pointer. It reads layout (font size, letter
+ * boxes) only when the pointer has moved or letters are still easing, and
+ * writes --skew only when it changes. A loop that read and wrote layout on
+ * every frame for every visible giant, forever, was a steady cost on the
+ * whole page even with nothing happening.
+ */
+let pointerDirty = false;
+
+function wake() {
+  if (!frame) frame = requestAnimationFrame(tick);
+}
+
 function tick() {
-  frame = requestAnimationFrame(tick);
+  frame = 0;
+  let busy = false;
 
   skew += (skewTarget - skew) * 0.12;
   skewTarget *= 0.9;
+  if (Math.abs(skew) > 0.01 || Math.abs(skewTarget) > 0.01) busy = true;
+  else { skew = 0; skewTarget = 0; }
 
   giants.forEach((giant) => {
     if (!giant.visible) return;
-    giant.box.style.setProperty("--skew", `${skew.toFixed(2)}deg`);
+
+    const lean = skew.toFixed(2);
+    if (giant.lean !== lean) {
+      giant.lean = lean;
+      giant.box.style.setProperty("--skew", `${lean}deg`);
+    }
+
+    if (!giant.letters.length || (!pointerDirty && !giant.easing)) return;
 
     const size = parseFloat(getComputedStyle(giant.word).fontSize);
     const radius = size * FALLOFF;
     const rect = giant.word.getBoundingClientRect();
     const inBand = pointer.y > rect.top - radius && pointer.y < rect.bottom + radius;
 
+    giant.easing = false;
     giant.letters.forEach((letter) => {
       let target = WDTH_REST;
       if (inBand) {
@@ -81,11 +106,16 @@ function tick() {
       if (Math.abs(target - letter.wdth) < 0.05) return;
       letter.wdth += (target - letter.wdth) * EASE;
       letter.el.style.fontVariationSettings = `"opsz" 12, "wdth" ${letter.wdth.toFixed(1)}`;
+      giant.easing = true;
     });
+    if (giant.easing) busy = true;
   });
+
+  pointerDirty = false;
+  if (busy) frame = requestAnimationFrame(tick);
 }
 
-const onPointer = (e) => { pointer.x = e.clientX; pointer.y = e.clientY; };
+const onPointer = (e) => { pointer.x = e.clientX; pointer.y = e.clientY; pointerDirty = true; wake(); };
 
 export function init(root = document) {
   if (!motionAllowed()) return () => {};
@@ -103,16 +133,18 @@ export function init(root = document) {
       const giant = giants.find((g) => g.box === entry.target);
       if (giant) giant.visible = entry.isIntersecting;
     });
+    wake();
   });
   giants.forEach((g) => observer.observe(g.box));
 
   unsubscribe = onScroll(({ velocity }) => {
     const v = Math.max(-SKEW_MAX, Math.min(SKEW_MAX, (velocity || 0) * SKEW_PER_VELOCITY));
     if (Math.abs(v) > Math.abs(skewTarget)) skewTarget = v;
+    wake();
   });
 
   if (hasFinePointer()) window.addEventListener("pointermove", onPointer, { passive: true });
-  frame = requestAnimationFrame(tick);
+  wake();
 
   return () => {
     observer.disconnect();
@@ -122,6 +154,7 @@ export function init(root = document) {
 
 export function destroy() {
   cancelAnimationFrame(frame);
+  frame = 0;
   unsubscribe?.();
   unsubscribe = null;
   window.removeEventListener("pointermove", onPointer);

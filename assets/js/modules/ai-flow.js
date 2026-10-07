@@ -9,6 +9,10 @@
  *           scrolled. Currents, dials and the reel move by it, so they
  *           idle on their own and race when you scroll.
  *   --loop, --loop2   --run folded to 0…100 at two speeds, for the reel.
+ * --p is set on the stage (most of the drawing reads it); the others are
+ * set only on the few elements that read them, and nothing is written
+ * unless it has changed — each write re-resolves styles for the whole
+ * subtree under it, which on these SVGs was most of the frame.
  * Everything else is CSS reading these; see components/ai.css.
  *
  * Without this module (or under reduced motion) --p stays at its CSS
@@ -36,6 +40,14 @@ function progress(el) {
   return clamp((vh - r.top) / (vh + r.height), 0, 1);
 }
 
+/** Set a custom property only when it has changed by more than `min`. */
+function write(el, memo, name, value, digits, min) {
+  const key = "_" + name;
+  if (memo[key] !== undefined && Math.abs(value - memo[key]) < min) return;
+  memo[key] = value;
+  el.style.setProperty(name, value.toFixed(digits));
+}
+
 function tick(now) {
   frame = 0;
   const dt = Math.min(64, now - (last || now));
@@ -47,17 +59,30 @@ function tick(now) {
   v += (clamp(dy / 30, -1, 1) - v) * 0.08;
 
   let any = false;
-  items.forEach((item) => {
+  // All reads before any write (see scene.js).
+  const targets = items.map((item) => (item.visible ? progress(item.el) : 0));
+  items.forEach((item, i) => {
     if (!item.visible) return;
     any = true;
-    item.p += (progress(item.el) - item.p) * EASE;
-    item.run += dt * IDLE + Math.abs(dy) * PUSH;
-    const st = item.el.style;
-    st.setProperty("--p", item.p.toFixed(4));
-    st.setProperty("--v", v.toFixed(3));
-    st.setProperty("--run", item.run.toFixed(1));
-    st.setProperty("--loop", ((item.run * 0.024) % 100).toFixed(3));
-    st.setProperty("--loop2", ((item.run * 0.018) % 100).toFixed(3));
+    item.p += (targets[i] - item.p) * EASE;
+    // Scroll drives --run; the idle tick only drives the reel's loop, which
+    // is plain HTML and moves on the compositor. An idle tick on the SVG
+    // marks repainted a full-width drawing every frame with nobody scrolling.
+    item.run += Math.abs(dy) * PUSH;
+    item.idle = (item.idle || 0) + dt * IDLE;
+
+    // Every write to a custom property re-resolves styles for everything
+    // under the element it is set on — on these stages, a couple of hundred
+    // SVG nodes. So: --p (which most of the drawing reads) only when it has
+    // actually moved, and the rest only on the few elements that use them.
+    write(item.el, item, "--p", item.p, 4, 0.0008);
+    item.vEls.forEach((el) => write(el, el, "--v", v, 3, 0.002));
+    item.runEls.forEach((el) => write(el, el, "--run", item.run, 1, 0.5));
+    item.loopEls.forEach((el) => {
+      const loop = item.run + item.idle;
+      write(el, el, "--loop", (loop * 0.024) % 100, 3, 0.01);
+      write(el, el, "--loop2", (loop * 0.018) % 100, 3, 0.01);
+    });
   });
 
   if (any) frame = requestAnimationFrame(tick);
@@ -79,6 +104,10 @@ export function init(root = document) {
     p: progress(el),   // start where the page already is
     run: 0,
     visible: false,
+    // The only elements that read --v, --run and --loop (components/ai.css).
+    vEls: Array.from(el.querySelectorAll(":scope > .ai-fig, .ai-reel__tilt")),
+    runEls: Array.from(el.querySelectorAll(".ai-dialface, .ai-flowdash")),
+    loopEls: Array.from(el.querySelectorAll(".ai-reel__row")),
   }));
   if (!items.length) return () => {};
 
@@ -101,6 +130,10 @@ export function destroy() {
   observer = null;
   cancelAnimationFrame(frame);
   frame = 0;
-  items.forEach(({ el }) => ["--p", "--v", "--run", "--loop", "--loop2"].forEach((k) => el.style.removeProperty(k)));
+  items.forEach((item) => {
+    item.el.style.removeProperty("--p");
+    [...item.vEls, ...item.runEls, ...item.loopEls].forEach((el) =>
+      ["--v", "--run", "--loop", "--loop2"].forEach((k) => el.style.removeProperty(k)));
+  });
   items = [];
 }

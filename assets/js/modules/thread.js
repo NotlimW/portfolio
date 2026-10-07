@@ -38,8 +38,10 @@ function target(el) {
 function tick() {
   frame = 0;
   let moving = false;
-  items.forEach((item) => {
-    const t = target(item.el);
+  // All reads before any write (see scene.js).
+  const targets = items.map((item) => target(item.el));
+  items.forEach((item, i) => {
+    const t = targets[i];
     const d = t - item.d;
     if (Math.abs(d) < 0.001) {
       if (item.d === t) return;

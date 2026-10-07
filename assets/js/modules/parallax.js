@@ -29,8 +29,12 @@ export function init(root = document) {
   unsubscribe = onScroll(() => {
     const viewportH = window.innerHeight;
 
-    items.forEach(({ el, strength }) => {
-      const rect = el.getBoundingClientRect();
+    // All reads before any write — see scene.js. (The transform written here
+    // does not move the element's layout box, so the reads stay valid.)
+    const rects = items.map(({ el }) => el.getBoundingClientRect());
+
+    items.forEach(({ el, strength }, i) => {
+      const rect = rects[i];
 
       if (rect.bottom < 0 || rect.top > viewportH) return;
 

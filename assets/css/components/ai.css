@@ -104,6 +104,8 @@
     z-index: 0;
     margin-inline: calc(50% - 50vw);
     pointer-events: none;
+    /* A repaint of the drawing stays inside the drawing. */
+    contain: layout paint;
     opacity: min(1, var(--p) * 4);
     /* A long fade out to the sides; the labels sit inside the solid part. */
     --fade-x: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
@@ -156,7 +158,9 @@
     opacity: 0;
     transform-box: fill-box;
     transform-origin: center;
-    animation: ai-pulse 3s var(--e-reveal) infinite;
+    /* No idle loop: a looping animation inside a full-width SVG repaints the
+       whole drawing every frame, scroll or not. */
+    animation: none;
   }
 
   @keyframes ai-pulse {
@@ -209,8 +213,7 @@
     fill: none;
     stroke: var(--line-strong);
     stroke-width: 1;
-    animation: ai-drift 9s ease-in-out infinite alternate;
-    animation-delay: calc(var(--i, 0) * -0.41s);
+    /* Still: see .ai-pulse. */
   }
 
   @keyframes ai-drift {

@@ -221,82 +221,92 @@ function measure(instance, rect) {
   canvas.width = Math.round(instance.w * dpr);
   canvas.height = Math.round(instance.h * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  instance.dpr = dpr;
 
   readColours(instance);
+
+  // One lattice cell, drawn once in device pixels: the resting dot at its
+  // centre. drawField() fills the canvas with it.
+  const tile = document.createElement("canvas");
+  const size = Math.max(1, Math.round(instance.spacing * dpr));
+  tile.width = tile.height = size;
+  const tctx = tile.getContext("2d");
+  tctx.fillStyle = instance.farStyle;
+  tctx.beginPath();
+  tctx.arc(size / 2, size / 2, instance.rMin * dpr, 0, TAU);
+  tctx.fill();
+  instance.pattern = ctx.createPattern(tile, "repeat");
 }
 
 /**
  * Draws the slice of the page-wide lattice that this canvas covers.
  *
- * A fill can only carry one colour, so alpha and tint cannot vary per dot the
- * way radius can. Rather than pay ~1500 fillStyle changes and ~1500 fills per
- * canvas per frame, the field is drawn as a handful of paths: one for
- * everything outside the cursor's reach, and NEAR_STEPS more for the dots
- * inside it, each holding the dots in one band of influence. Seven fills
- * total, and the banding is invisible because radius still varies smoothly
- * across the band boundaries.
+ * The resting field is one pattern fill. Inside the cursor's reach the dots
+ * are drawn by hand as NEAR_STEPS paths, one per band of influence — a fill
+ * can only carry one colour, and the banding is invisible because radius
+ * still varies smoothly across the band boundaries.
  *
  * @param originY page-space y of this canvas's top edge, parallax applied
  */
 function drawField(instance, originY) {
-  const { ctx, w, h, spacing, left, rMin, rMax } = instance;
+  const { ctx, w, h, spacing, left, rMin, rMax, dpr } = instance;
 
   // Lattice phase: where the first column/row inside this window falls. Solved
   // from page coordinates, so the section next door lands on the same lines.
   const startX = Math.ceil(left / spacing) * spacing - left;
   const startY = Math.ceil(originY / spacing) * spacing - originY;
 
+  // The resting field: one fill with a pre-drawn dot tile, phased onto the
+  // lattice. This used to be ~1500 arcs per canvas per frame, redrawn on
+  // every scroll frame across every canvas on screen — the single biggest
+  // cost on the page while scrolling. A pattern fill is one draw call.
+  instance.pattern.setTransform(new DOMMatrix([1 / dpr, 0, 0, 1 / dpr, startX - spacing / 2, startY - spacing / 2]));
+  ctx.fillStyle = instance.pattern;
+  ctx.fillRect(0, 0, w, h);
+
   // Cursor in this canvas's local space. The bloom is a viewport thing — it
   // follows the pointer on screen, so it is NOT offset by parallax.
   const cx = cursor.x - instance.rectLeft;
   const cy = cursor.y - instance.rectTop - instance.slide;
+  if (!cursor.seen || cy < -REACH || cy > h + REACH) return;
+
+  // The bloom: clear the cursor's reach out of the resting field and draw
+  // just those dots by hand — swollen, tinted and shoved away from it.
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, REACH - 2, 0, TAU);
+  ctx.clip();
+  ctx.clearRect(cx - REACH, cy - REACH, REACH * 2, REACH * 2);
+  ctx.restore();
+
   const reach2 = REACH * REACH;
   const swell = rMax - rMin;
-
-  const far = new Path2D();
   const near = instance.nearStyle.map(() => new Path2D());
+  const y0 = startY + Math.max(0, Math.ceil((cy - REACH - startY) / spacing)) * spacing;
+  const x0 = startX + Math.max(0, Math.ceil((cx - REACH - startX) / spacing)) * spacing;
 
-  for (let y = startY; y < h + spacing; y += spacing) {
-    // Rows outside the cursor's reach can be solved without the distance
-    // check — most of the field, most of the time.
+  for (let y = y0; y <= cy + REACH && y < h + spacing; y += spacing) {
     const dy = y - cy;
-    const rowNear = cursor.seen && dy > -REACH && dy < REACH;
     const dy2 = dy * dy;
-
-    for (let x = startX; x < w + spacing; x += spacing) {
-      if (rowNear) {
-        const dx = x - cx;
-        const d2 = dx * dx + dy2;
-
-        if (d2 < reach2) {
-          // 1 at the cursor, 0 at the edge of reach, squared so the bloom has
-          // a soft shoulder instead of a visible circular rim.
-          const t = 1 - d2 / reach2;
-          const r = rMin + swell * t * t;
-
-          // Shove the dot directly away from the cursor. The dot sitting exactly
-          // under the pointer has no direction to go and correctly stays put;
-          // the ring around it moves most, so the lattice opens up rather than
-          // sliding sideways.
-          const d = Math.sqrt(d2);
-          const shove = d > 0.001 ? (PUSH * t * t) / d : 0;
-          const px = x + dx * shove;
-          const py = y + dy * shove;
-
-          const band = near[Math.min(NEAR_STEPS - 1, (t * NEAR_STEPS) | 0)];
-          band.moveTo(px + r, py);
-          band.arc(px, py, r, 0, TAU);
-          continue;
-        }
-      }
-
-      far.moveTo(x + rMin, y);
-      far.arc(x, y, rMin, 0, TAU);
+    for (let x = x0; x <= cx + REACH && x < w + spacing; x += spacing) {
+      const dx = x - cx;
+      const d2 = dx * dx + dy2;
+      if (d2 >= reach2) continue;
+      // 1 at the cursor, 0 at the edge of reach, squared so the bloom has a
+      // soft shoulder instead of a visible circular rim.
+      const t = 1 - d2 / reach2;
+      const r = rMin + swell * t * t;
+      // Shove the dot directly away from the cursor, so the lattice opens up
+      // around the pointer rather than sliding sideways.
+      const d = Math.sqrt(d2);
+      const shove = d > 0.001 ? (PUSH * t * t) / d : 0;
+      const px = x + dx * shove;
+      const py = y + dy * shove;
+      const band = near[Math.min(NEAR_STEPS - 1, (t * NEAR_STEPS) | 0)];
+      band.moveTo(px + r, py);
+      band.arc(px, py, r, 0, TAU);
     }
   }
-
-  ctx.fillStyle = instance.farStyle;
-  ctx.fill(far);
 
   for (let i = 0; i < near.length; i++) {
     ctx.fillStyle = instance.nearStyle[i];

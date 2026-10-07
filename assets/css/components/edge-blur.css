@@ -47,45 +47,21 @@
      hidden rather than opaque — the exact opposite of alpha-mode masking's
      default with the same stop colour. White reads as "fully visible" under
      both interpretations. */
+  /* One layer per edge (it was three): each backdrop-filter re-blurs the
+     full width of whatever moves under it on every scroll frame, and six of
+     them were a measurable share of the frame. A single blur fading out
+     through its mask reads nearly the same at this size. */
   .edge-blur--top[data-layer="1"] {
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-    mask-image: linear-gradient(to bottom, white 0%, white 45%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, white 0%, white 45%, transparent 100%);
-  }
-
-  .edge-blur--top[data-layer="2"] {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-    mask-image: linear-gradient(to bottom, white 0%, white 25%, transparent 60%);
-    -webkit-mask-image: linear-gradient(to bottom, white 0%, white 25%, transparent 60%);
-  }
-
-  .edge-blur--top[data-layer="3"] {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    mask-image: linear-gradient(to bottom, white 0%, transparent 30%);
-    -webkit-mask-image: linear-gradient(to bottom, white 0%, transparent 30%);
+    mask-image: linear-gradient(to bottom, white 0%, white 20%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, white 0%, white 20%, transparent 100%);
   }
 
   .edge-blur--bottom[data-layer="1"] {
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-    mask-image: linear-gradient(to top, white 0%, white 45%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to top, white 0%, white 45%, transparent 100%);
-  }
-
-  .edge-blur--bottom[data-layer="2"] {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-    mask-image: linear-gradient(to top, white 0%, white 25%, transparent 60%);
-    -webkit-mask-image: linear-gradient(to top, white 0%, white 25%, transparent 60%);
-  }
-
-  .edge-blur--bottom[data-layer="3"] {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    mask-image: linear-gradient(to top, white 0%, transparent 30%);
-    -webkit-mask-image: linear-gradient(to top, white 0%, transparent 30%);
+    mask-image: linear-gradient(to top, white 0%, white 20%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, white 0%, white 20%, transparent 100%);
   }
 }

@@ -195,6 +195,9 @@
       0
     );
     opacity: calc(var(--masonry-dim) + var(--sharp) * (1 - var(--masonry-dim)));
+    /* Own layer: the drift and fade are then a move and a blend of a cached
+       texture, not a repaint of the image every scroll frame. */
+    will-change: transform, opacity;
   }
 
   /* ---- Media ------------------------------------------------------------
@@ -207,6 +210,7 @@
     position: absolute;
     inset: calc(-1 * var(--masonry-bleed));
     transform: scale(calc(1 + (1 - var(--sharp)) * var(--masonry-lift)));
+    will-change: transform;
   }
 
   .creative-wall__media picture { display: block; width: 100%; height: 100%; }
