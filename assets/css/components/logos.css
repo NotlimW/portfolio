@@ -88,60 +88,24 @@
     line-height: 1;
   }
 
-  /* ---- Stand-in marks, one voice per client ------------------------------- */
-  .logo--aros .logo__mark {
-    font-family: var(--font-display);
-    font-weight: var(--fw-display);
-    font-variation-settings: var(--fv-display-tight);
-    font-size: clamp(2.6rem, 6.5vw, 6.5rem);
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
+  /* ---- Real logos ----------------------------------------------------------
+     The client's own SVG (assets/media/logos/), flattened to one colour:
+     black, with any white knockouts kept. Opacity brings it down to the
+     muted text tone, and it comes up on hover, as the text marks did.
+     --s evens out the optical weight of wide wordmarks and the badge. */
+  .logo--img img {
+    display: block;
+    width: auto;
+    height: calc(clamp(2.25rem, 5vw, 4.75rem) * var(--s, 1));
+    opacity: 0.55;
+    transition: opacity var(--d-short) var(--e-micro);
   }
 
-  .logo--logimark .logo__mark {
-    font-family: var(--font-sans);
-    font-weight: var(--fw-bold);
-    font-size: clamp(2.4rem, 6vw, 6rem);
-    letter-spacing: -0.045em;
-  }
+  .logo--img:hover img { opacity: 0.9; }
 
-  .logo--logimark .logo__mark::before {
-    content: "";
-    width: 0.62em;
-    height: 0.62em;
-    border-radius: 0.14em;
-    background: currentColor;
-  }
-
-  .logo--friends .logo__mark {
-    gap: 0;
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: clamp(2.8rem, 7vw, 7rem);
-    letter-spacing: -0.01em;
-  }
-
-  .logo--friends .logo__mark::after {
-    content: "°";
-    margin-left: 0.04em;
-    font-size: 0.7em;
-    align-self: flex-start;
-  }
-
-  .logo--soscale .logo__mark {
-    font-family: var(--font-mono);
-    font-weight: var(--fw-medium);
-    font-size: clamp(1.6rem, 3.6vw, 3.6rem);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .logo--webbson .logo__mark {
-    font-family: var(--font-sans);
-    font-weight: var(--fw-black);
-    font-size: clamp(2.6rem, 6.5vw, 6.5rem);
-    letter-spacing: -0.06em;
-  }
+  .logo--mister-york    { --s: 1.7; }
+  .logo--hatstore       { --s: 0.8; }
+  .logo--sjofartsverket { --s: 1.15; }
 }
 
 /* ==========================================================================
