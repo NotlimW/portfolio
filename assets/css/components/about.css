@@ -35,7 +35,7 @@
   }
 
   .story__photo { aspect-ratio: 4 / 5; }
-  .story__photo img { width: 100%; height: 100%; object-fit: cover; }
+  .story__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 
   .story__text {
     display: grid;
@@ -169,42 +169,23 @@
     .edu__item { grid-template-columns: 11rem minmax(0, 1fr); }
   }
 
-  /* ---- Learning ------------------------------------------------------------ */
-  .learn__title {
-    margin: 0 0 clamp(var(--sp-12), 6vw, var(--sp-24));
-    font-family: var(--font-display);
-    font-weight: var(--fw-display);
-    font-variation-settings: var(--fv-display-tight);
-    font-size: clamp(2.5rem, 6.5vw, 6.5rem);
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-  }
+  /* The ongoing entry: learning every day, first in the list. Its label
+     is in sun, and its three steps sit as a small inline loop. */
+  .edu__item--now .edu__level { color: var(--c-accent-text); }
 
-  .learn__title .em { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
-
-  .learn__loop {
-    display: grid;
-    gap: var(--sp-8);
-    margin: 0;
+  .edu__loop {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-6);
+    margin: var(--sp-4) 0 0;
     padding: 0;
     list-style: none;
-    counter-reset: learn;
+    font-size: var(--fs-small);
   }
 
-  .learn__loop li {
-    display: grid;
-    gap: var(--sp-3);
-    padding-top: var(--sp-4);
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .learn__loop li:first-child { border-top-color: var(--c-sun); }
-  .learn__n { color: var(--c-accent-text); }
-  .learn__loop p { margin: 0; max-width: 32ch; color: var(--text-muted); }
-
-  @media (min-width: 48rem) {
-    .learn__loop { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
+  .edu__loop li { display: flex; gap: var(--sp-2); align-items: baseline; }
+  .edu__loop li + li::before { content: "→"; color: var(--c-accent-text); margin-right: var(--sp-4); }
+  .edu__loop .t-label { color: var(--text-muted); }
 
   /* ---- Elsewhere: TikTok card beside a LinkedIn card ---------------------- */
   .elsewhere {

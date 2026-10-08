@@ -66,11 +66,16 @@
   }
 }
 
-/* Touch screens: no edge blur. A backdrop-filter re-blurs everything that
-   scrolls under it, every frame, and on a phone two full-width strips of it
-   were a real share of the scroll cost for a detail at the very edge. */
+/* Touch screens: a lighter edge blur. A backdrop-filter re-blurs whatever
+   scrolls under it every frame, so on a phone the strips are narrower and
+   the radius smaller: the edge still softens, for a fraction of the cost. */
 @layer components {
   @media (hover: none) {
-    .edge-blur { display: none; }
+    .edge-blur { height: 2.25rem; }
+    .edge-blur--top[data-layer="1"],
+    .edge-blur--bottom[data-layer="1"] {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
   }
 }

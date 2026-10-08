@@ -744,7 +744,7 @@ node "Portfolio Milton/dev-server.js"
   - Phones:
     - Each drawing sits below its copy at full strength (no longer a dim backdrop) and is scaled to 100vw (the 760px minimum is lifted), so the whole idea shows.
     - Side fade is down to 4%, and the drift transform is off.
-    - SVG type is enlarged in drawing units (text 36, step labels 42, node labels 28) so it still reads once scaled to about a third. These need the `.ai-stage .ai-fig …` selectors to beat the base sizes, which come later in the file.
+    - Context and Tools are drawn a second time, upright (`svg.ai-fig__v`, viewBox 400 wide), and that version replaces the wide one below 48rem. The steps zigzag down to save height (about 440px tall at 375 wide). Context: field top right, dial left, written lines bottom right. Tools: tasks top left, Trigger right, Workflow and App back to the left, canvas bottom right. They run edge to edge at opacity 0.72 (Tools 0.5, since its boxes and sun lines read heavier), with a 12%/9% fade on all sides and 34 units of padding in the viewBox so the labels stay clear of the fade. They use the same classes, so all the motion carries over. They have their own dial pivot (128 250) and their own hatch pattern (`#ai-hatch-v`, since a pattern inside a hidden SVG doesn't paint). The enlarged phone type is gone, because the upright versions read at their native size. They were generated from the desktop geometry with a script: dial ticks and circles scaled 0.8, the field remapped, and `--sx/--sy` recomputed. Visuals (the reel) is unchanged.
 - **Bands under right-set giants:**
   - They sit under the word again (on the right) but are not mirrored: `.poster-head--end` puts the headline in column 2 and the lede in column 3 of `1fr 22ch measure`. Headline first, then its line.
   - Left-set bands are headline, lede, then space.
@@ -774,3 +774,13 @@ node "Portfolio Milton/dev-server.js"
 - **Shared pieces:** the topbar, menu and footer are copied from index.html with `../` paths.
 - **New:** `.topbar--light` for pages that open on paper; `aria-current` marks the page's own link.
 - **New CSS:** components/about.css (imported in main.css).
+- **Learning merged into Education:** the dark "I read up at night…" section is gone. Learning is now the first, ongoing entry in the Education list ("Self taught, every day"), with a sun "Ongoing" label and a small inline loop: Evening → Next morning → After that. The Education lede is updated to match.
+- **About story photo:** now the new profile portrait (`milton-bust.webp`, the TikTok avatar), cropped 4:5 at `object-position: 50% 20%`.
+- **Slide seam, the real fix:**
+  - The panel used `min(1, p / 0.7)` over an eased progress, which cut the ease-in-out off at full speed: it slammed to a stop at about 40px per step.
+  - New: `data-scene-span` (scene.js) plays the whole curve over a share of the scene. The seam uses `data-scene-span="0.6"` and a plain `(1 − p)` translate, so the move decelerates to rest.
+  - Smoothing is dropped here again: its exponential tail crept the last 30px into the release and showed a sliver.
+  - Measured at 16px and 60px steps: deltas rise and fall symmetrically, with no strip.
+- `.slide__viewport` is `100lvh`, so the panel runs behind a phone's toolbar.
+- **Hero photo on phones:** it now runs from 4svh down to the hero's bottom (100lvh), fading only at the top (`object-position: 51% 40%`), so the picture itself continues behind Safari's toolbar. The floor shade keeps the copy readable. (The 80svh band stopped the picture above the toolbar.)
+- **Edge blur is back on touch,** lighter: 2.25rem strips, 2px blur.

@@ -162,10 +162,22 @@
       transform: none;
       --fade-x: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
     }
-    .ai-stage > .ai-fig svg { width: 100vw; min-width: 0; }
-    .ai-stage .ai-fig text { font-size: 36px; }
-    .ai-stage .ai-fig .ai-step { font-size: 42px; }
-    .ai-stage .ai-fig .ai-node text { font-size: 28px; }
+    /* Context and Tools are drawn a second time for a phone's portrait
+       screen: the steps zigzag down, left and right, so the drawing stays
+       compact. Edge to edge, a little dimmer, and faded out on all sides. */
+    .ai-stage > .ai-fig > svg { display: none; }
+    .ai-stage > .ai-fig > svg.ai-fig__v {
+      display: block;
+      width: min(100vw, 30rem);
+      min-width: 0;
+      opacity: 0.72;
+    }
+    /* Tools is mostly solid boxes and sun lines, so it reads heavier. */
+    .ai-stage > .ai-tools > svg.ai-fig__v { opacity: 0.5; }
+    .ai-stage > .ai-fig {
+      --fade-x: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      --fade-y: linear-gradient(transparent, #000 9%, #000 91%, transparent);
+    }
     /* Right-set copy (Visuals) comes back to the left edge on a phone. */
     .ai-stage--end .ai-stage__text { justify-self: start; }
     .ai-stage > .ai-fig,
@@ -175,6 +187,11 @@
   /* ---- Shared figure language --------------------------------------------- */
   .ai-fig { margin: 0; }
   .ai-fig svg { display: block; height: auto; overflow: visible; }
+  .ai-fig svg.ai-fig__v { display: none; }
+
+  /* The upright phone versions: their own pivot and hatch. */
+  .ai-fig__v .ai-dialface { transform-origin: 128px 250px; }
+  .ai-fig__v .ai-task { fill: url(#ai-hatch-v); }
 
   .ai-fig text {
     font-family: var(--font-sans);

@@ -19,6 +19,11 @@
  *   <div data-scene data-scene-ease="soft">   linear through the middle, with
  *                                        a gentle run-up and run-out at the
  *                                        ends (for long sideways tracks)
+ *   <div data-scene data-scene-span="0.7">  the whole curve plays out over the
+ *                                        first 70% of the scene and holds at
+ *                                        1 after — so an eased move ends at
+ *                                        rest instead of being cut off at
+ *                                        full speed by a CSS clamp
  *   <div data-scene data-scene-catch>    a pinned scene that lands softly:
  *                                        --catch (px) eases its sticky child
  *                                        into the pin instead of letting the
@@ -109,6 +114,7 @@ export function init(root = document) {
     curve: el.dataset.sceneEase === "soft" ? softEnds
       : el.hasAttribute("data-scene-ease") ? easeInOut : null,
     smooth: el.hasAttribute("data-scene-smooth"),
+    span: parseFloat(el.dataset.sceneSpan) || 1,
     catches: el.hasAttribute("data-scene-catch"),
     lastCatch: 0,
     target: -1,
@@ -146,7 +152,7 @@ export function init(root = document) {
         }
       }
 
-      const raw = progressFor(rect, scene.mode, viewportH);
+      const raw = clamp(progressFor(rect, scene.mode, viewportH) / scene.span);
       const value = scene.curve ? scene.curve(raw) : raw;
 
       if (scene.smooth) {

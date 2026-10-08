@@ -105,23 +105,27 @@
     background: linear-gradient(transparent calc(100% - 30svh), #0C0A08 calc(100% - 30svh));
   }
 
+  /* Large viewport, so the panel runs down behind a phone's toolbar (see
+     .hero). */
   .slide__viewport {
     position: sticky;
     top: 0;
-    height: 100svh;
+    height: 100vh;
+    height: 100lvh;
     overflow: clip;
     /* Lands into the pin and leaves it softly (--catch, scene.js). */
     translate: 0 var(--catch, 0px);
   }
 
-  /* Fully in at 70% of the scene, and held there: it has to be across the
-     whole frame before the release starts lifting the viewport, or the
-     dark foot of the section shows under the light half (and a late
-     arrival left a light sliver as the section scrolled away). */
+  /* Fully in at 60% of the scene (data-scene-span on the section, so its
+     ease-in-out plays out whole and the panel settles instead of slamming
+     to a stop), and held there: it has to be across the whole frame before
+     the release starts lifting the viewport, or the dark foot of the
+     section shows under the light half. */
   .slide__panel {
     position: absolute;
     inset: 0;
-    transform: translate3d(calc((1 - min(1, var(--progress, 0) / 0.7)) * 100%), 0, 0);
+    transform: translate3d(calc((1 - var(--progress, 0)) * 100%), 0, 0);
     will-change: transform;
   }
 
