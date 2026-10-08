@@ -795,3 +795,4 @@ node "Portfolio Milton/dev-server.js"
 - **Home → About:** under the "Right now" copy there is a quiet `.link-more` ("More about me" plus a drawn hairline arrow, base.css). A hairline sits under it and sweeps to sun on hover, and the arrow nudges right.
 - **Home, Now:** the TikTok card is removed from the front page. It lives on About under Elsewhere. The `.now-grid` keeps its columns; the copy holds its measure in the first one.
 - **Copy:** "in house" is removed everywhere (About story paragraph and the Experience band).
+- **Home, Now:** the giant "Now." and its band are set on the left (no `poster-head--end`, `data-bleed="left"`).
