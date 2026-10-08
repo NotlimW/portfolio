@@ -510,5 +510,7 @@
   @media (max-width: 47.99rem) {
     .zoom__layout { grid-template-columns: 1fr; gap: var(--sp-4); }
     .zoom__note   { padding-bottom: 0; }
+    /* "A wide" larger: at the desktop clamp it bottomed out at 4rem. */
+    .zoom__kicker { font-size: 24vw; }
   }
 }
