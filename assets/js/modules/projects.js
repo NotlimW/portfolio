@@ -71,7 +71,7 @@ let edge = 10;             // half the visible width of the band, world units
 let calm = 1;              // 1 on wide screens, less where one card fills the width
 let pxPerUnit = 100;       // CSS px per world unit at the band, for the dot field
 const DOTS_DEPTH = 0.6;    // the dot field slides at this share of the cards' speed — it sits behind them
-let frame = 0, visible = false, unsubscribe = null, observer = null;
+let frame = 0, visible = false, unsubscribe = null, observer = null, hudObserver = null;
 // The band's own clock. It only runs while something is moving, so a band
 // at rest is not redrawn sixty times a second for a ripple nobody can see —
 // and picks up exactly where it stopped, with no jump.
@@ -82,6 +82,14 @@ let touch = 0;                         // eased 0 … 1 while the pointer is ove
 const touchAt = { x: 0, y: 0 };        // where, on the band's plane
 let pointerLastX = 0, pointerPush = 0; // sideways pointer movement, as a push
 const cleanups = [];
+
+/** Run in the browser's idle time — one piece of work per idle period. */
+const idle = window.requestIdleCallback
+  ? (cb) => requestIdleCallback(cb, { timeout: 2000 })
+  : (cb) => setTimeout(cb, 60);
+
+/** How long the hero's entrance runs (components/hero.css), plus a margin. */
+const AFTER_INTRO = 2600;
 
 /* ---- Card faces --------------------------------------------------------- */
 
@@ -374,13 +382,16 @@ function size() {
   camera.aspect = w / h;
   // The middle card takes about 40 % of a wide screen and most of a narrow
   // one; the field of view is worked back from that.
-  const share = camera.aspect >= 1 ? 0.4 : 0.78;
+  const share = camera.aspect >= 1 ? 0.4 : 0.86;
   const halfWidth = CARD_W / share / 2;
   const fovH = 2 * Math.atan(halfWidth / VIEW);
   camera.fov = (2 * Math.atan(Math.tan(fovH / 2) / camera.aspect) * 180) / Math.PI;
   camera.updateProjectionMatrix();
   edge = halfWidth + CARD_W * 0.35;
   pxPerUnit = w / (2 * halfWidth);
+  // The card's height on screen, so the captions can sit just outside the
+  // band on a tall phone screen instead of out in its far corners.
+  section.style.setProperty("--band-h", `${Math.round(CARD_H * pxPerUnit)}px`);
   calm = Math.min(1, Math.max(0.4, camera.aspect / 1.4));
   cards.forEach(({ material }) => {
     material.uniforms.uEdge.value = edge;
@@ -388,13 +399,16 @@ function size() {
   });
 }
 
-function build() {
+function makeRenderer() {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   // A full-screen WebGL surface at 3× (or even 2×) on a phone is a lot of
   // fill for photos that are already soft from the zoom; 1.5 reads the same.
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.5 : 2));
 
+}
+
+function build() {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
   camera.position.set(0, 0, VIEW);
@@ -441,17 +455,21 @@ function build() {
       renderer.initTexture(t);
       return t;
     };
-    material.uniforms.uOverlay.value = texture(paintOverlay(item, title, i, items.length));
-    paintPicture(item, title).then((face) => {
+    idle(() => {
+      material.uniforms.uOverlay.value = texture(paintOverlay(item, title, i, items.length));
+      needsRender = true;
+    });
+    // Each picture is painted and uploaded in an idle period of its own:
+    // five 1280px canvases drawn and sent to the GPU in one go was a 50ms+
+    // frame on its own.
+    paintPicture(item, title).then((face) => idle(() => {
       material.uniforms.uPicture.value = texture(face);
       material.uniforms.uReady.value = 1;
       needsRender = true;
-    });
+    }));
 
     return { item, mesh, material, base: i * STEP, hover: 0 };
   });
-
-  size();
 }
 
 /* ---- Input -------------------------------------------------------------- */
@@ -708,12 +726,13 @@ export function init(root = document) {
   // the GPU) before anyone scrolls to it. Booting it only on approach put
   // all of that in the middle of a scroll. Approaching first still starts it.
   let started = false;
+  // Not straight after load, though: locally and on a fast connection load
+  // fires within a fraction of a second, which put the whole boot inside the
+  // hero's entrance animation. Wait out the intro first.
   const boot = () => { if (!started) { started = true; start(); } };
-  const whenIdle = window.requestIdleCallback
-    ? (cb) => requestIdleCallback(cb, { timeout: 4000 })
-    : (cb) => setTimeout(cb, 1500);
-  if (document.readyState === "complete") whenIdle(boot);
-  else window.addEventListener("load", () => whenIdle(boot), { once: true });
+  const later = () => setTimeout(() => idle(boot), AFTER_INTRO);
+  if (document.readyState === "complete") later();
+  else window.addEventListener("load", later, { once: true });
   observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       visible = entry.isIntersecting;
@@ -726,6 +745,16 @@ export function init(root = document) {
   }, { rootMargin: "100% 0px" });
   observer.observe(section);
 
+  // The corner captions come in once the section owns the screen and go
+  // again as it leaves: "owns" = covers the middle tenth of the viewport,
+  // which a pinned section does from just after it locks until just before
+  // it lets go. An observer, so nothing runs per scroll frame.
+  const hudEl = section.querySelector(".projects__hud");
+  hudObserver = new IntersectionObserver(([entry]) => {
+    hudEl.dataset.in = String(entry.isIntersecting);
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  hudObserver.observe(section);
+
   return destroy;
 }
 
@@ -733,7 +762,17 @@ async function start() {
   try {
     THREE = await import(THREE_URL);
     await document.fonts?.ready;
+    // One step per idle period: loading, building and compiling in a single
+    // go was an 80ms frame.
+    // Through a frame first, so two steps never share one idle period.
+    const nextIdle = () => new Promise((resolve) => requestAnimationFrame(() => idle(resolve)));
+    await nextIdle();
+    makeRenderer();
+    await nextIdle();
     build();
+    await nextIdle();
+    size();
+    await nextIdle();
     // Compile every shader now instead of on the first visible frame.
     renderer.compile(scene, camera);
   } catch (error) {
@@ -753,6 +792,8 @@ async function start() {
 }
 
 export function destroy() {
+  hudObserver?.disconnect();
+  hudObserver = null;
   cancelAnimationFrame(frame);
   unsubscribe?.();
   observer?.disconnect();

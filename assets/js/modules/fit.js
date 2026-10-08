@@ -21,13 +21,19 @@ let frame = 0;
 function fit() {
   const frameWidth = document.documentElement.clientWidth;
 
-  containers.forEach((box) => {
+  // Measure every word first, then size them all. Measuring after a write
+  // made the browser lay the page out again for each of the fifteen giants.
+  const ratios = containers.map((box) => {
     const word = box.querySelector(".t-bleed");
-    if (!word) return;
+    if (!word) return 0;
     // offsetWidth, not the bounding rect: the reveal leaves the word rotated
     // mid-entrance, and a rotated box is wider than the word.
     const size = parseFloat(getComputedStyle(word).fontSize);
-    const ratio = word.offsetWidth / size;
+    return word.offsetWidth / size;
+  });
+
+  containers.forEach((box, i) => {
+    const ratio = ratios[i];
     if (!ratio) return;
     // data-fit-sm overrides on phones, where a word that is a third of a
     // desktop frame would be a caption.

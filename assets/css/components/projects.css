@@ -65,14 +65,52 @@
 
   .projects__row:last-child { grid-row: 3; }
 
+  /* The corner captions arrive once the section owns the screen and leave
+     as it goes (data-in, modules/projects.js): the top pair drops in from
+     above, the bottom pair rises from below, each a beat after its
+     neighbour. Leaving runs the same moves back, a little quicker. Without
+     the script the attribute never appears and they simply show. */
+  .projects__hud[data-in] .projects__row > * {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(calc(var(--from, 1) * 0.9em));
+    transition: opacity var(--d-short) var(--e-micro),
+                transform var(--d-short) var(--e-micro);
+  }
+
+  .projects__hud[data-in] .projects__row:first-child { --from: -1; }
+
+  .projects__hud[data-in="true"] .projects__row > * {
+    opacity: 1;
+    transform: none;
+    transition: opacity var(--d-reveal) var(--e-reveal),
+                transform var(--d-reveal) var(--e-reveal);
+  }
+
+  .projects__hud[data-in="true"] .projects__row:first-child > :nth-child(2) { transition-delay: 80ms; }
+  .projects__hud[data-in="true"] .projects__row:last-child  > :first-child  { transition-delay: 160ms; }
+  .projects__hud[data-in="true"] .projects__row:last-child  > :nth-child(2) { transition-delay: 240ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .projects__hud[data-in] .projects__row > * { transform: none; }
+  }
+
   /* Keep the count clear of the menu button in the top right corner. */
   @media (min-width: 48rem) {
     .projects__row:first-child { padding-right: 3.75rem; }
   }
 
-  /* The menu button sits in the top right corner on small screens. */
+  /* A tall phone screen: the band is a thin strip across the middle, and
+     captions out in the corners left a screen of empty paper between them
+     and the cards. They gather just above and below the band instead
+     (--band-h is written by modules/projects.js). */
   @media (max-width: 47.99rem) {
-    .projects__hud { padding-top: 5.5rem; padding-bottom: 6rem; }
+    .projects__hud {
+      grid-template-rows: 1fr auto auto 1fr;
+      row-gap: calc(var(--band-h, 12rem) + var(--sp-12));
+    }
+    .projects__row:first-child { grid-row: 2; }
+    .projects__row:last-child  { grid-row: 3; }
   }
 
   .projects__label {

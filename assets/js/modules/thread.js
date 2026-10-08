@@ -62,10 +62,9 @@ export function init(root = document) {
   items = Array.from(root.querySelectorAll("[data-thread]")).map((el) => ({ el, d: 0 }));
   if (!items.length) return () => {};
 
-  items.forEach((item) => {
-    item.d = target(item.el);
-    item.el.style.setProperty("--d", item.d.toFixed(4));
-  });
+  // All reads, then all writes.
+  items.forEach((item) => { item.d = target(item.el); });
+  items.forEach((item) => item.el.style.setProperty("--d", item.d.toFixed(4)));
 
   unsubscribe = onScroll(kick);
   window.addEventListener("resize", kick);

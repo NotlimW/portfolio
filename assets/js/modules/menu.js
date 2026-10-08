@@ -16,27 +16,12 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 let toggle = null;
 let menu = null;
 let lastFocused = null;
-const indices = [];
+/** Whether the last thing the visitor did was a key press, not a pointer. */
+let viaKeyboard = false;
+const onAnyKey = () => { viaKeyboard = true; };
+const onAnyPointer = () => { viaKeyboard = false; };
 
 const isOpen = () => menu?.dataset.open === "true";
-
-/**
- * Number every row. The index is decorative — it is a coordinate, not a
- * label — so it is built here and hidden from assistive tech rather than
- * living in the markup where it would end up inside the link's name.
- */
-function numberRows() {
-  menu.querySelectorAll(".menu__link").forEach((link, i) => {
-    if (link.querySelector(".menu__index")) return;
-
-    const n = document.createElement("span");
-    n.className = "menu__index tabular";
-    n.setAttribute("aria-hidden", "true");
-    n.textContent = String(i + 1).padStart(2, "0");
-    link.prepend(n);
-    indices.push(n);
-  });
-}
 
 function setOrigin() {
   const rect = toggle.getBoundingClientRect();
@@ -54,7 +39,10 @@ function open() {
   document.documentElement.classList.add("is-menu-open");
   stopScroll();
 
-  menu.querySelector(FOCUSABLE)?.focus();
+  // Focus moves into the menu either way (keyboard users need it there), but
+  // the ring only shows when the menu was opened from the keyboard — after a
+  // click it read as a stray yellow outline on the close button.
+  menu.querySelector(FOCUSABLE)?.focus({ focusVisible: viaKeyboard });
 }
 
 function close({ restoreFocus = true } = {}) {
@@ -64,7 +52,7 @@ function close({ restoreFocus = true } = {}) {
   document.documentElement.classList.remove("is-menu-open");
   startScroll();
 
-  if (restoreFocus) (lastFocused ?? toggle).focus();
+  if (restoreFocus) (lastFocused ?? toggle).focus({ focusVisible: viaKeyboard });
 }
 
 function onKeydown(event) {
@@ -102,11 +90,12 @@ export function init(root = document) {
 
   menu.setAttribute("inert", "");
   menu.dataset.open = "false";
-  numberRows();
 
   toggle.addEventListener("click", () => (isOpen() ? close() : open()));
   menu.querySelector("[data-menu-close]")?.addEventListener("click", () => close());
   document.addEventListener("keydown", onKeydown);
+  document.addEventListener("keydown", onAnyKey, true);
+  document.addEventListener("pointerdown", onAnyPointer, true);
 
   // Navigating within the page should close the curtain behind you.
   menu.addEventListener("click", (event) => {
@@ -120,8 +109,8 @@ export function init(root = document) {
 
 export function destroy() {
   document.removeEventListener("keydown", onKeydown);
+  document.removeEventListener("keydown", onAnyKey, true);
+  document.removeEventListener("pointerdown", onAnyPointer, true);
   if (isOpen()) close({ restoreFocus: false });
 
-  indices.forEach((n) => n.remove());
-  indices.length = 0;
 }

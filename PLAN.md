@@ -559,3 +559,44 @@ node "Portfolio Milton/dev-server.js"
   - Mobile 375×812: 16.7 ms on average, no frames over 24 ms.
   - Before: 15–23 long frames, up to 284 ms.
 - **Rule:** never write a per-frame custom property on `<html>` or `<body>`. Set it on the element that reads it.
+
+### Load smoothness
+- The hero intro is held paused (`.reveal-ready:not([data-ready]) .hero *`) until main.js has booted, so the one heavy boot frame comes before the intro and not inside it. If main.js never boots, the head script drops `.reveal-ready` after 4s and the intro plays anyway.
+- **Projects boot:**
+  - Waits 2.6s after `load` for the intro to finish, then runs in steps, each in its own idle period behind a rAF: renderer, then cards, then size, then compile.
+  - Each card's overlay and picture are painted and uploaded in their own idle period.
+  - Before, all of this was one 80–100 ms frame inside the intro.
+- fit.js and thread.js init now read every measurement before writing anything.
+- After load, the only long frame is the first render of the page (~55 ms, before anything moves).
+
+### Menu curtain cleanup
+- Removed: the yellow corner brackets, the staircase indent (every row is now flush left), and the hover row numbers (`numberRows`/`.menu__index`).
+- The close button sits exactly where the menu button is (top right).
+- No focus ring after a mouse click: menu.js tracks whether the last input was keyboard or pointer and focuses with `{ focusVisible }` accordingly. Keyboard users still get the ring.
+
+### Projects: corner captions in/out
+- An IntersectionObserver (band at the viewport's middle 10%) sets `data-in` on `.projects__hud`.
+- The top pair drops in from above and the bottom pair rises from below, staggered 80 ms apart. They leave the same way, quicker.
+- No per-frame work. Without JS the attribute never appears and they simply show.
+- Note: projects.js already has a module-level `hud` object, so don't shadow it in init (TDZ took the whole module down once).
+
+### Spacing at narrower widths + mobile pass
+- `.feature__caption` (Content / Systems / Brand) gets its flex column and gap at every width. Before, both were set only at ≥64rem, so below that everything stacked with no space. The headline and its lede keep a tight 8px pair.
+- **Projects on phones:**
+  - Cards are bigger (share 0.86).
+  - The four captions gather just above and below the band (`--band-h` written by `size()`), instead of sitting in the far corners with a screen of empty paper between them and the cards.
+- **Statement scenes** ("Not a threat", "Then there's AI", …): `min-height` is 64svh on phones instead of a full screen.
+- **About:** more room above the tools ribbon.
+- **Footer:**
+  - The link groups are 2 columns even on phones.
+  - "Else where" → "Elsewhere".
+  - The dock steps aside when the closing "Milton Winroth" word comes into view (IntersectionObserver in nav.js).
+- **Hero, 30–48rem:** the floor shade rises higher and darker, so the copy no longer runs across the poster's lettering.
+- **Audit script** (gaps under 6px between stacked text blocks), run at 375 and 680: what remains is intentional (padding inside the element, line stacks, background drawings).
+- Mobile full-page scroll: 16.7 ms average, no long frames.
+
+### Hero headline on phones (<48rem)
+- "A creative" alone at the top. "problem" drops onto "solver." as one left-set block on the floor: `bottom: 24.5vw`. Both are fit to the width, so their heights are fixed shares of vw.
+- The copy sits above that block (`bottom: calc(45vw + sp-4)`). The floor shade rises to 62% and is darker, so the sentence reads clear of the poster. The separate tablet-only shade block is gone.
+- The selector needs `.hero .hero__word--b[data-bleed]` to beat poster.css's `[data-fit][data-bleed="right"]`, which loads later.
+- **Phone and tablet photo (<48rem):** `.hero__media` is `top: 4svh; height: 80svh`, only slightly zoomed out from full-bleed. It is masked to fade to the dark ground at the top and from 62% down, so the poster stops above the copy. (A 50svh band was tried and was too far out.)

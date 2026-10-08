@@ -37,14 +37,14 @@
     border-color: var(--c-paper);
   }
 
+  /* Two columns even on a phone: the groups are short lists of short
+     words, and stacked one under another they made a footer three screens
+     long. */
   .footer__grid {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--sp-12) var(--grid-gutter);
     padding-block: var(--sp-24) var(--sp-16);
-  }
-
-  @media (min-width: 30rem) {
-    .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (min-width: 48rem) {

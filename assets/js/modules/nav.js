@@ -41,6 +41,7 @@ let onResize = null;
 let bodyObserver = null;
 let group = null;
 let onDocPointer = null;
+let endObserver = null;
 
 /**
  * The group is open if either is true: a pointer or keyboard focus is on it,
@@ -285,6 +286,18 @@ export function init(root = document) {
   }
 
   let lastProgress = "";
+  let atEnd = false;
+  const bleed = root.querySelector(".footer__bleed");
+  if (bleed && dock) {
+    endObserver = new IntersectionObserver(([entry]) => {
+      atEnd = entry.isIntersecting;
+      const on = !atEnd && window.scrollY > window.innerHeight * ARRIVE_AT;
+      dock.dataset.shown = String(on);
+    // The word is set to sink below the page's last pixel, so its box can sit
+    // just under the fold even at the very bottom: reach a little past it.
+    }, { rootMargin: "0px 0px 25% 0px" });
+    endObserver.observe(bleed);
+  }
   unsubscribe = onScroll(({ y, progress }) => {
     // On the dock, its only reader — not on the root. A custom property set
     // on <html> is inherited by every element, so writing it there made the
@@ -302,7 +315,10 @@ export function init(root = document) {
 
     const shown = y > window.innerHeight * ARRIVE_AT;
     late.forEach((el) => {
-      if ((el.dataset.shown === "true") !== shown) el.dataset.shown = String(shown);
+      // The dock also steps aside over the footer's closing word: the footer
+      // carries its own links there, and the pill sat on top of the name.
+      const on = shown && !(el === dock && atEnd);
+      if ((el.dataset.shown === "true") !== on) el.dataset.shown = String(on);
     });
     if (!shown) setHoverOpen(false);
 
@@ -324,6 +340,8 @@ export function destroy() {
   if (onResize) window.removeEventListener("resize", onResize);
   if (onDocPointer) document.removeEventListener("pointerdown", onDocPointer);
   bodyObserver?.disconnect();
+  endObserver?.disconnect();
+  endObserver = null;
 
   late.forEach((el) => delete el.dataset.shown);
   links.forEach(({ link }) => delete link.dataset.current);

@@ -89,6 +89,14 @@ function loop() {
 function onPointerMove(event) {
   target.x = event.clientX + OFFSET_X;
   target.y = event.clientY + OFFSET_Y;
+  // First sighting (page load, or the pointer coming back into the window):
+  // land on the pointer instead of easing in from wherever the dot was
+  // parked — at load that was the top-left corner.
+  if (root.dataset.active !== "true") {
+    current.x = target.x;
+    current.y = target.y;
+    root.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
+  }
   if (!rafId) rafId = requestAnimationFrame(loop);
   root.dataset.active = "true";
 
@@ -166,7 +174,6 @@ export function init(scope = document) {
 
   scope.querySelectorAll("[data-magnetic]").forEach(bindMagnet);
 
-  rafId = requestAnimationFrame(loop);
   return destroy;
 }
 

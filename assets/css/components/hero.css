@@ -182,7 +182,9 @@
   }
 
   .hero__meta dt { color: var(--text-faint); }
-  .hero__meta dd { color: var(--text); }
+  /* One line each — the Work list read as broken when it wrapped onto a
+     second line. The block may run wider than the sentence above it. */
+  .hero__meta dd { color: var(--text); white-space: nowrap; }
 
   /* The live dot marks the one reading that is a status, not a fact. */
   .hero__meta > div:first-child dd::before {
@@ -213,17 +215,43 @@
      above that, over a shade rising from the floor. */
   @media (max-width: 47.99rem) {
     .hero__word--a { top: 5rem; }
-    .hero__word--b { top: calc(5rem + 19vw); }
 
+    /* The photograph is a wide room; covering a tall phone with it blew the
+       poster up behind every line of type. Here it is a band across the
+       middle instead — zoomed out, so more of the room shows — and it
+       dissolves into the dark ground above and below, where the picture
+       has nothing more to give. */
+    .hero__media {
+      inset: auto -3%;
+      top: 4svh;
+      height: 80svh;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 10%, #000 62%, transparent 92%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 10%, #000 62%, transparent 92%);
+    }
+
+    /* "problem" drops to sit right on top of "solver." — the two read as one
+       left-set block on the floor, "A creative" alone above the poster.
+       Both are sized to the width (fit.js), so their heights are fixed
+       shares of vw: "solver." stands ~24vw above the floor. */
+    .hero .hero__word--b[data-bleed] {
+      top: auto;
+      bottom: 24.5vw;
+      justify-content: flex-start;
+      padding-left: calc(var(--page-inline) - 0.04em);
+      padding-right: 0;
+    }
+
+    /* The floor shade rises past the copy, so the sentence reads on a quiet
+       ground rather than across the poster's lettering. */
     .hero__shade {
       background:
         linear-gradient(180deg, rgb(23 18 14 / 0.75) 0%, transparent 34%),
-        linear-gradient(0deg, rgb(23 18 14 / 0.9) 0%, rgb(23 18 14 / 0.55) 30%, transparent 52%);
+        linear-gradient(0deg, rgb(23 18 14 / 0.94) 0%, rgb(23 18 14 / 0.86) 40%, transparent 62%);
     }
 
-    /* Below the poster, above the sunk "solver.": only the sentence and
-       the one live reading fit there without touching the poster. */
-    .hero__inner { top: auto; bottom: calc(30vw + var(--sp-2)); }
+    /* Above the "problem / solver." block: only the sentence and the one
+       live reading fit there without touching the poster. */
+    .hero__inner { top: auto; bottom: calc(45vw + var(--sp-4)); }
     .hero__band  { gap: var(--sp-3); }
     .hero__meta > div { grid-template-columns: 1fr; gap: 0; }
     .hero__meta > div:nth-child(n + 2),
@@ -237,5 +265,18 @@
     .hero__word .g,
     .hero__inner { animation: none; }
     .hero__meta > div:first-child dd::before { animation: none; opacity: 1; }
+  }
+}
+
+/* Hold the entrance on its first frame until main.js has booted. Boot is
+   the page's one heavy frame (the first layout of the whole page, the giants
+   measured, text split); started at first paint, the intro ran straight into
+   it and stuttered at its very start. data-ready lands at the end of boot.
+   If the script never boots, the inline head script drops .reveal-ready
+   after 4s and this lets go. */
+@layer components {
+  .reveal-ready:not([data-ready]) .hero,
+  .reveal-ready:not([data-ready]) .hero * {
+    animation-play-state: paused;
   }
 }
