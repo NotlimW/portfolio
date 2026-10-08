@@ -36,7 +36,15 @@
        allowed to differ per axis, so vertical drift still shows and the page
        still cannot scroll sideways. */
     overflow-x: clip;
+    /* Short at the bottom: the uneven column ends and the drift already
+       leave air under the last frames, so a full section padding on top of
+       that put Systems much further away than the next section down. */
     padding-block: var(--section-y);
+  }
+
+  /* (Phones stack the frames in even columns, so they keep the full pad.) */
+  @media (min-width: 48rem) {
+    .creative-wall { padding-bottom: calc(var(--section-y) * 0.15); }
   }
 
   .creative-wall__head { margin-bottom: var(--sp-12); }
@@ -119,6 +127,9 @@
   /* Phones: the heading sits close to its wall. */
   @media (max-width: 47.99rem) {
     .creative-wall > .poster-head { margin-bottom: var(--sp-6); }
+    /* Without the script the extras are hidden here instead (masonry.js
+       leaves them out of the columns). */
+    [data-wall-extra] { display: none; }
   }
 
   @media (min-width: 48rem) {

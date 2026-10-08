@@ -107,7 +107,13 @@ function buildColumns(grid) {
     return { el, speed, weight: 0, shift: 0, last: NaN };
   });
 
+  // Phones get a shorter wall: the items marked data-wall-extra are left
+  // out of the columns entirely (the 3 → 4 column change at 48rem rebuilds,
+  // so they come back on wider screens).
+  const short = window.matchMedia("(max-width: 47.99rem)").matches;
+
   for (const item of grid.items) {
+    if (short && item.el.hasAttribute("data-wall-extra")) continue;
     // --ratio is authored as "4 / 5"; height per unit width is its inverse.
     const [w, h] = (item.el.style.getPropertyValue("--ratio") || "1/1")
       .split("/")

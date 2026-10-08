@@ -68,13 +68,22 @@
 
   .ai-stage--end .ai-stage__text { justify-self: end; }
 
-  /* The column is as wide as its paragraphs (28ch of the compact size), so
-     the tag row above them wraps inside that measure instead of running
-     past it. The stacked stage lays its copy out in columns of its own. */
-  .ai-stage:not(.ai-stage--stack) > .ai-stage__text {
-    font-size: var(--fs-compact);
-    max-width: var(--measure-compact);
+  /* Context and Visuals: the copy sits in the upper part of the drawing
+     rather than at its centre, which left a tall empty band between the
+     heading and the copy (349px at 1440). */
+  @media (min-width: 48rem) {
+    .ai-stage:not(.ai-stage--stack) { margin-top: var(--sp-6); }
+    .ai-stage:not(.ai-stage--stack) > .ai-stage__text {
+      align-self: start;
+      margin-top: clamp(var(--sp-12), 9vw, 10rem);
+    }
   }
+
+  /* The paragraphs take the column's full width, so they line up with the
+     tag row above them (which fits on one line at this width) instead of
+     stopping short of it. The stacked stage lays its copy out in columns
+     of its own. */
+  .ai-stage:not(.ai-stage--stack) > .ai-stage__text > .t-compact { max-width: none; }
 
   /* Stacked: the copy above, the drawing below it — for a drawing whose
      left edge carries meaning the copy would cover. */
