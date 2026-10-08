@@ -30,6 +30,7 @@ import * as nav from "./modules/nav.js";
 import * as menu from "./modules/menu.js";
 import * as cursor from "./modules/cursor.js";
 import * as copy from "./modules/copy.js";
+import * as timeline from "./modules/timeline.js";
 import * as marquee from "./modules/marquee.js";
 import * as counter from "./modules/counter.js";
 import * as track from "./modules/track.js";
@@ -61,6 +62,7 @@ const modules = [
   counter,
   cursor,
   copy,
+  timeline,
 ];
 
 const teardown = [];

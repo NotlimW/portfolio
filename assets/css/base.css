@@ -366,4 +366,39 @@
 
   .btn--ghost:hover,
   .btn--ghost:focus-visible { border-color: var(--c-sun); }
+
+  /* A quiet way on to another page: the words, a drawn hairline arrow, and
+     a hairline under them that sweeps to sun on hover (as the footer mail). */
+  .link-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    justify-self: start;
+    width: fit-content;
+    padding-bottom: 0.3em;
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    background: linear-gradient(var(--c-sun) 0 0) 0 100% / 0 1px no-repeat,
+                linear-gradient(var(--line-strong) 0 0) 0 100% / 100% 1px no-repeat;
+    transition: background-size 0.5s var(--e-reveal);
+  }
+
+  .link-more:hover,
+  .link-more:focus-visible { background-size: 100% 1px, 100% 1px; }
+
+  .link-more__arrow {
+    width: 1.5em;
+    height: 0.625em;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+    transition: translate var(--d-short) var(--e-attitude);
+  }
+
+  .link-more__arrow path { vector-effect: non-scaling-stroke; }
+
+  .link-more:hover .link-more__arrow,
+  .link-more:focus-visible .link-more__arrow { translate: 0.3em 0; }
 }

@@ -35,7 +35,7 @@
   }
 
   .story__photo { aspect-ratio: 4 / 5; }
-  .story__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+  .story__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
 
   .story__text {
     display: grid;
@@ -52,6 +52,8 @@
      runs down the left edge and a sun line draws over it as the list
      crosses the screen (--progress from scene.js, data-scene="cover"). */
   .tl {
+    /* How far the sun line has drawn, 0…1. */
+    --fill: clamp(0, calc(var(--progress, 1) * 1.6 - 0.25), 1);
     position: relative;
     display: grid;
     gap: var(--sp-16);
@@ -76,10 +78,12 @@
     left: -0.5px;
     background: var(--c-sun);
     transform-origin: 0 0;
-    transform: scaleY(clamp(0, calc(var(--progress, 1) * 1.6 - 0.25), 1));
+    transform: scaleY(var(--fill));
   }
 
   .tl__item {
+    /* 1 once the line has reached this node (--at from modules/timeline.js). */
+    --on: clamp(0, calc((var(--fill) - var(--at, 0)) * 60), 1);
     position: relative;
     display: grid;
     align-items: start;
@@ -95,8 +99,20 @@
     width: 10px;
     height: 10px;
     border-radius: var(--r-pill);
-    background: var(--bg);
+    background: color-mix(in oklab, var(--c-sun) calc(var(--on) * 100%), var(--bg));
     border: 2px solid var(--c-sun);
+    transition: background-color var(--d-short) var(--e-micro);
+  }
+
+  /* "from → to" as a short hairline instead of an arrow glyph. */
+  .tl__to {
+    display: inline-block;
+    width: 1em;
+    height: 1px;
+    margin-inline: 0.2em;
+    vertical-align: middle;
+    background: currentColor;
+    opacity: 0.6;
   }
 
   .tl__years { color: var(--text-muted); padding-top: 0.25em; }
@@ -135,6 +151,11 @@
     .tl__item { grid-template-columns: 11rem minmax(0, 1fr); }
   }
 
+  /* ---- Tools ribbon -----------------------------------------------------
+     The front page ribbon, between Experience and Education. The section
+     already gives it its air, so the ribbon drops its own. */
+  .about-tools .clients--tools { padding-block: 0; }
+
   /* ---- Education ---------------------------------------------------------- */
   .edu {
     display: grid;
@@ -169,23 +190,41 @@
     .edu__item { grid-template-columns: 11rem minmax(0, 1fr); }
   }
 
-  /* The ongoing entry: learning every day, first in the list. Its label
-     is in sun, and its three steps sit as a small inline loop. */
-  .edu__item--now .edu__level { color: var(--c-accent-text); }
+  /* ---- Learning: its own part after the education list -----------------
+     Set like the page hero: a giant word bleeding off the left, the band
+     under it, then the daily loop as three big rows on hairlines. */
+  .learn { margin-top: clamp(var(--sp-16), 10vw, var(--sp-32)); }
 
-  .edu__loop {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2) var(--sp-6);
-    margin: var(--sp-4) 0 0;
-    padding: 0;
+  .learn__loop {
+    display: grid;
+    margin-top: clamp(var(--sp-12), 6vw, var(--sp-24));
+    margin-bottom: 0;
     list-style: none;
-    font-size: var(--fs-small);
+    counter-reset: none;
   }
 
-  .edu__loop li { display: flex; gap: var(--sp-2); align-items: baseline; }
-  .edu__loop li + li::before { content: "→"; color: var(--c-accent-text); margin-right: var(--sp-4); }
-  .edu__loop .t-label { color: var(--text-muted); }
+  .learn__loop li {
+    display: grid;
+    gap: var(--sp-2) var(--sp-12);
+    align-items: baseline;
+    padding-block: var(--sp-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .learn__loop li:last-child { border-bottom: 1px solid var(--line); }
+
+  .learn__loop .t-label { color: var(--text-muted); }
+
+  .learn__step {
+    font-size: clamp(1.75rem, 4.2vw, 3.75rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  @media (min-width: 48rem) {
+    .learn__loop li { grid-template-columns: 11rem minmax(0, 1fr); }
+  }
 
   /* ---- Elsewhere: TikTok card beside a LinkedIn card ---------------------- */
   .elsewhere {

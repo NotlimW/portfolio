@@ -153,11 +153,25 @@
 @layer components {
   .clients--tools { padding-block: clamp(4rem, 8vw, 6rem) 0; }
 
+  /* The tools head sits like a poster-head band: the line right beside
+     its headline on a computer, not pushed out to the far edge. */
+  @media (min-width: 48rem) {
+    .clients__head--band {
+      display: grid;
+      grid-template-columns: minmax(0, 22ch) minmax(0, var(--measure-compact)) 1fr;
+      align-items: start;
+    }
+    .clients__head--band .t-compact { padding-top: 0.3em; }
+  }
+
   .tool .logo__mark {
     font-family: var(--font-sans);
     font-weight: var(--fw-medium);
     font-size: clamp(2rem, 5vw, 4.75rem);
     letter-spacing: -0.04em;
+    /* The row clips (overflow: hidden), and line-height 1 leaves no room
+       below the baseline: g, j, p and y lost their tails. */
+    padding-block: 0.08em 0.24em;
   }
 
   .tool--serif .logo__mark {
