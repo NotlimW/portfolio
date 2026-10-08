@@ -100,10 +100,13 @@
     overflow: clip;
   }
 
+  /* Fully in at 85% of the scene, and held there: arriving on the very last
+     frame of the pin left a sliver of the light ground showing as the
+     section scrolled away. */
   .slide__panel {
     position: absolute;
     inset: 0;
-    transform: translate3d(calc((1 - var(--progress, 0)) * 100%), 0, 0);
+    transform: translate3d(calc((1 - min(1, var(--progress, 0) / 0.85)) * 100%), 0, 0);
     will-change: transform;
   }
 

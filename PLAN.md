@@ -643,3 +643,9 @@ node "Portfolio Milton/dev-server.js"
 - **Process runs sideways on phones** (unless reduced motion):
   - 86vw columns (max 30rem), pin 340svh, text under each drawing.
   - track.js measures at every width; thread.js and the particle hold follow suit.
+- **Slide seam fix:** the panel is fully in at 85% of the scene and held there (`min(1, p / 0.85)`). The seam no longer uses `data-scene-smooth`. Arriving on the last frame of the pin, plus the smoothing lag, left a white sliver on the left as "Then there's AI." scrolled away.
+- **Dock on phones (≤48rem):** the Work group never opens. `syncGroup()` forces it closed, the first tap follows the link, and `.dock__sub` and the caret are hidden. The four links fit across the screen. "Work" still lights up while you are in any of its sections. Desktop is unchanged.
+- **Portrait project cards on phones** (`PORTRAIT` = ≤47.99rem at load):
+  - The card is 3.6 × 4.8 (3:4) with a 960px-wide texture and a share of 0.72.
+  - Overlay type is sized from `u = min(h, 0.525·w)`, which matches the old sizes on wide cards. On portrait cards the labels are larger, and the title sits on its own wrapped lines above "View case".
+  - Desktop is unchanged.

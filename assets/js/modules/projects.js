@@ -50,8 +50,12 @@ import { refresh as refreshParticles } from "./particles.js";
 
 const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 
-const CARD_W = 6;
-const CARD_H = 3.15;       // wide: about 1.9 : 1
+// Phones get portrait cards: on a tall screen a wide card is a thin strip
+// across the middle. Decided once, at load (the geometry, the shader and the
+// textures are all built to these proportions).
+const PORTRAIT = window.matchMedia("(max-width: 47.99rem)").matches;
+const CARD_W = PORTRAIT ? 3.6 : 6;
+const CARD_H = PORTRAIT ? 4.8 : 3.15;   // phones 3 : 4, wide screens about 1.9 : 1
 const GAP = 0.24;
 const STEP = CARD_W + GAP;
 const VIEW = 8;            // camera distance in front of the band
@@ -61,7 +65,7 @@ const ZOOM = 1.16;         // how far the picture is zoomed in, for room to slid
 const EASE = 0.058;        // how quickly the band catches the scroll — low = glides
 const RISE = 0.22;         // how quickly the swell answers speed
 const SETTLE = 0.045;      // how slowly it lets go
-const TEX_W = 1280;
+const TEX_W = PORTRAIT ? 960 : 1280;
 const TEX_H = Math.round(TEX_W * (CARD_H / CARD_W));
 
 let section, stage, canvas, items;
@@ -149,7 +153,11 @@ async function paintPicture(item, title) {
 /** The overlay: everything that should NOT slide with the picture. */
 function paintOverlay(item, title, index, total) {
   const [c, ctx] = surface();
-  const w = TEX_W, h = TEX_H, pad = w * 0.04;
+  const w = TEX_W, h = TEX_H;
+  // Type unit: the card's height on a wide card (as before), its width on a
+  // tall one — so a long title still fits across a portrait card.
+  const u = Math.min(h, w * 0.525);
+  const pad = PORTRAIT ? w * 0.06 : w * 0.04;
   const ink = cssVar("--c-ink") || "#17120E";
   const paper = cssVar("--c-paper") || "#FBFAF7";
   const sun = cssVar("--c-sun") || "#FFD900";
@@ -176,7 +184,7 @@ function paintOverlay(item, title, index, total) {
   if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
 
   // Head, left: the label the site uses — a small sun dot, then the tags.
-  const label = Math.round(h * 0.042);
+  const label = Math.round(u * (PORTRAIT ? 0.075 : 0.042));
   ctx.textBaseline = "middle";
   const headY = pad + label * 0.55;
   ctx.fillStyle = onSun ? ink : sun;
@@ -198,7 +206,7 @@ function paintOverlay(item, title, index, total) {
   // Cards without a picture: the title set large, the way the site sets its
   // giants, closed with a sun full stop.
   if (!hasPicture) {
-    const size = Math.round(h * 0.17);
+    const size = Math.round(u * 0.17);
     ctx.font = `800 ${size}px "Bricolage Grotesque", sans-serif`;
     if ("letterSpacing" in ctx) ctx.letterSpacing = `${-size * 0.02}px`;
     ctx.textBaseline = "alphabetic";
@@ -216,18 +224,34 @@ function paintOverlay(item, title, index, total) {
     if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
   } else {
     // Pictures: the title at the foot, large and light.
-    const size = Math.round(h * 0.105);
+    const size = Math.round(u * (PORTRAIT ? 0.16 : 0.105));
     ctx.font = `500 ${size}px Satoshi, sans-serif`;
     if ("letterSpacing" in ctx) ctx.letterSpacing = `${-size * 0.03}px`;
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = fg;
-    ctx.fillText(title, pad, h - pad * 1.15);
+    if (PORTRAIT) {
+      // Tall card: the title gets its own lines above "View case", wrapped
+      // to the card's width and stacked up from the foot.
+      const max = w - pad * 2;
+      const lines = [];
+      title.split(" ").forEach((word) => {
+        const lineNow = lines[lines.length - 1];
+        if (lineNow && ctx.measureText(`${lineNow} ${word}`).width <= max) lines[lines.length - 1] = `${lineNow} ${word}`;
+        else lines.push(word);
+      });
+      const foot = h - pad * 1.15 - u * 0.075 * 2.2;
+      lines.forEach((line, i) => {
+        ctx.fillText(line, pad, foot - (lines.length - 1 - i) * size * 1.0);
+      });
+    } else {
+      ctx.fillText(title, pad, h - pad * 1.15);
+    }
     if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
   }
 
   // Foot, right: "View case" as a quiet text link — the label face, a
   // hairline under it and a small arrow, no button.
-  const ctaSize = Math.round(h * 0.042);
+  const ctaSize = Math.round(u * (PORTRAIT ? 0.075 : 0.042));
   ctx.font = `500 ${ctaSize}px Satoshi, sans-serif`;
   ctx.textBaseline = "alphabetic";
   ctx.textAlign = "right";
@@ -382,7 +406,9 @@ function size() {
   camera.aspect = w / h;
   // The middle card takes about 40 % of a wide screen and most of a narrow
   // one; the field of view is worked back from that.
-  const share = camera.aspect >= 1 ? 0.4 : 0.86;
+  // Portrait cards are tall, so a slightly smaller share keeps the captions
+  // above and below them clear of the menu button and the dock.
+  const share = camera.aspect >= 1 ? 0.4 : PORTRAIT ? 0.72 : 0.86;
   const halfWidth = CARD_W / share / 2;
   const fovH = 2 * Math.atan(halfWidth / VIEW);
   camera.fov = (2 * Math.atan(Math.tan(fovH / 2) / camera.aspect) * 180) / Math.PI;

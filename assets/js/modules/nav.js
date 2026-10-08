@@ -163,9 +163,12 @@ function setCurrent(y) {
 }
 
 /** The one place hoverOpen and sectionOpen become the state CSS and ARIA read. */
+/** Phones: the Work group never opens. "Work" is a plain link there. */
+const narrow = () => window.matchMedia("(max-width: 48rem)").matches;
+
 function syncGroup() {
   if (!group) return;
-  const open = hoverOpen || sectionOpen;
+  const open = !narrow() && (hoverOpen || sectionOpen);
   const str = String(open);
   if (group.el.dataset.open === str) return;
   group.el.dataset.open = str;
@@ -247,7 +250,7 @@ export function init(root = document) {
       // reports hover and would otherwise never get the first-tap-opens step.
       let openAtDown = true;
       group.parent.addEventListener("pointerdown", (event) => {
-        openAtDown = event.pointerType === "mouse" || groupEl.dataset.open === "true";
+        openAtDown = event.pointerType === "mouse" || narrow() || groupEl.dataset.open === "true";
       });
       group.parent.addEventListener("click", (event) => {
         if (!openAtDown) { event.preventDefault(); setHoverOpen(true); }

@@ -397,11 +397,9 @@
     white-space: nowrap;
   }
 
-  /* Below 48rem the full set does not fit across the screen once Work is
-     open. The dock scrolls sideways instead of wrapping — a two-row pill
-     stops reading as a dock — and nav.js slides the open group into view.
-     Work opens the same way as on desktop: by reaching its sections, or by a
-     first tap on "Work" (the second tap follows the link). */
+  /* Below 48rem the dock is the four top-level links only (no Work
+     sub-row). It may still scroll sideways on the very narrowest screens
+     rather than wrap — a two-row pill stops reading as a dock. */
   @media (max-width: 48rem) {
     .dock {
       overflow-x: auto;
@@ -414,12 +412,11 @@
     .dock__link { padding-inline: var(--sp-3); }
     .dock__link--parent { gap: 6px; }
 
-    .dock__sub {
-      padding-left: var(--sp-1);
-      gap: 0;
-    }
-
-    .dock__group:not([data-open="true"]) .dock__sub { padding-left: 0; }
+    /* Phones: no sub-row. Opening it pushed the strip into a sideways
+       scroll that fought the page's own scrolling; "Work" simply goes to
+       the work, and the four links fit across the screen. */
+    .dock__sub,
+    .dock__caret { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
