@@ -649,3 +649,8 @@ node "Portfolio Milton/dev-server.js"
   - The card is 3.6 × 4.8 (3:4) with a 960px-wide texture and a share of 0.72.
   - Overlay type is sized from `u = min(h, 0.525·w)`, which matches the old sizes on wide cards. On portrait cards the labels are larger, and the title sits on its own wrapped lines above "View case".
   - Desktop is unchanged.
+- **Case images on phones (Content, Systems):**
+  - `.feature__media` is a 2-column grid. The nested `.grid` is `display: contents`, and every tile is `grid-column: auto` (to beat `.col-6`'s full span on phones).
+  - All tiles are 4:5 with `--r-md` corners.
+  - The chip is hidden.
+- **Output on phones:** heading margin is sp-6. On touch, `--masonry-col-drift` is 0, since the wall holds still there and the 150px drift reserve was a gap under the heading.

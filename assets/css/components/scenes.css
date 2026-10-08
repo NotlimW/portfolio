@@ -193,6 +193,21 @@
     gap: var(--sp-6);
   }
 
+  /* Phones: every picture in the case goes into one two-column grid, all
+     at the same 4:5, instead of a tall single-file stack of mixed shapes.
+     The nested .grid steps aside (display: contents) so its two squares
+     join the same grid. The chip is dropped: on a half-width tile it
+     covered the picture it was labelling. */
+  @media (max-width: 47.99rem) {
+    .feature__media {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--sp-2);
+    }
+    .feature__media > .grid { display: contents; }
+    .feature__media .media { grid-column: auto; aspect-ratio: 4 / 5; border-radius: var(--r-md); }
+    .feature__media .media__chip { display: none; }
+  }
+
   /* ==========================================================================
      MEDIA
      Large by default. A case image that has to be squinted at is not a case
