@@ -841,3 +841,7 @@ node "Portfolio Milton/dev-server.js"
   - Result: three outcome rows, the bento shot again, and links (arosauto.se, back to all work).
   - Images are in `assets/media/aros/`: hero, bento and ipad from mwstudio.se, plus the crops (logo, logo-inverted, photo-1 to photo-3) from its stylesheet. Hero and bento are reused.
   - Year is 2024: the images on mwstudio.se were uploaded in December 2024. The home card says 2025, and this needs Milton to confirm.
+- **Aros Auto case, more of Milton's own text:** translated from his mwstudio.se case in his voice. The brief now has four paragraphs (background, the clean up, the audience, the workshop and moodboards). Under the brand board are three notes (`.cs-notes`: colour, imagery, type). A "From skeleton to prototype" block (`.cs-split`) sits after the bento shot. Menu items say what they hold. The build steps carry a line each (now five, with "Global parts"), and the result rows follow his wording.
+- **Case labels on the first line:** `.cs-split` and `.cs-brief` use `align-items: baseline`, so the label lines up with the first line of the copy.
+- **Aros Auto, navigation card:** the two menus are stacked and set like a menu. Each has a head row (name, plus what it is for), then one row per item with the name left and its contents right, on hairlines.
+- **Aros Auto:** the 21:9 detail crop of the hero shot is removed.
