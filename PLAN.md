@@ -654,3 +654,52 @@ node "Portfolio Milton/dev-server.js"
   - All tiles are 4:5 with `--r-md` corners.
   - The chip is hidden.
 - **Output on phones:** heading margin is sp-6. On touch, `--masonry-col-drift` is 0, since the wall holds still there and the 150px drift reserve was a gap under the heading.
+- **Visuals on phones:** `.ai-stage--end` copy is `justify-self: start`.
+- **Dock and menu button arrival** (nav.css keyframes, not transitions):
+  - The dock springs up with a squash and settle (`dock-in`, 0.95s), and its links roll in with a 60ms stagger.
+  - The menu button drops in with a turn and one bounce (`btn-in`, 0.12s after).
+  - Exit uses quick plain keyframes. `[data-shown="false"]` is only ever written after a first arrival (guarded in the footer observer too), so nothing plays on load.
+  - Reduced motion: no keyframes.
+- **Slide seam ("Creative work…" → "Then there's AI.") gets the soft catch too:** `data-scene-catch` with `translate` on `.slide__viewport`. The section's last 30svh is painted #0C0A08, so the strip the early release uncovers is already the AI dark. Measured: 40 … 5 2 into the pin, 0 2 5 … 38 out.
+- **Chapter covers on the slide seam** (`.chapter`, scenes.css), replacing the two centred statements:
+  - **Light cover:** "Chapter 01 · Work", kicker "Creative work / made by", note, and a giant "human" with a sun full stop drawn by `::after`, so it survives giants.js letter-splitting.
+  - **Dark cover:** "Chapter 02 · AI", kicker "Then there's", note, and a giant sun "AI.", set right on desktop.
+  - On phones the giant follows straight under the kicker, and the note sits low above the dock.
+- **Chapter covers, v2** (no labels, no notes, just the headings):
+  - The kicker zigzags: first line left, second set right. Phones set both left.
+  - **Light:** "Creative work" / "made by" over a giant "human" with a sun full stop.
+  - **Dark:** "Then" / "there's" over a giant sun "AI." (fit 0.46). Behind it, `.chapter__echo` is the same word as a 1.5px sun outline: it trails the panel in by `(1 − progress)·0.5em` and lands slightly misregistered.
+  - The echo is a `.line` holding a `.t-bleed`, so its box matches the solid word exactly. It needs the `.chapter__giant .chapter__echo` selector to beat `.chapter__giant .line { position: relative }`.
+- **Chapter covers, v3** (v2 was too much). Set exactly like the hero and the zoom scene: one kicker line top left (zoom-kicker size) and one giant on the floor, nothing else.
+  - **Light:** "Creative work / made by" + "human" (sun full stop), set right, fit 0.62.
+  - **Dark:** "Then there's" + sun "AI.", set left, fit 0.4.
+  - The zigzag and the outline echo are removed.
+  - On phones the giant is lifted 5.5rem clear of the dock.
+- **Chapter covers, final:** back to v1 without labels or notes.
+  - **Light:** kicker "Creative work / made by" and a giant "human" (sun full stop), set left, fit 0.8.
+  - **Dark:** kicker "Then there's" set right, and a giant sun "AI." set right, fit 0.5.
+  - On phones everything is left and the giant follows straight under the kicker.
+- "human." is now all sun yellow (the full stop is plain text again, no `::after`), fit 0.72. Both giants sit `clamp(4.5rem, 11vh, 7rem)` up from the floor instead of sunk, so the whole word and its full stop clear the dock.
+- **Dark cover spread like the hero** (`.chapter--spread`, `.chapter__word--a/b/c`):
+  - Desktop: "Then" top left (fit 0.3), "there's" set right at 38% (fit 0.44), and a sun "AI." bottom left (fit 0.24).
+  - Phones: "Then" at the top, with "there's" and "AI." stacked on the floor above the dock.
+- **Chapter covers reverted:** the slide seam is back to the two original centred statements ("Creative work made by human." / "Then there's AI."), restored from git HEAD. `.chapter*` CSS is removed. It keeps the soft catch, the dark foot, and the panel arriving at 85%.
+- **Dock and menu-button arrival, v2** (v1 felt too playful):
+  - The dock rises as a small circle at the bottom centre, then widens to both sides into the pill (`clip-path: inset(-12px calc(50% − 2.4rem) round 999px)` → `inset(-12px)`). The links fade up 0.62s in, 40ms apart.
+  - Exit closes to the circle and sinks.
+  - The menu button just scales and fades in.
+  - One soft curve, no overshoot.
+- **Arrival, v3:**
+  - The dock starts as a true circle. nav.js writes `--dock-h` (the pill's height) and the clip is `inset(0 calc(50% − dock-h/2) round 999px)`. Before, a fixed 2.4rem made a short pill instead of a dot.
+  - The rise and the opening overlap (28% / easeInOutQuint), 1.25s.
+  - The menu button drops in from above as a 0.3-scale dot, then grows into place (`btn-in`, 1s). Exit reverses it.
+- **Arrival, v4, matched to the Work row's feel:**
+  - Dock: 0.8s. It rises on `--e-attitude`, then opens from the dot on a slightly bouncier curve, cubic-bezier(0.34, 1.5, 0.6, 1), with scale 0.9 → 1 (peaks at 1.008). Links follow at 0.42s on `--d-short --e-attitude`.
+  - Button: 0.75s. It drops as a dot, then grows (peaks ~5% over).
+  - Exits use `--e-anticipate`, like the Work row closing.
+  - **Gotcha:** `var()` inside a keyframe's `animation-timing-function` is dropped and the step falls back to `ease`, so the curves are written out literally there. This is also why the earlier versions felt stiff.
+- **Dock on phones:** 12px from the bottom (plus the safe area), was 24px.
+- **Arrival, v5 (softer):**
+  - Dock 1.05s, button 1s. Opacity rises across the whole entrance (0 → 0.55 at the dot stage → 1).
+  - The rise uses cubic-bezier(0.22, 1, 0.36, 1), and the opening a gentler cubic-bezier(0.34, 1.3, 0.55, 1), peaking at scale ≈ 1.003. Links fade in over 0.6s from 0.5s.
+  - Exit: the dock's labels fade out first (0.2s), and the pill starts closing 0.12s later.

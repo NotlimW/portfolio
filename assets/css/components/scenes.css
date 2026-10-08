@@ -91,13 +91,22 @@
      Used as the seam between two sections rather than as a section itself.
      ========================================================================== */
 
-  .slide { position: relative; height: 170svh; }
+  /* The foot of the seam is already the AI section's dark: the soft release
+     (--catch) lifts the panel a little before the pin lets go, and the strip
+     it uncovers must not flash the light ground. */
+  .slide {
+    position: relative;
+    height: 170svh;
+    background: linear-gradient(transparent calc(100% - 30svh), #0C0A08 calc(100% - 30svh));
+  }
 
   .slide__viewport {
     position: sticky;
     top: 0;
     height: 100svh;
     overflow: clip;
+    /* Lands into the pin and leaves it softly (--catch, scene.js). */
+    translate: 0 var(--catch, 0px);
   }
 
   /* Fully in at 85% of the scene, and held there: arriving on the very last

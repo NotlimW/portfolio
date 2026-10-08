@@ -90,6 +90,11 @@ function measureSections() {
  * white-space: nowrap. Same "measure once, animate the number" shape as
  * track.js's --track-distance.
  */
+/** The dock's own height, so its arrival (nav.css) starts as a true circle. */
+function measureDockHeight(dock) {
+  if (dock) dock.style.setProperty("--dock-h", `${dock.offsetHeight}px`);
+}
+
 function measureSubWidth() {
   if (!group) return;
   const width = group.sub.scrollWidth;
@@ -264,6 +269,8 @@ export function init(root = document) {
 
       measureSubWidth();
       document.fonts?.ready.then(measureSubWidth);
+      measureDockHeight(dock);
+      document.fonts?.ready.then(() => measureDockHeight(dock));
     }
   }
 
@@ -295,7 +302,8 @@ export function init(root = document) {
     endObserver = new IntersectionObserver(([entry]) => {
       atEnd = entry.isIntersecting;
       const on = !atEnd && window.scrollY > window.innerHeight * ARRIVE_AT;
-      dock.dataset.shown = String(on);
+      // Never write "false" before a first arrival: it would play the exit.
+      if (on || dock.dataset.shown) dock.dataset.shown = String(on);
     // The word is set to sink below the page's last pixel, so its box can sit
     // just under the fold even at the very bottom: reach a little past it.
     }, { rootMargin: "0px 0px 25% 0px" });
@@ -329,6 +337,7 @@ export function init(root = document) {
   });
 
   onResize = () => {
+    measureDockHeight(dock);
     measureSections();
     measureSubWidth();
     setCurrent(window.scrollY);
