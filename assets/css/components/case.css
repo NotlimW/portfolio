@@ -143,7 +143,7 @@
      left, what it holds on the right, a hairline under every row. */
   .cs-nav__menus {
     display: grid;
-    gap: clamp(var(--sp-6), 3vw, var(--sp-10, 2.5rem));
+    gap: clamp(var(--sp-6), 3vw, var(--sp-8));
     margin-top: var(--sp-4);
   }
 
@@ -226,7 +226,7 @@
   .cs-steps { margin-top: 0; }
 
   /* ---- Result ------------------------------------------------------------ */
-  .cs-result { display: grid; gap: clamp(var(--sp-12), 6vw, var(--sp-20)); }
+  .cs-result { display: grid; gap: clamp(var(--sp-12), 6vw, var(--sp-24)); }
 
   .cs-outcomes {
     display: grid;
@@ -253,12 +253,64 @@
     .cs-outcomes li { grid-template-columns: 11rem minmax(0, 1fr); align-items: baseline; }
   }
 
+  /* The end of the case: two big ways on, side by side. A label over a
+     large line on a hairline; on hover the line takes the accent, the
+     hairline fills with sun and the arrow moves off toward where it goes. */
   .cs-next {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-4) var(--sp-12);
-    font-size: clamp(1.125rem, 1.8vw, 1.5rem);
+    display: grid;
+    gap: var(--sp-6) clamp(var(--sp-6), 3vw, var(--sp-12));
   }
+
+  @media (min-width: 48rem) {
+    .cs-next { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .cs-next__link {
+    display: grid;
+    gap: var(--sp-3);
+    padding-top: var(--sp-6);
+    background: linear-gradient(var(--c-sun) 0 0) 0 0 / 0 2px no-repeat,
+                linear-gradient(var(--line-strong) 0 0) 0 0 / 100% 1px no-repeat;
+    transition: background-size 0.5s var(--e-reveal);
+  }
+
+  .cs-next__link .t-label { color: var(--text-muted); }
+
+  .cs-next__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .cs-next__arrow {
+    flex: none;
+    width: 0.7em;
+    height: 0.7em;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+    transition: translate var(--d-short) var(--e-attitude);
+  }
+
+  .cs-next__link:hover,
+  .cs-next__link:focus-visible { background-size: 100% 2px, 100% 1px; }
+
+  .cs-next__link:hover .cs-next__title,
+  .cs-next__link:focus-visible .cs-next__title { color: var(--c-accent-text); }
+
+  .cs-next__link:hover .cs-next__arrow,
+  .cs-next__link:focus-visible .cs-next__arrow { translate: 0.15em -0.15em; }
+
+  .cs-next__link[href^="/"]:hover .cs-next__arrow,
+  .cs-next__link[href^="/"]:focus-visible .cs-next__arrow { translate: 0.25em 0; }
 
   /* ==========================================================================
      AROS AUTO · BRAND BOARD
@@ -376,5 +428,28 @@
     .aa-card--logo, .aa-card--logo-dark { grid-column: span 3; }
     .aa-type  { grid-column: span 4; }
     .aa-shape { grid-column: span 2; }
+  }
+}
+
+/* ==========================================================================
+   404 — the giant number, the path that was asked for, and three big ways
+   back (the case page's end links).
+   ========================================================================== */
+@layer components {
+  .nf-path {
+    padding: 0.1em 0.4em;
+    border-radius: var(--r-sm);
+    background: var(--bg-warm);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+
+  .nf-note { max-width: 46ch; margin: 0 0 clamp(var(--sp-8), 4vw, var(--sp-12)); }
+
+  @media (min-width: 64rem) {
+    .nf-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .nf-links .cs-next__title { font-size: clamp(1.5rem, 2.6vw, 2.5rem); }
   }
 }

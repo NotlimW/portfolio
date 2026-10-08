@@ -845,3 +845,11 @@ node "Portfolio Milton/dev-server.js"
 - **Case labels on the first line:** `.cs-split` and `.cs-brief` use `align-items: baseline`, so the label lines up with the first line of the copy.
 - **Aros Auto, navigation card:** the two menus are stacked and set like a menu. Each has a head row (name, plus what it is for), then one row per item with the name left and its contents right, on hairlines.
 - **Aros Auto:** the 21:9 detail crop of the hero shot is removed.
+- **Aros Auto, end links:** two big tiles (`.cs-next__link`): a label over a large line with an arrow pushed to the right, on a hairline that fills with sun on hover. The arrow moves toward where the link goes.
+- **Case CSS fix:** `--sp-20` does not exist in the scale, which made the `.cs-result` gap invalid (0px between the last image and the end links). It now uses sp-24, and the menu gap uses sp-8.
+- **Hello → zoom gap:** the zoom window starts above the middle (inset top 22% / bottom 38%, phones 10% / 44%; it was 30% / 30%), so the gap under the Hello statement is smaller. It still opens to the full screen.
+- **404 page** (`404.html` at the root, served by dev-server.js for any missing path):
+  - Built from the contact shell with absolute paths, and marked noindex.
+  - The giant is a plain "404", sized to match the subpage heroes (data-fit 0.23, phones 0.34: a touch larger than "About me", about 220px at 1440). The dancing letters experiment and dance.js were dropped.
+  - The band reads "This page took a *wrong turn*." and the lede shows the path that was asked for ("No AI made it up either…").
+  - Three big way-back links (Take me home, About me, Say hello) reuse the case page's `.cs-next` tiles. Styles are at the end of `case.css`.

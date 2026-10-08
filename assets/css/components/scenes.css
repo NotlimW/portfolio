@@ -30,16 +30,26 @@
   }
 
   .zoom__frame {
+    /* Where the opening window starts. It sits a little above the middle,
+       so the gap under the text before it is not a third of a screen. */
+    --zoom-top: 22%;
+    --zoom-bottom: 38%;
     position: absolute;
     inset: 0;
-    /* Opens from a centred window to the full viewport. clip-path is used
+    /* Opens from a small window to the full viewport. clip-path is used
        rather than width/height so nothing reflows, and rather than scale so
        the corner radius stays true instead of being scaled with the box. */
     clip-path: inset(
-      calc((1 - var(--progress, 0)) * 30%)
+      calc((1 - var(--progress, 0)) * var(--zoom-top))
       calc((1 - var(--progress, 0)) * 33%)
+      calc((1 - var(--progress, 0)) * var(--zoom-bottom))
       round calc((1 - var(--progress, 0)) * var(--r-xl))
     );
+  }
+
+  /* Phones: the window starts higher still. */
+  @media (max-width: 47.99rem) {
+    .zoom__frame { --zoom-top: 10%; --zoom-bottom: 44%; }
   }
 
   .zoom__media {
