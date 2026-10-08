@@ -29,7 +29,12 @@
     --intro-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
     position: relative;
-    min-height: 100svh;
+    /* The large viewport, not the small one: on a phone the picture has to
+       run down behind Safari's toolbar instead of stopping short of it and
+       letting the next section show through there. Type may sit under the
+       toolbar here; the picture may not stop. */
+    min-height: 100vh;
+    min-height: 100lvh;
     overflow: clip;
     background: var(--c-ink);
   }

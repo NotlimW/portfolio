@@ -431,7 +431,7 @@ function makeRenderer() {
   // same, and the high pixel ratio makes multisampling redundant there.
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   renderer = new THREE.WebGLRenderer({ canvas, antialias: !coarse, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.25 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1 : 2));
 
 }
 

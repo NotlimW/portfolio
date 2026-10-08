@@ -172,3 +172,42 @@
     }
   }
 }
+
+/* ---- Touch screens: what Safari on a phone pays most for ------------------
+   Desktop is untouched. On a phone, mostly Safari:
+   · the frost grain is a blend mode over a fixed pill, so every frame that
+     scrolls beneath it has to be re-blended — dropped;
+   · the logo rows are masked while their contents move every frame, which
+     re-composites the mask continuously — the fade becomes two static
+     gradients laid over the edges instead;
+   · `will-change` holds a GPU layer per element; the wall, parallax images
+     and case pictures stand still on touch, so the layers are given back. */
+@layer components {
+  @media (hover: none) {
+    .glass::before { display: none; }
+
+    /* :root lifts these over the component files that load after this one. */
+    :root .clients__row {
+      position: relative;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    .clients__row::before,
+    .clients__row::after {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      z-index: 1;
+      width: 12%;
+      pointer-events: none;
+    }
+    .clients__row::before { left: 0;  background: linear-gradient(90deg, var(--bg), transparent); }
+    .clients__row::after  { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+
+    :root [data-parallax],
+    :root .creative-wall__col,
+    :root .creative-wall__frame,
+    :root .creative-wall__media,
+    :root .case__media img { will-change: auto; }
+  }
+}

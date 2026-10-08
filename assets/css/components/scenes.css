@@ -19,10 +19,13 @@
 
   .zoom { position: relative; height: 220svh; }
 
+  /* Large viewport, so the picture reaches behind a phone's toolbar (see
+     .hero). */
   .zoom__viewport {
     position: sticky;
     top: 0;
-    height: 100svh;
+    height: 100vh;
+    height: 100lvh;
     overflow: clip;
   }
 

@@ -89,7 +89,7 @@ const SETTLED = 0.4;
 const VIEW_PAD = 160;
 
 /** Small filled circles are the one mark that does gain from a 2× buffer. */
-const MAX_DPR = 2;
+const MAX_DPR = window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
 
 let unsubscribe = null;
 let onResize = null;

@@ -36,7 +36,7 @@ const MAX = TOUCH ? 420 : 2400; // cap on the surge, px per second
 const FOLLOW = [0.1, 0.05];    // per row: how quickly it answers the scroll — low = lags
 const STAGGER = 0.14;          // second row's head start, as a share of a track width
 const LEAN_PER_SPEED = 0.006;  // degrees of skew per px/s
-const LEAN_MAX = TOUCH ? 4 : 10;
+const LEAN_MAX = TOUCH ? 0 : 10;
 
 let groups = [];
 let frame = 0;
@@ -69,10 +69,15 @@ function tick(now) {
     let x = (row.x - row.stagger * row.width) % row.width;
     if (x > 0) x -= row.width;
 
-    row.tracks.forEach((track) => {
-      track.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
-    });
-    row.el.style.transform = `skewX(${row.lean.toFixed(2)}deg)`;
+    const tx = `translate3d(${x.toFixed(1)}px, 0, 0)`;
+    if (row.tx !== tx) {
+      row.tx = tx;
+      row.tracks.forEach((track) => { track.style.transform = tx; });
+    }
+    // Only when it changes: a style write per row per frame adds up on a
+    // phone. Touch sets no lean at all (LEAN_MAX 0), so it is written once.
+    const skew = `skewX(${row.lean.toFixed(2)}deg)`;
+    if (row.skew !== skew) { row.skew = skew; row.el.style.transform = skew; }
   }); });
 }
 

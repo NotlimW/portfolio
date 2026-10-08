@@ -750,3 +750,14 @@ node "Portfolio Milton/dev-server.js"
   - Left-set bands are headline, lede, then space.
 - **All section numbers (01–11) are removed.** The Content and Systems bands, which held only the number, are removed too.
 - **AI stages:** more air under the heading band (`margin-top: clamp(sp-12, 6vw, sp-24)`, was sp-8). Tools at 1700 wide: 120px between the band and the copy.
+
+### Touch/Safari pass (desktop unchanged)
+- glass.css touch block:
+  - The frost grain is off; its `mix-blend-mode` over a fixed pill re-blends every scroll frame.
+  - `.clients__row` loses its mask (a mask over contents that move every frame re-composites continuously). The edges fade with two static `var(--bg)` gradient pseudos instead.
+  - `will-change: auto` on the parallax images, the wall columns, frames and media, and the case images. All of these stand still on touch, so the layers are given back to iOS.
+  - These need `:root …` to beat the component files that load later.
+- logos.js: no lean on touch, and the track and row transforms are only written when they change.
+- Particles cap DPR at 1.5 on coarse pointers; the WebGL carousel uses 1.
+- Mobile full-page scroll: 16.8ms average. One 161ms first-visit hitch near Process did not repeat in two re-runs, so it is likely the first raster of the step drawings.
+- **Hero and zoom viewport use `100lvh`** (fallback 100vh) instead of `100svh`, so on a phone the picture and its dark ground run down behind Safari's toolbar instead of stopping short and showing the next section there. Text may sit under the toolbar in those two places, by Milton's call.
