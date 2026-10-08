@@ -9,7 +9,7 @@
      between the page hero's band and the photo, which reads best. Each
      section takes half of it above and half below. */
   .page-about {
-    --about-gap: clamp(var(--sp-16), 13vw, 12rem);
+    --about-gap: clamp(4.5rem, 15vw, 13.5rem);
   }
 
   .page-about > .section { padding-block: calc(var(--about-gap) / 2); }
