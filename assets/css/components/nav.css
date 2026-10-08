@@ -43,6 +43,15 @@
     color: var(--text);
   }
 
+  /* Subpages open on paper, not on the photograph: ink text there. */
+  .topbar--light {
+    --text:       var(--c-ink);
+    --text-muted: color-mix(in oklab, var(--c-ink) 60%, transparent);
+    --c-accent:   var(--c-accent-text);
+  }
+
+  .topbar__link[aria-current="page"] { color: var(--text); }
+
   .topbar__mark {
     font-weight: var(--fw-bold);
     letter-spacing: -0.03em;

@@ -1,0 +1,253 @@
+/* ==========================================================================
+   ABOUT — the about page's own pieces. Everything else on it (poster heads,
+   reveals, statement, the TikTok card, footer) is the shared system.
+   ========================================================================== */
+@layer components {
+
+  /* ---- Page hero ---------------------------------------------------------
+     A subpage: light ground instead of the front page's dark photograph, a
+     trail back home above the giant, and the giant is the page's name. */
+  .page-hero {
+    padding-top: clamp(6.5rem, 16vh, 10rem);
+    padding-bottom: clamp(var(--sp-12), 8vw, var(--sp-24));
+  }
+
+  .page-hero__trail {
+    display: flex;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-6);
+    color: var(--text-muted);
+  }
+
+  .page-hero__trail a {
+    color: var(--text);
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .page-hero__trail a:hover { color: var(--c-accent-text); }
+
+  /* ---- Story ---------------------------------------------------------------
+     Portrait on the left, held while the story scrolls past on the right. */
+  .story {
+    display: grid;
+    gap: var(--sp-12);
+    align-items: start;
+  }
+
+  .story__photo { aspect-ratio: 4 / 5; }
+  .story__photo img { width: 100%; height: 100%; object-fit: cover; }
+
+  .story__text {
+    display: grid;
+    gap: var(--sp-12);
+  }
+
+  @media (min-width: 64rem) {
+    .story { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--sp-24); }
+    .story__photo { position: sticky; top: 14vh; }
+  }
+
+  /* ---- Experience timeline -----------------------------------------------
+     Years on the left, the company and its roles on the right. A hairline
+     runs down the left edge and a sun line draws over it as the list
+     crosses the screen (--progress from scene.js, data-scene="cover"). */
+  .tl {
+    position: relative;
+    display: grid;
+    gap: var(--sp-16);
+    margin: 0;
+    padding: 0 0 0 var(--sp-8);
+    list-style: none;
+  }
+
+  .tl::before,
+  .tl::after {
+    content: "";
+    position: absolute;
+    top: 0.4em;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: var(--line-strong);
+  }
+
+  .tl::after {
+    width: 2px;
+    left: -0.5px;
+    background: var(--c-sun);
+    transform-origin: 0 0;
+    transform: scaleY(clamp(0, calc(var(--progress, 1) * 1.6 - 0.25), 1));
+  }
+
+  .tl__item {
+    position: relative;
+    display: grid;
+    align-items: start;
+    gap: var(--sp-3) var(--sp-12);
+  }
+
+  /* The node on the line. */
+  .tl__item::before {
+    content: "";
+    position: absolute;
+    top: 0.35em;
+    left: calc(var(--sp-8) * -1 - 4.5px);
+    width: 10px;
+    height: 10px;
+    border-radius: var(--r-pill);
+    background: var(--bg);
+    border: 2px solid var(--c-sun);
+  }
+
+  .tl__years { color: var(--text-muted); padding-top: 0.25em; }
+
+  .tl__company {
+    margin: 0 0 var(--sp-4);
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .tl__roles {
+    display: grid;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .tl__role {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-1) var(--sp-6);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tl__role-title { font-weight: var(--fw-medium); }
+  .tl__role-when  { color: var(--text-muted); }
+  .tl__text { max-width: 60ch; }
+
+  @media (min-width: 48rem) {
+    .tl__item { grid-template-columns: 11rem minmax(0, 1fr); }
+  }
+
+  /* ---- Education ---------------------------------------------------------- */
+  .edu {
+    display: grid;
+    gap: var(--sp-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .edu__item {
+    display: grid;
+    align-items: start;
+    gap: var(--sp-3) var(--sp-12);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .edu__level { color: var(--text-muted); padding-top: 0.3em; }
+
+  .edu__what {
+    margin: 0;
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .edu__where { margin: var(--sp-1) 0 var(--sp-3); color: var(--c-accent-text); }
+  .edu__item p:last-child { max-width: 60ch; }
+
+  @media (min-width: 48rem) {
+    .edu__item { grid-template-columns: 11rem minmax(0, 1fr); }
+  }
+
+  /* ---- Learning ------------------------------------------------------------ */
+  .learn__title {
+    margin: 0 0 clamp(var(--sp-12), 6vw, var(--sp-24));
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display-tight);
+    font-size: clamp(2.5rem, 6.5vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .learn__title .em { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
+
+  .learn__loop {
+    display: grid;
+    gap: var(--sp-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: learn;
+  }
+
+  .learn__loop li {
+    display: grid;
+    gap: var(--sp-3);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .learn__loop li:first-child { border-top-color: var(--c-sun); }
+  .learn__n { color: var(--c-accent-text); }
+  .learn__loop p { margin: 0; max-width: 32ch; color: var(--text-muted); }
+
+  @media (min-width: 48rem) {
+    .learn__loop { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  /* ---- Elsewhere: TikTok card beside a LinkedIn card ---------------------- */
+  .elsewhere {
+    display: grid;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .elsewhere { grid-template-columns: minmax(0, 22rem) minmax(0, 22rem); justify-content: start; }
+  }
+
+  .li-card {
+    display: grid;
+    gap: var(--sp-2);
+    padding: var(--sp-6);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    transition: border-color var(--d-short) var(--e-micro), translate var(--d-short) var(--e-attitude);
+  }
+
+  .li-card:hover { border-color: var(--c-sun); translate: 0 -2px; }
+
+  .li-card__mark {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: var(--sp-2);
+    border-radius: var(--r-md);
+    background: var(--c-ink);
+    color: var(--c-paper);
+    font-weight: 700;
+    font-size: 1.4rem;
+  }
+
+  .li-card__name { font-size: var(--fs-h3); font-weight: var(--fw-medium); }
+
+  .li-card__cta {
+    margin-top: var(--sp-4);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--line);
+    font-weight: var(--fw-medium);
+  }
+}

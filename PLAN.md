@@ -761,3 +761,16 @@ node "Portfolio Milton/dev-server.js"
 - Particles cap DPR at 1.5 on coarse pointers; the WebGL carousel uses 1.
 - Mobile full-page scroll: 16.8ms average. One 161ms first-visit hitch near Process did not repeat in two re-runs, so it is likely the first raster of the step drawings.
 - **Hero and zoom viewport use `100lvh`** (fallback 100vh) instead of `100svh`, so on a phone the picture and its dark ground run down behind Safari's toolbar instead of stopping short and showing the next section there. Text may sit under the toolbar in those two places, by Milton's call.
+
+### About page (about/index.html)
+- Content is taken from mwstudio.se/om-mig, translated into Milton's voice (English, no dashes; periods use →).
+- **Sections** (dock: Story · Experience · Education · Elsewhere):
+  1. Page hero: light ground, a "Home / About me" trail, giant "About me", and an h1 band. It reads clearly as a subpage, against the dark photographic front page.
+  2. Story: sticky portrait next to a lit statement and three paragraphs.
+  3. Experience: `.tl` timeline (SoScale, Webbson, Consid, MW Studio) with roles, dates and type. A sun line draws down on `--progress` (`data-scene="cover"`).
+  4. Education: LiU, BTH, NTI.
+  5. Learning: dark, "I read up at night. I try it at work the next day.", plus an evening, next morning, after that loop.
+  6. Elsewhere: the TikTok card (shared) and a new LinkedIn card.
+- **Shared pieces:** the topbar, menu and footer are copied from index.html with `../` paths.
+- **New:** `.topbar--light` for pages that open on paper; `aria-current` marks the page's own link.
+- **New CSS:** components/about.css (imported in main.css).
