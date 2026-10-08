@@ -72,6 +72,9 @@ function boot() {
 
   // Anchor links go through Lenis so in-page jumps match the page's feel.
   document.addEventListener("click", (event) => {
+    // A link that has already handled its own click (the dock's first tap on
+    // "Work" only opens the group) is left alone.
+    if (event.defaultPrevented) return;
     const link = event.target.closest('a[href^="#"]');
     const id = link?.getAttribute("href");
     if (!id || id === "#") return;

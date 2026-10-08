@@ -165,8 +165,31 @@ function setCurrent(y) {
 function syncGroup() {
   if (!group) return;
   const open = hoverOpen || sectionOpen;
-  group.el.dataset.open = String(open);
-  group.parent.setAttribute("aria-expanded", String(open));
+  const str = String(open);
+  if (group.el.dataset.open === str) return;
+  group.el.dataset.open = str;
+  group.parent.setAttribute("aria-expanded", str);
+  revealGroup(open);
+}
+
+/**
+ * On a narrow screen the dock is a sideways-scrolling strip, and an opened
+ * Work row can push past its edge. Slide the strip so the group sits in
+ * view while open, and back to the start when it closes.
+ */
+function revealGroup(open) {
+  const dock = group.el.parentElement;
+  if (dock.scrollWidth <= dock.clientWidth && !open) {
+    if (dock.scrollLeft) dock.scrollTo({ left: 0, behavior: "smooth" });
+    return;
+  }
+  // Wait out the width transition, then measure the settled row.
+  clearTimeout(group.revealTimer);
+  group.revealTimer = setTimeout(() => {
+    if (dock.scrollWidth <= dock.clientWidth) return;
+    const left = open ? group.el.offsetLeft - 4 : 0;
+    dock.scrollTo({ left, behavior: "smooth" });
+  }, open ? 260 : 0);
 }
 
 function setHoverOpen(open) {
@@ -206,18 +229,28 @@ export function init(root = document) {
         sub: groupEl.querySelector(".dock__sub"),
       };
 
-      groupEl.addEventListener("pointerenter", () => setHoverOpen(true));
-      groupEl.addEventListener("pointerleave", () => setHoverOpen(false));
-      groupEl.addEventListener("focusin", () => setHoverOpen(true));
+      // A touch also fires pointerenter and focus, both before its click —
+      // left in, they would open the group just in time for the first tap
+      // to follow the link. Touch is handled by the tap logic below instead.
+      const isTouch = () => !window.matchMedia("(hover: hover)").matches;
+      groupEl.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") setHoverOpen(true); });
+      groupEl.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") setHoverOpen(false); });
+      groupEl.addEventListener("focusin", (e) => { if (!isTouch() && e.target.matches(":focus-visible")) setHoverOpen(true); });
       groupEl.addEventListener("focusout", (event) => {
-        if (!groupEl.contains(event.relatedTarget)) setHoverOpen(false);
+        if (!isTouch() && !groupEl.contains(event.relatedTarget)) setHoverOpen(false);
       });
 
-      // Touch has no hover: the first tap opens, the link itself still works
-      // on the second. Anything else on the page closes it.
+      // Touch has no hover: a tap on a closed "Work" opens it, a tap on an
+      // open one follows the link. Anything else on the page closes it.
+      // Judged by the tap itself, not by (hover: hover) — a touch laptop
+      // reports hover and would otherwise never get the first-tap-opens step.
+      let openAtDown = true;
+      group.parent.addEventListener("pointerdown", (event) => {
+        openAtDown = event.pointerType === "mouse" || groupEl.dataset.open === "true";
+      });
       group.parent.addEventListener("click", (event) => {
-        if (window.matchMedia("(hover: hover)").matches) return;
-        if (!hoverOpen) { event.preventDefault(); setHoverOpen(true); }
+        if (!openAtDown) { event.preventDefault(); setHoverOpen(true); }
+        openAtDown = true;
       });
 
       onDocPointer = (event) => {
@@ -286,6 +319,8 @@ export function destroy() {
   links.forEach(({ link }) => delete link.dataset.current);
   clearRolls();
   if (group) {
+    clearTimeout(group.revealTimer);
+    delete group.el.dataset.open;
     delete group.parent.dataset.current;
     group.parent.removeAttribute("aria-expanded");
   }

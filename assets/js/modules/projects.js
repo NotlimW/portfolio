@@ -491,6 +491,32 @@ function hitTest() {
   return -1;
 }
 
+/* ---- The site cursor ----------------------------------------------------
+   The cards are drawn in a canvas, so the cursor (modules/cursor.js) cannot
+   tell a card from the space between them. While a card is under the
+   pointer, the canvas carries the same markers a link to a case would:
+   data-cursor-hover and data-cursor-label="Case". When that changes under
+   a still pointer (the band slid a card in or out), a pointermove is
+   replayed on the canvas so the cursor updates without waiting for the
+   mouse. */
+let cursorOnCard = false;
+
+function syncCursor() {
+  const on = hovered >= 0 && !pointer.down;
+  if (on === cursorOnCard) return;
+  cursorOnCard = on;
+  if (on) {
+    canvas.dataset.cursorHover = "";
+    canvas.dataset.cursorLabel = "Case";
+  } else {
+    delete canvas.dataset.cursorHover;
+    delete canvas.dataset.cursorLabel;
+  }
+  if (pointer.inside) {
+    canvas.dispatchEvent(new PointerEvent("pointermove", { clientX: pointer.x, clientY: pointer.y, bubbles: true }));
+  }
+}
+
 /* ---- Loop --------------------------------------------------------------- */
 
 const hud = {};
@@ -528,6 +554,7 @@ function tick() {
 
   hovered = pointer.down ? hovered : hitTest();
   canvas.dataset.hover = String(hovered >= 0);
+  syncCursor();
 
   // Where the pointer meets the band's plane (z = 0), in world units.
   if (pointer.inside) {

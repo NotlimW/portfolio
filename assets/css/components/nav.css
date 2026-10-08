@@ -397,10 +397,11 @@
     white-space: nowrap;
   }
 
-  /* Below 48rem the full set does not fit across the screen. The dock scrolls
-     sideways instead of wrapping — a two-row pill stops reading as a dock —
-     and the Work row is simply always open: touch has no hover, and a
-     scrolling strip has no popover to clip. */
+  /* Below 48rem the full set does not fit across the screen once Work is
+     open. The dock scrolls sideways instead of wrapping — a two-row pill
+     stops reading as a dock — and nav.js slides the open group into view.
+     Work opens the same way as on desktop: by reaching its sections, or by a
+     first tap on "Work" (the second tap follows the link). */
   @media (max-width: 48rem) {
     .dock {
       overflow-x: auto;
@@ -411,14 +412,14 @@
 
     .dock::-webkit-scrollbar { display: none; }
     .dock__link { padding-inline: var(--sp-3); }
-
-    .dock__caret { display: none; }
+    .dock__link--parent { gap: 6px; }
 
     .dock__sub {
-      width: auto;
-      padding-left: 0;
+      padding-left: var(--sp-1);
       gap: 0;
     }
+
+    .dock__group:not([data-open="true"]) .dock__sub { padding-left: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {

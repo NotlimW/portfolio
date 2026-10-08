@@ -49,7 +49,16 @@
     will-change: transform;
   }
 
+  /* The picture element has to fill too, or the image inside sizes to its
+     own aspect ratio and stops short of the frame on a tall (phone) screen. */
+  .zoom__media picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .zoom__media img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
