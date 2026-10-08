@@ -600,3 +600,32 @@ node "Portfolio Milton/dev-server.js"
 - The copy sits above that block (`bottom: calc(45vw + sp-4)`). The floor shade rises to 62% and is darker, so the sentence reads clear of the poster. The separate tablet-only shade block is gone.
 - The selector needs `.hero .hero__word--b[data-bleed]` to beat poster.css's `[data-fit][data-bleed="right"]`, which loads later.
 - **Phone and tablet photo (<48rem):** `.hero__media` is `top: 4svh; height: 80svh`, only slightly zoomed out from full-bleed. It is masked to fade to the dark ground at the top and from 62% down, so the poster stops above the copy. (A 50svh band was tried and was too far out.)
+
+### Copy pass: Milton's voice, no dashes, no orphans
+- **Voice:** relaxed and laid back, but professional. First person, plain words ("ads", "stuff", "figure out"), short sentences. No AI tells: no em dashes, no "Not X — a Y", no aphorism pairs ("The making is the fun part. The finding is the job."), no tidy triads.
+- All em dashes are out of the visible copy, including:
+  - the meta title ("·"), the clock ("Stockholm · 09:12") and "Since 2025"
+  - the SVG step labels ("01 Collect", "B · kept")
+  - alt text ("Placeholder: …")
+  - the card counter ("01 / 05")
+- Design headlines kept as they were: "Advertising that has to earn its place.", "Not a threat. An opportunity.", "Got something worth solving?", "Giving a production team its week back.".
+- **Orphans:**
+  - base.css sets `text-wrap: pretty` on p/li/dd/dt and `balance` on h1–h6.
+  - modules/typeset.js ties the last three words of every running paragraph or subhead with non-breaking spaces, so no last line holds fewer than three words, in any browser. It runs before split.js and statement.js.
+  - Checked at 375, 680 and 1280: no orphans.
+- The case pages under work/ still have their old copy.
+
+### Soft sideways motion
+- **scene.js:**
+  - `data-scene-ease="soft"`: linear through the middle, with a quadratic run-up over the first 15% and run-out over the last 15%.
+  - `data-scene-smooth`: `--progress` glides toward its target (0.11 per frame) in a rAF loop that sleeps on arrival, and fires `scene:frame` on window while it moves.
+- **Process pin:** soft + smooth. **Slide seam:** ease + smooth.
+- **particles.js:** a pin that is a scene slides its dots by the scene's own `--progress`, so they move with the track, and redraws on `scene:frame`. thread.js also kicks on `scene:frame`.
+- **Projects:** the band target uses `softEnds()` (edge 0.14), the inverse for keyboard focus, and EASE 0.058. Before, the cards started at full speed when the pin caught and stopped dead at the end.
+- Measured: Process starts 0, −1, −3, −7, −12 px and coasts to a stop over ~0.5s after the scroll stops. The carousel ramps 0, 1, 4, 11, 23… and glides out.
+- **Soft catch into and out of pins** (`data-scene-catch`, scene.js → `--catch`, applied as `translate` on `.projects__sticky` and on `.process-pin__viewport` at ≥64rem):
+  - Across a zone of 2·D centred on the pin (D = 0.3·vh), the sticky child's speed falls linearly from the page's speed to 0. The visual offset is `(s+D)²/4D`, where s = rect.top, minus the natural sticky position.
+  - The release mirrors it.
+  - It is a function of position only, so there is no lag and no loop.
+  - The first try used `g(u) = 2u² − u³` ending exactly at the pin. That surged to 1.33× speed before braking, so it was replaced.
+  - Measured per 40px scroll step: 40 … 38 35 32 28 25 22 18 15 12 8 5 2 0, and the mirror on release.

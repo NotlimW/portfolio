@@ -27,6 +27,8 @@
     top: 0;
     height: 100svh;
     overflow: clip;
+    /* Lands into the pin and leaves it softly (--catch, scene.js). */
+    translate: 0 var(--catch, 0px);
   }
 
   .projects__canvas {

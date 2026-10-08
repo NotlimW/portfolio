@@ -10,6 +10,7 @@
  */
 
 import * as smoothScroll from "./modules/smooth-scroll.js";
+import * as typeset from "./modules/typeset.js";
 import * as scene from "./modules/scene.js";
 import * as particles from "./modules/particles.js";
 import * as fit from "./modules/fit.js";
@@ -36,6 +37,7 @@ import { scrollTo } from "./modules/smooth-scroll.js";
 /** smooth-scroll first — it is the dependency, not a peer. */
 const modules = [
   smoothScroll,
+  typeset,          // before split / statement: they build lines from the layout
   scene,
   particles,
   fit,

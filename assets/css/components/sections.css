@@ -173,6 +173,8 @@
       position: sticky;
       top: 0;
       height: 100svh;
+      /* Lands into the pin and leaves it softly (--catch, scene.js). */
+      translate: 0 var(--catch, 0px);
       display: flex;
       align-items: center;
       overflow: clip;

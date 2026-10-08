@@ -432,7 +432,14 @@ const draw = () => {
       const hold = Math.min(travel, Math.max(0, -pin.top));
       instance.host.particleHoldY = hold;
       const slide = instance.pin.particlesSlide;
-      instance.host.particleShiftX = (hold / travel) * window.innerWidth * slide;
+      // A pin that is also a scene carries its own eased, smoothed progress:
+      // slide the dots by that, so they move with the track instead of
+      // against it. Otherwise, the raw share of the pin scrolled.
+      const scene = instance.pin.hasAttribute("data-scene")
+        ? parseFloat(instance.pin.style.getPropertyValue("--progress"))
+        : NaN;
+      const share = Number.isFinite(scene) ? scene : hold / travel;
+      instance.host.particleShiftX = share * window.innerWidth * slide;
     }
     render(instance, rects[i]);
   });
@@ -482,6 +489,7 @@ export function init(root = document) {
   if (!motionAllowed()) return destroy;
 
   unsubscribe = onScroll(draw);
+  window.addEventListener("scene:frame", draw);
 
   // Coarse pointers get the field and the parallax but no bloom: there is no
   // hover on a touchscreen, and a bloom pinned to the last tap is just a
@@ -528,6 +536,7 @@ export function refresh() {
 
 export function destroy() {
   unsubscribe?.();
+  window.removeEventListener("scene:frame", draw);
   if (frame !== null) cancelAnimationFrame(frame);
   if (onResize) window.removeEventListener("resize", onResize);
   if (onPointerMove) window.removeEventListener("pointermove", onPointerMove);

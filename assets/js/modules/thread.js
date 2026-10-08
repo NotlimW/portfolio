@@ -67,6 +67,7 @@ export function init(root = document) {
   items.forEach((item) => item.el.style.setProperty("--d", item.d.toFixed(4)));
 
   unsubscribe = onScroll(kick);
+  window.addEventListener("scene:frame", kick);
   window.addEventListener("resize", kick);
   return destroy;
 }
@@ -74,6 +75,7 @@ export function init(root = document) {
 export function destroy() {
   unsubscribe?.();
   unsubscribe = null;
+  window.removeEventListener("scene:frame", kick);
   window.removeEventListener("resize", kick);
   cancelAnimationFrame(frame);
   frame = 0;

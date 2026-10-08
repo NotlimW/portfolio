@@ -12,6 +12,12 @@
     background: var(--bg);
   }
 
+  /* No orphans: running text never leaves one or two words alone on its last
+     line, and headings break into lines of even length. Component rules can
+     still override (the giants are single words and do not care). */
+  p, li, dd, dt, figcaption, blockquote { text-wrap: pretty; }
+  h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
   /* ---- Type scale --------------------------------------------------------
      Classes, not element selectors, so an <h2> can be set at display scale
      without breaking the document outline.

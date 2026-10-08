@@ -58,7 +58,7 @@ const VIEW = 8;            // camera distance in front of the band
 const CORNER = 0.13;       // corner radius, world units
 const GLOW = 0.7;          // room around each card for its hover glow
 const ZOOM = 1.16;         // how far the picture is zoomed in, for room to slide
-const EASE = 0.065;        // how quickly the band catches the scroll — low = glides
+const EASE = 0.058;        // how quickly the band catches the scroll — low = glides
 const RISE = 0.22;         // how quickly the swell answers speed
 const SETTLE = 0.045;      // how slowly it lets go
 const TEX_W = 1280;
@@ -191,7 +191,7 @@ function paintOverlay(item, title, index, total) {
   ctx.textAlign = "right";
   ctx.font = `400 ${label}px "JetBrains Mono", monospace`;
   ctx.globalAlpha = 0.85;
-  ctx.fillText(`${String(index + 1).padStart(2, "0")} — ${String(total).padStart(2, "0")}`, w - pad, headY);
+  ctx.fillText(`${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`, w - pad, headY);
   ctx.globalAlpha = 1;
   ctx.textAlign = "left";
 
@@ -492,6 +492,29 @@ function progressFromScroll() {
   return t > 0 ? Math.min(1, Math.max(0, -rect.top / t)) : 0;
 }
 
+/*
+ * The band's position along the pin, from the share of it scrolled: even
+ * pace through the middle, with a gentle run-up as the section locks and a
+ * run-out before it lets go. Linear, the cards started at full speed the
+ * moment the pin caught and stopped dead at its end. Same curve as
+ * scene.js's data-scene-ease="soft".
+ */
+const EDGE = 0.14;
+const SOFT_V = 1 / (1 - EDGE);
+function softEnds(t) {
+  if (t < EDGE) return (SOFT_V * t * t) / (2 * EDGE);
+  if (t > 1 - EDGE) return 1 - (SOFT_V * (1 - t) ** 2) / (2 * EDGE);
+  return SOFT_V * (t - EDGE / 2);
+}
+/** Inverse of softEnds, for jumping the scroll to put a given card in front. */
+function softEndsInverse(y) {
+  const a = (SOFT_V * EDGE) / 2;               // value at t = EDGE
+  if (y < a) return Math.sqrt((2 * EDGE * y) / SOFT_V);
+  if (y > 1 - a) return 1 - Math.sqrt((2 * EDGE * (1 - y)) / SOFT_V);
+  return y / SOFT_V + EDGE / 2;
+}
+const bandProgress = () => softEnds(progressFromScroll());
+
 function scrollToProgress(p, immediate = true) {
   const y = section.getBoundingClientRect().top + window.scrollY + p * travel();
   if (document.documentElement.classList.contains("lenis")) {
@@ -572,7 +595,7 @@ function tick() {
   lastNow = now;
   // Read the scroll every frame rather than only on scroll events, so a
   // jump (anchor link, resize, restored position) can never strand the band.
-  target = progressFromScroll() * maxOffset();
+  target = bandProgress() * maxOffset();
   const prev = current;
   current += (target - current) * (reduced ? 1 : EASE);
   const v = reduced ? 0 : current - prev;
@@ -692,7 +715,7 @@ function bindInput() {
   // Keyboard: focusing a link in the (hidden) list brings its card round.
   items.forEach((item, i) => {
     item.querySelector("a").addEventListener("focus", () => {
-      scrollToProgress(i / cards.length, false);
+      scrollToProgress(softEndsInverse(i / cards.length), false);
     });
   });
 
@@ -784,9 +807,9 @@ async function start() {
   bindInput();
 
   unsubscribe = onScroll(() => {
-    target = progressFromScroll() * maxOffset();
+    target = bandProgress() * maxOffset();
   });
-  target = progressFromScroll() * maxOffset();
+  target = bandProgress() * maxOffset();
   current = target;
   frame = requestAnimationFrame(tick);
 }
