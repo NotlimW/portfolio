@@ -117,7 +117,7 @@
    in the serif italic for rhythm. A touch smaller than the client marks.
    ========================================================================== */
 @layer components {
-  .clients--tools { padding-block: clamp(4rem, 8vw, 6rem) 0; }
+  .clients--tools { padding-block: clamp(5rem, 11vw, 10rem) 0; }
 
   /* The tools head sits like a poster-head band: the line right beside
      its headline on a computer, not pushed out to the far edge. */

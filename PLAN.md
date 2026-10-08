@@ -825,3 +825,4 @@ node "Portfolio Milton/dev-server.js"
 - **Projects corner captions are static:** the in/out animation (`data-in` observer in projects.js and its CSS) is removed. The captions just show.
 - **Logo and tools ribbons (logos.js):** no hover slowdown any more, and scroll speed in either direction pushes them forward (`AUTO + |velocity| * PUSH`), so scrolling up never runs them backwards.
 - **Clients section:** more air above it, after the project carousel (`padding-top: clamp(5rem, 12vw, 10rem)`, was clamp(2.5rem, 6vw, 5rem)). The tools ribbon keeps its own padding.
+- **Home, Now spacing:** less air between the band and the copy (`#about > .poster-head` margin-bottom clamp(sp-8, 3.5vw, sp-12)), and more above the tools ribbon (clamp(5rem, 11vw, 10rem), was clamp(4rem, 8vw, 6rem)). About's ribbon still drops its own padding.

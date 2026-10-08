@@ -337,6 +337,9 @@
   /* ==========================================================================
      NOW — the text, and a small card: where the thinking goes public
      ========================================================================== */
+  /* The copy sits closer under its band than other sections' content. */
+  #about > .poster-head { margin-bottom: clamp(var(--sp-8), 3.5vw, var(--sp-12)); }
+
   .now-grid {
     display: grid;
     gap: var(--sp-12);
