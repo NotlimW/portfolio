@@ -831,3 +831,13 @@ node "Portfolio Milton/dev-server.js"
 - **AI stages, less white space (48rem up):** in Context and Visuals the copy sits in the upper part of the drawing (`align-self: start`, margin-top clamp(sp-12, 9vw, 10rem)) and the stage margin-top is sp-6. Band to copy went from 349px to 202px at 1440. Tools (stacked) was already 110px and is unchanged.
 - **"A wide" on phones:** 24vw (about 90px at 375). It was stuck at the 4rem floor of the desktop clamp.
 - **Output ends on one line:** frames use only 9:16, 4:5 or 16:9 (Milton's rule). The ratios were chosen with a small search that mirrors masonry.js's shortest-column packing, so the columns end level: 18 frames in 4 columns end within 0.01 of a column width, and 12 frames in 2 or 3 columns end exactly level. Milton's portraits are never 16:9. (A first try that stretched the last frame in each column was dropped, since it broke the ratios.)
+- **Case page: Aros Auto** (`work/aros-auto/index.html`, styles in `components/case.css`):
+  - Built from the contact page shell, with paths two levels down, a dock (Brief · Brand · Web · Build · Result) and Lato loaded for this page only.
+  - Hero: giant "Aros Auto", band, then a facts row (client, agency, role, year, live link). After it, the start page shot full width.
+  - Brief: two short paragraphs, chips for the research steps, and four numbers (50+ pages, 2 menus, 4 people, 0 prompts written; the counts animate via counter.js).
+  - Brand: the old stylesheet image rebuilt as a bento board of real elements in Aros Auto's own language (`.aa-*`). It has the logo and inverted logo (cropped from the stylesheet), the three colours with hex codes, a Lato specimen, the cut corner card with its arrow button in CSS, and the three imagery photos (cropped from the stylesheet).
+  - Web: the bento shot, the tablet shot next to the new two-menu navigation as a real list, and a 21:9 detail crop of the hero shot.
+  - Build: giant "By hand.", band "Made before the *AI boom*.", and four steps as learn-loop rows (Figma, WordPress/Gutenberg, Motion One, Blocket).
+  - Result: three outcome rows, the bento shot again, and links (arosauto.se, back to all work).
+  - Images are in `assets/media/aros/`: hero, bento and ipad from mwstudio.se, plus the crops (logo, logo-inverted, photo-1 to photo-3) from its stylesheet. Hero and bento are reused.
+  - Year is 2024: the images on mwstudio.se were uploaded in December 2024. The home card says 2025, and this needs Milton to confirm.

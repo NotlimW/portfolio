@@ -1,0 +1,319 @@
+/* ==========================================================================
+   CASE — a case study page (work/<client>/). The shared system carries the
+   hero, poster heads, reveals and footer; this file holds the case's own
+   parts: the facts row, the shots, the brief, the numbers, the outcomes.
+   The .aa-* block is Aros Auto's brand board, rebuilt from their stylesheet
+   as real elements (their colours, Lato, the cut corner), so it is set in
+   their language rather than the site's.
+   ========================================================================== */
+@layer components {
+
+  /* One even gap between the parts, as on About. */
+  .page-case { --case-gap: clamp(4.5rem, 13vw, 12rem); }
+  .page-case > .section { padding-block: calc(var(--case-gap) / 2); }
+  .page-case > .page-hero { padding-bottom: calc(var(--case-gap) / 3); }
+
+  /* ---- Facts: client, agency, role, year, link ------------------------- */
+  .cs-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-6) var(--sp-8);
+    margin-block: clamp(var(--sp-8), 4vw, var(--sp-12)) 0;
+  }
+
+  .cs-facts > div {
+    display: grid;
+    align-content: start;
+    gap: var(--sp-1);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--line);
+  }
+
+  .cs-facts dt { color: var(--text-muted); }
+  .cs-facts dd { margin: 0; font-weight: var(--fw-medium); }
+
+  @media (min-width: 64rem) {
+    .cs-facts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+
+  /* ---- Shots: the mockups, cropped to the frame they sit in --------------- */
+  .cs-shot { margin: 0; }
+  .cs-shot img { width: 100%; height: 100%; object-fit: cover; }
+  .cs-shot--hero   { aspect-ratio: 16 / 9; }
+  .cs-shot--hero img { object-position: 50% 62%; }
+  .cs-shot--wide   { aspect-ratio: 16 / 9; }
+  .cs-shot--wide img { object-position: 68% 62%; }   /* the laptop sits right of centre */
+  .cs-shot--tall   { aspect-ratio: 4 / 5; }
+
+  /* The same laptop photo, cropped in on the screen. */
+  .cs-shot--detail { aspect-ratio: 21 / 9; }
+  .cs-shot--detail img { transform: scale(2.1); transform-origin: 47% 47%; }
+
+  @media (max-width: 47.99rem) {
+    .cs-shot--hero, .cs-shot--wide { aspect-ratio: 4 / 3; }
+    .cs-shot--detail { aspect-ratio: 4 / 3; }
+  }
+
+  .cs-bleed { padding-top: var(--sp-4); }
+
+  /* ---- Brief ------------------------------------------------------------- */
+  .cs-brief {
+    display: grid;
+    gap: var(--sp-4) var(--sp-12);
+    align-items: start;
+  }
+
+  .cs-brief__label { margin: 0; color: var(--text-muted); padding-top: 0.4em; }
+  .cs-brief .t-body-l { margin: 0; max-width: 54ch; }
+
+  @media (min-width: 48rem) {
+    .cs-brief { grid-template-columns: 11rem minmax(0, 1fr); }
+  }
+
+  .cs-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cs-chips li {
+    padding: 0.35em 0.9em;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  /* ---- The project in numbers -------------------------------------------- */
+  .cs-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-8) var(--sp-6);
+    margin: clamp(var(--sp-16), 8vw, var(--sp-24)) auto 0;
+    list-style: none;
+  }
+
+  .cs-stats li {
+    display: grid;
+    gap: var(--sp-2);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .cs-stats__num {
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-variation-settings: var(--fv-display-tight);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .cs-stats .t-label { color: var(--text-muted); }
+
+  @media (min-width: 64rem) {
+    .cs-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* ---- Gallery ----------------------------------------------------------- */
+  .cs-gallery { display: grid; gap: clamp(var(--sp-4), 2vw, var(--sp-6)); }
+
+  .cs-pair {
+    display: grid;
+    gap: clamp(var(--sp-4), 2vw, var(--sp-6));
+    align-items: stretch;
+  }
+
+  @media (min-width: 48rem) {
+    .cs-pair { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  }
+
+  .cs-nav {
+    display: grid;
+    align-content: start;
+    gap: var(--sp-4);
+    padding: clamp(var(--sp-6), 3vw, var(--sp-12));
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-lg);
+  }
+
+  .cs-nav > .t-label { color: var(--c-accent-text); }
+  .cs-nav .t-compact { margin: 0; }
+
+  .cs-nav__menus {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-6);
+    margin-top: var(--sp-4);
+  }
+
+  .cs-nav__menus ol {
+    display: grid;
+    gap: var(--sp-2);
+    margin: var(--sp-3) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.02em;
+  }
+
+  /* ---- Build steps (the learn loop's rows, from about.css) --------------- */
+  .cs-steps { margin-top: 0; }
+
+  /* ---- Result ------------------------------------------------------------ */
+  .cs-result { display: grid; gap: clamp(var(--sp-12), 6vw, var(--sp-20)); }
+
+  .cs-outcomes {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cs-outcomes li {
+    display: grid;
+    gap: var(--sp-2) var(--sp-12);
+    padding-block: var(--sp-6);
+    border-top: 1px solid var(--line);
+    font-size: clamp(1.25rem, 2.2vw, 1.875rem);
+    font-weight: var(--fw-medium);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .cs-outcomes li:last-child { border-bottom: 1px solid var(--line); }
+  .cs-outcomes .t-label { color: var(--text-muted); font-weight: 400; letter-spacing: 0; }
+
+  @media (min-width: 48rem) {
+    .cs-outcomes li { grid-template-columns: 11rem minmax(0, 1fr); align-items: baseline; }
+  }
+
+  .cs-next {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4) var(--sp-12);
+    font-size: clamp(1.125rem, 1.8vw, 1.5rem);
+  }
+
+  /* ==========================================================================
+     AROS AUTO · BRAND BOARD
+     Their stylesheet as a bento of cards, in their colours and Lato.
+     ========================================================================== */
+  .aa-board {
+    --aa-primary: #FF5532;
+    --aa-pale: #F7F6F2;
+    --aa-black: #0F242E;
+    --aa-r: clamp(14px, 1.6vw, 22px);
+
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(var(--sp-2), 1.2vw, var(--sp-4));
+    font-family: "Lato", var(--font-sans);
+  }
+
+  .aa-card {
+    position: relative;
+    grid-column: span 6;
+    display: grid;
+    min-height: clamp(8rem, 13vw, 12rem);
+    margin: 0;
+    padding: clamp(var(--sp-4), 2vw, var(--sp-8));
+    overflow: clip;
+    border-radius: var(--aa-r);
+    background: var(--aa-pale);
+    color: var(--aa-black);
+  }
+
+  .aa-card__label {
+    align-self: end;
+    font-size: var(--fs-small);
+    color: color-mix(in oklab, currentColor 60%, transparent);
+  }
+
+  .aa-card__label--on-color { color: rgb(255 255 255 / 0.85); }
+
+  /* Logos: the positive one sits on pale (the white of the crop drops out),
+     the inverted one is its own dark card, as in the stylesheet. */
+  .aa-card--logo { place-items: center; }
+  .aa-card--logo img { width: min(70%, 22rem); height: auto; mix-blend-mode: multiply; }
+  .aa-card--logo .aa-card__label { position: absolute; left: inherit; bottom: clamp(var(--sp-4), 2vw, var(--sp-8)); left: clamp(var(--sp-4), 2vw, var(--sp-8)); }
+
+  .aa-card--logo-dark { padding: 0; background: var(--aa-black); color: #fff; }
+  .aa-card--logo-dark img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); }
+  .aa-card--logo-dark .aa-card__label { position: absolute; bottom: clamp(var(--sp-4), 2vw, var(--sp-8)); left: clamp(var(--sp-4), 2vw, var(--sp-8)); color: rgb(255 255 255 / 0.6); }
+
+  /* Colours */
+  .aa-swatch { grid-column: span 2; align-content: end; gap: var(--sp-1); min-height: clamp(9rem, 15vw, 14rem); }
+  .aa-swatch__name { font-weight: 700; font-size: clamp(1rem, 1.6vw, 1.375rem); }
+  .aa-swatch__hex { font-family: var(--font-mono); font-size: var(--fs-small); opacity: 0.75; }
+  .aa-swatch--primary { background: var(--aa-primary); color: #fff; }
+  .aa-swatch--pale    { background: var(--aa-pale); box-shadow: inset 0 0 0 1px var(--line); }
+  .aa-swatch--black   { background: var(--aa-black); color: var(--aa-pale); }
+
+  /* Type */
+  .aa-type {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    gap: var(--sp-2) clamp(var(--sp-6), 3vw, var(--sp-12));
+  }
+  .aa-type__aa {
+    font-weight: 700;
+    font-size: clamp(5rem, 12vw, 11rem);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+  }
+  .aa-type__name { display: block; font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.75rem); }
+  .aa-type__name--regular { font-weight: 400; opacity: 0.7; }
+  .aa-type__set { display: block; margin-top: var(--sp-3); font-size: var(--fs-small); opacity: 0.6; overflow-wrap: anywhere; }
+  .aa-type .aa-card__label { grid-column: 1 / -1; margin-top: var(--sp-4); }
+
+  /* Shape: an orange card with its bottom right corner cut out, and the
+     round arrow button sitting in the cut. */
+  .aa-shape { background: var(--aa-primary); color: #fff; align-content: space-between; min-height: clamp(12rem, 18vw, 16rem); }
+  .aa-shape__title { font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; }
+  .aa-shape__notch {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: clamp(4.5rem, 7vw, 6rem);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-top-left-radius: var(--aa-r);
+    background: var(--bg);
+  }
+  .aa-shape__btn {
+    display: grid;
+    place-items: center;
+    width: 64%;
+    aspect-ratio: 1;
+    border: 1.5px solid var(--aa-black);
+    border-radius: 50%;
+    color: var(--aa-black);
+  }
+  .aa-shape__btn svg { width: 38%; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .aa-shape .aa-card__label { max-width: 60%; }
+
+  /* Imagery: their crops already carry the cut corner; the white of the cut
+     drops out against the card. */
+  .aa-photo { grid-column: span 2; padding: 0; min-height: 0; aspect-ratio: 1; }
+  .aa-photo img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+
+  .aa-board__note { grid-column: 1 / -1; margin: var(--sp-2) 0 0; }
+
+  /* Phones: the logo cards are too short for a label beside the mark. */
+  @media (max-width: 47.99rem) {
+    .aa-card--logo .aa-card__label,
+    .aa-card--logo-dark .aa-card__label { display: none; }
+  }
+
+  @media (min-width: 48rem) {
+    .aa-card--logo, .aa-card--logo-dark { grid-column: span 3; }
+    .aa-type  { grid-column: span 4; }
+    .aa-shape { grid-column: span 2; }
+  }
+}

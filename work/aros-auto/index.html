@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Aros Auto · Milton Winroth</title>
+<meta name="description" content="Aros Auto: a new identity, a bento style site and 50+ pages for a family owned car dealer. Brand and web case by Milton Winroth, made at Webbson.">
+
+<meta property="og:title" content="Aros Auto · Milton Winroth">
+<meta property="og:description" content="A new identity, a bento style site and 50+ pages for a family owned car dealer.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#17120E">
+
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
+<!-- Lato, only for showing the Aros Auto type in its own face. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<!-- Park the headline lines below their masks before the first paint;
+     if main.js has not booted in 4s, give the headings back. -->
+<script>
+  document.documentElement.classList.add("reveal-ready");
+  setTimeout(function () {
+    if (!document.documentElement.dataset.ready) {
+      document.documentElement.classList.remove("reveal-ready");
+    }
+  }, 4000);
+</script>
+<link rel="stylesheet" href="../../assets/css/main.css">
+<script type="module" src="../../assets/js/main.js"></script>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="cursor" data-cursor aria-hidden="true"></div>
+
+<div class="edge-blur edge-blur--top" data-layer="1" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" data-layer="1" aria-hidden="true"></div>
+
+<header class="topbar topbar--light">
+  <a class="topbar__mark" href="/">
+    <span class="topbar__mark-full">Milton Winroth</span>
+  </a>
+
+  <nav class="topbar__links" aria-label="Site">
+    <a class="topbar__link" href="../../work/">Case studies</a>
+    <a class="topbar__link" href="../../about/">About me</a>
+    <a class="topbar__link" href="../../contact/">Contact</a>
+  </nav>
+</header>
+
+
+<button class="menu-btn glass glass--pill" data-menu-toggle data-late
+        aria-expanded="false" aria-controls="menu">
+  <i aria-hidden="true"></i>
+  <i aria-hidden="true"></i>
+  <span class="sr-only">Menu</span>
+</button>
+
+
+
+<!-- The page's own table of contents. -->
+<nav class="dock glass glass--pill" data-dock data-late aria-label="Sections">
+  <a class="dock__link" href="#brief">Brief</a>
+  <a class="dock__link" href="#brand">Brand</a>
+  <a class="dock__link" href="#web">Web</a>
+  <a class="dock__link" href="#build">Build</a>
+  <a class="dock__link" href="#result">Result</a>
+</nav>
+
+<div class="menu" id="menu" data-menu data-ground="dark" aria-label="Menu">
+  <button class="menu__close" data-menu-close>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span class="sr-only">Close menu</span>
+  </button>
+
+  <div class="menu__inner">
+    <ul class="menu__list" role="list">
+      <li class="menu__item" style="--i: 0"><a class="menu__link" href="/">Home</a></li>
+      <li class="menu__item" style="--i: 1"><a class="menu__link" href="../../work/">Case studies</a></li>
+      <li class="menu__item" style="--i: 2"><a class="menu__link" href="../../about/">About me</a></li>
+      <li class="menu__item" style="--i: 3"><a class="menu__link" href="../../contact/">Contact</a></li>
+    </ul>
+
+    <div class="menu__meta t-small">
+      <span class="t-label">Get in touch</span>
+      <a class="link" href="mailto:hello@miltonw.com">hello@miltonw.com</a>
+      <a class="link" href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
+      <p class="t-label" style="margin-top: var(--sp-4)">
+        Stockholm · <span data-clock class="tabular">--:--</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<main id="main" class="page-case">
+
+  <!-- ========================================================================
+       PAGE HERO · the trail, the client's name as the giant, the one line,
+       and the facts in a row under it.
+       ======================================================================== -->
+  <section class="page-hero canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell page-hero__trail t-label">
+      <a href="/">Home</a><span aria-hidden="true">/</span><a href="/#brand">Work</a><span aria-hidden="true">/</span><span>Aros Auto</span>
+    </div>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.62" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Aros Auto</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h1 class="t-title-compact">A car dealer site with <em class="em">room</em> to breathe.</h1>
+        <p class="t-compact muted">A new identity, a bento style layout and 50+ pages for a family owned car dealer in Västerås and Enköping.</p>
+      </div>
+    </header>
+
+    <dl class="shell cs-facts" data-reveal="stagger">
+      <div><dt class="t-label">Client</dt><dd>Aros Auto</dd></div>
+      <div><dt class="t-label">Agency</dt><dd>Webbson</dd></div>
+      <div><dt class="t-label">My role</dt><dd>UX design, art direction, front end</dd></div>
+      <div><dt class="t-label">Year</dt><dd>2024</dd></div>
+      <div><dt class="t-label">Live</dt><dd><a class="link" href="https://arosauto.se" target="_blank" rel="noopener">arosauto.se ↗</a></dd></div>
+    </dl>
+  </section>
+
+  <!-- The first look: the new start page, full width. -->
+  <section class="cs-bleed" data-ground="light" aria-label="The new start page">
+    <div class="shell">
+      <figure class="media cs-shot cs-shot--hero" data-reveal="media">
+        <img src="../../assets/media/aros/hero.webp" alt="The new Aros Auto start page on a laptop" width="1800" height="1350" loading="lazy" decoding="async" fetchpriority="high">
+      </figure>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       BRIEF · short: what was wrong, who it is for, how we found out.
+       ======================================================================== -->
+  <section class="section canvas-host" id="brief" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell cs-brief">
+      <h2 class="t-label cs-brief__label" data-reveal="fade">The brief</h2>
+      <div class="stack-6" data-reveal="stagger">
+        <p class="t-body-l">
+          The site had grown for years and was full of pages nobody could find. On top of
+          that, Aros Auto had taken on a new car brand and wanted a look that matched.
+        </p>
+        <p class="t-body-l muted">
+          The people they sell to are families and commuters who need a car that just works,
+          plus younger drivers they wanted to reach. Quality, experience, security and
+          simplicity were the values to build on.
+        </p>
+        <ul class="cs-chips" role="list">
+          <li>Interviews</li><li>Market analysis</li><li>Workshop</li><li>Moodboards</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- The project in four numbers. -->
+    <ul class="shell cs-stats" role="list" data-reveal="stagger">
+      <li><span class="cs-stats__num"><span data-count="50">50</span>+</span><span class="t-label">pages, rebuilt</span></li>
+      <li><span class="cs-stats__num" data-count="2">2</span><span class="t-label">menus instead of one</span></li>
+      <li><span class="cs-stats__num" data-count="4">4</span><span class="t-label">people in the build</span></li>
+      <li><span class="cs-stats__num">0</span><span class="t-label">prompts written</span></li>
+    </ul>
+  </section>
+
+  <!-- ========================================================================
+       BRAND · the stylesheet, rebuilt as a bento board of real elements:
+       logo, colours with their codes, the type set in Lato, the cut corner
+       shape, and the imagery.
+       ======================================================================== -->
+  <section class="section canvas-host" id="brand" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.5" data-fit-sm="0.9" data-bleed="right">
+        <span class="line"><span class="t-bleed">Brand</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Warm, clear and a bit <em class="em">rounded</em>.</h2>
+        <p class="t-compact muted">Straight out of the workshop moodboards: a palette, a shape, a typeface and a way to pick photos.</p>
+      </div>
+    </header>
+
+    <div class="shell aa-board" data-reveal="stagger">
+      <div class="aa-card aa-card--logo">
+        <img src="../../assets/media/aros/logo.webp" alt="The Aros Auto logo" width="375" height="120" loading="lazy" decoding="async">
+        <span class="aa-card__label">Logo</span>
+      </div>
+      <div class="aa-card aa-card--logo-dark">
+        <img src="../../assets/media/aros/logo-inverted.webp" alt="The Aros Auto logo, inverted on dark" width="772" height="176" loading="lazy" decoding="async">
+        <span class="aa-card__label">Inverted</span>
+      </div>
+
+      <div class="aa-card aa-swatch aa-swatch--primary"><span class="aa-swatch__name">Primary</span><span class="aa-swatch__hex">#FF5532</span></div>
+      <div class="aa-card aa-swatch aa-swatch--pale"><span class="aa-swatch__name">Pale</span><span class="aa-swatch__hex">#F7F6F2</span></div>
+      <div class="aa-card aa-swatch aa-swatch--black"><span class="aa-swatch__name">Black</span><span class="aa-swatch__hex">#0F242E</span></div>
+
+      <div class="aa-card aa-type">
+        <span class="aa-type__aa" aria-hidden="true">Aa</span>
+        <div>
+          <span class="aa-type__name">Lato Bold</span>
+          <span class="aa-type__name aa-type__name--regular">Lato Regular</span>
+          <span class="aa-type__set">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz 0123456789</span>
+        </div>
+        <span class="aa-card__label">Type. Easy to read, and its soft corners fit the rounded layout.</span>
+      </div>
+
+      <div class="aa-card aa-shape">
+        <span class="aa-shape__title">Kontakta oss</span>
+        <span class="aa-shape__notch" aria-hidden="true"><span class="aa-shape__btn"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M 1 11 L 11 1 M 3 1 H 11 V 9"/></svg></span></span>
+        <span class="aa-card__label aa-card__label--on-color">Shape. The cut corner with its arrow, on every card.</span>
+      </div>
+
+      <figure class="aa-card aa-photo"><img src="../../assets/media/aros/photo-1.webp" alt="A Suzuki S-Cross on a city street" width="266" height="266" loading="lazy" decoding="async"></figure>
+      <figure class="aa-card aa-photo"><img src="../../assets/media/aros/photo-2.webp" alt="A Peugeot 3008 by the sea" width="266" height="266" loading="lazy" decoding="async"></figure>
+      <figure class="aa-card aa-photo"><img src="../../assets/media/aros/photo-3.webp" alt="Charging an electric car" width="266" height="266" loading="lazy" decoding="async"></figure>
+      <p class="aa-board__note t-small muted">Imagery: everyday photos people recognise themselves in, next to the brands' own high end shots.</p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       WEB · the layout in pictures, and the new navigation as a real list.
+       ======================================================================== -->
+  <section class="section canvas-host" id="web" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.4" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Web</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">A bento layout that <em class="em">stands out</em>.</h2>
+        <p class="t-compact muted">Clear boxes for clear content, and a look no other car dealer around had.</p>
+      </div>
+    </header>
+
+    <div class="shell cs-gallery">
+      <figure class="media cs-shot cs-shot--wide" data-reveal="media">
+        <img src="../../assets/media/aros/bento.webp" alt="The bento grid on the start page: contact, about, a featured car and Google reviews" width="1800" height="1350" loading="lazy" decoding="async">
+      </figure>
+
+      <div class="cs-pair">
+        <figure class="media cs-shot cs-shot--tall" data-reveal="media">
+          <img src="../../assets/media/aros/ipad.webp" alt="A brand page for Peugeot on a tablet" width="1800" height="1350" loading="lazy" decoding="async">
+        </figure>
+
+        <div class="cs-nav" data-reveal="stagger">
+          <span class="t-label">Navigation</span>
+          <p class="t-compact">One long menu became two short ones, shaped by SEO and by what people come for.</p>
+          <div class="cs-nav__menus">
+            <div>
+              <span class="t-label muted">Main</span>
+              <ol role="list"><li>Car brands</li><li>Cars in stock</li><li>Services</li><li>Rental car</li></ol>
+            </div>
+            <div>
+              <span class="t-label muted">Secondary</span>
+              <ol role="list"><li>Your visit</li><li>About us</li><li>Contact &amp; opening hours</li></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- A close look at the screen: the same photo, cropped in. -->
+      <figure class="media cs-shot cs-shot--detail" data-reveal="media">
+        <img src="../../assets/media/aros/hero.webp" alt="A close up of the start page hero with its cut corner arrow" width="1800" height="1350" loading="lazy" decoding="async">
+      </figure>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       BUILD · made before the AI boom: every step by hand.
+       ======================================================================== -->
+  <section class="section canvas-host" id="build" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.5" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">By hand.</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Made before the <em class="em">AI boom</em>.</h2>
+        <p class="t-compact muted">No generated images and no generated code. Sketches, prototypes and a lot of hours in Figma and the editor, by a team of four.</p>
+      </div>
+    </header>
+
+    <ol class="shell learn__loop cs-steps" role="list" data-reveal="stagger">
+      <li><span class="t-label">Figma</span><span class="learn__step">Page skeletons, then hi-fi prototypes</span></li>
+      <li><span class="t-label">WordPress</span><span class="learn__step">Custom Gutenberg blocks the team can build with</span></li>
+      <li><span class="t-label">Motion One</span><span class="learn__step">A section library with light motion</span></li>
+      <li><span class="t-label">Blocket</span><span class="learn__step">Cars in stock, straight from <em class="em">Blocket</em></span></li>
+    </ol>
+  </section>
+
+  <!-- ========================================================================
+       RESULT · what they got, the site again, and where to go next.
+       ======================================================================== -->
+  <section class="section canvas-host" id="result" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.55" data-fit-sm="0.9" data-bleed="right">
+        <span class="line"><span class="t-bleed">Result</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">A site they can <em class="em">keep up</em> with.</h2>
+        <p class="t-compact muted">Tested over several rounds until the navigation and the flow of information felt right.</p>
+      </div>
+    </header>
+
+    <div class="shell cs-result">
+      <ul class="cs-outcomes" role="list" data-reveal="stagger">
+        <li><span class="t-label">Identity</span><span>A new graphic profile that speaks to new audiences.</span></li>
+        <li><span class="t-label">Editing</span><span>A flexible editor the team uses to make new pages on their own.</span></li>
+        <li><span class="t-label">Structure</span><span>50+ pages in an order people can actually find their way through.</span></li>
+      </ul>
+
+      <figure class="media cs-shot cs-shot--wide" data-reveal="media">
+        <img src="../../assets/media/aros/bento.webp" alt="The finished start page on a laptop" width="1800" height="1350" loading="lazy" decoding="async">
+      </figure>
+
+      <nav class="cs-next" aria-label="Next">
+        <a class="link-more" href="https://arosauto.se" target="_blank" rel="noopener">Visit arosauto.se<svg class="link-more__arrow" viewBox="0 0 24 10" aria-hidden="true"><path d="M 0 5 H 22 M 18 1 L 22 5 L 18 9"/></svg></a>
+        <a class="link-more" href="/#brand">Back to all work<svg class="link-more__arrow" viewBox="0 0 24 10" aria-hidden="true"><path d="M 0 5 H 22 M 18 1 L 22 5 L 18 9"/></svg></a>
+      </nav>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer" id="contact" data-ground="dark">
+  <div class="shell">
+    <div class="stack-8">
+      <h2 class="footer__cta" data-reveal="lines">
+        <span class="line"><span>Got something</span></span>
+        <span class="line"><span>worth <em class="em">solving?</em></span></span>
+      </h2>
+
+      <!-- The address itself is the call to action: click to write, or copy. -->
+      <p class="footer__reach" data-reveal="fade">
+        <a class="footer__mail" href="mailto:hello@miltonw.com">
+          hello@miltonw.com<span class="footer__mail-arrow" aria-hidden="true">↗</span>
+        </a>
+        <button class="footer__copy t-label" type="button" data-copy="hello@miltonw.com" data-cursor-label="Copy">Copy</button>
+      </p>
+    </div>
+
+    <div class="footer__grid" data-reveal="stagger">
+      <div class="footer__col">
+        <span class="t-label footer__head">Shortcuts</span>
+        <a href="/">Home</a>
+        <a href="../../work/">Work</a>
+        <a href="../../about/">About me</a>
+        <a href="../../contact/">Contact</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label footer__head">Projects</span>
+        <a href="../../work/aros-auto/">Aros Auto</a>
+        <a href="../../work/logimark/">Logimark</a>
+        <a href="../../work/creative-strategy-hub/">Creative strategy hub</a>
+        <a href="../../work/ai-production-system/">AI creation</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label footer__head">About me</span>
+        <a href="../../about/">Biography</a>
+        <a href="../../about/">Work experience</a>
+        <a href="../../about/">Academic experience</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label footer__head">Contact details</span>
+        <a href="mailto:hello@miltonw.com">hello@miltonw.com</a>
+        <a href="tel:+46733883533">+46 733 88 35 33</a>
+      </div>
+    </div>
+
+    <!-- TODO: confirm the TikTok handle — placeholder until Milton confirms it. -->
+    <div class="footer__elsewhere" data-reveal="fade">
+      <span class="t-label footer__head">Elsewhere</span>
+      <a href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.tiktok.com/@notlimw" target="_blank" rel="noopener">TikTok</a>
+    </div>
+
+    <div class="footer__bottom t-label" data-reveal="fade">
+      <span>© <span class="tabular">2026</span> Milton Winroth</span>
+      <span>A creative problem solver</span>
+    </div>
+  </div>
+
+</footer>
+
+</body>
+</html>
