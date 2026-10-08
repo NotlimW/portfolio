@@ -16,7 +16,9 @@
 
   .clients {
     position: relative;
-    padding-block: clamp(2.5rem, 6vw, 5rem);
+    /* More air above: it follows the project carousel, whose captions sit
+       low in its last screen. */
+    padding-block: clamp(5rem, 12vw, 10rem) clamp(2.5rem, 6vw, 5rem);
   }
 
   /* Above the section's dot field (the particle canvas sits at z -1). */
