@@ -297,7 +297,7 @@ export function init(root = document) {
 
   let lastProgress = "";
   let atEnd = false;
-  const bleed = root.querySelector(".footer__bleed");
+  const bleed = root.querySelector(".footer__bottom");
   if (bleed && dock) {
     endObserver = new IntersectionObserver(([entry]) => {
       atEnd = entry.isIntersecting;
@@ -326,8 +326,8 @@ export function init(root = document) {
 
     const shown = y > window.innerHeight * ARRIVE_AT;
     late.forEach((el) => {
-      // The dock also steps aside over the footer's closing word: the footer
-      // carries its own links there, and the pill sat on top of the name.
+      // The dock also steps aside at the foot of the footer: the footer
+      // carries its own links there, and the pill sat on top of them.
       const on = shown && !(el === dock && atEnd);
       if ((el.dataset.shown === "true") !== on) el.dataset.shown = String(on);
     });

@@ -746,7 +746,7 @@
   <!-- ========================================================================
        SCENE · SLIDE — a panel arrives from the side and hands over to dark
        ======================================================================== -->
-  <section class="slide" data-ground="light" data-nav-section="ai" data-scene data-scene-ease data-scene-catch data-particles-hold data-particles-slide="0.5" data-particles-hold-media="(prefers-reduced-motion: no-preference)" aria-hidden="true">
+  <section class="slide" data-ground="light" data-nav-section="ai" data-scene data-scene-ease data-scene-smooth data-scene-catch data-particles-hold data-particles-slide="0.5" data-particles-hold-media="(prefers-reduced-motion: no-preference)" aria-hidden="true">
     <div class="slide__viewport">
       <div class="slide__under">
         <!-- .slide__under carries its own transform already (see scenes.css),
@@ -1151,17 +1151,6 @@
     </div>
   </section>
 
-  <!-- ---- AI · close ------------------------------------------------------- -->
-  <section class="statement-scene canvas-host ai-ground" data-ground="dark" data-scene="cover" data-scene-ease data-nav-section="ai">
-    <canvas class="particles" data-particles aria-hidden="true"></canvas>
-    <div class="shell">
-      <p class="statement-scene__text">
-        <span class="statement-scene__line" style="--depth: -0.5">Not a threat.</span>
-        <span class="statement-scene__line" style="--depth: -0.15">An <em class="em">opportunity</em>.</span>
-      </p>
-    </div>
-  </section>
-
   <!-- ========================================================================
        PROCESS · dark, horizontal on desktop
        ======================================================================== -->
@@ -1407,17 +1396,18 @@
         <span class="line"><span>worth <em class="em">solving?</em></span></span>
       </h2>
 
-      <p>
-        <a class="footer__mail glass glass--pill" href="mailto:hello@mwstudio.se" data-magnetic>
-          hello@mwstudio.se
-          <span aria-hidden="true">→</span>
+      <!-- The address itself is the call to action: click to write, or copy. -->
+      <p class="footer__reach">
+        <a class="footer__mail" href="mailto:hello@mwstudio.se">
+          hello@mwstudio.se<span class="footer__mail-arrow" aria-hidden="true">↗</span>
         </a>
+        <button class="footer__copy t-label" type="button" data-copy="hello@mwstudio.se" data-cursor-label="Copy">Copy</button>
       </p>
     </div>
 
     <div class="footer__grid" data-reveal="stagger">
       <div class="footer__col">
-        <span class="t-label">Shortcuts</span>
+        <span class="t-label footer__head">Shortcuts</span>
         <a href="/">Home</a>
         <a href="work/">Work</a>
         <a href="about/">About me</a>
@@ -1425,7 +1415,7 @@
       </div>
 
       <div class="footer__col">
-        <span class="t-label">Projects</span>
+        <span class="t-label footer__head">Projects</span>
         <a href="work/aros-auto/">Aros Auto</a>
         <a href="work/logimark/">Logimark</a>
         <a href="work/creative-strategy-hub/">Creative strategy hub</a>
@@ -1433,14 +1423,14 @@
       </div>
 
       <div class="footer__col">
-        <span class="t-label">About me</span>
+        <span class="t-label footer__head">About me</span>
         <a href="about/">Biography</a>
         <a href="about/">Work experience</a>
         <a href="about/">Academic experience</a>
       </div>
 
       <div class="footer__col">
-        <span class="t-label">Contact details</span>
+        <span class="t-label footer__head">Contact details</span>
         <a href="mailto:hello@miltonw.com">hello@miltonw.com</a>
         <a href="tel:+46733883533">+46 733 88 35 33</a>
       </div>
@@ -1448,7 +1438,7 @@
 
     <!-- TODO: confirm the TikTok handle — placeholder until Milton confirms it. -->
     <div class="footer__elsewhere" data-reveal="fade">
-      <span class="t-label">Elsewhere</span>
+      <span class="t-label footer__head">Elsewhere</span>
       <a href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://www.tiktok.com/@notlimw" target="_blank" rel="noopener">TikTok</a>
     </div>
@@ -1459,11 +1449,6 @@
     </div>
   </div>
 
-  <!-- The sign-off. The surname set too big for the page and sunk through
-       the floor, with the last drop of glass on the site lying across it. -->
-  <div class="footer__bleed" aria-hidden="true" data-fit="0.72" data-bleed="right">
-    <span class="t-bleed">Winroth</span>
-  </div>
 </footer>
 
 </body>

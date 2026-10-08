@@ -18,6 +18,7 @@
  */
 
 import { hasFinePointer, motionAllowed } from "./motion-prefs.js";
+import { onScroll } from "./smooth-scroll.js";
 
 let root = null;
 let dot = null;
@@ -26,6 +27,10 @@ let rafId = null;
 let target = { x: 0, y: 0 };
 let current = { x: 0, y: 0 };
 let squash = 0;
+/** The real pointer, in viewport px. Only ever written from real events. */
+const seen = { x: 0, y: 0, ok: false };
+let refreshFrame = 0;
+let unsubscribe = null;
 const magnets = [];
 
 const EASE = 0.18;
@@ -87,6 +92,13 @@ function loop() {
 }
 
 function onPointerMove(event) {
+  // Only the browser's own events move the dot. A synthetic event carries
+  // whatever coordinates its sender remembered — stale, or 0,0 — and that
+  // is what sent the dot to the corner or left it somewhere else.
+  if (!event.isTrusted) return;
+  seen.x = event.clientX;
+  seen.y = event.clientY;
+  seen.ok = true;
   target.x = event.clientX + OFFSET_X;
   target.y = event.clientY + OFFSET_Y;
   // First sighting (page load, or the pointer coming back into the window):
@@ -100,7 +112,24 @@ function onPointerMove(event) {
   if (!rafId) rafId = requestAnimationFrame(loop);
   root.dataset.active = "true";
 
-  const node = event.target;
+  describe(event.target);
+}
+
+/**
+ * Re-reads what is under the pointer without it having moved: the page
+ * scrolled under a still mouse, or a module (the WebGL carousel) changed
+ * what the thing under it is. Uses the pointer's own last real position.
+ */
+function refresh() {
+  if (refreshFrame || !seen.ok || root?.dataset.active !== "true") return;
+  refreshFrame = requestAnimationFrame(() => {
+    refreshFrame = 0;
+    describe(document.elementFromPoint(seen.x, seen.y));
+  });
+}
+
+/** Hover state, label and ground for whatever element the pointer is on. */
+function describe(node) {
   if (!(node instanceof Element)) return;
   const text = labelFor(node);
   root.dataset.hover = String(Boolean(node.closest("a, button, [data-cursor-hover]")));
@@ -171,6 +200,8 @@ export function init(scope = document) {
 
   window.addEventListener("pointermove", onPointerMove, { passive: true });
   document.addEventListener("pointerleave", onPointerLeave);
+  window.addEventListener("cursor:refresh", refresh);
+  unsubscribe = onScroll(refresh);
 
   scope.querySelectorAll("[data-magnetic]").forEach(bindMagnet);
 
@@ -181,6 +212,11 @@ export function destroy() {
   if (rafId) cancelAnimationFrame(rafId);
   window.removeEventListener("pointermove", onPointerMove);
   document.removeEventListener("pointerleave", onPointerLeave);
+  window.removeEventListener("cursor:refresh", refresh);
+  unsubscribe?.();
+  unsubscribe = null;
+  cancelAnimationFrame(refreshFrame);
+  refreshFrame = 0;
 
   magnets.forEach(({ el, onMove, onLeave }) => {
     el.removeEventListener("pointermove", onMove);

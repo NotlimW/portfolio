@@ -7,7 +7,7 @@
   .footer {
     background: var(--bg-invert);
     color: var(--text-invert);
-    padding-block: var(--section-y) 0;
+    padding-block: var(--section-y) var(--sp-24);
     overflow: clip;
   }
 
@@ -19,23 +19,52 @@
     text-wrap: balance;
   }
 
-  .footer__mail {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-4);
-    padding: var(--sp-4) var(--sp-8);
-    font-size: var(--fs-body-l);
-    transition: background var(--d-short) var(--e-micro),
-                color var(--d-short) var(--e-micro),
-                border-color var(--d-short) var(--e-micro);
-    will-change: transform;
+  /* The call to action is the address itself, set large: a hairline under
+     it that turns sun on hover says "this is a link" without a button
+     shape, and a small "Copy" beside it for anyone who would rather paste
+     it somewhere (modules/copy.js). */
+  .footer__reach {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-3) var(--sp-6);
   }
 
-  .footer__mail:hover {
-    background: var(--c-paper);
-    color: var(--c-ink);
-    border-color: var(--c-paper);
+  .footer__mail {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3em;
+    padding-bottom: 0.12em;
+    font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.02em;
+    color: var(--c-paper);
+    background: linear-gradient(var(--c-sun) 0 0) 0 100% / 0 1px no-repeat,
+                linear-gradient(var(--line-invert) 0 0) 0 100% / 100% 1px no-repeat;
+    transition: background-size 0.5s var(--e-reveal), color var(--d-short) var(--e-micro);
   }
+
+  .footer__mail:hover { background-size: 100% 1px, 100% 1px; }
+
+  .footer__mail-arrow {
+    font-size: 0.6em;
+    color: var(--c-sun);
+    transition: translate var(--d-short) var(--e-attitude);
+  }
+
+  .footer__mail:hover .footer__mail-arrow { translate: 0.15em -0.15em; }
+
+  .footer__copy {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-invert-muted);
+    cursor: pointer;
+    transition: color var(--d-micro) var(--e-micro);
+  }
+
+  .footer__copy:hover,
+  .footer__copy[data-copied] { color: var(--c-sun); }
 
   /* Two columns even on a phone: the groups are short lists of short
      words, and stacked one under another they made a footer three screens
@@ -56,6 +85,17 @@
     flex-direction: column;
     gap: var(--sp-3);
   }
+
+  /* Column headings read as headings: full-strength paper and a heavier
+     weight, over links held back in the muted tone. */
+  .footer__head {
+    margin-bottom: var(--sp-2);
+    color: var(--c-paper);
+    font-weight: var(--fw-medium);
+  }
+
+
+  .footer__elsewhere .footer__head { margin-bottom: 0; }
 
   .footer__col a {
     color: var(--text-invert-muted);
@@ -94,22 +134,4 @@
     border-top: 1px solid var(--line-invert);
   }
 
-  /* ---- Sign-off -----------------------------------------------------------
-     The surname as bleed type, sinking through the bottom of the page — the
-     last crop on the site mirrors the first one in the hero. White on
-     espresso, with a drop of glass resting on it.
-     --------------------------------------------------------------------- */
-  .footer__bleed {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    overflow-x: clip;
-    margin-top: var(--sp-16);
-    margin-bottom: -0.14em;
-    font-size: var(--fs-bleed);   /* fallback; modules/fit.js measures */
-    color: var(--c-paper);
-    user-select: none;
-  }
-
-  .footer__bleed .t-bleed { font-size: 1em; flex-shrink: 0; }
 }

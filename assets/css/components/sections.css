@@ -214,6 +214,17 @@
   }
 
   @media (min-width: 64rem) {
+    /* The track rides high in its frame rather than centred: it starts
+       close under the header when the pin catches, and leaves real room
+       between the step text and the dock at the foot of the screen. The
+       drawings are a little smaller to give that room. */
+    .process-pin__viewport {
+      align-items: flex-start;
+      padding-top: clamp(2rem, 7vh, 5rem);
+    }
+    .process { --col: min(37.5rem, 72svh * 600 / 640); }
+    #process .poster-head { margin-bottom: var(--sp-8); }
+
     /* Drawing and text share one cell: the text sits over the foot of the
        drawing. */
     .process__step { grid-template-areas: "step"; }

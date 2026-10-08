@@ -703,3 +703,27 @@ node "Portfolio Milton/dev-server.js"
   - Dock 1.05s, button 1s. Opacity rises across the whole entrance (0 → 0.55 at the dot stage → 1).
   - The rise uses cubic-bezier(0.22, 1, 0.36, 1), and the opening a gentler cubic-bezier(0.34, 1.3, 0.55, 1), peaking at scale ≈ 1.003. Links fade in over 0.6s from 0.5s.
   - Exit: the dock's labels fade out first (0.2s), and the pill starts closing 0.12s later.
+- **Removed the "Not a threat. An opportunity." closing scene.** The AI part (Tools) now hands straight over to Process.
+- **Process, desktop spacing:**
+  - The pinned track rides high (`align-items: flex-start`, padding-top `clamp(1.5rem, 5vh, 3.5rem)`), and columns are 64svh-based (was 76).
+  - The `#process` header margin is sp-8.
+  - Measured at 1280×800: header → drawing 72px, and 184px of air between the step text and the dock while pinned.
+- **Process spacing, retuned** (the first pass left too much air): columns are 72svh-based and padding-top is `clamp(2rem, 7vh, 5rem)`. At 1280×800 that gives header → drawing 88px, the drawing top at 56px, and 104px of air above the dock.
+- **Cursor bug fixed (dot flying to the corner, or losing its place):**
+  - projects.js used to dispatch a synthetic `pointermove` with its own remembered coordinates whenever the Case state flipped. Those were 0,0 if the pointer had entered without moving, or stale after scrolling out under a still mouse.
+  - Now cursor.js ignores untrusted pointer events and keeps the real pointer position itself.
+  - On `cursor:refresh` (sent by projects.js) and on every scroll, it re-reads `elementFromPoint` at that position.
+  - projects.js also drops `pointer.inside` once the last position falls outside the canvas.
+- **Footer:**
+  - The giant "Winroth" sign-off is removed (markup and CSS), and the footer gets sp-24 bottom padding.
+  - Column headings (`.footer__head`) are full paper with a sun dot, over muted links.
+  - The CTA is a solid sun pill, "Mail me →" (`aria-label` carries the address). The arrow nudges right on hover.
+  - The dock now steps aside when `.footer__bottom` comes into view.
+- **Slide seam, smoother:**
+  - The section is 230svh (was 170), the panel is fully in at 70% of the eased progress, and `data-scene-smooth` is back on.
+  - The panel then holds across the frame well before the soft release starts. Before, the release began while the panel was still sliding, and the section's dark foot showed under the light half as a black strip at the bottom.
+  - Measured: the panel is fully in at 77% of the scroll, and no dark strip at any point.
+- **Footer CTA, v2:**
+  - The address itself, set large (`.footer__reach` / `.footer__mail`), is the mailto link. A hairline underline sweeps to sun on hover, with a sun ↗.
+  - Beside it is a small "Copy" text button (`[data-copy]`, new modules/copy.js) that says "Copied" for 1.6s.
+  - Footer heading dots are removed; headings stay paper and medium weight.

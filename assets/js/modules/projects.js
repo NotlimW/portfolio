@@ -592,9 +592,10 @@ function syncCursor() {
     delete canvas.dataset.cursorHover;
     delete canvas.dataset.cursorLabel;
   }
-  if (pointer.inside) {
-    canvas.dispatchEvent(new PointerEvent("pointermove", { clientX: pointer.x, clientY: pointer.y, bubbles: true }));
-  }
+  // Ask the cursor to look again at what is under it. It keeps the real
+  // pointer position itself; sending it a made-up pointermove with our own
+  // remembered coordinates sent the dot to stale spots, or to 0,0.
+  window.dispatchEvent(new Event("cursor:refresh"));
 }
 
 /* ---- Loop --------------------------------------------------------------- */
@@ -649,6 +650,14 @@ function tick() {
   const time = reduced ? 0 : clock;
 
   // Where the pointer meets the band's plane (z = 0), in world units.
+  if (pointer.inside) {
+    const rect = canvas.getBoundingClientRect();
+    // Scrolled out from under a still mouse: no pointerleave fires for
+    // that, so check the last known position against the canvas itself.
+    if (pointer.y < rect.top || pointer.y > rect.bottom || pointer.x < rect.left || pointer.x > rect.right) {
+      pointer.inside = false;
+    }
+  }
   if (pointer.inside) {
     const rect = canvas.getBoundingClientRect();
     const nx = ((pointer.x - rect.left) / rect.width) * 2 - 1;
@@ -715,7 +724,7 @@ function bindInput() {
       scrollToProgress(Math.min(1, Math.max(0, p)));
     }
   };
-  const onEnter = (e) => { pointer.inside = true; pointerLastX = e.clientX; };
+  const onEnter = (e) => { pointer.inside = true; pointerLastX = e.clientX; pointer.x = e.clientX; pointer.y = e.clientY; };
   const onLeave = () => { pointer.inside = false; };
   const onDown = (e) => {
     pointer.down = true;
