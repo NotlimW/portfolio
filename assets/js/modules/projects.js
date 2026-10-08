@@ -75,7 +75,7 @@ let edge = 10;             // half the visible width of the band, world units
 let calm = 1;              // 1 on wide screens, less where one card fills the width
 let pxPerUnit = 100;       // CSS px per world unit at the band, for the dot field
 const DOTS_DEPTH = 0.6;    // the dot field slides at this share of the cards' speed — it sits behind them
-let frame = 0, visible = false, unsubscribe = null, observer = null, hudObserver = null;
+let frame = 0, visible = false, unsubscribe = null, observer = null;
 // The band's own clock. It only runs while something is moving, so a band
 // at rest is not redrawn sixty times a second for a ripple nobody can see —
 // and picks up exactly where it stopped, with no jump.
@@ -804,16 +804,6 @@ export function init(root = document) {
   }, { rootMargin: "100% 0px" });
   observer.observe(section);
 
-  // The corner captions come in once the section owns the screen and go
-  // again as it leaves: "owns" = covers the middle tenth of the viewport,
-  // which a pinned section does from just after it locks until just before
-  // it lets go. An observer, so nothing runs per scroll frame.
-  const hudEl = section.querySelector(".projects__hud");
-  hudObserver = new IntersectionObserver(([entry]) => {
-    hudEl.dataset.in = String(entry.isIntersecting);
-  }, { rootMargin: "-45% 0px -45% 0px" });
-  hudObserver.observe(section);
-
   return destroy;
 }
 
@@ -851,8 +841,6 @@ async function start() {
 }
 
 export function destroy() {
-  hudObserver?.disconnect();
-  hudObserver = null;
   cancelAnimationFrame(frame);
   unsubscribe?.();
   observer?.disconnect();

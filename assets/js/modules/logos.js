@@ -7,9 +7,9 @@
  *
  * Both rows travel the same way, right to left, so scrolling down reads as
  * moving right along the page. They roll on their own all the time; scroll
- * speed adds to that — scroll down and they surge left, scroll up and they
- * are pushed back — then they ease back to their own pace. The page never
- * stops for them.
+ * speed adds to that in either direction (scrolling up surges them on too,
+ * never back) and they ease back to their own pace. Nothing stops them, a
+ * pointer resting on a mark included.
  *
  * The second row starts offset and answers the scroll with more lag, so a
  * fast scroll pulls the rows apart and they settle back into step. Each
@@ -56,8 +56,8 @@ function tick(now) {
   velocity *= 0.9;
 
   groups.forEach(({ visible, rows }) => { if (visible) rows.forEach((row) => {
-    row.ease += ((row.hover ? 0.15 : 1) - row.ease) * 0.06;
-    const target = Math.max(-MAX, Math.min(MAX, AUTO + velocity * PUSH)) * row.ease;
+    // Scroll speed in either direction pushes the same way: forward.
+    const target = Math.min(MAX, AUTO + Math.abs(velocity) * PUSH);
     row.speed += (target - row.speed) * row.follow;
     row.x -= row.speed * dt;
 
@@ -94,10 +94,8 @@ export function init(root = document) {
       el, tracks: [track, clone],
       follow: FOLLOW[i] ?? FOLLOW[FOLLOW.length - 1],
       stagger: i * STAGGER,
-      x: 0, speed: AUTO, width: 1, lean: 0, ease: 1, hover: false,
+      x: 0, speed: AUTO, width: 1, lean: 0,
     };
-    el.addEventListener("pointerenter", () => { row.hover = true; });
-    el.addEventListener("pointerleave", () => { row.hover = false; });
     return row;
   }) }));
 

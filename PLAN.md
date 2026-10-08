@@ -822,3 +822,5 @@ node "Portfolio Milton/dev-server.js"
 - **About, Elsewhere simpler:** the TikTok and LinkedIn cards are replaced by the contact page's `.social` row, larger (`.social--large`). The `.tt-card` and `.li-card` styles are unused now.
 - **About, Elsewhere:** the giant is set left, so it lines up with the links under it.
 - **About hero giant:** data-fit 0.5, the same size as Contact's "Say hello.".
+- **Projects corner captions are static:** the in/out animation (`data-in` observer in projects.js and its CSS) is removed. The captions just show.
+- **Logo and tools ribbons (logos.js):** no hover slowdown any more, and scroll speed in either direction pushes them forward (`AUTO + |velocity| * PUSH`), so scrolling up never runs them backwards.
