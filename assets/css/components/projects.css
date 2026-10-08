@@ -107,12 +107,19 @@
      and the cards. They gather just above and below the band instead
      (--band-h is written by modules/projects.js). */
   @media (max-width: 47.99rem) {
-    .projects__hud {
-      grid-template-rows: 1fr auto auto 1fr;
-      row-gap: calc(var(--band-h, 12rem) + var(--sp-12));
+    /* Each caption row is set a fixed distance from the middle of the
+       screen, where the band runs: half the band, plus room for its swell
+       (in motion the cards lean and bow past their resting height). */
+    .projects__hud { --clear: calc(var(--band-h, 12rem) * 0.7 + var(--sp-6)); }
+    .projects__row {
+      position: absolute;
+      inset-inline: var(--page-inline);
+      /* Out of the grid, or an absolutely placed row measures its % from
+         its own grid row instead of the whole screen. */
+      grid-row: auto;
     }
-    .projects__row:first-child { grid-row: 2; }
-    .projects__row:last-child  { grid-row: 3; }
+    .projects__row:first-child { bottom: calc(50% + var(--clear)); }
+    .projects__row:last-child  { top: calc(50% + var(--clear)); grid-row: auto; }
   }
 
   .projects__label {

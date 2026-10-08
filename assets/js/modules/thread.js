@@ -22,7 +22,9 @@ let frame = 0;
 let unsubscribe = null;
 
 const clamp01 = (n) => Math.min(1, Math.max(0, n));
-const horizontal = () => window.matchMedia("(min-width: 64rem)").matches;
+// Sideways whenever the process track is laid out as one (track.js gives it
+// a distance to travel); stacked otherwise.
+const horizontal = () => window.matchMedia("(min-width: 64rem), (prefers-reduced-motion: no-preference)").matches;
 
 function target(el) {
   const r = el.getBoundingClientRect();

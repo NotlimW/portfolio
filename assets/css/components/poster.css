@@ -99,6 +99,17 @@
     justify-content: flex-end;
     padding-right: calc(var(--page-inline) - 0.04em);
   }
+
+  /* Phones: every giant sets flush left. Alternating sides reads as a
+     composition on a wide screen; on a narrow one it just looks like the
+     word slid off, and the eye has to hunt for where each section starts. */
+  @media (max-width: 47.99rem) {
+    [data-fit][data-bleed="right"] {
+      justify-content: flex-start;
+      padding-right: 0;
+      padding-left: calc(var(--page-inline) - 0.04em);
+    }
+  }
 }
 
 /* Scroll lean, written by modules/giants.js. On the mask, not the word:

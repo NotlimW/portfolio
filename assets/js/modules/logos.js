@@ -27,12 +27,16 @@ import { onScroll } from "./smooth-scroll.js";
 import { motionAllowed } from "./motion-prefs.js";
 
 const AUTO = 40;               // px per second, always, leftward
-const PUSH = 55;               // px per second added per unit of scroll velocity
-const MAX = 2400;              // cap on the surge, px per second
+// A finger flick reports far higher scroll velocities than a wheel, and on a
+// phone the rows are also narrower on screen: with the desktop numbers they
+// shot past at up to 2400px/s. Touch gets a gentle push and a low cap.
+const TOUCH = window.matchMedia("(pointer: coarse)").matches;
+const PUSH = TOUCH ? 10 : 55;  // px per second added per unit of scroll velocity
+const MAX = TOUCH ? 420 : 2400; // cap on the surge, px per second
 const FOLLOW = [0.1, 0.05];    // per row: how quickly it answers the scroll — low = lags
 const STAGGER = 0.14;          // second row's head start, as a share of a track width
 const LEAN_PER_SPEED = 0.006;  // degrees of skew per px/s
-const LEAN_MAX = 10;
+const LEAN_MAX = TOUCH ? 4 : 10;
 
 let groups = [];
 let frame = 0;

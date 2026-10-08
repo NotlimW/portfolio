@@ -400,11 +400,12 @@ function size() {
 }
 
 function makeRenderer() {
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   // A full-screen WebGL surface at 3× (or even 2×) on a phone is a lot of
-  // fill for photos that are already soft from the zoom; 1.5 reads the same.
+  // fill for photos that are already soft from the zoom; 1.25 reads the
+  // same, and the high pixel ratio makes multisampling redundant there.
   const coarse = window.matchMedia("(pointer: coarse)").matches;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.5 : 2));
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: !coarse, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.25 : 2));
 
 }
 

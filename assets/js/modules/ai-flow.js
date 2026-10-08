@@ -19,7 +19,7 @@
  * default of 1, the rest at 0: the drawings are complete and still.
  */
 
-import { motionAllowed } from "./motion-prefs.js";
+import { motionAllowed, isTouch } from "./motion-prefs.js";
 
 const EASE = 0.07;       // how fast --p catches up with the scroll
 const IDLE = 0.06;       // drive per millisecond when nothing scrolls
@@ -97,7 +97,10 @@ function wake() {
 }
 
 export function init(root = document) {
-  if (!motionAllowed()) return () => {};
+  // Touch: the drawings show complete and still. Every value written here
+  // re-resolves styles for a few hundred SVG nodes, and on a phone that was
+  // the heaviest thing in the AI section.
+  if (!motionAllowed() || isTouch()) return () => {};
 
   items = Array.from(root.querySelectorAll("[data-ai-flow]")).map((el) => ({
     el,

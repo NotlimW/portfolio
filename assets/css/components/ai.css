@@ -131,9 +131,18 @@
     min-width: 760px;
   }
 
-  /* Phones: the copy needs the room, so the drawing steps further back. */
+  /* Phones: the copy needs the room, so the drawing steps further back —
+     and the whole stage packs tight. The copy sits at the top of the stage
+     instead of centred over a drawing taller than it, which left a band of
+     empty ground above and below every block. */
   @media (max-width: 47.99rem) {
-    .ai-stage { min-height: 0; padding-block: var(--sp-12); }
+    .ai-stage {
+      min-height: 0;
+      margin-top: var(--sp-6);
+      padding-block: var(--sp-4) 0;
+      align-items: start;
+    }
+    .ai-stage--stack { row-gap: var(--sp-4); }
     .ai-stage > .ai-fig,
     .ai-stage > .ai-reel { opacity: calc(0.5 * min(1, var(--p) * 4)); }
   }
@@ -261,6 +270,13 @@
      The scroll slides the plane sideways and the rows against each other,
      so the reel keeps moving with the page. */
   .ai-reel { position: relative; min-width: 0; margin-block: 0; overflow-x: clip; }
+
+  /* Phones: smaller frames, so the strip stays a backdrop to the copy
+     rather than a screen of its own. */
+  @media (max-width: 47.99rem) {
+    .ai-reel__tilt { padding-block: var(--sp-4); }
+    .ai-reel .ai-frame { width: 6.5rem; }
+  }
 
   .ai-reel__tilt {
     display: grid;

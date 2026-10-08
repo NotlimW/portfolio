@@ -20,7 +20,7 @@
  */
 
 import { onScroll } from "./smooth-scroll.js";
-import { motionAllowed, hasFinePointer } from "./motion-prefs.js";
+import { motionAllowed, hasFinePointer, isTouch } from "./motion-prefs.js";
 
 const WDTH_REST = 82;
 const WDTH_PEAK = 100;
@@ -169,7 +169,8 @@ export function init(root = document) {
   });
   giants.forEach((g) => observer.observe(g.box));
 
-  unsubscribe = onScroll(({ velocity }) => {
+  // Touch: no scroll lean (one less style write per giant per frame).
+  if (!isTouch()) unsubscribe = onScroll(({ velocity }) => {
     const v = Math.max(-SKEW_MAX, Math.min(SKEW_MAX, (velocity || 0) * SKEW_PER_VELOCITY));
     if (Math.abs(v) > Math.abs(skewTarget)) skewTarget = v;
     wake();

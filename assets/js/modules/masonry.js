@@ -31,7 +31,7 @@
  */
 
 import { onScroll } from "./smooth-scroll.js";
-import { motionAllowed } from "./motion-prefs.js";
+import { motionAllowed, isTouch } from "./motion-prefs.js";
 
 /** Below this, the change is smaller than a pixel of travel. Don't pay for it. */
 const EPSILON = 0.004;
@@ -143,9 +143,11 @@ export function init(root = document) {
 
   grids.forEach((grid) => { buildColumns(grid); measure(grid); });
 
-  // Reduced motion: pin every item to the middle of the plane — level,
-  // sharp, fully opaque — and never subscribe to anything.
-  if (!motionAllowed()) {
+  // Reduced motion, and touch: pin every item to the middle of the plane —
+  // level, sharp, fully opaque — and never subscribe to anything. On a phone
+  // the per-image depth pass was a style write per image per scroll frame
+  // across the busiest stretch of the page.
+  if (!motionAllowed() || isTouch()) {
     grids.forEach((grid) => {
       grid.items.forEach((item) => item.el.style.setProperty("--pass", "0"));
     });

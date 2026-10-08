@@ -613,7 +613,7 @@ node "Portfolio Milton/dev-server.js"
   - base.css sets `text-wrap: pretty` on p/li/dd/dt and `balance` on h1–h6.
   - modules/typeset.js ties the last three words of every running paragraph or subhead with non-breaking spaces, so no last line holds fewer than three words, in any browser. It runs before split.js and statement.js.
   - Checked at 375, 680 and 1280: no orphans.
-- The case pages under work/ still have their old copy.
+- Note: the case pages under work/ do not exist yet (they are only planned, see the sitemap). Every "Read the case" and card link on the home page currently leads to a missing page.
 
 ### Soft sideways motion
 - **scene.js:**
@@ -629,3 +629,17 @@ node "Portfolio Milton/dev-server.js"
   - It is a function of position only, so there is no lag and no loop.
   - The first try used `g(u) = 2u² − u³` ending exactly at the pin. That surged to 1.33× speed before braking, so it was replaced.
   - Measured per 40px scroll step: 40 … 38 35 32 28 25 22 18 15 12 8 5 2 0, and the mirror on release.
+
+### Phone round 2 (from testing on a real phone)
+- **Touch lite** (`isTouch()` in motion-prefs.js, `pointer: coarse`):
+  - Off on touch: ai-flow (drawings complete and still), parallax.js, the giants' scroll lean, and the masonry per-image depth pass (items pinned at --pass 0).
+  - No backdrop-filter on `.glass` (denser tint instead).
+  - WebGL: no MSAA, pixel ratio 1.25.
+  - logos.js: push 10 (was 55), cap 420px/s (was 2400), lean max 4. Flick velocities had thrown the rows past.
+- **All giants flush left below 48rem** (poster.css overrides `data-bleed="right"`).
+- **"Creative work made by human."**: two `.nowrap` groups, so it can only break before "made".
+- **Projects on phones:** the caption rows are absolutely placed at `50% ± (0.7·band + sp-6)`. They need `grid-row: auto`, or the % resolves against their grid row.
+- **AI on phones:** stage `align-items: start`, padding sp-4/0, margin-top sp-6, stack gap sp-4; reel frames 6.5rem with sp-4 padding.
+- **Process runs sideways on phones** (unless reduced motion):
+  - 86vw columns (max 30rem), pin 340svh, text under each drawing.
+  - track.js measures at every width; thread.js and the particle hold follow suit.

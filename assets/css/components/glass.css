@@ -159,7 +159,16 @@
    what a backdrop-filter pays for on every frame something scrolls under
    it; at 16px the pill still reads as frosted. */
 @layer components {
+  /* Touch: no live blur at all. The pill is fixed over everything that
+     scrolls, so a backdrop-filter re-blurs the page under it every frame —
+     on a phone GPU that alone could cost the scroll its smoothness. A
+     denser tint keeps it legible. */
   @media (hover: none) {
-    .glass { --glass-blur: 16px; }
+    /* Doubled class: the dock and menu button set their own tint in nav.css. */
+    .glass.glass {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      --glass-tint: rgb(23 18 14 / 0.9);
+    }
   }
 }

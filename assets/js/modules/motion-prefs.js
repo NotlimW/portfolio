@@ -17,6 +17,11 @@ export const prefersReducedMotion = () => reducedQuery.matches;
 /** True for mouse/trackpad. Touch and pen get the simpler experience. */
 export const hasFinePointer = () => pointerQuery.matches;
 
+/** True on a touchscreen (phones, tablets). These get a lighter build: the
+    effects that cost a style pass on every scroll frame are skipped, since a
+    phone has a fraction of a laptop's headroom for them. */
+export const isTouch = () => window.matchMedia("(pointer: coarse)").matches;
+
 /** True when decorative, scroll-linked motion is allowed to run at all. */
 export const motionAllowed = () => !reducedQuery.matches;
 

@@ -166,7 +166,9 @@
   .process__out { color: var(--text); }
   .process__out span { color: var(--text-muted); margin-right: 0.5em; }
 
-  @media (min-width: 64rem) {
+  /* The pinned sideways track: always on desktop, and on phones too unless
+     the visitor asked for less motion (then the steps simply stack). */
+  @media (min-width: 64rem), (prefers-reduced-motion: no-preference) {
     .process-pin { height: 380svh; }
 
     .process-pin__viewport {
@@ -197,7 +199,21 @@
     }
 
     .process::after { content: ""; }
+  }
 
+  /* Phones and tablets: one step per screen width, drawing above and text
+     below in each column, so the line still runs edge to edge. */
+  @media (max-width: 63.99rem) and (prefers-reduced-motion: no-preference) {
+    .process-pin { height: 340svh; }
+    .process {
+      --col: min(86vw, 30rem);
+      grid-template-columns: repeat(6, var(--col)) var(--page-inline);
+      align-items: start;
+    }
+    .process__text { padding-right: var(--sp-8); }
+  }
+
+  @media (min-width: 64rem) {
     /* Drawing and text share one cell: the text sits over the foot of the
        drawing. */
     .process__step { grid-template-areas: "step"; }

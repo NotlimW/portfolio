@@ -9,8 +9,8 @@
  *
  *   <div data-track>   →   --track-distance: <px>
  *
- * Below 64rem the tracks lay out vertically and the measurement is cleared,
- * because a horizontal hijack on a small screen costs more than it gives.
+ * The process track runs sideways at every width (stacked only under
+ * reduced motion, where this module does not run).
  */
 
 import { motionAllowed } from "./motion-prefs.js";
@@ -18,7 +18,9 @@ import { motionAllowed } from "./motion-prefs.js";
 let onResize = null;
 let tracks = [];
 
-const isDesktop = () => window.matchMedia("(min-width: 48rem)").matches;
+// Every width: the stylesheet decides whether a track is laid out sideways,
+// and a track that is not simply measures as 0.
+const isDesktop = () => true;
 
 function measure(el) {
   if (!isDesktop()) {

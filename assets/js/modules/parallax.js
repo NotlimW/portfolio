@@ -11,13 +11,15 @@
  */
 
 import { onScroll } from "./smooth-scroll.js";
-import { motionAllowed } from "./motion-prefs.js";
+import { motionAllowed, isTouch } from "./motion-prefs.js";
 
 let unsubscribe = null;
 let items = [];
 
 export function init(root = document) {
-  if (!motionAllowed()) return () => {};
+  // Touch: images sit still. A transform per image per scroll frame is a
+  // small cost on a laptop and a real one on a phone.
+  if (!motionAllowed() || isTouch()) return () => {};
 
   items = Array.from(root.querySelectorAll("[data-parallax]")).map((el) => ({
     el,
