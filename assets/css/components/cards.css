@@ -45,6 +45,12 @@
 
   .case:hover .case__img { transform: scale(1.02); }
 
+  /* The pictures carry no .case__img class, so the rule above never landed.
+     `scale` rather than transform: parallax.js owns the image's transform. */
+  .case__media img { transition: scale 0.9s var(--e-reveal); }
+  .case:hover .case__media[data-inview="true"] img,
+  .case:hover .case__media:not([data-reveal]) img { scale: 1.04; }
+
   .case__tags {
     display: flex;
     flex-wrap: wrap;

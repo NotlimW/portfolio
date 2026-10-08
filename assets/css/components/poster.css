@@ -63,12 +63,16 @@
        headline and line in the sticky caption): number stays far right. */
     .poster-head__band > .section__num:only-child { grid-column: 3; }
 
+    /* A right-set giant keeps its band under it, on the right — but the
+       band is not mirrored: headline first, its line to the right of it,
+       and the number out on the far left. (Mirroring put the headline
+       last, after the line it introduces.) */
     .poster-head--end .poster-head__band {
-      grid-template-columns: 1fr minmax(0, var(--measure-compact)) minmax(0, 22ch);
+      grid-template-columns: 1fr minmax(0, 22ch) minmax(0, var(--measure-compact));
     }
 
-    .poster-head--end .poster-head__band .t-title-compact { grid-column: 3; grid-row: 1; }
-    .poster-head--end .poster-head__band .t-compact      { grid-column: 2; grid-row: 1; }
+    .poster-head--end .poster-head__band .t-title-compact { grid-column: 2; grid-row: 1; }
+    .poster-head--end .poster-head__band .t-compact      { grid-column: 3; grid-row: 1; }
     .poster-head--end .poster-head__band .section__num   { grid-column: 1; grid-row: 1; justify-self: start; }
   }
 

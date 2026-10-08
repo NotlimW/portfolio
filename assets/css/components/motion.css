@@ -57,6 +57,22 @@
     transform: none;
   }
 
+  /* ---- 03 · Media: an image opens up as it arrives ---------------------
+     The frame un-clips from the bottom while the picture inside settles
+     from a slight zoom. Clip and scale only — nothing reflows. */
+  [data-reveal="media"] {
+    clip-path: inset(14% 0 0 0 round var(--r-lg));
+    transition: clip-path 1.1s var(--e-reveal);
+  }
+
+  [data-reveal="media"] img {
+    scale: 1.12;
+    transition: scale 1.4s var(--e-reveal);
+  }
+
+  [data-reveal="media"][data-inview="true"] { clip-path: inset(0 0 0 0 round var(--r-lg)); }
+  [data-reveal="media"][data-inview="true"] img { scale: 1; }
+
   /* ---- 03 · Stagger children --------------------------------------------- */
   [data-reveal="stagger"] > * {
     opacity: 0;
@@ -218,6 +234,9 @@
       transform: none !important;
       transition: none !important;
     }
+
+    [data-reveal="media"] { clip-path: none !important; }
+    [data-reveal="media"] img { scale: 1 !important; }
 
     [data-parallax] { transform: none !important; }
 

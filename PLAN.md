@@ -727,3 +727,26 @@ node "Portfolio Milton/dev-server.js"
   - The address itself, set large (`.footer__reach` / `.footer__mail`), is the mailto link. A hairline underline sweeps to sun on hover, with a sun ↗.
   - Beside it is a small "Copy" text button (`[data-copy]`, new modules/copy.js) that says "Copied" for 1.6s.
   - Footer heading dots are removed; headings stay paper and medium weight.
+
+### Motion pass: filling the gaps
+- **Audit:** every text block or media item not under a reveal or a scroll scene.
+- **Added reveals:**
+  - Every `.poster-head__band` (11, staggered headline → lede → number).
+  - The Brand cases' tags and descriptions (fade), "All work" (fade), the About body (stagger), and the footer email line and bottom row (fade).
+- **New `[data-reveal="media"]`** (motion.css) on the Content, Systems and Brand pictures: the frame un-clips from 14% at the bottom while the image settles from scale 1.12. Off under reduced motion.
+- **Hover:**
+  - The Brand case images now zoom 1.04 (`scale`, since parallax owns the transform; the old `.case__img` rule targeted nothing).
+  - Footer links nudge 0.2em right.
+- **Checked:** after a full scroll no reveal is stuck hidden; average frame 16.7ms.
+- **Poster-head bands never mirror:** the `.poster-head--end` band overrides are removed. Every band is headline left, lede beside it, number far right, whatever side the giant word sits on. Checked: all 11 bands at title x=51, lede x=309, number x=1210 (1280 wide).
+- **AI drawings:**
+  - Desktop: the Tools drawing gets 48px more room under its copy (`.ai-stage--stack > .ai-fig` margin-top sp-12).
+  - Phones:
+    - Each drawing sits below its copy at full strength (no longer a dim backdrop) and is scaled to 100vw (the 760px minimum is lifted), so the whole idea shows.
+    - Side fade is down to 4%, and the drift transform is off.
+    - SVG type is enlarged in drawing units (text 36, step labels 42, node labels 28) so it still reads once scaled to about a third. These need the `.ai-stage .ai-fig …` selectors to beat the base sizes, which come later in the file.
+- **Bands under right-set giants:**
+  - They sit under the word again (on the right) but are not mirrored: `.poster-head--end` puts the headline in column 2 and the lede in column 3 of `1fr 22ch measure`. Headline first, then its line.
+  - Left-set bands are headline, lede, then space.
+- **All section numbers (01–11) are removed.** The Content and Systems bands, which held only the number, are removed too.
+- **AI stages:** more air under the heading band (`margin-top: clamp(sp-12, 6vw, sp-24)`, was sp-8). Tools at 1700 wide: 120px between the band and the copy.

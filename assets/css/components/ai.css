@@ -52,7 +52,8 @@
     grid-template-columns: minmax(0, 1fr);
     align-items: center;
     min-height: clamp(22rem, 42vw, 40rem);
-    margin-top: var(--sp-8);
+    /* Clear air between the heading band above and this copy. */
+    margin-top: clamp(var(--sp-12), 6vw, var(--sp-24));
   }
 
   .ai-stage > * { grid-area: stage; }
@@ -90,6 +91,7 @@
       margin-bottom: calc(min(100vw, 110rem) * -0.025);
     }
     .ai-stage--stack .case__tags { grid-column: 1 / -1; }
+    .ai-stage--stack > .ai-fig { margin-top: var(--sp-12); }
     .ai-stage--stack > .ai-stage__text p { margin: 0; }
   }
 
@@ -143,10 +145,31 @@
       align-items: start;
     }
     .ai-stage--stack { row-gap: var(--sp-4); }
+
+    /* The drawings: below the copy rather than behind it, scaled to the
+       width so the whole idea is in view (at their desktop minimum of
+       760px a phone only showed a cropped middle), and at full strength.
+       Their type is set larger in drawing units so it still reads once
+       the drawing is scaled down to a third. */
+    .ai-stage {
+      grid-template-areas: "text" "fig";
+      row-gap: var(--sp-8);
+    }
+    .ai-stage > .ai-stage__text { grid-area: text; }
+    .ai-stage > .ai-fig,
+    .ai-stage > .ai-reel { grid-area: fig; }
+    .ai-stage > .ai-fig {
+      transform: none;
+      --fade-x: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    }
+    .ai-stage > .ai-fig svg { width: 100vw; min-width: 0; }
+    .ai-stage .ai-fig text { font-size: 36px; }
+    .ai-stage .ai-fig .ai-step { font-size: 42px; }
+    .ai-stage .ai-fig .ai-node text { font-size: 28px; }
     /* Right-set copy (Visuals) comes back to the left edge on a phone. */
     .ai-stage--end .ai-stage__text { justify-self: start; }
     .ai-stage > .ai-fig,
-    .ai-stage > .ai-reel { opacity: calc(0.5 * min(1, var(--p) * 4)); }
+    .ai-stage > .ai-reel { opacity: 1; }
   }
 
   /* ---- Shared figure language --------------------------------------------- */

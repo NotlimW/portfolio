@@ -105,6 +105,12 @@
 
   .footer__col a:hover { color: var(--c-paper); }
 
+  /* A small nudge on hover, so a list of plain links still answers. */
+  .footer__col a,
+  .footer__elsewhere a { transition: color var(--d-micro) var(--e-micro), translate var(--d-short) var(--e-attitude); }
+  .footer__col a:hover,
+  .footer__elsewhere a:hover { translate: 0.2em 0; }
+
   /* Same shape as .footer__col — a label over a short list — but set apart
      from the four-column grid rather than competing for a fifth slot in it. */
   .footer__elsewhere {
