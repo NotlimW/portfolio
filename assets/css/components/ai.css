@@ -149,7 +149,7 @@
     fill: var(--text-muted);
   }
 
-  .ai-fig .ai-step { font-size: 15px; fill: var(--text-muted); letter-spacing: 0.01em; }
+  .ai-fig .ai-step { font-size: 15px; fill: var(--text-muted); }
 
   .ai-pulse {
     fill: none;

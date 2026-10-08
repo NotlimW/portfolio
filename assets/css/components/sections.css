@@ -144,7 +144,7 @@
     font-family: var(--font-mono);
     font-size: var(--fs-label);
     font-weight: var(--fw-regular);
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
     color: var(--text-muted);
   }
 

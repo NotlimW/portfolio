@@ -143,10 +143,12 @@
                 background var(--d-micro) var(--e-micro);
   }
 
-  .cursor[data-hover="true"] .cursor__dot {
-    width: var(--cursor-dot-hot);
-    height: var(--cursor-dot-hot);
-    background: var(--cursor-fg);
+  /* Over a target that says what it does, the label takes the dot's place:
+     the dot shrinks away and the word appears where it was, up and to the
+     right of the pointer. A target with nothing to say keeps the dot. */
+  .cursor[data-hover="true"][data-labelled="true"] .cursor__dot {
+    width: 0;
+    height: 0;
   }
 
   .cursor__ring {
@@ -162,31 +164,39 @@
                 opacity var(--d-micro) var(--e-micro);
   }
 
-  .cursor[data-hover="true"] .cursor__ring {
-    transform: scale(1);
-    opacity: 1;
-  }
+  /* The ring is retired: the label pill alone marks the target state. */
+  .cursor__ring { display: none; }
 
+  /* A small glass pill with a hairline outline, its bottom-left corner on
+     the dot's anchor. The blur is what keeps the word legible over a busy
+     photo; the outline gives the glass an edge. */
   .cursor__label {
-    translate: -50% -50%;
+    translate: -4px calc(-100% + 4px);
+    padding: 0.6em 0.85em;
+    border-radius: var(--r-pill);
+    border: 1px solid color-mix(in oklab, var(--cursor-fg) 35%, transparent);
+    background: color-mix(in oklab, var(--c-paper) 22%, transparent);
+    backdrop-filter: blur(10px) saturate(1.3);
+    -webkit-backdrop-filter: blur(10px) saturate(1.3);
     font-family: var(--font-mono);
     font-size: var(--fs-micro);
     font-weight: var(--fw-medium);
     letter-spacing: var(--tr-micro);
     text-transform: uppercase;
     line-height: 1;
-    color: var(--c-accent);
+    color: var(--cursor-fg);
     white-space: nowrap;
     /* Indent compensates for the tracking on the last character, which
        otherwise pushes the optical centre left. */
     text-indent: var(--tr-micro);
     opacity: 0;
-    transform: translateY(0.4em);
+    transform: scale(0.4);
+    transform-origin: 0 100%;
     transition: opacity var(--d-micro) var(--e-micro),
                 transform var(--d-short) var(--e-attitude);
   }
 
-  .cursor[data-hover="true"] .cursor__label {
+  .cursor[data-hover="true"][data-labelled="true"] .cursor__label {
     opacity: 1;
     transform: none;
   }

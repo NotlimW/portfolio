@@ -72,6 +72,10 @@ let calm = 1;              // 1 on wide screens, less where one card fills the w
 let pxPerUnit = 100;       // CSS px per world unit at the band, for the dot field
 const DOTS_DEPTH = 0.6;    // the dot field slides at this share of the cards' speed — it sits behind them
 let frame = 0, visible = false, unsubscribe = null, observer = null;
+// The band's own clock. It only runs while something is moving, so a band
+// at rest is not redrawn sixty times a second for a ripple nobody can see —
+// and picks up exactly where it stopped, with no jump.
+let clock = 0, lastNow = 0, needsRender = true;
 let pointer = { x: 0, y: 0, inside: false, down: false, startX: 0, startScroll: 0, moved: 0 };
 let hovered = -1;
 let touch = 0;                         // eased 0 … 1 while the pointer is over the band
@@ -366,6 +370,7 @@ const fragment = /* glsl */ `
 function size() {
   const w = stage.clientWidth, h = stage.clientHeight;
   renderer.setSize(w, h, false);
+  needsRender = true;
   camera.aspect = w / h;
   // The middle card takes about 40 % of a wide screen and most of a narrow
   // one; the field of view is worked back from that.
@@ -385,7 +390,10 @@ function size() {
 
 function build() {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // A full-screen WebGL surface at 3× (or even 2×) on a phone is a lot of
+  // fill for photos that are already soft from the zoom; 1.5 reads the same.
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.5 : 2));
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
@@ -428,12 +436,16 @@ function build() {
       const t = new THREE.CanvasTexture(face);
       t.colorSpace = THREE.SRGBColorSpace;
       t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      // Upload now, while nothing is scrolling, rather than on the first
+      // frame the card is drawn.
+      renderer.initTexture(t);
       return t;
     };
     material.uniforms.uOverlay.value = texture(paintOverlay(item, title, i, items.length));
     paintPicture(item, title).then((face) => {
       material.uniforms.uPicture.value = texture(face);
       material.uniforms.uReady.value = 1;
+      needsRender = true;
     });
 
     return { item, mesh, material, base: i * STEP, hover: 0 };
@@ -537,7 +549,9 @@ function tick() {
   frame = requestAnimationFrame(tick);
 
   const reduced = prefersReducedMotion();
-  const time = reduced ? 0 : performance.now() / 1000;
+  const now = performance.now();
+  const dt = Math.min(0.064, (now - (lastNow || now)) / 1000);
+  lastNow = now;
   // Read the scroll every frame rather than only on scroll events, so a
   // jump (anchor link, resize, restored position) can never strand the band.
   target = progressFromScroll() * maxOffset();
@@ -555,6 +569,16 @@ function tick() {
   hovered = pointer.down ? hovered : hitTest();
   canvas.dataset.hover = String(hovered >= 0);
   syncCursor();
+
+  // At rest — band caught up, no swell, no pointer, no hover fading — the
+  // last frame is still correct. Skip the redraw.
+  const active = pointer.inside || touch > 0.003
+    || Math.abs(target - current) > 0.0005 || Math.abs(speed) > 0.00002 || Math.abs(swell) > 0.002
+    || cards.some((card, i) => Math.abs((i === hovered && !pointer.down ? 1 : 0) - card.hover) > 0.002);
+  if (!active && !needsRender) return;
+  needsRender = false;
+  if (!reduced) clock += dt;
+  const time = reduced ? 0 : clock;
 
   // Where the pointer meets the band's plane (z = 0), in world units.
   if (pointer.inside) {
@@ -679,15 +703,22 @@ export function init(root = document) {
   hud.tags = section.querySelector("[data-projects-tags]");
   section.querySelector("[data-projects-total]").textContent = String(items.length).padStart(2, "0");
 
-  // Load three.js only once the section is close, so it costs the hero
-  // nothing.
+  // Load three.js once the page has settled after load — in idle time, so
+  // it costs the hero nothing and is warm (shaders compiled, textures on
+  // the GPU) before anyone scrolls to it. Booting it only on approach put
+  // all of that in the middle of a scroll. Approaching first still starts it.
   let started = false;
+  const boot = () => { if (!started) { started = true; start(); } };
+  const whenIdle = window.requestIdleCallback
+    ? (cb) => requestIdleCallback(cb, { timeout: 4000 })
+    : (cb) => setTimeout(cb, 1500);
+  if (document.readyState === "complete") whenIdle(boot);
+  else window.addEventListener("load", () => whenIdle(boot), { once: true });
   observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       visible = entry.isIntersecting;
       if (visible && !started) {
-        started = true;
-        start();
+        boot();
       } else if (visible && renderer && !frame) {
         frame = requestAnimationFrame(tick);
       }
@@ -703,6 +734,8 @@ async function start() {
     THREE = await import(THREE_URL);
     await document.fonts?.ready;
     build();
+    // Compile every shader now instead of on the first visible frame.
+    renderer.compile(scene, camera);
   } catch (error) {
     console.warn("[projects] WebGL track unavailable, showing the list:", error);
     return;

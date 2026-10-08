@@ -93,9 +93,11 @@ function onPointerMove(event) {
   root.dataset.active = "true";
 
   const node = event.target;
+  if (!(node instanceof Element)) return;
   const text = labelFor(node);
   root.dataset.hover = String(Boolean(node.closest("a, button, [data-cursor-hover]")));
-  if (label.textContent !== text) label.textContent = text;
+  root.dataset.labelled = String(Boolean(text));
+  if (text && label.textContent !== text) label.textContent = text;
 
   // An open curtain is a dark surface that sits outside every [data-ground].
   const ground = document.documentElement.classList.contains("is-menu-open")

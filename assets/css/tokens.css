@@ -181,10 +181,10 @@
     --tr-display-xl: -0.05em;
     --tr-display-l:  -0.042em;
     --tr-heading:    -0.03em;
-    --tr-label:       0.12em;
-    /* Wider than --tr-label. Micro readouts need the extra air to stay
-       legible at 11px, and the openness is what makes them read technical. */
-    --tr-micro:       0.18em;
+    --tr-label:       0;
+    /* No tracking on any text, labels and micro readouts included — a
+       design decision. These stay as tokens so it is one place to change. */
+    --tr-micro:       0;
 
     --fw-light:   300;
     --fw-regular: 400;

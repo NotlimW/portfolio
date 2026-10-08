@@ -530,3 +530,32 @@ node "Portfolio Milton/dev-server.js"
 - Work's sub-row is no longer forced open below 48rem. It opens as on desktop: by reaching Content / Systems / Brand, or with a first tap on "Work" (a second tap follows the link). Tapping anywhere else closes it.
 - When the group opens, the sideways-scrolling dock slides so the sub-links are in view. When it closes, the dock slides back to the start.
 - Touch is detected by the pointer type of the tap, not by `(hover: hover)`. The global anchor handler in main.js respects `defaultPrevented`.
+
+### Giant words: the cursor swell no longer shakes
+- giants.js aims the width swell at each letter's *rest* position, measured from the edge the word is pinned to. It is re-measured only when the size changes.
+- Before, it measured live letter boxes. On right-pinned words ("Tools") a widening letter pushed the T away from the cursor, it shrank back, slid under it again, and jittered.
+
+### Cursor: label pill instead of ring
+- The ring and the ink "hot dot" are gone. Over a target with a label (Case, Go, Visit…), the yellow dot shrinks away and a small yellow pill with the word takes its place, up and to the right of the pointer.
+- A target with no label keeps the dot. cursor.js writes `data-labelled`.
+
+### Performance pass 3 (phones especially)
+- **Particles:** each canvas is drawn once on whole lattice cells, with one cell of overhang inside a `.particles-clip` wrapper. Scrolling, parallax and the sideways slides only move it with a transform, solving the lattice phase. A canvas repaints only when the cursor bloom touches it, or has just left it. Before, 2–4 viewport-sized 2× canvases were cleared and refilled every scroll frame. Measured: 12 fills over 60 scroll frames, against roughly 3 per frame before.
+- **Project carousel:**
+  - Renders only while something moves (scroll catch-up, swell, pointer, hover fade).
+  - Its own clock pauses at rest, so the wave resumes without a jump.
+  - Pixel ratio is capped at 1.5 on coarse pointers.
+- **Touch screens:** no edge blur, and the glass blur drops from 36px to 16px.
+
+### No letter-spacing; glass cursor pill
+- All positive tracking is removed: `--tr-label` and `--tr-micro` are now 0, as are the process numbers, graphic labels and AI step labels. The tight negative tracking on the big headings stays. The SOSCALE/MEDIA wordmark keeps its spacing because it copies their logo.
+- Cursor label: a glass pill with a blurred background, a light tint, a 1px hairline outline in the text colour, and text in the cursor's ground colour.
+
+### Performance pass 4: the real culprit
+- Scroll-handler profiling showed that every scroll frame restyled the whole document, about 10 ms a frame and 12.6 s over one pass of the page. The cause was nav.js writing `--scroll-progress` on `<html>`: custom properties inherit, so each write invalidated every element. It is now written on the dock, its only reader, and only when it changes. Handler total went from 12.6 s to 0.6 s.
+- **Projects (three.js):** loaded in idle time after `load` rather than on approach. Shaders are precompiled with `renderer.compile` and textures uploaded with `renderer.initTexture`, so nothing boots mid-scroll.
+- **Measured, full-page scripted scroll (22 px a frame):**
+  - Desktop 1280×800: 16.7 ms on average, one 29 ms frame.
+  - Mobile 375×812: 16.7 ms on average, no frames over 24 ms.
+  - Before: 15–23 long frames, up to 284 ms.
+- **Rule:** never write a per-frame custom property on `<html>` or `<body>`. Set it on the element that reads it.

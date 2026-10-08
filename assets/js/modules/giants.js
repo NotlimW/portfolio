@@ -64,6 +64,36 @@ function split(word) {
  */
 let pointerDirty = false;
 
+const restSettings = `"opsz" 12, "wdth" ${WDTH_REST}`;
+
+/**
+ * Where each letter's centre sits with the whole word at rest, measured from
+ * the edge the word is pinned to (right for data-bleed="right", left for
+ * "left", the middle otherwise). The swell is aimed from these, not from
+ * the letters' live boxes: a widening letter pushes its neighbours away
+ * from the pinned edge — on "Tools" the T slid fifty pixels left — and a
+ * letter measured where it now is had moved off the pointer, shrank back,
+ * slid under it again, and shook. Re-measured only when the size changes.
+ */
+function measureRest(giant, size) {
+  const live = giant.letters.map((l) => l.el.style.fontVariationSettings);
+  giant.letters.forEach((l) => { l.el.style.fontVariationSettings = restSettings; });
+  const w = giant.word.getBoundingClientRect();
+  const pin = giant.box.dataset.bleed;
+  const edge = pin === "right" ? w.right : pin === "left" ? w.left : (w.left + w.right) / 2;
+  giant.rest = giant.letters.map((l) => {
+    const r = l.el.getBoundingClientRect();
+    return { dx: r.left + r.width / 2 - edge, dy: r.top + r.height / 2 - w.top };
+  });
+  giant.letters.forEach((l, i) => { l.el.style.fontVariationSettings = live[i]; });
+  giant.restSize = size;
+}
+
+function pinnedEdge(giant, rect) {
+  const pin = giant.box.dataset.bleed;
+  return pin === "right" ? rect.right : pin === "left" ? rect.left : (rect.left + rect.right) / 2;
+}
+
 function wake() {
   if (!frame) frame = requestAnimationFrame(tick);
 }
@@ -89,17 +119,19 @@ function tick() {
     if (!giant.letters.length || (!pointerDirty && !giant.easing)) return;
 
     const size = parseFloat(getComputedStyle(giant.word).fontSize);
+    if (giant.restSize !== size) measureRest(giant, size);
     const radius = size * FALLOFF;
     const rect = giant.word.getBoundingClientRect();
+    const edge = pinnedEdge(giant, rect);
     const inBand = pointer.y > rect.top - radius && pointer.y < rect.bottom + radius;
 
     giant.easing = false;
-    giant.letters.forEach((letter) => {
+    giant.letters.forEach((letter, i) => {
       let target = WDTH_REST;
       if (inBand) {
-        const r = letter.el.getBoundingClientRect();
-        const dx = pointer.x - (r.left + r.width / 2);
-        const dy = pointer.y - (r.top + r.height / 2);
+        const rest = giant.rest[i];
+        const dx = pointer.x - (edge + rest.dx);
+        const dy = pointer.y - (rect.top + rest.dy);
         const w = Math.exp(-(dx * dx + dy * dy) / (2 * radius * radius));
         target = WDTH_REST + (WDTH_PEAK - WDTH_REST) * w;
       }

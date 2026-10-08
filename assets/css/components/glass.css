@@ -81,11 +81,19 @@
      follow the scroll. Pinning it to inset: 0 would size the backing store to
      the whole section, which on the tall sections is tens of megabytes to
      clear and repaint every frame. */
+  /* The canvas's clip — the section's box, painting nothing itself. */
+  .particles-clip {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
   .particles {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
     width: 100%;
     pointer-events: none;
     /* No will-change. It would promote all thirteen of these to permanent
@@ -144,5 +152,14 @@
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .glass { background-color: var(--bg-raised); }
     [data-ground="dark"] .glass { background-color: var(--c-ink-soft); }
+  }
+}
+
+/* Phones: a lighter blur on the glass (dock, menu button). The radius is
+   what a backdrop-filter pays for on every frame something scrolls under
+   it; at 16px the pill still reads as frosted. */
+@layer components {
+  @media (hover: none) {
+    .glass { --glass-blur: 16px; }
   }
 }

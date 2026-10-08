@@ -284,11 +284,21 @@ export function init(root = document) {
     bodyObserver.observe(document.body);
   }
 
+  let lastProgress = "";
   unsubscribe = onScroll(({ y, progress }) => {
-    document.documentElement.style.setProperty("--scroll-progress", progress.toFixed(4));
+    // On the dock, its only reader — not on the root. A custom property set
+    // on <html> is inherited by every element, so writing it there made the
+    // browser restyle the whole page on every scroll frame: ~10ms a frame,
+    // the largest single cost on the page.
+    const p = progress.toFixed(3);
+    if (dock && p !== lastProgress) {
+      lastProgress = p;
+      dock.style.setProperty("--scroll-progress", p);
+    }
 
     // The scroll cue stops inviting once the invitation has been accepted.
-    if (hero) hero.dataset.scrolled = String(y > 40);
+    const scrolled = String(y > 40);
+    if (hero && hero.dataset.scrolled !== scrolled) hero.dataset.scrolled = scrolled;
 
     const shown = y > window.innerHeight * ARRIVE_AT;
     late.forEach((el) => {

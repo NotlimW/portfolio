@@ -122,10 +122,21 @@ function findPin(canvas) {
 
 function build(canvas) {
   const density = parseFloat(canvas.dataset.density) || 1;
+  const host = canvas.parentElement;
+
+  // The canvas overhangs its window by up to one lattice cell (see render()),
+  // so it sits in a clip the size of the section. The clip, not the section:
+  // overflow on the section itself would un-stick every sticky caption in it.
+  const clip = document.createElement("div");
+  clip.className = "particles-clip";
+  clip.setAttribute("aria-hidden", "true");
+  canvas.replaceWith(clip);
+  clip.append(canvas);
 
   return {
     canvas,
-    host: canvas.parentElement,
+    clip,
+    host,
     // A pinned scene this canvas sits in, if it asks for its dots to hold
     // still vertically (and, optionally, to slide sideways) while pinned.
     pin: findPin(canvas),
@@ -137,6 +148,9 @@ function build(canvas) {
     hostH: 0,
     left: 0,
     slide: -1,
+    ox: 0,
+    oy: 0,
+    bloomed: false,
     live: false,
     farStyle: "rgba(11, 11, 12, 0.22)",
     nearStyle: [],
@@ -201,6 +215,7 @@ function readColours(instance) {
  */
 function release(instance) {
   if (!instance.live) return;
+  instance.bloomed = false;
   instance.canvas.width = 0;
   instance.canvas.height = 0;
   instance.live = false;
@@ -216,10 +231,17 @@ function measure(instance, rect) {
   instance.hostH = rect.height;
   instance.w = rect.width;
   instance.h = Math.min(rect.height, window.innerHeight + VIEW_PAD * 2);
+  // One lattice cell of overhang each way: the field is periodic, so any
+  // drift is a move of under one cell — done with a transform, not a redraw.
+  const cw = instance.w + instance.spacing;
+  const ch = instance.h + instance.spacing;
+  instance.cw = cw;
+  instance.ch = ch;
 
-  canvas.style.height = `${instance.h}px`;
-  canvas.width = Math.round(instance.w * dpr);
-  canvas.height = Math.round(instance.h * dpr);
+  canvas.style.width = `${cw}px`;
+  canvas.style.height = `${ch}px`;
+  canvas.width = Math.round(cw * dpr);
+  canvas.height = Math.round(ch * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   instance.dpr = dpr;
 
@@ -236,6 +258,8 @@ function measure(instance, rect) {
   tctx.arc(size / 2, size / 2, instance.rMin * dpr, 0, TAU);
   tctx.fill();
   instance.pattern = ctx.createPattern(tile, "repeat");
+  instance.pattern.setTransform(new DOMMatrix([1 / dpr, 0, 0, 1 / dpr, -instance.spacing / 2, -instance.spacing / 2]));
+  instance.dirty = true;
 }
 
 /**
@@ -248,27 +272,35 @@ function measure(instance, rect) {
  *
  * @param originY page-space y of this canvas's top edge, parallax applied
  */
-function drawField(instance, originY) {
-  const { ctx, w, h, spacing, left, rMin, rMax, dpr } = instance;
+/** Where the cursor sits in this canvas's own (overhung, shifted) space. */
+function cursorLocal(instance) {
+  return {
+    cx: cursor.x - instance.rectLeft - instance.ox,
+    cy: cursor.y - instance.rectTop - instance.slide - instance.oy,
+  };
+}
 
-  // Lattice phase: where the first column/row inside this window falls. Solved
-  // from page coordinates, so the section next door lands on the same lines.
-  const startX = Math.ceil(left / spacing) * spacing - left;
-  const startY = Math.ceil(originY / spacing) * spacing - originY;
+function bloomReaches(instance) {
+  if (!cursor.seen) return false;
+  const { cx, cy } = cursorLocal(instance);
+  return cy > -REACH && cy < instance.ch + REACH && cx > -REACH && cx < instance.cw + REACH;
+}
 
-  // The resting field: one fill with a pre-drawn dot tile, phased onto the
-  // lattice. This used to be ~1500 arcs per canvas per frame, redrawn on
-  // every scroll frame across every canvas on screen — the single biggest
-  // cost on the page while scrolling. A pattern fill is one draw call.
-  instance.pattern.setTransform(new DOMMatrix([1 / dpr, 0, 0, 1 / dpr, startX - spacing / 2, startY - spacing / 2]));
+function drawField(instance) {
+  const { ctx, cw: w, ch: h, spacing, rMin, rMax } = instance;
+  // Dots sit on whole cells of the canvas's own space; render() moves the
+  // canvas so those cells land on the page-wide lattice.
+  const startX = 0;
+  const startY = 0;
+
+  // The resting field: one fill with a pre-drawn dot tile.
   ctx.fillStyle = instance.pattern;
   ctx.fillRect(0, 0, w, h);
 
-  // Cursor in this canvas's local space. The bloom is a viewport thing — it
-  // follows the pointer on screen, so it is NOT offset by parallax.
-  const cx = cursor.x - instance.rectLeft;
-  const cy = cursor.y - instance.rectTop - instance.slide;
-  if (!cursor.seen || cy < -REACH || cy > h + REACH) return;
+  // The bloom is a viewport thing — it follows the pointer on screen, so it
+  // is NOT offset by parallax.
+  if (!bloomReaches(instance)) return;
+  const { cx, cy } = cursorLocal(instance);
 
   // The bloom: clear the cursor's reach out of the resting field and draw
   // just those dots by hand — swollen, tinted and shoved away from it.
@@ -335,16 +367,10 @@ function render(instance, rect) {
   if (!near) { release(instance); return; }
   if (!instance.live) { measure(instance, rect); instance.live = true; }
 
-  const { ctx, canvas, w, h, hostH } = instance;
+  const { ctx, canvas, h, hostH, spacing } = instance;
 
   // Slide the drawing window down the section so it stays over the viewport.
-  // One composited transform per canvas per frame, versus repainting a
-  // section-tall surface.
   const slide = Math.max(0, Math.min(-rect.top - VIEW_PAD, hostH - h));
-  if (slide !== instance.slide) {
-    instance.slide = slide;
-    canvas.style.transform = `translate3d(0, ${slide.toFixed(1)}px, 0)`;
-  }
 
   // Kept for the cursor's local-space conversion inside drawField().
   instance.rectLeft = rect.left;
@@ -364,8 +390,31 @@ function render(instance, rect) {
   const originY = pageTop - window.scrollY * PARALLAX
     - (instance.host.particleHoldY || 0) * (1 - PARALLAX);
 
-  ctx.clearRect(0, 0, w, h);
-  drawField(instance, originY);
+  // Lattice phase: where the first column/row inside this window falls,
+  // solved from page coordinates so the section next door lands on the same
+  // lines. The canvas is drawn once on whole cells and moved back by the
+  // phase — scrolling, the parallax drift and the sideways slides are all a
+  // composited transform. It used to clear and refill two to four
+  // viewport-sized 2× canvases on every scroll frame, the largest single
+  // cost on the page, and far worse on a phone.
+  const startX = Math.ceil(instance.left / spacing) * spacing - instance.left;
+  const startY = Math.ceil(originY / spacing) * spacing - originY;
+  const ox = startX - spacing;
+  const oy = startY - spacing;
+  if (slide !== instance.slide || Math.abs(ox - instance.ox) > 0.05 || Math.abs(oy - instance.oy) > 0.05) {
+    instance.slide = slide;
+    instance.ox = ox;
+    instance.oy = oy;
+    canvas.style.transform = `translate3d(${ox.toFixed(2)}px, ${(slide + oy).toFixed(2)}px, 0)`;
+  }
+
+  // Repaint only when the bloom is on this canvas, or has just left it.
+  const bloom = bloomReaches(instance);
+  if (!instance.dirty && !bloom && !instance.bloomed) return;
+  instance.dirty = false;
+  instance.bloomed = bloom;
+  ctx.clearRect(0, 0, instance.cw, instance.ch);
+  drawField(instance);
 }
 
 const draw = () => {
@@ -485,6 +534,7 @@ export function destroy() {
   if (onPointerLeave) document.removeEventListener("pointerleave", onPointerLeave);
 
   instances.forEach(release);
+  instances.forEach(({ canvas, clip }) => { clip.replaceWith(canvas); canvas.style.width = ""; });
   instances = [];
   unsubscribe = null;
   onResize = null;

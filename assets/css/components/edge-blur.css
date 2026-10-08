@@ -65,3 +65,12 @@
     -webkit-mask-image: linear-gradient(to top, white 0%, white 20%, transparent 100%);
   }
 }
+
+/* Touch screens: no edge blur. A backdrop-filter re-blurs everything that
+   scrolls under it, every frame, and on a phone two full-width strips of it
+   were a real share of the scroll cost for a detail at the very edge. */
+@layer components {
+  @media (hover: none) {
+    .edge-blur { display: none; }
+  }
+}
