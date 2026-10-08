@@ -798,3 +798,26 @@ node "Portfolio Milton/dev-server.js"
 - **Home, Now:** the giant "Now." and its band are set on the left (no `poster-head--end`, `data-bleed="left"`).
 - **Client logos are real now:** Stockholms stad, Sjöfartsverket, Mister York, by Crea and Hatstore (Proteinbolaget was added, then removed), as SVG in `assets/media/logos/`. They came from each company's own site (Mister York and Hatstore copied from inline SVG in their pages). Colours are flattened to black with white knockouts kept, and they show at opacity 0.55 (0.9 on hover). `--s` evens out the optical size (the badge is larger, the wide Hatstore wordmark smaller). The text stand-ins (Aros Auto, Logimark, Friends Agenda, SoScale, Webbson) and their styles are removed from the carousel. More logos will come later.
 - **Stockholm logo fix:** the clean-up script stripped `class` attributes, and in this file those carried the white crown and head inside the shield (`.st1`). It was re-fetched, and only `.st0` was recoloured to black.
+- **Contact page** (`contact/index.html`, styles in `components/contact.css`):
+  - Built from the About page shell (head, topbar with `aria-current`, menu, dock "Email · Elsewhere", footer with links fixed to `../about/`).
+  - Page hero: giant "Say hello.", band "No forms, just *email*.".
+  - `#email`: the address set large (`.contact__mail`, hairline that sweeps to sun on hover, nowrap) with a "Copy address" button (copy.js). Beside it, three facts on hairlines: Based in (with the live clock), Right now, Good to know.
+  - `#elsewhere`: the TikTok and LinkedIn cards, same as on About.
+  - No form.
+  - Home and About now point Contact (topbar, menu, footer) at this page instead of `#contact`.
+  - The address used is hello@mwstudio.se. The footer's "Contact details" column still says hello@miltonw.com; which one is right is open.
+- **iOS Safari bottom bar:** the bottom edge-blur strip is hidden on touch again. iOS 26 Safari treats a fixed element flush with the bottom edge as a page toolbar and paints a solid bar behind its UI instead of floating it. The top strip stays.
+- **Contact page, tighter:**
+  - Smaller giant (data-fit 0.5) and `.page-hero--compact`. The email section is `section--tight`.
+  - No dock.
+  - The Elsewhere section is gone. LinkedIn and TikTok are now a "Find me on" row of `.link-more` links in the facts list.
+  - "Right now" no longer mentions freelance. "Good to know" adds UGC and collaborations.
+- **Email settled:** hello@miltonw.com everywhere (was hello@mwstudio.se in the footer CTA, menu and contact page).
+- **Contact page:** the "Right now" row is gone. "Find me on" is now a `.social` list: each link has the name large, a muted line under it, and a drawn corner arrow on the right that leaves toward the corner on hover while the name takes the accent.
+- **Contact, social icons:** LinkedIn and TikTok marks from Simple Icons (CC0, simple-icons@13.21.0), inlined as `.social__icon` in the text colour, to the left of each name.
+- **Contact, social links quieter:** a small inline row (icon, name and corner arrow, in the muted tone, coming up to the text colour on hover). The handle lines are gone.
+- **AI stage copy width:** the tag row ran past the paragraphs (column 34ch, paragraphs 28ch at the compact size). Non-stacked `.ai-stage__text` is now `font-size: var(--fs-compact); max-width: var(--measure-compact)`, so the tags wrap inside the text measure.
+- **About, learning part reworded:** the giant is "Always curious" (it was "Self taught", but Milton also studied, and "Still learning" undersold him). The band reads "On top of what's *new*." The lede frames the degree as the start, then the evening reading and next-day testing.
+- **About, one gap:** `main.page-about` sets `--about-gap: clamp(sp-16, 13vw, 12rem)`. Every section takes half of it above and below, the hero keeps half below and Story none above, and `.learn` gets the full gap. Measured after all reveals had played: every transition is 187–190px at 1440 and 64–80px at 375, which matches the hero-to-photo distance Milton liked. (The earlier 520–580 figures were inflated by giant lines still parked below their masks.)
+- **About, Elsewhere simpler:** the TikTok and LinkedIn cards are replaced by the contact page's `.social` row, larger (`.social--large`). The `.tt-card` and `.li-card` styles are unused now.
+- **About, Elsewhere:** the giant is set left, so it lines up with the links under it.

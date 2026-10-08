@@ -68,6 +68,14 @@
 
   .ai-stage--end .ai-stage__text { justify-self: end; }
 
+  /* The column is as wide as its paragraphs (28ch of the compact size), so
+     the tag row above them wraps inside that measure instead of running
+     past it. The stacked stage lays its copy out in columns of its own. */
+  .ai-stage:not(.ai-stage--stack) > .ai-stage__text {
+    font-size: var(--fs-compact);
+    max-width: var(--measure-compact);
+  }
+
   /* Stacked: the copy above, the drawing below it — for a drawing whose
      left edge carries meaning the copy would cover. */
   .ai-stage--stack {

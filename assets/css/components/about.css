@@ -4,6 +4,18 @@
    ========================================================================== */
 @layer components {
 
+  /* ---- One gap for the whole page ------------------------------------------
+     Every part of About sits the same distance from the next: the distance
+     between the page hero's band and the photo, which reads best. Each
+     section takes half of it above and half below. */
+  .page-about {
+    --about-gap: clamp(var(--sp-16), 13vw, 12rem);
+  }
+
+  .page-about > .section { padding-block: calc(var(--about-gap) / 2); }
+  .page-about > .page-hero { padding-bottom: calc(var(--about-gap) / 2); }
+  .page-about > .section--flush-top { padding-top: 0; }
+
   /* ---- Page hero ---------------------------------------------------------
      A subpage: light ground instead of the front page's dark photograph, a
      trail back home above the giant, and the giant is the page's name. */
@@ -193,7 +205,8 @@
   /* ---- Learning: its own part after the education list -----------------
      Set like the page hero: a giant word bleeding off the left, the band
      under it, then the daily loop as three big rows on hairlines. */
-  .learn { margin-top: clamp(var(--sp-16), 10vw, var(--sp-32)); }
+  /* The page's one gap, like every other part. */
+  .learn { margin-top: var(--about-gap); }
 
   .learn__loop {
     display: grid;

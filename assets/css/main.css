@@ -33,6 +33,7 @@
 @import url("components/projects.css");
 @import url("components/ai.css");
 @import url("components/about.css");
+@import url("components/contact.css");
 /* Last of the components: it is the one place that says what a headline is
    made of, and has to win over each component's own font-weight. */
 @import url("components/display.css");
