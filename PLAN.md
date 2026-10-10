@@ -859,3 +859,9 @@ node "Portfolio Milton/dev-server.js"
   - No page requests Google Fonts or Fontshare any more (no visitor data sent to a third party). The docs/ previews still link Google for their own fonts.
   - **JetBrains Mono is removed:** `--font-mono` is gone and its 11 uses take `--font-sans`. The project carousel's canvas labels draw in Satoshi 500.
   - Fonts now in use: Bricolage Grotesque (giants), Satoshi (all other text), Instrument Serif (italic accents), Lato (Aros Auto's brand board only).
+- **Satoshi replaced by Plus Jakarta Sans** (Google Fonts, OFL). The reason is legal: Satoshi's ITF Free Font License is unclear on serving its files from a public repo, while every OFL face may be shared as long as its licence goes with it.
+  - The file is variable (200–800, latin and latin-ext). The 900 token falls back to 800.
+  - `--font-sans`, the display fallback, the canvas labels in projects.js and the styleguide all name Plus Jakarta Sans now.
+  - The Satoshi files are removed from assets/fonts (they remain in git history).
+  - Each family's licence sits beside its files as `assets/fonts/OFL-<family>.txt`.
+  - The home page now loads 3 font files.

@@ -112,11 +112,11 @@
        ink traps into every joint — the crotch of the W, the arm of the k,
        the shoulder of the r — and that is what stops a black grotesk at
        20vw reading as a slab. Set this large, the traps become the texture.
-       Satoshi carries body and the compact poster copy. Mono is reserved for
-       labels, years and figures. Site language: English.
+       Plus Jakarta Sans carries body, the compact poster copy, labels and
+       figures. Site language: English.
        --------------------------------------------------------------------- */
-    --font-display: "Bricolage Grotesque", "Satoshi", -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-sans:    "Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans:    "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     /* The signature word. Instrument Serif italic — the one soft, old
        letterform in a set of hard modern ones, same job as the lens. */
     --font-serif:   "Instrument Serif", Georgia, "Times New Roman", serif;

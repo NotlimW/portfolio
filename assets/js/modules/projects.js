@@ -192,12 +192,12 @@ function paintOverlay(item, title, index, total) {
   ctx.arc(pad + label * 0.22, headY, label * 0.2, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = fg;
-  ctx.font = `500 ${label}px Satoshi, sans-serif`;
+  ctx.font = `500 ${label}px "Plus Jakarta Sans", sans-serif`;
   ctx.fillText(item.dataset.tags || "", pad + label * 0.75, headY);
 
   // Head, right: the index, in mono.
   ctx.textAlign = "right";
-  ctx.font = `500 ${label}px "Satoshi", sans-serif`;
+  ctx.font = `500 ${label}px "Plus Jakarta Sans", sans-serif`;
   ctx.globalAlpha = 0.85;
   ctx.fillText(`${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`, w - pad, headY);
   ctx.globalAlpha = 1;
@@ -225,7 +225,7 @@ function paintOverlay(item, title, index, total) {
   } else {
     // Pictures: the title at the foot, large and light.
     const size = Math.round(u * (PORTRAIT ? 0.16 : 0.105));
-    ctx.font = `500 ${size}px Satoshi, sans-serif`;
+    ctx.font = `500 ${size}px "Plus Jakarta Sans", sans-serif`;
     if ("letterSpacing" in ctx) ctx.letterSpacing = `${-size * 0.03}px`;
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = fg;
@@ -252,7 +252,7 @@ function paintOverlay(item, title, index, total) {
   // Foot, right: "View case" as a quiet text link — the label face, a
   // hairline under it and a small arrow, no button.
   const ctaSize = Math.round(u * (PORTRAIT ? 0.075 : 0.042));
-  ctx.font = `500 ${ctaSize}px Satoshi, sans-serif`;
+  ctx.font = `500 ${ctaSize}px "Plus Jakarta Sans", sans-serif`;
   ctx.textBaseline = "alphabetic";
   ctx.textAlign = "right";
   const arrow = ctaSize * 0.7;
