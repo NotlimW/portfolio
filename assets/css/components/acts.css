@@ -293,7 +293,7 @@
   .wire svg :not(text):not([class*="fill"]) { fill: none; }
 
   .wire__label {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 15px;
     letter-spacing: var(--tr-label);
     text-transform: uppercase;
@@ -371,7 +371,7 @@
   }
 
   .nodes__label {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 15px;
     letter-spacing: var(--tr-label);
     text-transform: uppercase;
@@ -382,7 +382,7 @@
   .nodes__label--live { fill: var(--c-accent); opacity: 1; }
 
   .nodes__tag {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 12px;
     letter-spacing: var(--tr-label);
     text-transform: uppercase;

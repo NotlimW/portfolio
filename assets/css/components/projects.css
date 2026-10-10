@@ -103,7 +103,7 @@
 
   .projects__count {
     white-space: nowrap;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: var(--fs-label);
     color: var(--text-muted);
   }

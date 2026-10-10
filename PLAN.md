@@ -853,3 +853,9 @@ node "Portfolio Milton/dev-server.js"
   - The giant is a plain "404", sized to match the subpage heroes (data-fit 0.23, phones 0.34: a touch larger than "About me", about 220px at 1440). The dancing letters experiment and dance.js were dropped.
   - The band reads "This page took a *wrong turn*." and the lede shows the path that was asked for ("No AI made it up either…").
   - Three big way-back links (Take me home, About me, Say hello) reuse the case page's `.cs-next` tiles. Styles are at the end of `case.css`.
+- **Fonts self-hosted** (`assets/fonts/`, `assets/css/fonts.css` imported first in main.css):
+  - Bricolage Grotesque (variable, latin and latin-ext), Instrument Serif (regular and italic, latin and latin-ext), Satoshi (300–900) and Lato (400/700 latin, case page only).
+  - The unicode-ranges are copied from Google's own CSS, so a page only fetches the subsets it uses. The home page loads 5 files.
+  - No page requests Google Fonts or Fontshare any more (no visitor data sent to a third party). The docs/ previews still link Google for their own fonts.
+  - **JetBrains Mono is removed:** `--font-mono` is gone and its 11 uses take `--font-sans`. The project carousel's canvas labels draw in Satoshi 500.
+  - Fonts now in use: Bricolage Grotesque (giants), Satoshi (all other text), Instrument Serif (italic accents), Lato (Aros Auto's brand board only).

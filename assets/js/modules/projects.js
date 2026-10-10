@@ -197,7 +197,7 @@ function paintOverlay(item, title, index, total) {
 
   // Head, right: the index, in mono.
   ctx.textAlign = "right";
-  ctx.font = `400 ${label}px "JetBrains Mono", monospace`;
+  ctx.font = `500 ${label}px "Satoshi", sans-serif`;
   ctx.globalAlpha = 0.85;
   ctx.fillText(`${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`, w - pad, headY);
   ctx.globalAlpha = 1;

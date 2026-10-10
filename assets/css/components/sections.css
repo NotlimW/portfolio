@@ -141,7 +141,7 @@
   }
 
   .process__n {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: var(--fs-label);
     font-weight: var(--fw-regular);
     letter-spacing: 0;
@@ -390,7 +390,7 @@
   }
 
   .tt-card__handle {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: var(--fs-label);
     color: var(--text-muted);
   }

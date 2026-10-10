@@ -173,7 +173,7 @@
   .gfx-accent-line { fill: none; stroke: var(--gfx-accent); stroke-opacity: var(--gfx-a-guide); }
 
   .gfx-t {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 18px;               /* user units — ~11px at the narrowest use */
     font-weight: var(--fw-medium);
     letter-spacing: var(--tr-label);
@@ -537,7 +537,7 @@
   /* Label sitting inside a box. Mono, small, and it never wraps — a node
      label that wraps stops looking like a node label. */
   .gfx-label {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 17px;
     font-weight: var(--fw-medium);
     letter-spacing: 0;
