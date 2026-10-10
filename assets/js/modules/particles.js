@@ -1,34 +1,22 @@
 /**
- * particles.js — the halftone field behind the page.
+ * particles.js — the halftone dot field behind every section.
  *
- * One dot lattice, evenly spaced, running the full height of the site. Dots
- * rest small and swell toward the cursor, so the pointer drags a soft bloom
- * around with it the way a halftone plate reads under a lens. The whole field
- * also drifts against scroll, which is where the page's sense of depth comes
- * from.
+ * One evenly spaced lattice that swells toward the cursor and drifts
+ * against the scroll.
  *
- *   <canvas data-particles></canvas>            the field
- *   <canvas data-particles data-density="0.6">  wider spacing, fewer dots
- *   host.particleShiftX = 120                     slide this host's dots sideways
- *   host.particleHoldY = 300                      cancel 300px of scroll (a pinned host)
- *   <section data-particles-hold[="selector"]      the same, worked out for every canvas
- *            data-particles-slide="0.4">        inside a pinned scene; slide = how far the
- *                                                 dots travel sideways over the pin, as a
- *                                                 share of the viewport width;
- *                                                 data-particles-hold-media limits it
- *                                                 to when the scene is actually pinned
+ *   <canvas data-particles>                       the field
+ *   <canvas data-particles data-density="0.6">    wider spacing
+ *   host.particleShiftX = 120                     slide a host's dots sideways
+ *   host.particleHoldY = 300                      cancel scroll (a pinned host)
+ *   <section data-particles-hold[="selector"]     work out the hold for every
+ *            data-particles-slide="0.4">          canvas in a pinned scene;
+ *                                                 slide is the sideways travel
+ *                                                 as a share of the viewport
  *
- * Ink is read from CSS rather than hardcoded, so a canvas inside a dark
- * section draws itself light without knowing anything about the section.
- *
- * WHY THIS IS STILL ONE CANVAS PER SECTION, not one fixed canvas for the whole
- * page: every section paints its own opaque background — the light sections
- * are paper, the dark ones near-black — so a single canvas behind them all
- * would be covered by the first one it passed under. The field is made
- * continuous instead by anchoring the lattice to PAGE coordinates rather than
- * to each canvas: neighbouring sections solve the same lattice for their own
- * slice of the page, so the dots line up across every seam and the seams
- * disappear.
+ * Each section has its own canvas, because every section paints an opaque
+ * background. The lattice is anchored to page coordinates, so neighbouring
+ * canvases line up and the field reads as one. Ink colours come from CSS,
+ * so a canvas in a dark section draws itself light.
  */
 
 import { onScroll } from "./smooth-scroll.js";
@@ -40,18 +28,7 @@ const SPACING = 32;
 /** How far the cursor's swell reaches. */
 const REACH = 320;
 
-/**
- * How far a dot is shoved away from the cursor at the peak of its influence.
- * The field parts around the pointer instead of only brightening under it,
- * which is what makes the grid read as a surface being pressed rather than a
- * lamp being shone on it.
- *
- * There is deliberately no per-dot velocity or spring here. The springiness
- * comes from the cursor itself being eased (see EASE): the whole field lags
- * and settles as one, which costs a couple of multiplies per dot instead of
- * ~1500 stateful bodies integrated every frame — and it never leaves a ticker
- * running once things have come to rest.
- */
+/** How far a dot is shoved away from the cursor at the peak of its influence. */
 const PUSH = 6;
 
 /** How many alpha/tint steps the near field is quantised into. See drawField. */
@@ -62,11 +39,7 @@ const TAU = Math.PI * 2;
 /** Fraction of scroll the field travels — under 1, so it lags and reads deep. */
 const PARALLAX = 0.12;
 
-/**
- * How much of the gap to the cursor is closed per frame. Low enough that the
- * bloom trails the pointer rather than being welded to it, which is the whole
- * character of the effect.
- */
+/** How much of the gap to the cursor is closed per frame. */
 const EASE = 0.085;
 
 /** Below this, the bloom has arrived and the animation loop can stop. */
@@ -76,15 +49,6 @@ const SETTLED = 0.4;
  * A canvas is never taller than the viewport plus this much slack, however
  * tall its section is, and it slides to follow the viewport as the section
  * passes.
- *
- * Sizing a canvas to its section looks harmless and is not: one section here
- * is 4535px tall, which at 2× is a 41MB backing store that clearRect() and
- * the whole draw pass have to touch on every scroll frame. Across ten
- * sections that was 116MB of surface being cleared and repainted while
- * scrolling — the single largest cost on the page.
- *
- * The lattice is procedural and solved from a page offset, so drawing a
- * viewport-sized window onto the same field is identical to drawing all of it.
  */
 const VIEW_PAD = 160;
 
@@ -125,8 +89,7 @@ function build(canvas) {
   const host = canvas.parentElement;
 
   // The canvas overhangs its window by up to one lattice cell (see render()),
-  // so it sits in a clip the size of the section. The clip, not the section:
-  // overflow on the section itself would un-stick every sticky caption in it.
+  // so it sits in a clip the size of the section.
   const clip = document.createElement("div");
   clip.className = "particles-clip";
   clip.setAttribute("aria-hidden", "true");
@@ -161,13 +124,7 @@ function build(canvas) {
 
 /**
  * Reads ink and dot weight from CSS so the canvas matches whichever ground it
- * sits on — and so the field can be tuned in the stylesheet like everything
- * else, rather than by editing numbers in here.
- *
- * The near field's fill styles are baked into strings here, once per resize,
- * rather than composed per frame: they only depend on tokens, and building
- * six rgba() strings inside the draw loop would be six allocations per canvas
- * per frame for values that never change between resizes.
+ * sits on.
  */
 function readColours(instance) {
   const styles = getComputedStyle(instance.canvas);
@@ -193,7 +150,8 @@ function readColours(instance) {
 
   // One style per influence band, from the outer edge of the cursor's reach
   // (near-invisible ink) to directly under it (bright, and pulled toward the
-  // accent so the bloom picks up a gold cast rather than just getting darker).
+  // accent so the bloom picks up a gold cast rather than just getting
+  // darker).
   instance.nearStyle = Array.from({ length: NEAR_STEPS }, (_, i) => {
     const t = (i + 0.5) / NEAR_STEPS;
     const mix = tint * t;
@@ -202,17 +160,7 @@ function readColours(instance) {
   });
 }
 
-/**
- * Hand a canvas's memory back.
- *
- * A viewport-sized buffer is ~24MB at this DPR, and there are more than a
- * dozen of them. Allocating them all up front is a third of a gigabyte of GPU
- * surface held for sections the visitor may never reach — and the cost is not
- * paid at load, it accumulates as each one is first rasterised, which is
- * exactly what "it gets laggy once you have scrolled a while" feels like.
- *
- * Setting either dimension to 0 frees the backing store immediately.
- */
+/** Hand a canvas's memory back. */
 function release(instance) {
   if (!instance.live) return;
   instance.bloomed = false;
@@ -264,12 +212,6 @@ function measure(instance, rect) {
 
 /**
  * Draws the slice of the page-wide lattice that this canvas covers.
- *
- * The resting field is one pattern fill. Inside the cursor's reach the dots
- * are drawn by hand as NEAR_STEPS paths, one per band of influence — a fill
- * can only carry one colour, and the banding is invisible because radius
- * still varies smoothly across the band boundaries.
- *
  * @param originY page-space y of this canvas's top edge, parallax applied
  */
 /** Where the cursor sits in this canvas's own (overhung, shifted) space. */
@@ -347,14 +289,12 @@ function drawField(instance) {
 }
 
 /**
- * Reads `rect` rather than measuring it: with a dozen-plus canvases and
- * six to eight of them typically near the viewport at once on the taller
- * stretches of the page, calling getBoundingClientRect() from inside this
- * function — interleaved with the canvas.width and canvas.style.transform
- * writes below — was forcing a synchronous layout on every single one of
- * them. draw() now reads every host's rect in one batched pass before any
- * instance writes anything, which is the difference between one reflow per
- * frame and one per canvas per frame.
+ * Reads `rect` rather than measuring it: with a dozen-plus canvases and six
+ * to eight of them typically near the viewport at once on the taller
+ * stretches of the page, calling getBoundingClientRect() here, interleaved
+ * with the canvas.width and canvas.style.transform writes below, would force
+ * a synchronous layout per canvas. draw() reads every host's rect in one
+ * batched pass before any instance writes anything.
  */
 function render(instance, rect) {
   const viewportH = window.innerHeight;
@@ -375,28 +315,19 @@ function render(instance, rect) {
   // Kept for the cursor's local-space conversion inside drawField().
   instance.rectLeft = rect.left;
   instance.rectTop = rect.top;
-  // A host can slide its own slice of the field sideways (the projects
-  // ribbon does, so the dots travel with the cards): host.particleShiftX,
-  // in CSS px, moves the lattice phase left by that much.
+  // A host can slide its own slice of the field sideways (the projects ribbon
+  // does, so the dots travel with the cards).
   instance.left = rect.left + window.scrollX + (instance.host.particleShiftX || 0);
 
-  // Page-space y of this canvas's top edge, minus the parallax lag. Because
-  // every canvas subtracts the same lag from the same page axis, the field
-  // stays continuous across section seams while it drifts.
+  // Page-space y of this canvas's top edge, minus the parallax lag.
   const pageTop = rect.top + window.scrollY + slide;
-  // A pinned host can hold its dots still vertically while it is pinned:
-  // host.particleHoldY is how far the page has scrolled through the pin, and
-  // the field is moved back up by exactly the distance that scroll carried it.
+  // A pinned host can hold its dots still vertically while it is pinned.
   const originY = pageTop - window.scrollY * PARALLAX
     - (instance.host.particleHoldY || 0) * (1 - PARALLAX);
 
   // Lattice phase: where the first column/row inside this window falls,
   // solved from page coordinates so the section next door lands on the same
-  // lines. The canvas is drawn once on whole cells and moved back by the
-  // phase — scrolling, the parallax drift and the sideways slides are all a
-  // composited transform. It used to clear and refill two to four
-  // viewport-sized 2× canvases on every scroll frame, the largest single
-  // cost on the page, and far worse on a phone.
+  // lines.
   const startX = Math.ceil(instance.left / spacing) * spacing - instance.left;
   const startY = Math.ceil(originY / spacing) * spacing - originY;
   const ox = startX - spacing;
@@ -434,7 +365,7 @@ const draw = () => {
       const slide = instance.pin.particlesSlide;
       // A pin that is also a scene carries its own eased, smoothed progress:
       // slide the dots by that, so they move with the track instead of
-      // against it. Otherwise, the raw share of the pin scrolled.
+      // against it.
       const scene = instance.pin.hasAttribute("data-scene")
         ? parseFloat(instance.pin.style.getPropertyValue("--progress"))
         : NaN;
@@ -447,8 +378,7 @@ const draw = () => {
 
 /**
  * Walks the bloom toward the pointer one frame at a time and stops as soon as
- * it gets there. Nothing animates while the page and the pointer are both
- * still — the loop is not a permanent ticker.
+ * it gets there.
  */
 function chase() {
   const dx = cursor.targetX - cursor.x;
@@ -491,9 +421,7 @@ export function init(root = document) {
   unsubscribe = onScroll(draw);
   window.addEventListener("scene:frame", draw);
 
-  // Coarse pointers get the field and the parallax but no bloom: there is no
-  // hover on a touchscreen, and a bloom pinned to the last tap is just a
-  // smudge the visitor cannot clear.
+  // Coarse pointers get the field and the parallax but no bloom.
   if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
     onPointerMove = (event) => {
       cursor.targetX = event.clientX;

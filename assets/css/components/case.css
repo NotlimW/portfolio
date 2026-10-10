@@ -2,9 +2,6 @@
    CASE — a case study page (work/<client>/). The shared system carries the
    hero, poster heads, reveals and footer; this file holds the case's own
    parts: the facts row, the shots, the brief, the numbers, the outcomes.
-   The .aa-* block is Aros Auto's brand board, rebuilt from their stylesheet
-   as real elements (their colours, Lato, the cut corner), so it is set in
-   their language rather than the site's.
    ========================================================================== */
 @layer components {
 
@@ -44,7 +41,6 @@
   .cs-shot--wide   { aspect-ratio: 16 / 9; }
   .cs-shot--wide img { object-position: 68% 62%; }   /* the laptop sits right of centre */
   .cs-shot--tall   { aspect-ratio: 4 / 5; }
-
 
   @media (max-width: 47.99rem) {
     .cs-shot--hero, .cs-shot--wide { aspect-ratio: 4 / 3; }
@@ -253,9 +249,7 @@
     .cs-outcomes li { grid-template-columns: 11rem minmax(0, 1fr); align-items: baseline; }
   }
 
-  /* The end of the case: two big ways on, side by side. A label over a
-     large line on a hairline; on hover the line takes the accent, the
-     hairline fills with sun and the arrow moves off toward where it goes. */
+  /* The end of the case: two big ways on, side by side. */
   .cs-next {
     display: grid;
     gap: var(--sp-6) clamp(var(--sp-6), 3vw, var(--sp-12));
@@ -271,7 +265,7 @@
     padding-top: var(--sp-6);
     background: linear-gradient(var(--c-sun) 0 0) 0 0 / 0 2px no-repeat,
                 linear-gradient(var(--line-strong) 0 0) 0 0 / 100% 1px no-repeat;
-    transition: background-size 0.5s var(--e-reveal);
+    transition: background-size var(--d-sweep) var(--e-reveal);
   }
 
   .cs-next__link .t-label { color: var(--text-muted); }
@@ -347,7 +341,7 @@
     color: color-mix(in oklab, currentColor 60%, transparent);
   }
 
-  .aa-card__label--on-color { color: rgb(255 255 255 / 0.85); }
+  .aa-card__label--on-color { color: color-mix(in oklab, var(--c-white) 85%, transparent); }
 
   /* Logos: the positive one sits on pale (the white of the crop drops out),
      the inverted one is its own dark card, as in the stylesheet. */
@@ -355,15 +349,15 @@
   .aa-card--logo img { width: min(70%, 22rem); height: auto; mix-blend-mode: multiply; }
   .aa-card--logo .aa-card__label { position: absolute; left: inherit; bottom: clamp(var(--sp-4), 2vw, var(--sp-8)); left: clamp(var(--sp-4), 2vw, var(--sp-8)); }
 
-  .aa-card--logo-dark { padding: 0; background: var(--aa-black); color: #fff; }
+  .aa-card--logo-dark { padding: 0; background: var(--aa-black); color: var(--c-white); }
   .aa-card--logo-dark img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); }
-  .aa-card--logo-dark .aa-card__label { position: absolute; bottom: clamp(var(--sp-4), 2vw, var(--sp-8)); left: clamp(var(--sp-4), 2vw, var(--sp-8)); color: rgb(255 255 255 / 0.6); }
+  .aa-card--logo-dark .aa-card__label { position: absolute; bottom: clamp(var(--sp-4), 2vw, var(--sp-8)); left: clamp(var(--sp-4), 2vw, var(--sp-8)); color: color-mix(in oklab, var(--c-white) 60%, transparent); }
 
   /* Colours */
   .aa-swatch { grid-column: span 2; align-content: end; gap: var(--sp-1); min-height: clamp(9rem, 15vw, 14rem); }
   .aa-swatch__name { font-weight: 700; font-size: clamp(1rem, 1.6vw, 1.375rem); }
   .aa-swatch__hex { font-family: var(--font-sans); font-size: var(--fs-small); opacity: 0.75; }
-  .aa-swatch--primary { background: var(--aa-primary); color: #fff; }
+  .aa-swatch--primary { background: var(--aa-primary); color: var(--c-white); }
   .aa-swatch--pale    { background: var(--aa-pale); box-shadow: inset 0 0 0 1px var(--line); }
   .aa-swatch--black   { background: var(--aa-black); color: var(--aa-pale); }
 
@@ -386,7 +380,7 @@
 
   /* Shape: an orange card with its bottom right corner cut out, and the
      round arrow button sitting in the cut. */
-  .aa-shape { background: var(--aa-primary); color: #fff; align-content: space-between; min-height: clamp(12rem, 18vw, 16rem); }
+  .aa-shape { background: var(--aa-primary); color: var(--c-white); align-content: space-between; min-height: clamp(12rem, 18vw, 16rem); }
   .aa-shape__title { font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; }
   .aa-shape__notch {
     position: absolute;
@@ -415,8 +409,6 @@
      drops out against the card. */
   .aa-photo { grid-column: span 2; padding: 0; min-height: 0; aspect-ratio: 1; }
   .aa-photo img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
-
-  .aa-board__note { grid-column: 1 / -1; margin: var(--sp-2) 0 0; }
 
   /* Phones: the logo cards are too short for a label beside the mark. */
   @media (max-width: 47.99rem) {

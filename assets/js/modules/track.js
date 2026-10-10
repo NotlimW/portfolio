@@ -1,10 +1,9 @@
 /**
  * track.js — measurement for every horizontal track on the page.
  *
- * Two sections now travel sideways: the process steps and the node-pipeline
- * act. Both are pinned by CSS `position: sticky` and timed by --progress from
- * scene.js. The one thing neither CSS nor scene.js can know is how far the
- * track actually has to move for its far edge to reach the viewport's far
+ * The process steps travel sideways: pinned by CSS `position: sticky` and
+ * timed by --progress from scene.js. The one thing neither CSS nor scene.js
+ * can know is how far the track actually has to move for its far edge to reach the viewport's far
  * edge — that needs a measurement, and it is the only reason this file exists.
  *
  *   <div data-track>   →   --track-distance: <px>

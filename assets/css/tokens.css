@@ -1,21 +1,17 @@
 /* ==========================================================================
    TOKENS — Milton Winroth Portfolio
    The only file in the project allowed to contain raw values.
-   Everything else references these custom properties.
    ========================================================================== */
 
 @layer tokens {
   :root {
     /* ---------------------------------------------------------------------
        1. COLOUR — primitives
-       "Leather & lamplight", locked 2026-10-04, revised twice the same day.
-       Read off one photograph: a white poster in a dark room with a single
-       shaft of sun across it. The room is the dark ground, the poster is
-       the light ground, and the sun is the only colour in the system —
-       yellow, not amber, not brown. Everything else is ink and paper.
+       "Leather & lamplight".
        --------------------------------------------------------------------- */
     --c-ink:            #17120E;   /* espresso — never #000 */
     --c-ink-soft:       #241C15;   /* walnut, raised on dark */
+    --c-ink-deep:       #0C0A08;   /* the AI chapter's deeper night */
     --c-paper:          #FBFAF7;   /* poster white — a breath of warmth */
     --c-white:          #FFFFFF;   /* raised on light */
 
@@ -32,20 +28,9 @@
     --c-grey-800:       #2F2821;
     --c-grey-900:       #1D1712;
 
-    /* Accent — the sun, and nothing else. No brown, no amber.
-       Yellow is 12:1 on espresso, so on the dark ground it is text. On
-       white it is 1.4:1, so on the light ground it NEVER carries text: it
-       is a surface — the highlighter stroke under the signature word, the
-       fill buttons wipe to, rules, dots, the lens caustic. Accent TEXT on
-       the light ground (labels, section numbers) is simply ink. Two tokens
-       keep that honest:
-         --c-accent       fills, rules, graphics — yellow on both grounds
-         --c-accent-text  anything you read — ink on light, yellow on dark
-       --c-sun-deep is the same yellow a step denser, for thin strokes and
-       dots on white, where full-strength sun would wash out. */
+    /* Accent — the sun, and nothing else. */
     --c-sun:            #FFD900;
     --c-sun-deep:       #F2CE00;
-    --c-amber:          var(--c-sun);   /* alias — older rules name it */
 
     --c-accent-lift:    var(--c-sun);
 
@@ -83,14 +68,7 @@
     --glass-edge:  var(--glass-light-edge);
     --glass-drop:  var(--glass-light-drop);
 
-    /* The halftone field reads its colour and weight from CSS. Channels, not
-       hex, because the canvas composes its own alpha.
-
-       Most of the separation between the resting field and the cursor's bloom
-       is carried by ALPHA, not size: the radius only has to travel from 0.9 to
-       2.0 because the dots are simultaneously going from nearly transparent to
-       nearly solid, and picking up a gold cast on the way. Growing them far
-       past that reads as bubbles rather than as a plate lighting up. */
+    /* The halftone field reads its colour and weight from CSS. */
     --particle-ink:            23, 18, 14;
     --particle-dot-min:        0.9;
     --particle-dot-max:        2.0;
@@ -98,22 +76,9 @@
     --particle-dot-alpha-near: 0.57;  /* directly under the cursor  */
     --particle-tint:           0.7;   /* how far toward the accent  */
 
-    /* The canvas stopped drawing rules and guides when it became a halftone
-       field, but components/graphics.css still builds its plates and guide
-       lines from these — same drawing language, different surface. */
-    --particle-accent:      242, 206, 0;
-    --particle-grid-alpha:  0.055;
-    --particle-guide-alpha: 0.3;
-
     /* ---------------------------------------------------------------------
-       3. TYPE — Direction B, "Poster", locked 2026-10-04.
-       Bricolage Grotesque at ExtraBold carries every headline. It is set at
-       its smallest optical size on purpose: at opsz 12 the face cuts deep
-       ink traps into every joint — the crotch of the W, the arm of the k,
-       the shoulder of the r — and that is what stops a black grotesk at
-       20vw reading as a slab. Set this large, the traps become the texture.
-       Plus Jakarta Sans carries body, the compact poster copy, labels and
-       figures. Site language: English.
+       3. TYPE — "Poster"
+       Bricolage Grotesque at ExtraBold carries every headline.
        --------------------------------------------------------------------- */
     --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-sans:    "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -122,17 +87,13 @@
     --font-serif:   "Instrument Serif", Georgia, "Times New Roman", serif;
 
     --fw-display:   800;
-    /* Everything that is not a giant: subheads, small headlines, quotes.
-       Semibold, so the ExtraBold giants are the only black-weight thing on
-       the page and the contrast reads as a decision. */
-    --fw-sub:       600;
     --fv-display:   "opsz" 12, "wdth" 100;
     /* The bleed words go narrower. Condensed, a word can be set bigger
        before it runs out of page — and the point is that it doesn't fit. */
     --fv-display-tight: "opsz" 12, "wdth" 82;
     /* Giants are set in sentence case and sized by modules/fit.js to a
-       fraction of the frame (data-fit), and held inside the page margins
-       on whichever side data-bleed names — they never leave the frame. */
+       fraction of the frame (data-fit), and held inside the page margins on
+       whichever side data-bleed names. */
 
     /* Bleed type. Sized off the viewport WIDTH and deliberately too big for
        it: the word is cropped by the frame, like the poster it came from. */
@@ -141,37 +102,31 @@
     --tr-bleed:      -0.035em;
 
     /* Compact poster copy — the small, dense block that sits against the
-       bleed type. The contrast in SIZE is the design: it only works if this
-       stays genuinely small and set tight. */
+       bleed type. */
     --fs-compact:    clamp(0.8125rem, 0.9vw, 0.9375rem);
     --lh-compact:    1.18;
     --tr-compact:    -0.012em;
     --measure-compact: 28ch;
 
-    /* The hero headline must never wrap mid-line — the line-mask reveal
-       assumes one line per mask. 12.5vw keeps "problem solver." inside the
-       page margins down to a 320px viewport with room to spare. */
+    /* The hero headline must never wrap mid-line. */
     --fs-display-xl: clamp(2.75rem, 12.5vw, 11rem);
-    /* Between display-l and display-xl. The footer CTA is the second-loudest
-       moment on the page and was sharing a size with section subheads. */
+    /* Between display-l and display-xl, for the footer CTA. */
     --fs-display-m:  clamp(2.75rem,  9vw,   8rem);
     --fs-display-l:  clamp(2.75rem,  7vw,   6rem);
     /* Magazine scale: the giants are enormous, so everything else drops a
-       long way. h2/h3 are now subheads, not headlines. */
+       long way. h2/h3 are subheads, not headlines. */
     --fs-h2:         clamp(1.375rem, 2.2vw, 2rem);
     --fs-h3:         clamp(1.0625rem, 1.4vw, 1.25rem);
     --fs-body-l:     clamp(0.9375rem, 1vw, 1.0625rem);
     --fs-body:       0.9375rem;
     --fs-small:      0.875rem;
     --fs-label:      0.75rem;
-    /* 11px. Reserved for instrument readouts — the scroll percentage in the
-       nav, the cursor label, menu indices. Never for anything you have to
-       read, only for things you glance at. */
+    /* 11px. */
     --fs-micro:      0.6875rem;
 
-    /* Display type gets tighter, not bigger. At 11rem the old 0.88/-0.04em
-       still had daylight between the lines and between the letters; a set
-       this large should read as one mass. Body sizes are untouched. */
+    /* Display type gets tighter, not bigger: set this large, a headline
+       should read as one mass, with no daylight between its lines or its
+       letters. */
     --lh-tight:      0.84;
     --lh-display:    0.88;
     --lh-heading:    1.0;
@@ -180,7 +135,6 @@
     --tr-display-xl: -0.05em;
     --tr-display-l:  -0.042em;
     --tr-heading:    -0.03em;
-    --tr-label:       0;
     /* No tracking on any text, labels and micro readouts included — a
        design decision. These stay as tokens so it is one place to change. */
     --tr-micro:       0;
@@ -227,9 +181,7 @@
 
     /* ---------------------------------------------------------------------
        6. RADIUS & ELEVATION
-       Barely rounded. The corner should register as intentional, not soft —
-       at display sizes anything above ~12px starts reading as friendly
-       rather than precise.
+       Barely rounded.
        --------------------------------------------------------------------- */
     --r-xs:   0.125rem;  /*  2 */
     --r-sm:   0.25rem;   /*  4 */
@@ -245,10 +197,7 @@
 
     /* ---------------------------------------------------------------------
        6b. GLASS — frosted, not glossy
-       No gradient fills. A gradient reads as a painted surface; etched glass
-       reads as a flat tint plus a sprayed grain, a hard blur behind it, and
-       two hairline edges that catch light. Depth comes from the edges and
-       the drop, never from a ramp across the face.
+       No gradient fills.
        --------------------------------------------------------------------- */
     --glass-blur:      36px;
     --glass-saturate:  1.5;
@@ -277,25 +226,6 @@
                          0 28px 70px -30px rgb(0 0 0 / 0.85);
 
     /* ---------------------------------------------------------------------
-       6c. LENS — the poster's glass drop
-       The one soft thing in a hard system. A free-form drop of frosted glass
-       laid over the display type: everything else on the site is cropped,
-       black and square-shouldered; this is round, wet and catches the sun.
-       It is the contrast, so it is rationed — one per scene, never a card.
-       Unlike .glass it IS allowed light ramps, because a drop is curved and
-       a curved surface has a highlight. Flat, it would read as a sticker.
-       --------------------------------------------------------------------- */
-    --lens-size:      clamp(11rem, 36vw, 36rem);
-    --lens-blur:      3.5px;
-    --lens-saturate:  1.4;
-    --lens-bright:    1.02;
-    --lens-tint:      rgb(255 248 236 / 0.07);
-    --lens-rim:       rgb(255 252 245 / 0.8);
-    --lens-caustic:   rgb(255 210 26 / 0.34);   /* the sun, focused through it */
-    --lens-shadow:    rgb(23 18 14 / 0.16);
-    --lens-morph:     24s;
-
-    /* ---------------------------------------------------------------------
        7. MOTION
        Six signature moves, one shared rhythm.
        --------------------------------------------------------------------- */
@@ -304,29 +234,17 @@
     --d-short:    0.35s;
     --d-roll:     0.45s;   /* label roll-overs in the nav */
     --d-reveal:   0.8s;
+    --d-sweep:    0.5s;    /* the hairline under a link filling with sun */
     --d-overlay:  0.7s;
 
     --e-reveal:  cubic-bezier(0.16, 1, 0.30, 1);    /* expo.out — entrances */
     --e-overlay: cubic-bezier(0.65, 0, 0.35, 1);    /* in-out — curtains */
     --e-micro:   cubic-bezier(0.33, 1, 0.68, 1);    /* hover, press */
-    /* Overshoots by ~4%. Only for things a pointer is touching — a hover
-       that lands slightly past and settles reads confident; the same curve
-       on a scroll reveal reads bouncy, which is the opposite of the point. */
+    /* Overshoots by ~4%. */
     --e-attitude: cubic-bezier(0.34, 1.28, 0.42, 1);
     /* The close-side twin of --e-attitude, for anything that bounces open
        toward a hard floor of zero (a width, a scale). --e-attitude overshoots
-       *past* its target and settles back — that only reads as a bounce when
-       there's room past the target to overshoot into. Closing to zero has no
-       such room: the same curve run in reverse wants to overshoot *below*
-       zero, which a width can't do, so the browser clips it. This curve puts
-       the overshoot at the *start* instead — the element grows a touch before
-       it commits to collapsing — so the bounce stays visible whichever
-       direction the floor is on.
-       The second control point still overshoots past 1, same idea as
-       --e-attitude: the clipped tail of that overshoot is invisible (a width
-       can't go negative), but its shape is not — the curve is already at the
-       floor with room to spare instead of sprinting into it, so the landing
-       reads as a settle rather than a snap. */
+       past* its target and settles back. */
     --e-anticipate: cubic-bezier(0.6, -0.28, 0.74, 1.2);
     /* Exits leave faster than they arrived. ~65% of the enter duration. */
     --e-exit:    cubic-bezier(0.55, 0, 0.85, 0.35);
@@ -334,35 +252,22 @@
     --stagger-line: 80ms;
     --stagger-grid: 60ms;
 
-    /* Headlines swing up out of the mask instead of sliding straight up.
-       Origin is the top-left of the line, so the far end drops and lifts —
-       it never breaks the top of the mask. */
+    /* Headlines swing up out of the mask instead of sliding straight up. */
     --reveal-skew: 3deg;
 
     /* Each frame closes this fraction of the distance left to travel, so the
-       number sets how long a gesture keeps coasting after your fingers stop.
-       At 0.09 a single flick took 1.23s to settle — the frame rate was a
-       locked 60fps the whole time and the page still felt sluggish, because
-       what you feel is the input latency, not the frame budget. 0.16 halves
-       the tail and still reads as clearly smoothed. */
+       number sets how long a gesture keeps coasting after your fingers stop. */
     --lenis-lerp: 0.16;
 
     /* ---------------------------------------------------------------------
        7b. EDGE — cursor, instrument readouts, surface texture
        --------------------------------------------------------------------- */
     --cursor-dot:      9px;    /* resting dot */
-    --cursor-dot-hot:  4px;    /* dot when a ring has taken over */
     --cursor-ring:     72px;   /* ring drawn around an interactive target */
     --cursor-squash:   0.55;   /* how much pointer speed stretches the dot */
 
-    /* Full-page film grain. Sprayed once over everything so light and dark
-       sections share one surface. Past ~0.06 it starts fighting body copy. */
-    --edge-grain:      0.045;
-    --edge-grain-tile: 220px;
-
     /* The menu curtain is drawn as a construction grid rather than a flat
-       black field — same language as the particle canvas, so the overlay
-       reads as part of the design file instead of a modal. */
+       black field. */
     --menu-grid-step:  4.5rem;
     --menu-dim:        0.32;   /* unhovered menu rows recede to this opacity */
 
@@ -376,18 +281,13 @@
     --z-sticky: 20;
     --z-nav:   100;
     --z-menu:  200;
-    /* Above everything, including the curtain. A custom cursor that
-       disappears behind the nav pill or the open menu is worse than no
-       custom cursor — it makes the pointer look like it is falling through
-       the page. This was 40, i.e. under both. */
+    /* Above everything, including the curtain. */
     --z-cursor: 300;
   }
 
   /* ---------------------------------------------------------------------
      Ground switching.
-     A section declares which ground it sits on and everything inside it —
-     text, rules, glass — resolves correctly without knowing anything about
-     its context. This is what makes alternating light and dark cheap.
+     A section declares which ground it sits on and everything inside it.
      --------------------------------------------------------------------- */
   [data-ground="dark"] {
     --bg:          var(--c-ink);
@@ -417,8 +317,6 @@
     --particle-dot-alpha:      0.28;
     --particle-dot-alpha-near: 0.63;
     --particle-accent:         255, 217, 0;
-    --particle-grid-alpha:     0.075;
-    --particle-guide-alpha:    0.4;
 
     background: var(--bg);
     color: var(--text);
@@ -461,13 +359,13 @@
       --d-short: 0.01ms;
       --d-roll: 0.01ms;
       --d-reveal: 0.01ms;
+      --d-sweep: 0.01ms;
       --d-overlay: 0.01ms;
       --stagger-line: 0ms;
       --stagger-grid: 0ms;
 
       /* The tilt on the line reveal and the pointer-speed squash are motion,
-         not styling. Zeroing them here means every rule that reads these
-         lands on a valid resting state without needing its own query. */
+         not styling. */
       --reveal-skew: 0deg;
       --cursor-squash: 0;
       --magnet: 0;

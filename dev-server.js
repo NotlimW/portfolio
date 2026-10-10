@@ -5,12 +5,16 @@
  * node_modules tree either. Node's own http and fs are enough.
  *
  *   node dev-server.js [port]
+ *
+ * Runs build.js first, and again whenever a file in partials/ changes.
  */
 
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const url = require("url");
+
+const { build, PARTIALS } = require("./build");
 
 const ROOT = __dirname;
 const PORT = Number(process.argv[2]) || 5173;
@@ -67,6 +71,11 @@ const server = http.createServer((req, res) => {
   });
   fs.createReadStream(filePath).pipe(res);
 });
+
+// Shared parts are built into the pages on start, and again whenever a
+// partial changes.
+build();
+fs.watch(PARTIALS, () => build());
 
 server.listen(PORT, () => {
   console.log(`Milton Winroth portfolio → http://localhost:${PORT}`);

@@ -66,15 +66,13 @@ function tick(now) {
     any = true;
     item.p += (targets[i] - item.p) * EASE;
     // Scroll drives --run; the idle tick only drives the reel's loop, which
-    // is plain HTML and moves on the compositor. An idle tick on the SVG
-    // marks repainted a full-width drawing every frame with nobody scrolling.
+    // is plain HTML and moves on the compositor.
     item.run += Math.abs(dy) * PUSH;
     item.idle = (item.idle || 0) + dt * IDLE;
 
     // Every write to a custom property re-resolves styles for everything
     // under the element it is set on — on these stages, a couple of hundred
-    // SVG nodes. So: --p (which most of the drawing reads) only when it has
-    // actually moved, and the rest only on the few elements that use them.
+    // SVG nodes.
     write(item.el, item, "--p", item.p, 4, 0.0008);
     item.vEls.forEach((el) => write(el, el, "--v", v, 3, 0.002));
     item.runEls.forEach((el) => write(el, el, "--run", item.run, 1, 0.5));
@@ -97,9 +95,7 @@ function wake() {
 }
 
 export function init(root = document) {
-  // Touch: the drawings show complete and still. Every value written here
-  // re-resolves styles for a few hundred SVG nodes, and on a phone that was
-  // the heaviest thing in the AI section.
+  // Touch: the drawings show complete and still.
   if (!motionAllowed() || isTouch()) return () => {};
 
   items = Array.from(root.querySelectorAll("[data-ai-flow]")).map((el) => ({

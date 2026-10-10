@@ -26,8 +26,7 @@ function onPointer(e) {
 }
 
 /* Runs only while the hero is easing toward the pointer, and only writes
-   while the hero is near the screen: --px/--py on the hero re-resolve its
-   whole subtree, which was a cost on every frame of the page, forever. */
+   while the hero is near the screen. */
 function tick() {
   frame = 0;
   pos.x += (pos.tx - pos.x) * EASE;

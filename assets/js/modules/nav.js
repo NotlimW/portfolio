@@ -1,34 +1,17 @@
 /**
- * nav.js — the dock, the menu button, the topbar, and knowing where you are.
+ * nav.js — the dock, the menu button and the topbar.
  *
- * Five jobs:
+ * - Brings the dock and menu button in once the topbar has scrolled away.
+ * - Writes scroll progress to the dock, which draws its ring from it.
+ * - Marks the current section in the dock. A section can claim a link it
+ *   doesn't own with data-nav-section="<id>".
+ * - Opens the Work group on hover, focus, tap, or while one of its
+ *   sections is on screen.
+ * - Builds the roll-over labels: the incoming copy is aria-hidden, so the
+ *   accessible name stays one word.
  *
- *   Bring the dock and the menu button in once the visitor has committed to
- *   reading, and take them away again at the top — where the topbar is still
- *   on screen and doing the same job better.
- *
- *   Publish scroll progress as a custom property, once, on the root. The dock
- *   draws its own ring from it and anything else that wants the number can
- *   read it without measuring scroll again.
- *
- *   Mark the section you are currently in. A table of contents that doesn't
- *   say where you are is just a list. A link's territory isn't only the
- *   section carrying its id — a transition beat (a statement, a slide seam)
- *   can belong to the case it's introducing or closing, tagged in the markup
- *   with data-nav-section="<id>" rather than guessed from position.
- *
- *   Open the Work group — on hover, on focus, on tap, and also simply by
- *   being in one of its three sections — and widen the dock to show it
- *   inline rather than popping a second panel above the first.
- *
- *   Give every dock and topbar label the same roll-over the site used to
- *   have on its single pill: the resting word slides up and out, an accent
- *   twin slides up to replace it. Built here, not in CSS alone, because the
- *   incoming copy has to be aria-hidden — the accessible name stays one word.
- *
- * Section positions are measured once, then re-measured whenever the page's
- * own height changes — never per frame. A frame does arithmetic against
- * numbers it already has.
+ * Section positions are measured on init and whenever the page height
+ * changes, never per frame.
  */
 
 import { onScroll } from "./smooth-scroll.js";
@@ -45,8 +28,7 @@ let endObserver = null;
 
 /**
  * The group is open if either is true: a pointer or keyboard focus is on it,
- * or the section you're currently reading is one of its own. Two independent
- * sources, one combined state — see syncGroup().
+ * or the section you're currently reading is one of its own.
  */
 let hoverOpen = false;
 let sectionOpen = false;
@@ -56,14 +38,7 @@ const links = [];
 const rolls = [];
 let sections = [];
 
-/**
- * Cache every region that counts as a link's territory: its own #id section,
- * plus any element elsewhere in the page tagged data-nav-section="<id>" — a
- * transition beat that visually belongs to that case even though the case
- * itself doesn't contain it. Each region is pushed separately rather than
- * merged into one range; as long as they sit back to back in the document
- * (which is how they're used) the dock reads as continuous across them.
- */
+/** Cache every region that counts as a link's territory. */
 function measureSections() {
   const regions = [];
 
@@ -84,11 +59,7 @@ function measureSections() {
 
 /**
  * The natural width of the Work group's sub-row, read while it is still
- * clipped to zero. An element with overflow: hidden reports its content's
- * full size via scrollWidth regardless of its own clipped width, as long as
- * that content doesn't wrap — which .dock__sublink guarantees with
- * white-space: nowrap. Same "measure once, animate the number" shape as
- * track.js's --track-distance.
+ * clipped to zero.
  */
 /** The dock's own height, so its arrival (nav.css) starts as a true circle. */
 function measureDockHeight(dock) {
@@ -101,17 +72,7 @@ function measureSubWidth() {
   if (width) group.sub.style.setProperty("--dock-sub-w", `${width}px`);
 }
 
-/**
- * Wraps a link's label in two stacked copies so it can roll on hover — the
- * resting word slides up and out, an accent-coloured twin slides up to
- * replace it. Both move on one transform (see .roll in nav.css), which is
- * what makes the swap read as a mechanism rather than as two animations.
- *
- * Only the label's own text node is touched, not the link's full children —
- * "Work" carries a caret span alongside its text, and replacing everything
- * would delete it. The incoming copy is aria-hidden, so the accessible name
- * stays the plain word the link already had.
- */
+/** Wraps a link's label in two stacked copies so it can roll on hover. */
 function buildRoll(link) {
   if (link.querySelector(".roll")) return;
 
@@ -183,8 +144,7 @@ function syncGroup() {
 
 /**
  * On a narrow screen the dock is a sideways-scrolling strip, and an opened
- * Work row can push past its edge. Slide the strip so the group sits in
- * view while open, and back to the start when it closes.
+ * Work row can push past its edge.
  */
 function revealGroup(open) {
   const dock = group.el.parentElement;
@@ -221,10 +181,7 @@ export function init(root = document) {
     // own text node, so the caret sitting beside it is untouched.
     dock.querySelectorAll(".dock__link, .dock__sublink").forEach(buildRoll);
 
-    // The parent link is excluded here on purpose: it shares its href (and
-    // so its target id) with the "Content" sub-link, and tracking both would
-    // make setCurrent() highlight whichever happened to come first. Its own
-    // current-state is derived instead, from whether any child is current.
+    // The parent link is excluded here on purpose.
     dock.querySelectorAll(".dock__link:not(.dock__link--parent), .dock__sublink").forEach((link) => {
       const id = link.getAttribute("href")?.replace("#", "");
       if (id) links.push({ link, id, inGroup: link.classList.contains("dock__sublink") });
@@ -238,9 +195,7 @@ export function init(root = document) {
         sub: groupEl.querySelector(".dock__sub"),
       };
 
-      // A touch also fires pointerenter and focus, both before its click —
-      // left in, they would open the group just in time for the first tap
-      // to follow the link. Touch is handled by the tap logic below instead.
+      // A touch also fires pointerenter and focus, both before its click.
       const isTouch = () => !window.matchMedia("(hover: hover)").matches;
       groupEl.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") setHoverOpen(true); });
       groupEl.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") setHoverOpen(false); });
@@ -250,9 +205,7 @@ export function init(root = document) {
       });
 
       // Touch has no hover: a tap on a closed "Work" opens it, a tap on an
-      // open one follows the link. Anything else on the page closes it.
-      // Judged by the tap itself, not by (hover: hover) — a touch laptop
-      // reports hover and would otherwise never get the first-tap-opens step.
+      // open one follows the link.
       let openAtDown = true;
       group.parent.addEventListener("pointerdown", (event) => {
         openAtDown = event.pointerType === "mouse" || narrow() || groupEl.dataset.open === "true";
@@ -276,17 +229,9 @@ export function init(root = document) {
 
   measureSections();
 
-  // The real bug this guards against: section positions were measured once,
-  // synchronously, before masonry.js had built the creative wall's columns
-  // and before any lazy image had loaded — both of which change the page's
-  // height well after nav.js's own init(). Every section below that point
-  // then carried a stale offset for the rest of the session, and the dock
-  // would highlight the wrong — or no — link once you scrolled past it.
-  //
-  // A ResizeObserver on the body is the general fix: it re-measures on *any*
-  // height change, whatever caused it, rather than chasing each cause
-  // individually (fonts, images, a later module's own layout pass). Same
-  // tool masonry.js already uses to keep its own measurements honest.
+  // Section positions go stale whenever the page's height changes after init:
+  // masonry.js building the creative wall, lazy images loading, fonts
+  // landing.
   if ("ResizeObserver" in window) {
     bodyObserver = new ResizeObserver(() => {
       measureSections();
@@ -310,10 +255,7 @@ export function init(root = document) {
     endObserver.observe(bleed);
   }
   unsubscribe = onScroll(({ y, progress }) => {
-    // On the dock, its only reader — not on the root. A custom property set
-    // on <html> is inherited by every element, so writing it there made the
-    // browser restyle the whole page on every scroll frame: ~10ms a frame,
-    // the largest single cost on the page.
+    // On the dock, its only reader — not on the root.
     const p = progress.toFixed(3);
     if (dock && p !== lastProgress) {
       lastProgress = p;

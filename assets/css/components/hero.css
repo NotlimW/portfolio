@@ -1,26 +1,7 @@
 /* ==========================================================================
    HERO — the poster on the chair
-   One photograph, full bleed: the site's own poster lying on a leather
-   chair in a dark room with a shaft of late sun. The motto is set over it
-   as three giants placed AROUND the poster, never across the face on it,
-   and read as a Z:
-
-       A creative            up in the dark wall, top left
-                  problem    right, flush to the right margin
-       solver.               yellow, bottom left, on the floor
-
-   Every word stays whole inside the page margins.
-
-   The photograph drifts with the pointer (modules/depth.js); the giants
-   drift at their own depths, so the type and the room come apart a little.
-
-   Entrance is CSS only and runs on first paint — nothing waits for a
-   script, so a failed script still leaves a finished hero:
-     0.0s  the photograph opens out of a smaller, darker, blurred frame
-     0.6s  "A creative" rises letter by letter out of its mask
-     0.8s  "problem"
-     1.0s  "solver."
-     1.5s  the small copy fades up
+   One photograph, full bleed: the site's own poster lying on a leather chair
+   in a dark room with a shaft of late sun.
    ========================================================================== */
 
 @layer components {
@@ -31,25 +12,22 @@
     position: relative;
     /* The large viewport, not the small one: on a phone the picture has to
        run down behind Safari's toolbar instead of stopping short of it and
-       letting the next section show through there. Type may sit under the
-       toolbar here; the picture may not stop. */
+       letting the next section show through there. */
     min-height: 100vh;
     min-height: 100lvh;
     overflow: clip;
     background: var(--c-ink);
   }
 
-  /* Pointer depth, written by modules/depth.js as --px/--py on the hero
-     and --d on each layer. The individual translate property composes with
-     any transform or animation a layer already has. */
+  /* Pointer depth, written by modules/depth.js as --px/--py on the hero and
+     --d on each layer. */
   .hero [data-depth] {
     translate: calc(var(--px, 0) * var(--d, 0) * 22px)
                calc(var(--py, 0) * var(--d, 0) * 14px);
   }
 
   /* ---- The photograph ---------------------------------------------------
-     Oversized a few percent so the pointer drift never shows an edge.
-     Anchored on the poster, so narrow screens crop the room, not it. */
+     Oversized a few percent so the pointer drift never shows an edge. */
   .hero__media {
     position: absolute;
     inset: -3%;
@@ -86,14 +64,13 @@
     z-index: 1;
     pointer-events: none;
     background:
-      linear-gradient(90deg, rgb(23 18 14 / 0.62) 0%, rgb(23 18 14 / 0.2) 30%, transparent 42%),
-      linear-gradient(0deg, rgb(23 18 14 / 0.55) 0%, transparent 30%);
+      linear-gradient(90deg, color-mix(in oklab, var(--c-ink) 62%, transparent) 0%, color-mix(in oklab, var(--c-ink) 20%, transparent) 30%, transparent 42%),
+      linear-gradient(0deg, color-mix(in oklab, var(--c-ink) 55%, transparent) 0%, transparent 30%);
     animation: hero-fade 1.6s ease 0.4s both;
   }
 
   /* ---- The giants -------------------------------------------------------
-     The h1 itself. Each word is placed on its own; modules/fit.js sizes it
-     to a share of the frame (data-fit) and data-bleed runs it off an edge. */
+     The h1 itself. */
   .hero__title {
     position: absolute;
     inset: 0;
@@ -146,8 +123,7 @@
   }
 
   /* Rests on the floor of the section with only the bottom of the bowls
-     touching it — sunk enough to feel grounded, not enough to cost a
-     letter. */
+     touching it — sunk enough to feel grounded, not enough to cost a letter. */
   .hero__word--c {
     --line-delay: 1s;
     bottom: 0;
@@ -215,16 +191,12 @@
   }
 
   /* ---- Small screens -----------------------------------------------------
-     Portrait crops the room down to the poster. The giants stack: two
-     above the poster, "solver." on the floor below it; the copy sits just
-     above that, over a shade rising from the floor. */
+     Portrait crops the room down to the poster. */
   @media (max-width: 47.99rem) {
     .hero__word--a { top: 5rem; }
 
-    /* The photograph runs from just under the topbar all the way down
-       behind the phone's toolbar (the hero is 100lvh), fading in only at the
-       top. The floor shade below darkens it where the copy and "solver."
-       sit, so the type stays readable over it. */
+    /* The photograph runs from just under the topbar all the way down behind
+       the phone's toolbar (the hero is 100lvh), fading in only at the top. */
     .hero__media {
       inset: auto -3%;
       top: 4svh;
@@ -236,9 +208,7 @@
     .hero__media img { object-position: 51% 40%; }
 
     /* "problem" drops to sit right on top of "solver." — the two read as one
-       left-set block on the floor, "A creative" alone above the poster.
-       Both are sized to the width (fit.js), so their heights are fixed
-       shares of vw: "solver." stands ~24vw above the floor. */
+       left-set block on the floor, "A creative" alone above the poster. */
     .hero .hero__word--b[data-bleed] {
       top: auto;
       bottom: 24.5vw;
@@ -251,8 +221,8 @@
        ground rather than across the poster's lettering. */
     .hero__shade {
       background:
-        linear-gradient(180deg, rgb(23 18 14 / 0.75) 0%, transparent 34%),
-        linear-gradient(0deg, rgb(23 18 14 / 0.94) 0%, rgb(23 18 14 / 0.86) 40%, transparent 62%);
+        linear-gradient(180deg, color-mix(in oklab, var(--c-ink) 75%, transparent) 0%, transparent 34%),
+        linear-gradient(0deg, color-mix(in oklab, var(--c-ink) 94%, transparent) 0%, color-mix(in oklab, var(--c-ink) 86%, transparent) 40%, transparent 62%);
     }
 
     /* Above the "problem / solver." block: only the sentence and the one
@@ -274,12 +244,7 @@
   }
 }
 
-/* Hold the entrance on its first frame until main.js has booted. Boot is
-   the page's one heavy frame (the first layout of the whole page, the giants
-   measured, text split); started at first paint, the intro ran straight into
-   it and stuttered at its very start. data-ready lands at the end of boot.
-   If the script never boots, the inline head script drops .reveal-ready
-   after 4s and this lets go. */
+/* Hold the entrance on its first frame until main.js has booted. */
 @layer components {
   .reveal-ready:not([data-ready]) .hero,
   .reveal-ready:not([data-ready]) .hero * {

@@ -2,14 +2,6 @@
    FONTS — served from the site itself, not from Google or Fontshare.
    No request leaves the site for type (nothing about a visitor is sent to a
    third party), and the files load from the same place as everything else.
-
-   Every face here is under the SIL Open Font License (fonts.google.com),
-   which allows serving and sharing the files as long as the licence goes
-   with them: see the OFL-*.txt files in assets/fonts/.
-   Each Google face is split by unicode-range the way Google serves it, so a
-   page only downloads the subsets its text actually uses. Lato is declared
-   here but only the Aros Auto case page sets anything in it, so only that
-   page ever fetches it.
    ========================================================================== */
 
 /* Bricolage Grotesque: the giants. One variable file covers opsz 12–96,

@@ -1,8 +1,6 @@
 /* ==========================================================================
    MAIN — Milton Winroth Portfolio
-   The cascade is designed, not accidental. Layer order is declared once,
-   here, before anything is imported. Later layers always win regardless of
-   selector specificity, so a utility never has to fight a component.
+   The cascade is designed, not accidental.
    ========================================================================== */
 
 @layer reset, tokens, base, layout, components, utilities;
@@ -16,11 +14,9 @@
 @import url("components/hero.css");
 @import url("components/glass.css");
 /* After glass, not before: the nav composes .glass and has to be able to
-   override it. The dock is both the glass panel and the fixed element, and
-   .glass sets position: relative — which silently won while nav came first. */
+   override it. */
 @import url("components/nav.css");
 @import url("components/scenes.css");
-@import url("components/graphics.css");
 @import url("components/masonry.css");
 @import url("components/poster.css");
 @import url("components/editorial.css");
@@ -36,6 +32,7 @@
 @import url("components/about.css");
 @import url("components/contact.css");
 @import url("components/case.css");
+@import url("components/brand.css");
 /* Last of the components: it is the one place that says what a headline is
    made of, and has to win over each component's own font-weight. */
 @import url("components/display.css");

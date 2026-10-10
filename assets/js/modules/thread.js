@@ -28,9 +28,9 @@ const horizontal = () => window.matchMedia("(min-width: 64rem), (prefers-reduced
 
 function target(el) {
   const r = el.getBoundingClientRect();
-  // The drawing point sits a little right of centre, and slides on toward
-  // the far edge over the last stretch of the pinned track, so the last
-  // scene finishes drawing before the track lets go.
+  // The drawing point sits a little right of centre, and slides on toward the
+  // far edge over the last stretch of the pinned track, so the last scene
+  // finishes drawing before the track lets go.
   const p = parseFloat(el.closest("[data-scene]")?.style.getPropertyValue("--progress")) || 0;
   return horizontal()
     ? clamp01((window.innerWidth * (0.6 + 0.6 * p * p * p) - r.left) / r.width)

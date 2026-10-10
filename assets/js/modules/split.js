@@ -1,35 +1,16 @@
 /**
- * split.js — turns a heading into the line structure the mask reveal needs.
- *
- * The hero's entrance is the site's signature: each line swings up out of a
- * clip, one after the other. It only works on markup shaped like
+ * split.js — splits a heading into the line spans the mask reveal needs:
  *
  *     <span class="line"><span>…</span></span>
  *
- * which is fine for a headline whose breaks are authored by hand, and useless
- * for every other heading on the page — where the breaks depend on the
- * viewport and change on every resize.
+ * Breaks are measured, not guessed: every word is wrapped, words sharing a
+ * top edge are grouped into a line, and each line is rebuilt in that shape,
+ * so the reveal breaks exactly where text-wrap: balance did.
  *
- * So this measures instead of guessing. Every word is wrapped, its rendered
- * top edge read, words sharing a top grouped into a line, and the line
- * rebuilt as the structure above. Because the split happens *after* layout,
- * it inherits whatever `text-wrap: balance` decided — the animation breaks
- * exactly where the typography already broke.
- *
- * Three things it is careful about:
- *
- *   Inline markup survives. `<em class="em">problem</em>` mid-heading keeps
- *   its element; the chain of inline ancestors is cloned per line rather than
- *   flattened, which is what stops the accent word losing its face.
- *
- *   The accessible name never changes. The original HTML is kept and the
- *   heading carries an aria-label of its own text, so a screen reader gets
- *   one sentence rather than a list of words.
- *
- *   It is reversible. restore() puts the original HTML back, which is what
- *   makes re-splitting on resize safe.
- *
- * Headings that already carry hand-authored .line markup are left alone.
+ * Inline markup such as an <em> is cloned into each line it spans. The
+ * heading keeps its original HTML as an aria-label, so screen readers get
+ * one sentence, and restore() puts it back before a re-split on resize.
+ * Headings that already contain .line markup are left alone.
  */
 
 import { onPreferenceChange, prefersReducedMotion } from "./motion-prefs.js";
@@ -117,11 +98,7 @@ function buildLine(words, root, index) {
   return line;
 }
 
-/**
- * Phase 1 — write. Put the original markup back and wrap every word.
- * Nothing is measured here, so the whole set can be prepared before the
- * browser is asked for a single layout.
- */
+/** Phase 1 — write. */
 function prepare(el) {
   if (!originals.has(el)) originals.set(el, el.innerHTML);
 
@@ -156,15 +133,7 @@ function commit({ el, words, text }, tops) {
   el.replaceChildren(fragment);
 }
 
-/**
- * Split every heading in one batch.
- *
- * The phases are separated on purpose. Splitting one heading at a time means
- * write, read, write, read — and every read after a write forces a fresh
- * layout of the whole page. Across thirty headings that measured as a single
- * 92ms task, which is six dropped frames in one go. Batched, it is one
- * layout for the entire set.
- */
+/** Split every heading in one batch. */
 function splitAll(targets) {
   const jobs = targets.map(prepare).filter(Boolean);          // write
   const tops = jobs.map(({ words }) => words.map((w) => w.getBoundingClientRect().top));  // read
@@ -182,12 +151,7 @@ export function init(root = document) {
   const targets = Array.from(root.querySelectorAll(SELECTOR));
   if (!targets.length) return () => {};
 
-  /**
-   * `initial` is the first pass, before reveal.js has observed anything. Any
-   * later pass — fonts landing, a resize — has replaced the line spans with
-   * new elements, so their starting state has to be re-applied or a heading
-   * that was already revealed would silently reset to hidden.
-   */
+  /** `initial` is the first pass, before reveal.js has observed anything. */
   const run = (initial = false) => {
     if (prefersReducedMotion()) { targets.forEach(restore); return; }
     splitAll(targets);

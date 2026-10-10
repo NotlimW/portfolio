@@ -10,7 +10,9 @@
 <meta property="og:title" content="Aros Auto · Milton Winroth">
 <meta property="og:description" content="A new identity, a bento style site and 50+ pages for a family owned car dealer.">
 <meta property="og:type" content="website">
+<!-- include: head -->
 <meta name="theme-color" content="#17120E">
+<link rel="icon" href="/assets/media/favicon.svg" type="image/svg+xml">
 
 
 <!-- Park the headline lines below their masks before the first paint;
@@ -23,8 +25,9 @@
     }
   }, 4000);
 </script>
-<link rel="stylesheet" href="../../assets/css/main.css">
-<script type="module" src="../../assets/js/main.js"></script>
+<link rel="stylesheet" href="/assets/css/main.css">
+<script type="module" src="/assets/js/main.js"></script>
+<!-- /include -->
 </head>
 
 <body>
@@ -32,21 +35,21 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="cursor" data-cursor aria-hidden="true"></div>
 
-<div class="edge-blur edge-blur--top" data-layer="1" aria-hidden="true"></div>
-<div class="edge-blur edge-blur--bottom" data-layer="1" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--top" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" aria-hidden="true"></div>
 
+<!-- include: topbar variant="light" -->
 <header class="topbar topbar--light">
   <a class="topbar__mark" href="/">
     <span class="topbar__mark-full">Milton Winroth</span>
   </a>
 
   <nav class="topbar__links" aria-label="Site">
-    <a class="topbar__link" href="../../work/">Case studies</a>
-    <a class="topbar__link" href="../../about/">About me</a>
-    <a class="topbar__link" href="../../contact/">Contact</a>
+    <a class="topbar__link" href="/#work">Case studies</a>
+    <a class="topbar__link" href="/about/">About me</a>
+    <a class="topbar__link" href="/contact/">Contact</a>
   </nav>
 </header>
-
 
 <button class="menu-btn glass glass--pill" data-menu-toggle data-late
         aria-expanded="false" aria-controls="menu">
@@ -54,7 +57,7 @@
   <i aria-hidden="true"></i>
   <span class="sr-only">Menu</span>
 </button>
-
+<!-- /include -->
 
 
 <!-- The page's own table of contents. -->
@@ -66,6 +69,7 @@
   <a class="dock__link" href="#result">Result</a>
 </nav>
 
+<!-- include: menu -->
 <div class="menu" id="menu" data-menu data-ground="dark" aria-label="Menu">
   <button class="menu__close" data-menu-close>
     <span aria-hidden="true"></span>
@@ -76,27 +80,27 @@
   <div class="menu__inner">
     <ul class="menu__list" role="list">
       <li class="menu__item" style="--i: 0"><a class="menu__link" href="/">Home</a></li>
-      <li class="menu__item" style="--i: 1"><a class="menu__link" href="../../work/">Case studies</a></li>
-      <li class="menu__item" style="--i: 2"><a class="menu__link" href="../../about/">About me</a></li>
-      <li class="menu__item" style="--i: 3"><a class="menu__link" href="../../contact/">Contact</a></li>
+      <li class="menu__item" style="--i: 1"><a class="menu__link" href="/#work">Case studies</a></li>
+      <li class="menu__item" style="--i: 2"><a class="menu__link" href="/about/">About me</a></li>
+      <li class="menu__item" style="--i: 3"><a class="menu__link" href="/contact/">Contact</a></li>
     </ul>
 
     <div class="menu__meta t-small">
       <span class="t-label">Get in touch</span>
       <a class="link" href="mailto:hello@miltonw.com">hello@miltonw.com</a>
       <a class="link" href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
-      <p class="t-label" style="margin-top: var(--sp-4)">
+      <p class="t-label menu__clock">
         Stockholm · <span data-clock class="tabular">--:--</span>
       </p>
     </div>
   </div>
 </div>
+<!-- /include -->
 
 <main id="main" class="page-case">
 
   <!-- ========================================================================
        PAGE HERO · the trail, the client's name as the giant, the one line,
-       and the facts in a row under it.
        ======================================================================== -->
   <section class="page-hero canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
@@ -177,8 +181,6 @@
 
   <!-- ========================================================================
        BRAND · the stylesheet, rebuilt as a bento board of real elements:
-       logo, colours with their codes, the type set in Lato, the cut corner
-       shape, and the imagery.
        ======================================================================== -->
   <section class="section canvas-host" id="brand" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
@@ -377,6 +379,7 @@
 
 </main>
 
+<!-- include: footer -->
 <footer class="footer" id="contact" data-ground="dark">
   <div class="shell">
     <div class="stack-8">
@@ -398,24 +401,24 @@
       <div class="footer__col">
         <span class="t-label footer__head">Shortcuts</span>
         <a href="/">Home</a>
-        <a href="../../work/">Work</a>
-        <a href="../../about/">About me</a>
-        <a href="../../contact/">Contact</a>
+        <a href="/#work">Work</a>
+        <a href="/about/">About me</a>
+        <a href="/contact/">Contact</a>
       </div>
 
       <div class="footer__col">
         <span class="t-label footer__head">Projects</span>
-        <a href="../../work/aros-auto/">Aros Auto</a>
-        <a href="../../work/logimark/">Logimark</a>
-        <a href="../../work/creative-strategy-hub/">Creative strategy hub</a>
-        <a href="../../work/ai-production-system/">AI creation</a>
+        <a href="/work/aros-auto/">Aros Auto</a>
+        <a href="/work/logimark/">Logimark</a>
+        <a href="/work/creative-strategy-hub/">Creative strategy hub</a>
+        <a href="/work/ai-production-system/">AI creation</a>
       </div>
 
       <div class="footer__col">
         <span class="t-label footer__head">About me</span>
-        <a href="../../about/">Biography</a>
-        <a href="../../about/">Work experience</a>
-        <a href="../../about/">Academic experience</a>
+        <a href="/about/">Biography</a>
+        <a href="/about/">Work experience</a>
+        <a href="/about/">Academic experience</a>
       </div>
 
       <div class="footer__col">
@@ -424,8 +427,6 @@
         <a href="tel:+46733883533">+46 733 88 35 33</a>
       </div>
     </div>
-
-    <!-- TODO: confirm the TikTok handle — placeholder until Milton confirms it. -->
     <div class="footer__elsewhere" data-reveal="fade">
       <span class="t-label footer__head">Elsewhere</span>
       <a href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
@@ -434,11 +435,12 @@
 
     <div class="footer__bottom t-label" data-reveal="fade">
       <span>© <span class="tabular">2026</span> Milton Winroth</span>
-      <span>A creative problem solver</span>
+      <a class="footer__secret" href="/brand/" data-cursor-label="Brand book">A creative problem solver</a>
     </div>
   </div>
 
 </footer>
+<!-- /include -->
 
 </body>
 </html>

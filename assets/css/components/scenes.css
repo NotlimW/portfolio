@@ -1,20 +1,15 @@
 /* ==========================================================================
    SCENES — the scroll transitions between sections
    Every one of these reads a single custom property, --progress (0 → 1),
-   written by js/modules/scene.js. No effect here has its own script.
-
-   Rule for all of them: only clip-path, transform and opacity. Nothing in
-   this file can trigger layout, which is what keeps a page this heavy at 60fps.
+   written by js/modules/scene.js.
    ========================================================================== */
-
 @layer components {
 
   /* ==========================================================================
      ZOOM — the page falls into an image
-     A small framed window in the middle of the screen opens out to full
-     bleed as you scroll, while the image inside settles back from an
-     oversized crop. The section is taller than the viewport; the frame is
-     pinned inside it.
+     A small framed window in the middle of the screen opens out to full bleed
+     as you scroll, while the image inside settles back from an oversized
+     crop.
      ========================================================================== */
 
   .zoom { position: relative; height: 220svh; }
@@ -95,7 +90,7 @@
     position: absolute;
     inset: -40% 0 0;
     z-index: -1;
-    background: linear-gradient(transparent, rgb(0 0 0 / 0.62));
+    background: linear-gradient(transparent, color-mix(in oklab, var(--c-ink) 62%, transparent));
     pointer-events: none;
   }
 
@@ -104,15 +99,13 @@
      Used as the seam between two sections rather than as a section itself.
      ========================================================================== */
 
-  /* The foot of the seam is already the AI section's dark: the soft release
-     (--catch) lifts the panel a little before the pin lets go, and the strip
-     it uncovers must not flash the light ground. */
+  /* The foot of the seam is already the AI section's dark. */
   .slide {
     position: relative;
     /* Long enough that the panel can travel slowly and still be fully in,
        and held, well before the soft release (--catch) begins. */
     height: 230svh;
-    background: linear-gradient(transparent calc(100% - 30svh), #0C0A08 calc(100% - 30svh));
+    background: linear-gradient(transparent calc(100% - 30svh), var(--c-ink-deep) calc(100% - 30svh));
   }
 
   /* Large viewport, so the panel runs down behind a phone's toolbar (see
@@ -128,10 +121,8 @@
   }
 
   /* Fully in at 60% of the scene (data-scene-span on the section, so its
-     ease-in-out plays out whole and the panel settles instead of slamming
-     to a stop), and held there: it has to be across the whole frame before
-     the release starts lifting the viewport, or the dark foot of the
-     section shows under the light half. */
+     ease-in-out plays out whole and the panel settles instead of slamming to
+     a stop), and held there. */
   .slide__panel {
     position: absolute;
     inset: 0;
@@ -158,20 +149,10 @@
 
   /* ==========================================================================
      CURTAIN — a section lifts over the one before it
-     Cheap seam between two grounds. The incoming section rises and the
-     outgoing one dims and falls slightly behind.
+     Cheap seam between two grounds.
      ========================================================================== */
 
   .curtain { position: relative; }
-
-  .curtain__out {
-    position: sticky;
-    top: 0;
-    height: 100svh;
-    transform: scale(calc(1 - var(--progress, 0) * 0.06));
-    filter: brightness(calc(1 - var(--progress, 0) * 0.45));
-    transform-origin: center 30%;
-  }
 
   /* ==========================================================================
      STICKY CAPTION — text holds while media scrolls past it
@@ -185,9 +166,8 @@
     align-items: start;
   }
 
-  /* The caption's rhythm holds at every width — it used to be set only in
-     the desktop block below, so on anything narrower the headline, line,
-     tags, body and button stacked with no space between them at all. */
+  /* The caption's rhythm is set for every width here; the desktop block
+     below only changes the layout around it. */
   .feature__caption {
     display: flex;
     flex-direction: column;
@@ -222,11 +202,8 @@
     gap: var(--sp-6);
   }
 
-  /* Phones: every picture in the case goes into one two-column grid, all
-     at the same 4:5, instead of a tall single-file stack of mixed shapes.
-     The nested .grid steps aside (display: contents) so its two squares
-     join the same grid. The chip is dropped: on a half-width tile it
-     covered the picture it was labelling. */
+  /* Phones: every picture in the case goes into one two-column grid, all at
+     the same 4:5, instead of a tall single-file stack of mixed shapes. */
   @media (max-width: 47.99rem) {
     .feature__media {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -239,8 +216,7 @@
 
   /* ==========================================================================
      MEDIA
-     Large by default. A case image that has to be squinted at is not a case
-     image. Placeholders below are removed as real assets arrive.
+     Large by default.
      ========================================================================== */
 
   .media {
@@ -250,7 +226,6 @@
     background: var(--bg-warm);
   }
 
-  .media--flush { border-radius: 0; }
   .media--tall  { aspect-ratio: 3 / 4; }
   .media--wide  { aspect-ratio: 16 / 9; }
   .media--square{ aspect-ratio: 1; }
@@ -267,98 +242,24 @@
     object-fit: cover;
   }
 
-  /* Full-bleed: escapes the shell without causing horizontal overflow. */
-  .media--bleed {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    border-radius: 0;
-  }
-
-  /* ---- Placeholder -------------------------------------------------------
-     Stands in for photography that hasn't been shot or cleared yet.
-     Drawn as an empty frame in a design file — flat fill, construction grid,
-     centre crosshair — rather than a soft gradient, so it reads as "slot
-     awaiting asset" instead of as decoration.
-     Delete the element, keep the .media wrapper.
-     --------------------------------------------------------------------- */
-  .media__placeholder {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-content: center;
-    gap: var(--sp-2);
-    text-align: center;
-    background-color: var(--c-mist);
-    background-image:
-      repeating-linear-gradient(90deg, rgb(23 18 14 / 0.07) 0 1px, transparent 1px 44px),
-      repeating-linear-gradient(0deg,  rgb(23 18 14 / 0.07) 0 1px, transparent 1px 44px);
-  }
-
-  /* Centre crosshair, two hard rules rather than an image. */
-  .media__placeholder::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(90deg, var(--c-accent) 0 100%),
-      linear-gradient(0deg,  var(--c-accent) 0 100%);
-    background-size: 1px 32px, 32px 1px;
-    background-position: center, center;
-    background-repeat: no-repeat;
-    opacity: 0.55;
-  }
-
-  /* Fine spray, so the empty frame isn't a dead flat field. */
-  .media__placeholder::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0.28;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  }
-
-  /* Lifts the frame's labels above its crosshair and grain. Deliberately not
-     `> *`: a <picture> caught by this became a positioned, auto-height box,
-     and since its only child is an absolutely positioned <img> it collapsed
-     to zero height — taking the photograph with it. */
-  .media__placeholder > :not(picture) { position: relative; z-index: 1; }
-
-  /* ---- Filled placeholder ------------------------------------------------
-     A placeholder standing in with a real photograph rather than a drawn
-     frame. It keeps the wrapper — and therefore its position, its parallax
-     and its clip — and only drops the frame decoration. That means swapping
-     a stand-in for the final asset later is a one-line change in the markup
-     and nothing here has to move.
-
-     Every one of these is temporary. Grep for `--filled` to find them all.
-     --------------------------------------------------------------------- */
-  .media__placeholder--filled {
-    background: none;
-    display: block;
-  }
-
-  .media__placeholder--filled::before,
-  .media__placeholder--filled::after { content: none; }
-
-  /* <picture> is the box; the <img> just fills it. Sizing the wrapper rather
-     than absolutely positioning the image inside an auto-height wrapper is
-     what keeps this working wherever the placeholder is used. */
-  .media__placeholder--filled > picture {
+  /* ---- Image -----------------------------------------------------------
+     The photograph fills its frame. */
+  .media__image,
+  .media__image > picture {
     position: absolute;
     inset: 0;
     display: block;
   }
 
-  .media__placeholder--filled img {
+  .media__image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  /* ---- Chip --------------------------------------------------------------
-     A frosted label floating over imagery. This is where glass actually
-     belongs now that the cards are gone: something sitting *on* a picture,
+  /* ---------------------------------------------------------------------
+     ---- Chip --------------------------------------------------------------
+     A frosted label floating over imagery: something sitting on a picture,
      where the blur has real content to work with.
      --------------------------------------------------------------------- */
   .media__chip {
@@ -368,12 +269,9 @@
     bottom: var(--sp-4);
     padding: var(--sp-3) var(--sp-4);
     /* A dark scrim, whatever ground the section is on — the chip sits on a
-       photograph, and the photograph could be anything. Light glass only
-       works over imagery you control; this has to stay legible over a white
-       screenshot and a night shot alike, so the tint goes dark and the text
-       stays light. */
-    --glass-tint: rgb(23 18 14 / 0.55);
-    --glass-line: rgb(255 255 255 / 0.22);
+       photograph, and the photograph could be anything. */
+    --glass-tint: color-mix(in oklab, var(--c-ink) 55%, transparent);
+    --glass-line: color-mix(in oklab, var(--c-white) 22%, transparent);
     --glass-grain: 0.14;
     color: var(--c-paper);
   }
@@ -382,21 +280,11 @@
      frame, or the parallax exposes an edge at the extremes of its travel. */
   .media [data-parallax] { inset: -14%; }
 
-  .media__placeholder--dark {
-    background-color: #1D1611;
-    background-image:
-      repeating-linear-gradient(90deg, rgb(232 226 214 / 0.08) 0 1px, transparent 1px 44px),
-      repeating-linear-gradient(0deg,  rgb(232 226 214 / 0.08) 0 1px, transparent 1px 44px);
-    color: var(--c-paper);
-  }
-
-  .media__placeholder--dark::after { mix-blend-mode: screen; opacity: 0.12; }
 
   /* ==========================================================================
      STATEMENT SCENE — a held sentence with parallax between its own lines
      Each line carries its own --depth, so the sentence pulls apart as it
-     crosses the viewport and closes again as it leaves. Kept to a few dozen
-     pixels: past that it stops reading as one sentence.
+     crosses the viewport and closes again as it leaves.
      ========================================================================== */
 
   .statement-scene {
@@ -415,6 +303,14 @@
     .statement-scene { min-height: 64svh; padding-block: var(--sp-16); }
   }
 
+  /* Inside the slide's panel the scene fills the panel instead of the
+     screen, and sits above the panel's own dot field. */
+  .statement-scene--panel {
+    z-index: 1;
+    height: 100%;
+    min-height: 0;
+  }
+
   .statement-scene__text {
     /* Shrink-wrapped so the corner brackets hug the sentence instead of the
        column it happens to sit in. */
@@ -428,35 +324,11 @@
     text-wrap: balance;
   }
 
-  /* Travel is in em, not pixels. Adjacent lines carry opposing depths, so a
-     fixed distance closes the same absolute gap whatever the type size — at
-     8rem that reads as depth, at 2.5rem on a phone it drove the two halves of
-     the sentence straight through each other. Tying it to the font size keeps
-     the ratio between travel and line-height constant at every breakpoint.
-     0.25em is the most it can move and still leave the lines clear. */
-  .statement-scene__line {
-    display: block;
-    transform: translate3d(0, calc((var(--progress, 0.5) - 0.5) * var(--depth, 0) * 0.5em), 0);
-    will-change: transform;
-  }
-
-  .statement-scene__foot {
-    margin-top: var(--sp-12);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--sp-3) var(--sp-8);
-    opacity: clamp(0, calc((var(--progress, 1) - 0.28) * 2.6), 1);
-  }
 }
 
 /* ==========================================================================
    ZOOM TITLE — "What I solve" as the poster for the seam
-   Set across the whole frame, corner to corner: "What I" large in the top
-   left, "solve" a giant in the sun colour along the bottom, pinned to the
-   right page margin, and a
-   small note at the bottom left on the giant's baseline. The two halves
-   of the title bracket the photograph instead of sitting in a block on it.
+   Set across the whole frame, corner to corner.
    ========================================================================== */
 @layer components {
   .zoom__caption--giant {
@@ -473,8 +345,8 @@
   .zoom__caption--giant::before {
     inset: 0;
     background:
-      linear-gradient(180deg, rgb(0 0 0 / 0.55) 0%, transparent 32%),
-      linear-gradient(0deg, rgb(0 0 0 / 0.6) 0%, transparent 42%);
+      linear-gradient(180deg, color-mix(in oklab, var(--c-ink) 55%, transparent) 0%, transparent 32%),
+      linear-gradient(0deg, color-mix(in oklab, var(--c-ink) 60%, transparent) 0%, transparent 42%);
   }
 
   .zoom__layout {
@@ -489,7 +361,7 @@
     /* Sits on the same line as the foot of the giant. */
     padding-bottom: 0.6em;
     max-width: calc(22ch + var(--page-inline));
-    color: rgb(251 250 247 / 0.8);
+    color: color-mix(in oklab, var(--c-paper) 80%, transparent);
   }
 
   .zoom__title { margin: 0; }

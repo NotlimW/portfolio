@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Brand book · Milton Winroth</title>
+<meta name="description" content="The brand book for Milton Winroth's site: colour, type, layout, shape, illustration, imagery, motion and tone of voice, read live from the site's own tokens.">
+<meta name="robots" content="noindex">
+
+<meta property="og:title" content="Brand book · Milton Winroth">
+<meta property="og:description" content="Everything that makes the site look and sound like it does.">
+<meta property="og:type" content="website">
+<!-- include: head -->
+<meta name="theme-color" content="#17120E">
+<link rel="icon" href="/assets/media/favicon.svg" type="image/svg+xml">
+
+
+<!-- Park the headline lines below their masks before the first paint;
+     if main.js has not booted in 4s, give the headings back. -->
+<script>
+  document.documentElement.classList.add("reveal-ready");
+  setTimeout(function () {
+    if (!document.documentElement.dataset.ready) {
+      document.documentElement.classList.remove("reveal-ready");
+    }
+  }, 4000);
+</script>
+<link rel="stylesheet" href="/assets/css/main.css">
+<script type="module" src="/assets/js/main.js"></script>
+<!-- /include -->
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="cursor" data-cursor aria-hidden="true"></div>
+
+<div class="edge-blur edge-blur--top" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" aria-hidden="true"></div>
+
+<!-- include: topbar variant="light" -->
+<header class="topbar topbar--light">
+  <a class="topbar__mark" href="/">
+    <span class="topbar__mark-full">Milton Winroth</span>
+  </a>
+
+  <nav class="topbar__links" aria-label="Site">
+    <a class="topbar__link" href="/#work">Case studies</a>
+    <a class="topbar__link" href="/about/">About me</a>
+    <a class="topbar__link" href="/contact/">Contact</a>
+  </nav>
+</header>
+
+<button class="menu-btn glass glass--pill" data-menu-toggle data-late
+        aria-expanded="false" aria-controls="menu">
+  <i aria-hidden="true"></i>
+  <i aria-hidden="true"></i>
+  <span class="sr-only">Menu</span>
+</button>
+<!-- /include -->
+
+
+<!-- The chapters. -->
+<nav class="dock glass glass--pill" data-dock data-late aria-label="Chapters">
+  <a class="dock__link" href="#essence">Essence</a>
+  <a class="dock__link" href="#colour">Colour</a>
+  <a class="dock__link" href="#type">Type</a>
+  <a class="dock__link" href="#layout">Layout</a>
+  <a class="dock__link" href="#visuals">Visuals</a>
+  <a class="dock__link" href="#motion">Motion</a>
+  <a class="dock__link" href="#voice">Voice</a>
+</nav>
+
+<!-- include: menu -->
+<div class="menu" id="menu" data-menu data-ground="dark" aria-label="Menu">
+  <button class="menu__close" data-menu-close>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span class="sr-only">Close menu</span>
+  </button>
+
+  <div class="menu__inner">
+    <ul class="menu__list" role="list">
+      <li class="menu__item" style="--i: 0"><a class="menu__link" href="/">Home</a></li>
+      <li class="menu__item" style="--i: 1"><a class="menu__link" href="/#work">Case studies</a></li>
+      <li class="menu__item" style="--i: 2"><a class="menu__link" href="/about/">About me</a></li>
+      <li class="menu__item" style="--i: 3"><a class="menu__link" href="/contact/">Contact</a></li>
+    </ul>
+
+    <div class="menu__meta t-small">
+      <span class="t-label">Get in touch</span>
+      <a class="link" href="mailto:hello@miltonw.com">hello@miltonw.com</a>
+      <a class="link" href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
+      <p class="t-label menu__clock">
+        Stockholm · <span data-clock class="tabular">--:--</span>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- /include -->
+
+<main id="main" class="page-brand" data-brand>
+
+  <!-- ========================================================================
+       HERO
+       ======================================================================== -->
+  <section class="page-hero page-hero--compact canvas-host" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell page-hero__trail t-label">
+      <a href="/">Home</a><span aria-hidden="true">/</span><span>Brand book</span>
+    </div>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.5" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Brand book</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h1 class="t-title-compact">Everything that makes this site <em class="em">mine</em>.</h1>
+        <p class="t-compact muted">Colour, type, layout, shapes, drawings, photos, motion and the way it talks. Every value on this page is read live from the site's own code.</p>
+      </div>
+    </header>
+    <dl class="shell bb-facts" data-reveal="stagger">
+      <div><dt class="t-label">Version</dt><dd>1.0</dd></div>
+      <div><dt class="t-label">Updated</dt><dd>October 2026</dd></div>
+      <div><dt class="t-label">Owner</dt><dd>Milton Winroth</dd></div>
+      <div><dt class="t-label">Source of truth</dt><dd><code>assets/css/tokens.css</code></dd></div>
+    </dl>
+  </section>
+
+  <!-- ========================================================================
+       ESSENCE · the idea, the line, the values, the personality
+       ======================================================================== -->
+  <section class="section canvas-host" id="essence" data-ground="dark">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.52" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Essence</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">A poster in a dark room.</h2>
+        <p class="t-compact muted">The whole look comes from one picture, so it all hangs together.</p>
+      </div>
+    </header>
+    <div class="shell bb-essence">
+      <p class="statement bb-essence__idea" data-reveal="fade">
+        A white poster in a dark room, with a single shaft of sun across it. The room is the
+        dark ground, the poster is the light ground, and the sun is the only colour. Everything
+        else is ink and paper.
+      </p>
+
+      <div class="bb-split" data-reveal="stagger">
+        <span class="t-label">The line</span>
+        <p class="bb-big">A creative <em class="em">problem</em> solver.</p>
+      </div>
+
+      <div class="bb-split" data-reveal="stagger">
+        <span class="t-label">What I do</span>
+        <p class="t-body-l">I find out what the actual problem is, then make the thing that solves it. Brand, ads, web, UX/UI and the AI workflows behind the work, mostly start to finish.</p>
+      </div>
+
+      <div class="bb-values" data-reveal="stagger">
+        <div><span class="t-label">Value</span><h3>Find the real problem</h3><p class="t-small muted">The brief is only the start. Figuring out the real problem is where the good ideas show up.</p></div>
+        <div><span class="t-label">Value</span><h3>Clear before clever</h3><p class="t-small muted">If it needs explaining, it isn't done. Big type and one idea at a time.</p></div>
+        <div><span class="t-label">Value</span><h3>Made, then made faster</h3><p class="t-small muted">Craft first. AI comes in where it makes the work better or quicker, never instead of thinking.</p></div>
+        <div><span class="t-label">Value</span><h3>Keep it honest</h3><p class="t-small muted">Real work, described in my own words. Stock photos and borrowed buzzwords stay out.</p></div>
+      </div>
+
+      <div class="bb-scales" data-reveal="stagger">
+        <span class="t-label">Personality</span>
+        <div class="bb-scale" style="--at: 0.35"><span>Relaxed</span><i aria-hidden="true"></i><span>Formal</span></div>
+        <div class="bb-scale" style="--at: 0.3"><span>Bold</span><i aria-hidden="true"></i><span>Quiet</span></div>
+        <div class="bb-scale" style="--at: 0.4"><span>Warm</span><i aria-hidden="true"></i><span>Cool</span></div>
+        <div class="bb-scale" style="--at: 0.7"><span>Playful</span><i aria-hidden="true"></i><span>Precise</span></div>
+        <div class="bb-scale" style="--at: 0.25"><span>Hands on</span><i aria-hidden="true"></i><span>Hands off</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       LOGO · the wordmark, its space, its size, and what not to do
+       ======================================================================== -->
+  <section class="section canvas-host" id="logo" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.6" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Wordmark</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Just the <em class="em">name</em>.</h2>
+        <p class="t-compact muted">No symbol. The name, set in the same face as the giant headlines, is the mark.</p>
+      </div>
+    </header>
+    <div class="shell bb-logo">
+      <div class="bb-logo__row" data-reveal="stagger">
+        <figure class="bb-logo__tile">
+          <span class="bb-wordmark">Milton Winroth</span>
+          <figcaption class="t-label">On paper · ink</figcaption>
+        </figure>
+        <figure class="bb-logo__tile bb-logo__tile--dark" data-ground="dark">
+          <span class="bb-wordmark">Milton Winroth</span>
+          <figcaption class="t-label">On espresso · paper</figcaption>
+        </figure>
+      </div>
+
+      <div class="bb-logo__rules" data-reveal="stagger">
+        <figure class="bb-logo__space">
+          <span class="bb-wordmark">Milton Winroth</span>
+          <figcaption><span class="t-label">Clear space</span><span class="t-small muted">The height of the M on every side. Nothing else goes inside it.</span></figcaption>
+        </figure>
+        <dl class="bb-specs">
+          <div><dt class="t-label">Face</dt><dd>Bricolage Grotesque, ExtraBold 800, width 82, optical size 12</dd></div>
+          <div><dt class="t-label">Tracking</dt><dd>-0.02em</dd></div>
+          <div><dt class="t-label">Case</dt><dd>As written: Milton Winroth</dd></div>
+          <div><dt class="t-label">Smallest</dt><dd>14px on screen, 25mm wide in print</dd></div>
+          <div><dt class="t-label">Colours</dt><dd>Ink on light, paper on dark. Turns sun on hover.</dd></div>
+        </dl>
+      </div>
+
+      <span class="t-label bb-sub">Don't</span>
+      <div class="bb-donts" data-reveal="stagger">
+        <figure><span class="bb-wordmark bb-wordmark--stretched">Milton Winroth</span><figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Stretch it</figcaption></figure>
+        <figure><span class="bb-wordmark bb-wordmark--outline">Milton Winroth</span><figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Outline it</figcaption></figure>
+        <figure><span class="bb-wordmark bb-wordmark--sun">Milton Winroth</span><figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Set it in sun on paper</figcaption></figure>
+        <figure><span class="bb-wordmark bb-wordmark--glow">Milton Winroth</span><figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Add a glow or shadow</figcaption></figure>
+        <figure><span class="bb-wordmark bb-wordmark--serif">Milton Winroth</span><figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Change the face</figcaption></figure>
+        <figure><span class="bb-wordmark bb-wordmark--tilted">Milton Winroth</span><figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Tilt it</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       COLOUR · primaries, neutrals, proportion, tokens, contrast
+       ======================================================================== -->
+  <section class="section canvas-host" id="colour" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.52" data-fit-sm="0.9" data-bleed="right">
+        <span class="line"><span class="t-bleed">Colour</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Ink, paper and one <em class="em">sun</em>.</h2>
+        <p class="t-compact muted">Yellow is the only colour. Everything else is a warm black, a warm white and the greys between.</p>
+      </div>
+    </header>
+    <div class="shell bb-colour">
+      <div class="bb-primaries" data-reveal="stagger">
+        <button class="bb-swatch bb-swatch--ink" type="button" data-swatch="--c-ink" data-cursor-label="Copy"><span class="bb-swatch__name">Ink</span><span class="bb-swatch__role">Espresso. Text, the dark ground. Never pure black.</span><span class="bb-swatch__codes" data-codes></span></button>
+        <button class="bb-swatch bb-swatch--paper" type="button" data-swatch="--c-paper" data-cursor-label="Copy"><span class="bb-swatch__name">Paper</span><span class="bb-swatch__role">Poster white with a breath of warmth. The light ground.</span><span class="bb-swatch__codes" data-codes></span></button>
+        <button class="bb-swatch bb-swatch--sun" type="button" data-swatch="--c-sun" data-cursor-label="Copy"><span class="bb-swatch__name">Sun</span><span class="bb-swatch__role">The only colour. A highlight or a thin rule, never text on light.</span><span class="bb-swatch__codes" data-codes></span></button>
+      </div>
+      <p class="t-small muted bb-hint">Click a colour to copy its hex.</p>
+
+      <div class="bb-proportion" data-reveal="fade">
+        <span class="t-label">How much of each</span>
+        <div class="bb-proportion__bar" aria-label="Paper about 55 percent, ink about 33 percent, greys about 10 percent, sun about 2 percent">
+          <span class="bb-share--paper" style="--w: 55">Paper</span>
+          <span class="bb-share--ink" style="--w: 33">Ink</span>
+          <span class="bb-share--grey" style="--w: 10">Greys</span>
+          <span class="bb-share--sun" style="--w: 2"></span>
+        </div>
+        <p class="t-small muted">The sun stays rare: one highlighted word per heading and the odd thin line.</p>
+      </div>
+
+      <span class="t-label bb-sub">Neutrals and support</span>
+      <div class="bb-swatches" data-tokens="--c-" data-kind="swatch" data-skip="--c-amber,--c-accent-lift,--c-accent,--c-accent-text,--c-accent-ink,--c-ink,--c-paper,--c-sun"></div>
+
+      <span class="t-label bb-sub">Semantic tokens · what components use</span>
+      <div class="bb-grounds">
+        <div class="bb-ground" data-ground="light"><span class="t-label">On the light ground</span><div class="bb-table" data-tokens="--bg,--text,--line,--c-accent,--focus" data-kind="swatch-row"></div></div>
+        <div class="bb-ground" data-ground="dark"><span class="t-label">On the dark ground</span><div class="bb-table" data-tokens="--bg,--text,--line,--c-accent,--focus" data-kind="swatch-row"></div></div>
+      </div>
+
+      <span class="t-label bb-sub">Contrast · checked live, WCAG 2</span>
+      <div class="bb-contrast" data-reveal="stagger">
+        <div data-contrast="--c-ink on --c-paper"></div>
+        <div data-contrast="--c-grey-600 on --c-paper"></div>
+        <div data-contrast="--c-grey-500 on --c-paper"></div>
+        <div data-contrast="--c-paper on --c-ink"></div>
+        <div data-contrast="--c-sun on --c-ink"></div>
+        <div data-contrast="--c-sun on --c-paper"></div>
+      </div>
+      <p class="t-small muted bb-hint">Sun on paper fails on purpose: on the light ground yellow is a surface, never text. Text that should feel accented there is simply ink.</p>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       TYPE · the three faces, a tester, the scale, the rules
+       ======================================================================== -->
+  <section class="section canvas-host" id="type" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.36" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Type</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Giant headlines, quiet text.</h2>
+        <p class="t-compact muted">Three faces, each with one job. The contrast in size is the design.</p>
+      </div>
+    </header>
+    <div class="shell bb-type">
+      <article class="bb-face" data-reveal="fade">
+        <div class="bb-face__meta">
+          <span class="t-label">Giants</span>
+          <h3>Bricolage Grotesque</h3>
+          <p class="t-small muted">ExtraBold 800, optical size 12, width 82. The giants and the wordmark. Sentence case, one word per section, sized to a share of the screen and allowed to crop. At opsz 12 the face cuts deep ink traps into every joint, and set this big those traps become the texture.</p>
+          <dl class="bb-specs bb-specs--tight"><div><dt class="t-label">Line height</dt><dd>0.78</dd></div><div><dt class="t-label">Tracking</dt><dd>-0.035em</dd></div><div><dt class="t-label">Licence</dt><dd>SIL OFL</dd></div></dl>
+        </div>
+        <div class="bb-tester">
+          <p class="bb-tester__text" contenteditable="true" spellcheck="false" data-tester>Problem solver.</p>
+          <div class="bb-tester__controls">
+            <label><span class="t-label">Width <output data-out="wdth">82</output></span><input type="range" min="75" max="100" value="82" data-axis="wdth"></label>
+            <label><span class="t-label">Weight <output data-out="wght">800</output></span><input type="range" min="600" max="800" value="800" data-axis="wght"></label>
+            <label><span class="t-label">Optical size <output data-out="opsz">12</output></span><input type="range" min="12" max="96" value="12" data-axis="opsz"></label>
+          </div>
+          <p class="t-small muted">Type anything. The site's own setting is width 82, weight 800, optical size 12.</p>
+        </div>
+      </article>
+
+      <div class="bb-faces" data-reveal="stagger">
+        <article class="bb-face bb-face--small">
+          <span class="t-label">Everything else</span>
+          <p class="bb-specimen bb-specimen--sans">Aa Bb Cc 0123</p>
+          <h3>Plus Jakarta Sans</h3>
+          <p class="t-small muted">Body, subheads, labels and buttons. Regular 400 for reading, Medium 500 for small headlines and labels, Bold 700 sparingly. No letter spacing anywhere.</p>
+          <div class="bb-weights"><span>Light</span><span>Regular</span><span>Medium</span><span>Semibold</span><span>Bold</span></div>
+        </article>
+        <article class="bb-face bb-face--small">
+          <span class="t-label">The signature word</span>
+          <p class="bb-specimen">One <em class="em">soft</em> word.</p>
+          <h3>Instrument Serif Italic</h3>
+          <p class="t-small muted">The one old, soft letterform among hard modern ones. Exactly one word per heading, on a sun highlighter stroke, set 8% larger so its x-height lines up.</p>
+        </article>
+      </div>
+
+      <span class="t-label bb-sub">The scale · from the tokens</span>
+      <div class="bb-scale-list" data-tokens="--fs-" data-kind="type"></div>
+
+      <span class="t-label bb-sub">Rules</span>
+      <ul class="bb-rules" role="list" data-reveal="stagger">
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Sentence case everywhere. Headlines too.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>One sun word per heading, at most one per section.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Body text and labels get no letter spacing. Only big type tightens.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Reading text stays within 68 characters a line, compact copy within 28.</li>
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No orphans: the last line always holds at least three words.</li>
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No all caps, no underlines for emphasis, no bold inside paragraphs.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       LAYOUT · space, grid, breakpoints
+       ======================================================================== -->
+  <section class="section canvas-host" id="layout" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.5" data-fit-sm="0.9" data-bleed="right">
+        <span class="line"><span class="t-bleed">Layout</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Wide margins, <em class="em">big</em> jumps.</h2>
+        <p class="t-compact muted">A 4px base, a 12 column grid and a lot of room between things.</p>
+      </div>
+    </header>
+    <div class="shell bb-layout">
+      <div class="bb-split">
+        <span class="t-label">Spacing</span>
+        <div class="bb-spaces" data-tokens="--sp-" data-kind="space"></div>
+      </div>
+
+      <div class="bb-split">
+        <span class="t-label">Grid</span>
+        <div class="stack-6">
+          <div class="bb-gridviz" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <dl class="bb-specs">
+            <div><dt class="t-label">Columns</dt><dd data-token="--grid-cols"></dd></div>
+            <div><dt class="t-label">Max width</dt><dd data-token="--grid-max"></dd></div>
+            <div><dt class="t-label">Gutter</dt><dd data-token="--grid-gutter"></dd></div>
+            <div><dt class="t-label">Page margin</dt><dd data-token="--page-inline"></dd></div>
+            <div><dt class="t-label">Between sections</dt><dd data-token="--section-y"></dd></div>
+            <div><dt class="t-label">Reading width</dt><dd data-token="--measure"></dd></div>
+          </dl>
+          <button class="btn btn--ghost bb-gridtoggle" type="button" data-grid-toggle aria-pressed="false">Show the grid on this page</button>
+        </div>
+      </div>
+
+      <div class="bb-split">
+        <span class="t-label">Breakpoints</span>
+        <div class="bb-table" data-tokens="--bp-" data-kind="plain"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       VISUALS · shape, illustration, imagery
+       ======================================================================== -->
+  <section class="section canvas-host" id="visuals" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.55" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Visuals</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Drawn in thin lines.</h2>
+        <p class="t-compact muted">Corners are barely rounded and drawings are made of lines. Photos show real projects.</p>
+      </div>
+    </header>
+    <div class="shell bb-visuals">
+      <h3 class="bb-h3">Shape</h3>
+      <div class="bb-radii" data-tokens="--r-" data-kind="radius"></div>
+      <div class="bb-shapes" data-reveal="stagger">
+        <figure><div class="bb-demo bb-demo--lines"><i></i><i></i><i></i></div><figcaption><span class="t-label">Hairlines</span><span class="t-small muted">1px rules at 12% or 22% ink. They divide; boxes are rare.</span></figcaption></figure>
+        <figure><div class="bb-demo bb-demo--dots canvas-host" data-ground="light"><canvas class="particles" data-particles aria-hidden="true"></canvas></div><figcaption><span class="t-label">The dot field</span><span class="t-small muted">A halftone of ink dots behind every section. It lights up in sun around the cursor.</span></figcaption></figure>
+        <figure><div class="bb-demo bb-demo--glass"><span class="glass glass--pill">Glass pill</span></div><figcaption><span class="t-label">Frosted glass</span><span class="t-small muted">Flat tint, grain, hairline edges. Only for things that float: the dock, the menu button.</span></figcaption></figure>
+        <figure><div class="bb-demo bb-demo--em"><span>One <em class="em">highlighted</em> word</span></div><figcaption><span class="t-label">The highlighter</span><span class="t-small muted">A sun stroke under the signature word. The most recognisable mark in the system.</span></figcaption></figure>
+      </div>
+
+      <h3 class="bb-h3">Illustration</h3>
+      <div class="bb-illo" data-reveal="stagger">
+        <figure class="bb-illo__good">
+          <svg viewBox="0 0 400 240" aria-hidden="true">
+            <g class="bb-ln"><path d="M 20 200 H 380 M 20 170 H 380 M 20 140 H 380"/><circle cx="200" cy="110" r="70"/><circle cx="200" cy="110" r="38" stroke-dasharray="2 5"/><path d="M 120 110 H 280 M 200 30 V 190"/></g>
+            <g class="bb-ln bb-ln--faint"><path d="M 276.0 110.0 L 288.0 110.0"/><path d="M 273.4 129.7 L 279.2 131.2"/><path d="M 265.8 148.0 L 271.0 151.0"/><path d="M 253.7 163.7 L 258.0 168.0"/><path d="M 238.0 175.8 L 241.0 181.0"/><path d="M 219.7 183.4 L 221.2 189.2"/><path d="M 200.0 186.0 L 200.0 198.0"/><path d="M 180.3 183.4 L 178.8 189.2"/><path d="M 162.0 175.8 L 159.0 181.0"/><path d="M 146.3 163.7 L 142.0 168.0"/><path d="M 134.2 148.0 L 129.0 151.0"/><path d="M 126.6 129.7 L 120.8 131.2"/><path d="M 124.0 110.0 L 112.0 110.0"/><path d="M 126.6 90.3 L 120.8 88.8"/><path d="M 134.2 72.0 L 129.0 69.0"/><path d="M 146.3 56.3 L 142.0 52.0"/><path d="M 162.0 44.2 L 159.0 39.0"/><path d="M 180.3 36.6 L 178.8 30.8"/><path d="M 200.0 34.0 L 200.0 22.0"/><path d="M 219.7 36.6 L 221.2 30.8"/><path d="M 238.0 44.2 L 241.0 39.0"/><path d="M 253.7 56.3 L 258.0 52.0"/><path d="M 265.8 72.0 L 271.0 69.0"/><path d="M 273.4 90.3 L 279.2 88.8"/></g>
+            <path class="bb-ln--sun" d="M 270 110 C 310 110, 300 60, 350 60"/>
+            <circle class="bb-ln--sun" cx="350" cy="60" r="4"/>
+          </svg>
+          <figcaption><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg><span>Construction drawings: rulers, dials, crosshairs, baselines. Hairline strokes, no fills. The sun on one or two marks only.</span></figcaption>
+        </figure>
+        <figure class="bb-illo__bad">
+          <svg viewBox="0 0 400 240" aria-hidden="true">
+            <defs><radialGradient id="bb-glow"><stop offset="0" stop-color="#FFD900"/><stop offset="1" stop-color="#FF7A00" stop-opacity="0"/></radialGradient></defs>
+            <circle cx="200" cy="120" r="95" fill="url(#bb-glow)"/>
+            <path d="M 120 150 C 150 60, 250 60, 280 150 Z" fill="#FFB800" opacity="0.8"/>
+          </svg>
+          <figcaption><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg><span>Fills, gradients, glow and blobs. Anything that looks painted rather than drawn.</span></figcaption>
+        </figure>
+      </div>
+
+      <h3 class="bb-h3">Imagery</h3>
+      <div class="bb-photos" data-reveal="stagger">
+        <figure class="bb-photo bb-photo--wide"><img src="../assets/media/aros/hero.webp" alt="A laptop with a client site on a grey stone plinth in window light" width="1800" height="1350" loading="lazy" decoding="async"><figcaption class="t-small muted">Work in context: real screens on calm grey stone, soft window light.</figcaption></figure>
+        <figure class="bb-photo bb-photo--tall"><img src="../assets/media/milton-standing.webp" alt="Milton on a white seamless background" width="1200" height="1800" loading="lazy" decoding="async"><figcaption class="t-small muted">People on plain white, natural and relaxed. No posing at the camera.</figcaption></figure>
+        <figure class="bb-photo bb-photo--wide"><img src="../assets/media/friends-agenda.webp" alt="Hands typing on a laptop showing an editorial site" width="1800" height="1350" loading="lazy" decoding="async"><figcaption class="t-small muted">Hands at work in warm interiors, with the site in use.</figcaption></figure>
+      </div>
+      <ul class="bb-rules" role="list" data-reveal="stagger">
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Formats: 9:16, 4:5 or 16:9. Case heroes may go 4:3.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Corners at radius large (8px), media revealed with a soft clip.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Real projects and real people. AI imagery only when the piece is about AI.</li>
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No stock smiles, no duotones, no heavy filters, no drop shadows on photos.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MOTION · curves, durations, principles
+       ======================================================================== -->
+  <section class="section canvas-host" id="motion" data-ground="dark">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.5" data-fit-sm="0.9" data-bleed="right">
+        <span class="line"><span class="t-bleed">Motion</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Smooth, with a <em class="em">faint</em> bounce.</h2>
+        <p class="t-compact muted">Things glide in and leave a bit faster than they came. Anything you touch settles with a hint of overshoot.</p>
+      </div>
+    </header>
+    <div class="shell bb-motion">
+      <div class="bb-curves" data-tokens="--e-" data-kind="ease"></div>
+      <p class="t-small muted bb-hint">Press a curve to see it move. Durations below.</p>
+      <div class="bb-table bb-table--inline" data-tokens="--d-" data-kind="plain"></div>
+      <ul class="bb-rules" role="list" data-reveal="stagger">
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Reveals use the expo out curve: fast start, long soft landing.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Only things under the pointer overshoot (attitude). Scroll reveals never bounce.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Exits take about 65% of the entrance time.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Motion follows the scroll, it doesn't play on its own in a loop.</li>
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No wobbles or confetti. Calm and deliberate.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Reduced motion turns all of it off and lands on the resting state.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       COMPONENTS · the small parts, live
+       ======================================================================== -->
+  <section class="section canvas-host" id="components" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.42" data-fit-sm="0.9" data-bleed="left">
+        <span class="line"><span class="t-bleed">Parts</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">The small things, live.</h2>
+        <p class="t-compact muted">The pieces every page is built from. These are the real, working components.</p>
+      </div>
+    </header>
+    <div class="shell bb-parts" data-reveal="stagger">
+      <figure><div class="bb-part"><a class="btn" href="#components">Primary button <span aria-hidden="true">→</span></a></div><figcaption class="t-label">Button · wipes to sun on hover</figcaption></figure>
+      <figure><div class="bb-part"><a class="btn btn--ghost" href="#components">Ghost button <span aria-hidden="true">→</span></a></div><figcaption class="t-label">Ghost button</figcaption></figure>
+      <figure><div class="bb-part"><a class="link-more" href="#components">More about me<svg class="link-more__arrow" viewBox="0 0 24 10" aria-hidden="true"><path d="M 0 5 H 22 M 18 1 L 22 5 L 18 9"/></svg></a></div><figcaption class="t-label">Quiet link · hairline fills with sun</figcaption></figure>
+      <figure><div class="bb-part"><span class="t-label accent">Labels with a sun dot</span></div><figcaption class="t-label">Label, accent</figcaption></figure>
+      <figure><div class="bb-part"><ul class="cs-chips" role="list"><li>Brand</li><li>Web</li><li>AI</li></ul></div><figcaption class="t-label">Chips</figcaption></figure>
+      <figure><div class="bb-part"><p class="t-title-compact">A small <em class="em">headline</em>.</p></div><figcaption class="t-label">Band headline</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       VOICE · personality, rules, this not that, a checker
+       ======================================================================== -->
+  <section class="section canvas-host" id="voice" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <header class="poster-head poster-head--end">
+      <div class="poster-head__word" aria-hidden="true" data-reveal="lines" data-fit="0.45" data-fit-sm="0.9" data-bleed="right">
+        <span class="line"><span class="t-bleed">Voice</span></span>
+      </div>
+      <div class="shell poster-head__band" data-reveal="stagger">
+        <h2 class="t-title-compact">Chill, but <em class="em">sharp</em>.</h2>
+        <p class="t-compact muted">Written the way I'd talk to a client I like. Relaxed, but to the point.</p>
+      </div>
+    </header>
+    <div class="shell bb-voice">
+      <div class="bb-values" data-reveal="stagger">
+        <div><span class="t-label">We are</span><h3>Relaxed</h3><p class="t-small muted">First person, everyday words, a bit of humour. Never stiff.</p></div>
+        <div><span class="t-label">We are</span><h3>Professional</h3><p class="t-small muted">Relaxed doesn't mean sloppy. Facts are right, claims are backed.</p></div>
+        <div><span class="t-label">We are</span><h3>Short</h3><p class="t-small muted">Short sentences. One idea each. If a word can go, it goes.</p></div>
+        <div><span class="t-label">We are</span><h3>Human</h3><p class="t-small muted">It should sound like a person wrote it, because one did.</p></div>
+      </div>
+
+      <span class="t-label bb-sub">Say it like this</span>
+      <div class="bb-thisnot" data-reveal="stagger">
+        <div><p class="bb-this"><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>I make digital ads that have to pull their weight.</p><p class="bb-not"><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Leveraging data-driven creative to unlock scalable performance.</p></div>
+        <div><p class="bb-this"><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Someone brings me something messy, I figure out the actual problem.</p><p class="bb-not"><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>I don't just design — I solve problems.</p></div>
+        <div><p class="bb-this"><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>What works stays, the rest goes.</p><p class="bb-not"><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>Embracing a culture of continuous, iterative innovation.</p></div>
+      </div>
+
+      <span class="t-label bb-sub">Writing rules</span>
+      <ul class="bb-rules" role="list" data-reveal="stagger">
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No em dashes or en dashes, ever. Use a full stop, a comma or a colon.</li>
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No "Not X, but Y" setups, tidy pairs of opposites or lists of exactly three for rhythm.</li>
+        <li><svg class="bb-mark bb-mark--no" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 2 L 10 10 M 10 2 L 2 10"/></svg>No buzzwords: leverage, unlock, elevate, seamless, journey, cutting edge.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>English on the site. Swedish place names stay Swedish.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Numbers as figures: 50+ pages, 4 people.</li>
+        <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Sentence case, and no orphans: the last line keeps at least three words.</li>
+      </ul>
+
+      <div class="bb-checker" data-reveal="fade">
+        <label class="t-label" for="bb-check">Voice check · paste some copy</label>
+        <textarea id="bb-check" rows="5" data-voice-input placeholder="Paste a paragraph and see what sticks out.">We don't just build websites — we craft seamless digital journeys that unlock your brand's potential.</textarea>
+        <ul class="bb-checker__out" role="list" aria-live="polite" data-voice-output></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ACCESS + FILES
+       ======================================================================== -->
+  <section class="section canvas-host" id="files" data-ground="light">
+    <canvas class="particles" data-particles aria-hidden="true"></canvas>
+    <div class="shell bb-closing">
+      <div class="bb-split" data-reveal="stagger">
+        <span class="t-label">Accessibility</span>
+        <ul class="bb-rules" role="list">
+          <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Body text passes WCAG AA on both grounds. Faint text is for whispers only, never for something you need to read.</li>
+          <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Focus rings are drawn in the deep sun, visible on both grounds.</li>
+          <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Body text never below 15px. Captions go down to 14px, labels to 12px, and 11px is only for things you glance at.</li>
+          <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Every image gets alt text that says what is in it, in plain words.</li>
+          <li><svg class="bb-mark bb-mark--yes" viewBox="0 0 12 12" aria-hidden="true"><path d="M 2 6.5 L 5 9.5 L 10 2.5"/></svg>Reduced motion is respected everywhere.</li>
+        </ul>
+      </div>
+      <div class="bb-split" data-reveal="stagger">
+        <span class="t-label">Files</span>
+        <ul class="bb-files" role="list">
+          <li><span>Tokens</span><code>assets/css/tokens.css</code></li>
+          <li><span>Fonts</span><code>assets/fonts/</code><span class="t-small muted">All SIL Open Font License, licences included</span></li>
+          <li><span>Font links</span><a class="link" href="https://fonts.google.com/specimen/Bricolage+Grotesque" target="_blank" rel="noopener">Bricolage Grotesque ↗</a> <a class="link" href="https://fonts.google.com/specimen/Plus+Jakarta+Sans" target="_blank" rel="noopener">Plus Jakarta Sans ↗</a> <a class="link" href="https://fonts.google.com/specimen/Instrument+Serif" target="_blank" rel="noopener">Instrument Serif ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- include: footer -->
+<footer class="footer" id="contact" data-ground="dark">
+  <div class="shell">
+    <div class="stack-8">
+      <h2 class="footer__cta" data-reveal="lines">
+        <span class="line"><span>Got something</span></span>
+        <span class="line"><span>worth <em class="em">solving?</em></span></span>
+      </h2>
+
+      <!-- The address itself is the call to action: click to write, or copy. -->
+      <p class="footer__reach" data-reveal="fade">
+        <a class="footer__mail" href="mailto:hello@miltonw.com">
+          hello@miltonw.com<span class="footer__mail-arrow" aria-hidden="true">↗</span>
+        </a>
+        <button class="footer__copy t-label" type="button" data-copy="hello@miltonw.com" data-cursor-label="Copy">Copy</button>
+      </p>
+    </div>
+
+    <div class="footer__grid" data-reveal="stagger">
+      <div class="footer__col">
+        <span class="t-label footer__head">Shortcuts</span>
+        <a href="/">Home</a>
+        <a href="/#work">Work</a>
+        <a href="/about/">About me</a>
+        <a href="/contact/">Contact</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label footer__head">Projects</span>
+        <a href="/work/aros-auto/">Aros Auto</a>
+        <a href="/work/logimark/">Logimark</a>
+        <a href="/work/creative-strategy-hub/">Creative strategy hub</a>
+        <a href="/work/ai-production-system/">AI creation</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label footer__head">About me</span>
+        <a href="/about/">Biography</a>
+        <a href="/about/">Work experience</a>
+        <a href="/about/">Academic experience</a>
+      </div>
+
+      <div class="footer__col">
+        <span class="t-label footer__head">Contact details</span>
+        <a href="mailto:hello@miltonw.com">hello@miltonw.com</a>
+        <a href="tel:+46733883533">+46 733 88 35 33</a>
+      </div>
+    </div>
+    <div class="footer__elsewhere" data-reveal="fade">
+      <span class="t-label footer__head">Elsewhere</span>
+      <a href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.tiktok.com/@notlimw" target="_blank" rel="noopener">TikTok</a>
+    </div>
+
+    <div class="footer__bottom t-label" data-reveal="fade">
+      <span>© <span class="tabular">2026</span> Milton Winroth</span>
+      <a class="footer__secret" href="/brand/" data-cursor-label="Brand book">A creative problem solver</a>
+    </div>
+  </div>
+
+</footer>
+<!-- /include -->
+
+</body>
+</html>

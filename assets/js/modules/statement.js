@@ -45,8 +45,7 @@ export function init(root = document) {
     const rect = el.getBoundingClientRect();
 
     // Progress runs from the paragraph entering the lower third of the
-    // viewport to it clearing the upper third — so the last word lights up
-    // while the sentence is still comfortably readable.
+    // viewport to it clearing the upper third.
     const start = window.innerHeight * 0.8;
     const end = window.innerHeight * 0.3;
     const progress = (start - rect.top) / (start - end + rect.height);

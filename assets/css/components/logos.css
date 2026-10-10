@@ -1,15 +1,6 @@
 /* ==========================================================================
    CLIENTS — the logo rows
    Two rows of large client marks running sideways, the same way, offset.
-   The page never stops for them: modules/logos.js keeps them rolling and
-   turns scroll speed into a surge, and leans the rows into the speed the
-   way the giant headlines do. No boxes, no rules. Kept tight top and
-   bottom — it is a breath between sections, not a section of its own.
-
-   Until the real logo files arrive, each mark is a typographic stand-in,
-   one treatment per client so the rows read as different brands rather
-   than a list of names. Swap .logo__mark for an <img>/<svg> and everything
-   else carries over.
    ========================================================================== */
 
 @layer components {
@@ -90,11 +81,9 @@
     line-height: 1;
   }
 
-  /* ---- Real logos ----------------------------------------------------------
-     The client's own SVG (assets/media/logos/), flattened to one colour:
-     black, with any white knockouts kept. Opacity brings it down to the
-     muted text tone, and it comes up on hover, as the text marks did.
-     --s evens out the optical weight of wide wordmarks and the badge. */
+  /* ---- Real logos
+     ---------------------------------------------------------- The client's
+     own SVG (assets/media/logos/), flattened to one colour. */
   .logo--img img {
     display: block;
     width: auto;
@@ -112,9 +101,7 @@
 
 /* ==========================================================================
    TOOLS — the same ribbon, for the tools in "Now"
-   Runs on modules/logos.js like the client rows. One voice for all of them
-   (they are tools, not brands): the body face, large, with every third one
-   in the serif italic for rhythm. A touch smaller than the client marks.
+   Runs on modules/logos.js like the client rows.
    ========================================================================== */
 @layer components {
   .clients--tools { padding-block: clamp(5rem, 11vw, 10rem) 0; }

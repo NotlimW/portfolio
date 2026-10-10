@@ -31,7 +31,7 @@ import * as menu from "./modules/menu.js";
 import * as cursor from "./modules/cursor.js";
 import * as copy from "./modules/copy.js";
 import * as timeline from "./modules/timeline.js";
-import * as marquee from "./modules/marquee.js";
+import * as brand from "./modules/brand.js";
 import * as counter from "./modules/counter.js";
 import * as track from "./modules/track.js";
 import { scrollTo } from "./modules/smooth-scroll.js";
@@ -58,11 +58,11 @@ const modules = [
   projects,
   masonry,
   track,
-  marquee,
   counter,
   cursor,
   copy,
   timeline,
+  brand,
 ];
 
 const teardown = [];

@@ -1,33 +1,17 @@
 /**
- * masonry.js — the focal plane behind the creative wall.
+ * masonry.js — columns and focal plane for the creative wall.
  *
- * The wall is thirty-odd frames that each drift at their own rate and pull
- * in and out of focus. That is two effects on every item, which is exactly
- * the shape of thing that quietly costs a page its frame rate — so this
- * module does the same job as parallax.js and scene.js but pays for it once:
+ * Builds one element per column and packs the items into the shortest one.
+ * While the wall is on screen it writes --pass (-1 → 0 → 1 across a
+ * crossing) per item and per column; drift, fade and scale are CSS reading
+ * that number (components/masonry.css).
  *
- *   one custom property   --pass, -1 → 0 → +1 across a crossing, 0 dead
- *                         centre. Drift, fade, scale and blur are all CSS
- *                         reading that number. See components/masonry.css.
+ * Item offsets are measured on init and resize only, and each frame reads
+ * once before it writes. Off-screen items are skipped.
  *
- *   one layout read       item offsets inside the grid are measured on init
- *                         and on resize, never per frame. A frame reads the
- *                         grid's own rect and does arithmetic from there, so
- *                         thirty items cost one getBoundingClientRect, not
- *                         thirty.
- *
- *   reads before writes   the two loops below are separate on purpose.
- *                         Interleaving them makes every write invalidate the
- *                         next read, and the frame turns into N forced
- *                         layouts instead of one.
- *
- * Off-screen items are skipped and their property removed, so the cost of
- * the section is proportional to what is actually on screen, not to how much
- * work Milton has made.
- *
- * Markup: <div data-masonry> around the grid, <figure data-plane> per item.
- * Speed is declarative and lives in CSS, as `style="--speed: .12"` — this
- * module never needs to know it.
+ *   <div data-masonry>                       the grid
+ *   <figure data-plane style="--speed: .12"> an item and its drift rate
+ *   data-wall-extra                          left out on phones
  */
 
 import { onScroll } from "./smooth-scroll.js";
@@ -36,13 +20,7 @@ import { motionAllowed, isTouch } from "./motion-prefs.js";
 /** Below this, the change is smaller than a pixel of travel. Don't pay for it. */
 const EPSILON = 0.004;
 
-/**
- * Per-column drift rates, as a fraction of --masonry-col-drift.
- *
- * Deliberately not a ramp. A monotonic 1 / .75 / .5 / .25 reads as the whole
- * wall being sheared; an irregular order reads as separate strips at separate
- * depths, which is the thing worth having. Index 0 is the left-most column.
- */
+/** Per-column drift rates, as a fraction of --masonry-col-drift. */
 const COLUMN_SPEEDS = [0.32, 1, 0.55, 0.82, 0.44, 0.9];
 
 let unsubscribe = null;
@@ -50,11 +28,7 @@ let onResize = null;
 let observer = null;
 let grids = [];
 
-/**
- * Item positions relative to their grid. Called on init and whenever the
- * grid's box changes — a breakpoint switching the column count, or images
- * settling after they load. Both move every item below them.
- */
+/** Item positions relative to their grid. */
 function measure(grid) {
   const rect = grid.el.getBoundingClientRect();
   grid.height = rect.height;
@@ -62,8 +36,7 @@ function measure(grid) {
   for (const item of grid.items) {
     const box = item.el.getBoundingClientRect();
     // Subtract the shift its column is currently carrying, so the resting
-    // layout position is measured rather than the animated one. Without this
-    // the effect feeds back into its own input and the wall creeps.
+    // layout position is measured rather than the animated one.
     item.top = box.top - rect.top - (item.column?.shift ?? 0);
     item.height = box.height;
   }
@@ -78,13 +51,7 @@ function columnCount(el) {
   return Number.isFinite(value) && value > 0 ? value : 1;
 }
 
-/**
- * Build the column elements and pack the items into them.
- *
- * Packing is shortest-column-first using each item's declared --ratio, so a
- * run of tall 9:16 creatives can't leave one strip hanging far below the
- * others. The ratio is authored in the markup already; nothing new is needed.
- */
+/** Build the column elements and pack the items into them. */
 function buildColumns(grid) {
   const count = columnCount(grid.el);
   if (count === grid.columnCount) return;
@@ -107,9 +74,9 @@ function buildColumns(grid) {
     return { el, speed, weight: 0, shift: 0, last: NaN };
   });
 
-  // Phones get a shorter wall: the items marked data-wall-extra are left
-  // out of the columns entirely (the 3 → 4 column change at 48rem rebuilds,
-  // so they come back on wider screens).
+  // Phones get a shorter wall: the items marked data-wall-extra are left out
+  // of the columns entirely (the 3 → 4 column change at 48rem rebuilds, so
+  // they come back on wider screens).
   const short = window.matchMedia("(max-width: 47.99rem)").matches;
 
   for (const item of grid.items) {
@@ -150,9 +117,7 @@ export function init(root = document) {
   grids.forEach((grid) => { buildColumns(grid); measure(grid); });
 
   // Reduced motion, and touch: pin every item to the middle of the plane —
-  // level, sharp, fully opaque — and never subscribe to anything. On a phone
-  // the per-image depth pass was a style write per image per scroll frame
-  // across the busiest stretch of the page.
+  // level, sharp, fully opaque — and never subscribe to anything.
   if (!motionAllowed() || isTouch()) {
     grids.forEach((grid) => {
       grid.items.forEach((item) => item.el.style.setProperty("--pass", "0"));
@@ -205,9 +170,7 @@ export function init(root = document) {
 
         // -1 the instant the item clears the top edge, +1 the instant before
         // it enters at the bottom, 0 when its centre meets the centre of the
-        // screen. Dividing by (viewport + item) / 2 rather than the viewport
-        // is what makes the ends land exactly on ±1 whatever the item's size
-        // — otherwise tall creatives would never fully reach the soft end.
+        // screen.
         const pass =
           (top + item.height / 2 - viewportH / 2) / ((viewportH + item.height) / 2);
 
@@ -223,9 +186,7 @@ export function init(root = document) {
   };
 
   const remeasure = () => {
-    // Rebuild only when the breakpoint actually changed the column count —
-    // buildColumns bails early otherwise, so a resize that doesn't cross a
-    // breakpoint costs one computed-style read.
+    // Rebuild only when the breakpoint actually changed the column count.
     grids.forEach((grid) => { buildColumns(grid); measure(grid); });
     update();
   };

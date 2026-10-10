@@ -1,61 +1,45 @@
 /* ==========================================================================
    DISPLAY — one face for every headline on the site
-
    Each component sets its own size and leading; this file is the only place
-   that says what a headline is made of. Loaded after the other components
-   so a single class here wins over the --fw-medium those files still carry
-   for their own body text. Changing the display face means changing
-   --font-display and nothing else.
+   that says what a headline is made of.
    ========================================================================== */
-
 @layer components {
 
   .hero__title,
   .footer__cta,
   .statement-scene__text,
-  .figure__value,
   .menu__link,
-  .topbar__mark,
-  .gfx-glyph {
+  .topbar__mark {
     font-family: var(--font-display);
     font-weight: var(--fw-display);
     font-variation-settings: var(--fv-display);
   }
 
-  /* The specimen's accent glyph was the italic serif. Same retirement as
-     .em: the face stays, the colour changes. */
-  .gfx-glyph--serif {
-    font-style: normal;
-    font-weight: var(--fw-display);
-  }
-
-  /* An ExtraBold at 0.84 leading carries ink above the cap height and below
-     the baseline that a Medium never did, and the reveal mask was shaving
-     it off. Give the mask room on both sides and take the room straight
-     back with a negative margin, so the lines still sit where they did. */
+  /* ExtraBold at tight leading carries ink past the line box; the padding
+     keeps the reveal mask from shaving it, the margin takes the room back. */
   [data-reveal="lines"] .line {
     padding-block: 0.08em 0.1em;
     margin-block: -0.08em -0.1em;
   }
 
-  /* Sideways too, for the giants: their tight tracking (--tr-bleed) is
-     applied after the last letter as well, so the last glyph's ink runs
-     past the end of its own box and the mask was shaving its right edge
-     ("Now." lost the side of its full stop). Room on both sides, taken
-     straight back, so the word still sits exactly where fit.js put it. */
+  /* Sideways too: the giants' negative tracking pushes the last glyph's ink
+     past the end of its box. */
   [data-fit] > .line {
     padding-inline: 0.08em;
     margin-inline: -0.08em;
   }
 
-  .topbar__mark { letter-spacing: -0.035em; }
+  /* The wordmark is set exactly like the giants: condensed to width 82,
+     so the name in the corner and the words across the page match. */
+  .topbar__mark {
+    font-variation-settings: var(--fv-display-tight);
+    letter-spacing: -0.02em;
+  }
 
   /* Subheads are set in the body face — the display face belongs to the
      giants only. */
-  .act__quote,
   .row-item__title,
-  .case__title,
-  .problem-row__quote {
+  .case__title {
     font-family: var(--font-sans);
     font-weight: var(--fw-medium);
     font-variation-settings: normal;

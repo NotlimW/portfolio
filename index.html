@@ -10,7 +10,9 @@
 <meta property="og:title" content="Milton Winroth · A creative problem solver">
 <meta property="og:description" content="Designer in Stockholm working on content, brand, UX/UI and web, plus the AI workflows that let creative work go further.">
 <meta property="og:type" content="website">
+<!-- include: head -->
 <meta name="theme-color" content="#17120E">
+<link rel="icon" href="/assets/media/favicon.svg" type="image/svg+xml">
 
 
 <!-- Park the headline lines below their masks before the first paint;
@@ -23,8 +25,9 @@
     }
   }, 4000);
 </script>
-<link rel="stylesheet" href="assets/css/main.css">
-<script type="module" src="assets/js/main.js"></script>
+<link rel="stylesheet" href="/assets/css/main.css">
+<script type="module" src="/assets/js/main.js"></script>
+<!-- /include -->
 </head>
 
 <body>
@@ -32,45 +35,35 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="cursor" data-cursor aria-hidden="true"></div>
 
-<div class="edge-blur edge-blur--top" data-layer="1" aria-hidden="true"></div>
-<div class="edge-blur edge-blur--bottom" data-layer="1" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--top" aria-hidden="true"></div>
+<div class="edge-blur edge-blur--bottom" aria-hidden="true"></div>
 
 <!-- ==========================================================================
-     NAV
-     ========================================================================== -->
-<!-- ==========================================================================
      TOPBAR — the site's own navigation, and only at the very top
-     Transparent and in normal flow, so it scrolls away with the hero rather
-     than following you down. Everything below the fold is handled by the
-     dock and the menu button, which is why this one never needs to persist.
      ========================================================================== -->
+<!-- include: topbar -->
 <header class="topbar">
   <a class="topbar__mark" href="/">
     <span class="topbar__mark-full">Milton Winroth</span>
   </a>
 
   <nav class="topbar__links" aria-label="Site">
-    <a class="topbar__link" href="work/">Case studies</a>
-    <a class="topbar__link" href="about/">About me</a>
-    <a class="topbar__link" href="contact/">Contact</a>
+    <a class="topbar__link" href="/#work">Case studies</a>
+    <a class="topbar__link" href="/about/">About me</a>
+    <a class="topbar__link" href="/contact/">Contact</a>
   </nav>
 </header>
 
-<!-- ==========================================================================
-     MENU BUTTON — top right, arrives with the dock
-     Same curtain as before; it just no longer lives inside the pill.
-     ========================================================================== -->
 <button class="menu-btn glass glass--pill" data-menu-toggle data-late
         aria-expanded="false" aria-controls="menu">
   <i aria-hidden="true"></i>
   <i aria-hidden="true"></i>
   <span class="sr-only">Menu</span>
 </button>
+<!-- /include -->
 
 <!-- ==========================================================================
      DOCK — the page's own table of contents
-     Bottom centre, glass, and only once you have started reading. Anchors
-     only: this is where you are in the page, not where you can go on the site.
      ========================================================================== -->
 <nav class="dock glass glass--pill" data-dock data-late aria-label="Sections">
   <a class="dock__link" href="#capabilities">What I do</a>
@@ -96,6 +89,7 @@
 <!-- ==========================================================================
      MENU CURTAIN
      ========================================================================== -->
+<!-- include: menu -->
 <div class="menu" id="menu" data-menu data-ground="dark" aria-label="Menu">
   <button class="menu__close" data-menu-close>
     <span aria-hidden="true"></span>
@@ -106,37 +100,27 @@
   <div class="menu__inner">
     <ul class="menu__list" role="list">
       <li class="menu__item" style="--i: 0"><a class="menu__link" href="/">Home</a></li>
-      <li class="menu__item" style="--i: 1"><a class="menu__link" href="work/">Case studies</a></li>
-      <li class="menu__item" style="--i: 2"><a class="menu__link" href="about/">About me</a></li>
-      <li class="menu__item" style="--i: 3"><a class="menu__link" href="contact/">Contact</a></li>
+      <li class="menu__item" style="--i: 1"><a class="menu__link" href="/#work">Case studies</a></li>
+      <li class="menu__item" style="--i: 2"><a class="menu__link" href="/about/">About me</a></li>
+      <li class="menu__item" style="--i: 3"><a class="menu__link" href="/contact/">Contact</a></li>
     </ul>
 
     <div class="menu__meta t-small">
       <span class="t-label">Get in touch</span>
       <a class="link" href="mailto:hello@miltonw.com">hello@miltonw.com</a>
       <a class="link" href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
-      <p class="t-label" style="margin-top: var(--sp-4)">
+      <p class="t-label menu__clock">
         Stockholm · <span data-clock class="tabular">--:--</span>
       </p>
     </div>
   </div>
 </div>
+<!-- /include -->
 
 <main id="main">
 
   <!-- ========================================================================
        HERO · dark — the poster on the chair
-       One photograph, full bleed: the brand's own poster lying on a leather
-       chair in late sun. The motto is set over it as three giants placed
-       AROUND the poster rather than across it, read as a Z: "A creative"
-       top left, "problem" flush to the right margin,
-       "solver." in yellow bottom left. The face on the poster is never
-       covered.
-
-       Entrance: the photograph opens out of a smaller, darker, blurred
-       frame; then the letters rise out of their masks one by one, line by
-       line. All of it is CSS (hero.css), keyed off html[data-ready], so a
-       failed script leaves a finished hero, never a blank one.
        ======================================================================== -->
   <section class="hero" data-ground="dark" data-hero>
     <div class="hero__media" aria-hidden="true" data-depth="0.45">
@@ -175,8 +159,6 @@
 
   <!-- ========================================================================
        STATEMENT · light — who, before what
-       No bottom padding: the client logos follow straight on, and their own
-       (tight) padding is the only gap between the two.
        ======================================================================== -->
   <section class="section section--flush-bottom canvas-host" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
@@ -190,7 +172,7 @@
       </div>
     </header>
     <div class="shell">
-      <div class="row row--between" style="align-items: flex-start">
+      <div class="row row--between row--top">
         <p class="statement" data-statement>
           Design has been around me my whole life. My dad ran ad agencies, so I grew up
           watching ideas turn into real things people could see. That's pretty much what
@@ -235,8 +217,6 @@
 
   <!-- ========================================================================
        CAPABILITIES · light, glass over an ambient field
-       Sits between the "Wide skill set" zoom and the client logos:
-       who → what I do → who for → the work.
        ======================================================================== -->
   <section class="section capabilities canvas-host" id="capabilities" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
@@ -298,14 +278,6 @@
 
   <!-- ========================================================================
        PROJECTS · light — the flowing ribbon
-       Previous work as cards on one long, gently curved band that flows as a
-       whole, standing on the same dot field as the rest of the page (modules/projects.js,
-       WebGL). The section pins and
-       the scroll drives the cards sideways; drag works too.
-       The <ol> is the real content: each card is drawn from its item —
-       data-image for the picture, data-tone for cards without one — and
-       the list is what screen readers and keyboards use, and what shows if
-       WebGL never starts.
        ======================================================================== -->
   <section class="projects canvas-host" id="projects" data-ground="light" data-projects data-scene data-scene-catch
            data-nav-section="work" aria-labelledby="projects-title">
@@ -347,14 +319,6 @@
 
   <!-- ========================================================================
        CLIENTS · light — two rows of marks running sideways
-       Both rows roll the same way, the second offset and lagging; scroll
-       speed throws them faster, and they lean into their speed like the
-       giant headlines do (modules/logos.js). The page never stops here.
-       No boxes.
-       Placeholder set: every name here already appears elsewhere on the
-       site. The marks are typographic stand-ins (logos.css) until the real
-       logo files arrive — swap each .logo__mark for an <img> or inline SVG.
-       TODO: replace with real client logos.
        ======================================================================== -->
   <section class="clients canvas-host" id="clients" data-ground="light"
            data-clients data-nav-section="work" aria-labelledby="clients-title">
@@ -390,7 +354,6 @@
 
   <!-- ========================================================================
        WORK · light → the two cases that matter most, at full size
-       Caption pins while the media column scrolls past it.
        ======================================================================== -->
   <section class="section canvas-host" id="work" data-ground="light">
     <canvas class="particles" data-particles aria-hidden="true"></canvas>
@@ -424,19 +387,19 @@
 
         <div class="feature__media">
           <div class="media media--hero" data-reveal="media">
-            <div class="media__placeholder media__placeholder--filled" data-parallax="0.1"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+            <div class="media__image" data-parallax="0.1"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
             <span class="media__chip glass glass--pill t-label">Meta · 9:16 · 2025</span>
           </div>
-          <div class="grid" style="gap: var(--sp-6)">
+          <div class="grid grid--tight">
             <div class="col-6 media media--square" data-reveal="media">
-              <div class="media__placeholder media__placeholder--filled" data-parallax="0.16"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+              <div class="media__image" data-parallax="0.16"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
             </div>
             <div class="col-6 media media--square" data-reveal="media">
-              <div class="media__placeholder media__placeholder--dark media__placeholder--filled" data-parallax="0.22"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder: the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+              <div class="media__image" data-parallax="0.22"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="The Aros Auto site on a laptop" loading="lazy" decoding="async"></picture></div>
             </div>
           </div>
           <div class="media media--wide" data-reveal="media">
-            <div class="media__placeholder media__placeholder--filled" data-parallax="0.12"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+            <div class="media__image" data-parallax="0.12"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
           </div>
         </div>
       </article>
@@ -445,8 +408,6 @@
 
   <!-- ========================================================================
        CREATIVE WALL · dark — the evidence behind the content case
-       Edge to edge, per-item parallax, focal-plane defocus. See
-       docs/masonry-snippet.html for the rationale.
        ======================================================================== -->
 <section class="creative-wall canvas-host" data-ground="light" data-nav-section="work" aria-labelledby="creative-wall-title">
   <canvas class="particles" data-particles aria-hidden="true"></canvas>
@@ -468,7 +429,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .06; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -476,7 +437,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .08; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder: Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -484,7 +445,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .11; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder: the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="The Aros Auto site on a laptop" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -492,7 +453,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .13; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -500,7 +461,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .16; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -508,7 +469,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .18; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder: the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="The Aros Auto site on a laptop" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -516,7 +477,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .16; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -524,7 +485,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .13; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -532,7 +493,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .11; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder: Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -541,7 +502,7 @@
     <figure class="creative-wall__item" data-plane style="--speed: .06; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -549,14 +510,14 @@
     <figure class="creative-wall__item" data-plane style="--speed: .07; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
     <figure class="creative-wall__item" data-plane style="--speed: .09; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder: the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="The Aros Auto site on a laptop" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -564,7 +525,7 @@
     <figure class="creative-wall__item" data-plane data-wall-extra style="--speed: .12; --ratio: 16 / 9">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -572,7 +533,7 @@
     <figure class="creative-wall__item" data-plane data-wall-extra style="--speed: .15; --ratio: 9 / 16">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -580,7 +541,7 @@
     <figure class="creative-wall__item" data-plane data-wall-extra style="--speed: .17; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Placeholder: Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/milton-portrait.webp" type="image/webp"><img src="assets/media/milton-portrait.jpg" alt="Milton Winroth holding a copy of Typografisk handbok" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -588,7 +549,7 @@
     <figure class="creative-wall__item" data-plane data-wall-extra style="--speed: .15; --ratio: 4 / 5">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--dark media__placeholder--filled"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder: the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="The Aros Auto site on a laptop" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -596,7 +557,7 @@
     <figure class="creative-wall__item" data-plane data-wall-extra style="--speed: .12; --ratio: 16 / 9">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="Placeholder: the Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/logimark.webp" type="image/webp"><img src="assets/media/logimark.jpg" alt="The Logimark identity across several screens" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -604,7 +565,7 @@
     <figure class="creative-wall__item" data-plane data-wall-extra style="--speed: .09; --ratio: 16 / 9">
       <div class="creative-wall__frame">
         <div class="creative-wall__media">
-          <div class="media__placeholder media__placeholder--filled"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+          <div class="media__image"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
         </div>
       </div>
     </figure>
@@ -643,11 +604,11 @@
 
         <div class="feature__media">
           <div class="media media--hero" data-reveal="media">
-            <div class="media__placeholder media__placeholder--dark media__placeholder--filled" data-parallax="0.1"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Placeholder: editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
+            <div class="media__image" data-parallax="0.1"><picture><source srcset="assets/media/friends-agenda.webp" type="image/webp"><img src="assets/media/friends-agenda.jpg" alt="Editorial layouts from the Friends Agenda site" loading="lazy" decoding="async"></picture></div>
             <span class="media__chip glass glass--pill t-label">n8n · Figma · Claude</span>
           </div>
           <div class="media media--tall" data-reveal="media">
-            <div class="media__placeholder media__placeholder--filled" data-parallax="0.14"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="Placeholder: the Aros Auto site shown across screen mockups" loading="lazy" decoding="async"></picture></div>
+            <div class="media__image" data-parallax="0.14"><picture><source srcset="assets/media/aros-auto.webp" type="image/webp"><img src="assets/media/aros-auto.jpg" alt="The Aros Auto site on a laptop" loading="lazy" decoding="async"></picture></div>
           </div>
         </div>
       </article>
@@ -722,8 +683,8 @@
         </article>
       </div>
 
-      <p style="margin-top: var(--sp-16)" data-reveal="fade">
-        <a class="btn btn--ghost" href="work/">All work, from content to print <span aria-hidden="true">→</span></a>
+      <p class="work__more" data-reveal="fade">
+        <a class="btn btn--ghost" href="#work">All work, from content to print <span aria-hidden="true">→</span></a>
       </p>
     </div>
   </section>
@@ -738,17 +699,13 @@
              which establishes a stacking context on its own — the canvas's
              z-index: -1 is contained by it without needing .canvas-host. -->
         <canvas class="particles" data-particles aria-hidden="true"></canvas>
-        <div class="statement-scene" style="position: relative; z-index: 1; height: 100%; min-height: 0">
+        <div class="statement-scene statement-scene--panel">
           <p class="statement-scene__text"><span class="nowrap">Creative work</span> <span class="nowrap">made by <em class="em">human</em>.</span></p>
         </div>
       </div>
 
-      <!-- Handing off to dark locally, ahead of the AI section itself
-           picking up data-ground="dark" right after this scene. The panel's
-           own canvas has to live in here, not out at the .slide level like
-           the zoom scene's does — it needs to inherit THIS data-ground for
-           its dots to come out light-on-dark instead of the section's light
-           ground bleeding through as dark-on-dark. -->
+      <!-- Handing off to dark locally, ahead of the AI section itself picking
+           up data-ground="dark" right after this scene. -->
       <div class="slide__panel ai-ground" data-ground="dark">
         <canvas class="particles" data-particles aria-hidden="true"></canvas>
         <div class="slide__content">
@@ -764,10 +721,6 @@
 
   <!-- ========================================================================
        AI · dark — three ways I use it: Context, Visuals, Tools.
-       Each part opens with a giant word as the divider, the real headline
-       and one line under it, a short block of copy, and an abstract line
-       drawing behind it that flows with the scroll (components/ai.css,
-       modules/ai-flow.js).
        ======================================================================== -->
   <!-- ---- AI · 01 — concept & strategy ------------------------------------- -->
   <section class="section canvas-host ai-part ai-ground" id="ai" data-ground="dark" data-nav-section="ai">
@@ -801,8 +754,7 @@
 
       <!-- Construction drawing, full width: a field of sources drifts on the
            left; on view the circles fly into the dial and keep turning there;
-           out of it, a concept is drafted as outlines on a baseline grid.
-           Lines only — the sun is a stroke, never a fill. -->
+           out of it, a concept is drafted as outlines on a baseline grid. -->
       <figure class="ai-fig ai-collect">
         <svg viewBox="0 0 1200 440" role="img" aria-labelledby="ai-collect-title">
           <title id="ai-collect-title">Dozens of sources are collected into one context held all at once, which writes a concept that fits the brand.</title>
@@ -933,7 +885,7 @@
           <circle class="ai-inner" cx="640" cy="205" r="82.5"/>
           <path class="ai-cross" d="M 490 205 H 790 M 640 55 V 355"/>
           <circle class="ai-pulse" cx="640" cy="205" r="150"/>
-          <g class="ai-orbit" style="transform-origin: 640px 205px">
+          <g class="ai-orbit">
               <circle class="ai-fly ai-fly--sun" cx="564.5" cy="101.2" r="3.9" style="--i: 0; --sx: -429.3px; --sy: 93.5px"/>
               <circle class="ai-fly" cx="644.1" cy="135.9" r="4.4" style="--i: 1; --sx: -499.3px; --sy: 191.5px"/>
               <circle class="ai-fly" cx="548.6" cy="120.4" r="4.2" style="--i: 2; --sx: -203.7px; --sy: 153.2px"/>
@@ -1135,7 +1087,7 @@
             <circle class="ai-inner" cx="128" cy="250" r="54.5"/>
             <path class="ai-cross" d="M 29.0 250 H 227.0 M 128 151.0 V 349.0"/>
             <circle class="ai-pulse" cx="128" cy="250" r="99.0"/>
-            <g class="ai-orbit" style="transform-origin: 128px 250px">
+            <g class="ai-orbit">
               <circle class="ai-fly ai-fly--sun" cx="78.2" cy="181.5" r="3.1" style="--i: 0; --sx: 158.5px; --sy: -139.3px"/>
               <circle class="ai-fly" cx="130.7" cy="204.4" r="3.5" style="--i: 1; --sx: 112.6px; --sy: -88.4px"/>
               <circle class="ai-fly" cx="67.7" cy="194.2" r="3.4" style="--i: 2; --sx: 313.4px; --sy: -108.2px"/>
@@ -1238,9 +1190,7 @@
       </div>
 
       <!-- Wireframe reel, full bleed: two rows of frame outlines on a tilted
-           plane, running in opposite directions. Each frame holds a sketch —
-           placeholder, subject, horizon, thirds, keyframes, a bezier — that
-           stands for output, not anyone's real work. One is picked. -->
+           plane, running in opposite directions. -->
       <figure class="ai-reel" aria-label="One brief becomes many frames across image, VFX and animation; one is picked.">
         <div class="ai-reel__tilt" aria-hidden="true">
           <div class="ai-reel__row"><div class="ai-reel__track"><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 01</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 02</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 10 92 H 90"/><path d="M 22 86 L 28 92 L 22 98 L 16 92 Z M 50 86 L 56 92 L 50 98 L 44 92 Z M 78 86 L 84 92 L 78 98 L 72 92 Z"/><path d="M 22 66 C 36 30, 64 30, 78 66"/></svg><i>ANIM 03</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 04</i></span><span class="ai-frame is-pick"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 05</i><b>Pick</b></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 33.3 0 V 125 M 66.6 0 V 125 M 0 41.6 H 100 M 0 83.3 H 100"/><circle cx="66.6" cy="41.6" r="5"/></svg><i>IMG 06</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 07</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 08</i></span></div><div class="ai-reel__track" aria-hidden="true"><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 01</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 02</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 10 92 H 90"/><path d="M 22 86 L 28 92 L 22 98 L 16 92 Z M 50 86 L 56 92 L 50 98 L 44 92 Z M 78 86 L 84 92 L 78 98 L 72 92 Z"/><path d="M 22 66 C 36 30, 64 30, 78 66"/></svg><i>ANIM 03</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 84 H 100"/><circle cx="66" cy="60" r="14"/><path d="M 0 104 H 100" stroke-dasharray="3 5"/></svg><i>IMG 04</i></span><span class="ai-frame is-pick"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 14 96 C 30 20, 70 110, 86 30"/><path d="M 14 96 L 30 20 M 86 30 L 70 110" stroke-dasharray="2 4"/><rect x="11" y="93" width="6" height="6"/><rect x="83" y="27" width="6" height="6"/></svg><i>VFX 05</i><b>Pick</b></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 33.3 0 V 125 M 66.6 0 V 125 M 0 41.6 H 100 M 0 83.3 H 100"/><circle cx="66.6" cy="41.6" r="5"/></svg><i>IMG 06</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><path d="M 0 0 L 100 125 M 100 0 L 0 125"/></svg><i>IMG 07</i></span><span class="ai-frame"><svg viewBox="0 0 100 125" preserveAspectRatio="none"><circle cx="50" cy="56" r="22"/><path d="M 50 24 V 88 M 18 56 H 82"/></svg><i>IMG 08</i></span></div></div>
@@ -1583,6 +1533,7 @@
 <!-- ==========================================================================
      FOOTER — the headline is the call to action
      ========================================================================== -->
+<!-- include: footer -->
 <footer class="footer" id="contact" data-ground="dark">
   <div class="shell">
     <div class="stack-8">
@@ -1604,24 +1555,24 @@
       <div class="footer__col">
         <span class="t-label footer__head">Shortcuts</span>
         <a href="/">Home</a>
-        <a href="work/">Work</a>
-        <a href="about/">About me</a>
-        <a href="contact/">Contact</a>
+        <a href="/#work">Work</a>
+        <a href="/about/">About me</a>
+        <a href="/contact/">Contact</a>
       </div>
 
       <div class="footer__col">
         <span class="t-label footer__head">Projects</span>
-        <a href="work/aros-auto/">Aros Auto</a>
-        <a href="work/logimark/">Logimark</a>
-        <a href="work/creative-strategy-hub/">Creative strategy hub</a>
-        <a href="work/ai-production-system/">AI creation</a>
+        <a href="/work/aros-auto/">Aros Auto</a>
+        <a href="/work/logimark/">Logimark</a>
+        <a href="/work/creative-strategy-hub/">Creative strategy hub</a>
+        <a href="/work/ai-production-system/">AI creation</a>
       </div>
 
       <div class="footer__col">
         <span class="t-label footer__head">About me</span>
-        <a href="about/">Biography</a>
-        <a href="about/">Work experience</a>
-        <a href="about/">Academic experience</a>
+        <a href="/about/">Biography</a>
+        <a href="/about/">Work experience</a>
+        <a href="/about/">Academic experience</a>
       </div>
 
       <div class="footer__col">
@@ -1630,8 +1581,6 @@
         <a href="tel:+46733883533">+46 733 88 35 33</a>
       </div>
     </div>
-
-    <!-- TODO: confirm the TikTok handle — placeholder until Milton confirms it. -->
     <div class="footer__elsewhere" data-reveal="fade">
       <span class="t-label footer__head">Elsewhere</span>
       <a href="https://www.linkedin.com/in/milton-winroth/" target="_blank" rel="noopener">LinkedIn</a>
@@ -1640,11 +1589,12 @@
 
     <div class="footer__bottom t-label" data-reveal="fade">
       <span>© <span class="tabular">2026</span> Milton Winroth</span>
-      <span>A creative problem solver</span>
+      <a class="footer__secret" href="/brand/" data-cursor-label="Brand book">A creative problem solver</a>
     </div>
   </div>
 
 </footer>
+<!-- /include -->
 
 </body>
 </html>

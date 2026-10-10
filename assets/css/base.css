@@ -1,7 +1,6 @@
 /* ==========================================================================
    BASE — elements and the type system
    ========================================================================== */
-
 @layer base {
   body {
     font-family: var(--font-sans);
@@ -13,12 +12,12 @@
   }
 
   /* No orphans: running text never leaves one or two words alone on its last
-     line, and headings break into lines of even length. Component rules can
-     still override (the giants are single words and do not care). */
+     line, and headings break into lines of even length. */
   p, li, dd, dt, figcaption, blockquote { text-wrap: pretty; }
   h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
 
-  /* ---- Type scale --------------------------------------------------------
+  /* ---------------------------------------------------------------------
+     ---- Type scale --------------------------------------------------------
      Classes, not element selectors, so an <h2> can be set at display scale
      without breaking the document outline.
      --------------------------------------------------------------------- */
@@ -32,9 +31,7 @@
     text-wrap: balance;
   }
 
-  /* h2 and h3 are subheads now, and subheads are set in the body face:
-     the display face is reserved for the giants, so the jump between the
-     two is a jump in face, size and weight at once. */
+  /* h2 and h3 are subheads now, and subheads are set in the body face. */
   .t-h2,
   .t-h3 {
     font-family: var(--font-sans);
@@ -43,10 +40,9 @@
     letter-spacing: -0.025em;
   }
 
-  /* ---- Bleed --------------------------------------------------------------
-     A word set too big for its frame. The parent clips it; the word never
-     wraps and never shrinks to fit — the crop is the point. Pair it with
-     .t-compact and nothing in between: the gap in scale is the design.
+  /* ---------------------------------------------------------------------
+     ---- Bleed --------------------------------------------------------------
+     A word set too big for its frame.
      --------------------------------------------------------------------- */
   .t-bleed {
     display: block;
@@ -61,10 +57,9 @@
     width: max-content;
   }
 
-  /* ---- Compact ------------------------------------------------------------
+  /* ---------------------------------------------------------------------
+     ---- Compact ------------------------------------------------------------
      The poster's small print: medium weight, tight leading, short measure.
-     Dense enough to read as one block from across the room, and small
-     enough that the bleed type next to it looks even bigger.
      --------------------------------------------------------------------- */
   .t-compact {
     font-size: var(--fs-compact);
@@ -87,8 +82,7 @@
     max-width: 22ch;
   }
 
-  .t-compact strong,
-  .t-compact--lead {
+  .t-compact strong {
     font-weight: var(--fw-bold);
     color: var(--text);
   }
@@ -127,16 +121,9 @@
     line-height: 1.55;
   }
 
-  /* ---- Label ---------------------------------------------------------------
-     Editorial, not a UI chip. Small medium-weight text in the body face, on
-     the page — no pill, no border, no glass. The glass chip and the mono
-     face both read as interface furniture; next to giant poster type a
-     label should read like a magazine's kicker instead.
-
-     .accent marks the one label in a group that names the thing: it goes to
-     ink and gets a small dot of sun in front. Every other label in the
-     row (year, format, medium) stays quiet grey with no marker, so a row of
-     tags reads as one name and some facts, not five buttons.
+  /* ---------------------------------------------------------------------
+     ---- Label ---------------------------------------------------------------
+     Editorial, not a UI chip.
      --------------------------------------------------------------------- */
   .t-label {
     display: inline-flex;
@@ -168,23 +155,17 @@
     background: var(--c-sun);
   }
 
-  /* ---- Bare label ----------------------------------------------------------
+  /* ---------------------------------------------------------------------
+     ---- Bare label ----------------------------------------------------------
      The same type without the chrome, for the places where a chip would be a
-     box floating in nothing: a rotated rail, the scroll cue, a figure
-     caption, a numeric column, and anything already inside its own container.
-     Scoped by the second class each of these already carries, so none of this
-     needs a markup change.
+     box floating in nothing.
      --------------------------------------------------------------------- */
-  .t-label.section__num,
+  /* A caption under a statistic is describing the number above it, not
+     tagging it. */
   .t-label.row-item__n,
   .t-label.rail,
-  .t-label.hero__cue,
-  .t-label.gfx__cap,
   .t-label.footer__bottom,
   .t-label.media__chip,
-  /* A caption under a statistic is describing the number above it, not
-     tagging it. A pill around "Pages designed and shipped" reads as a
-     category the figure belongs to, which is the wrong relationship. */
   .figures .t-label {
     display: inline;
     padding: 0;
@@ -193,7 +174,6 @@
     white-space: normal;
   }
 
-  .t-label.hero__cue,
   .t-label.footer__bottom { display: inline-flex; }
 
   .t-label.media__chip { display: inline-flex; padding: var(--sp-3) var(--sp-4); }
@@ -202,19 +182,10 @@
      the page ground underneath it. */
   .zoom__caption .t-label,
   .slide__content .t-label {
-    border-color: rgb(255 255 255 / 0.32);
+    border-color: color-mix(in oklab, var(--c-white) 32%, transparent);
   }
 
-  /* The signature: exactly one word per headline, picked out in the sun.
-     Used no more than once per section — that is what keeps it a
-     signature.
-
-     Same face, same weight — the poster this system came from never
-     switches face. On the dark ground the word simply turns yellow. On the
-     light ground yellow text would be 1.6:1, so the yellow goes behind the
-     word instead: a highlighter stroke across the lower two thirds of the
-     x-height, the ink stays black. It pops harder than coloured text ever
-     did, and it stays readable. */
+  /* The signature: exactly one word per headline, picked out in the sun. */
   .em {
     /* Instrument Serif runs small next to a grotesk; the bump puts its
        x-height on the same line. */
@@ -247,12 +218,10 @@
   .measure       { max-width: var(--measure); }
   .measure-tight { max-width: var(--measure-tight); }
 
-  /* ---- Links --------------------------------------------------------------
-     The rule enters from the left and leaves to the right — it never
-     retraces its own path. That directionality is the whole difference
-     between an underline that grows and one that feels drawn: the anchor
-     point flips instantly (0s) while only the width is timed, so the mark
-     always travels the way the eye already reads.
+  /* ---------------------------------------------------------------------
+     ---- Links --------------------------------------------------------------
+     The rule enters from the left and leaves to the right — it never retraces
+     its own path.
      --------------------------------------------------------------------- */
   .link {
     color: var(--text);
@@ -279,8 +248,6 @@
     top: var(--sp-4);
     left: var(--sp-4);
     z-index: calc(var(--z-menu) + 1);
-    /* Was carrying a raw 1.25rem fallback for a --sp-5 that does not exist
-       in the scale. The scale has no 20px step by design. */
     padding: var(--sp-3) var(--sp-6);
     border-radius: var(--r-pill);
     background: var(--c-ink);
@@ -292,16 +259,9 @@
 
   .skip-link:focus-visible { transform: none; }
 
-  /* ---- Buttons ------------------------------------------------------------
-     The fill wipes up from the bottom edge instead of cross-fading. A colour
-     transition tells you the state changed; a wipe tells you the button did
-     something — and it costs one transform on a pseudo-element, so it stays
-     off the main thread. The trailing glyph carries on past the label with
-     the overshoot curve, which is the bit that reads as attitude.
-
-     ::before sits at z-index -1 inside the button's own stacking context, so
-     it paints over the button's background but under its label. Same trick
-     .glass uses for its frost.
+  /* ---------------------------------------------------------------------
+     ---- Buttons ------------------------------------------------------------
+     The fill wipes up from the bottom edge instead of cross-fading.
      --------------------------------------------------------------------- */
   /* Buttons wipe to the sun with espresso text on it — the one place the
      yellow is a large solid field on the light ground. */
@@ -380,7 +340,7 @@
     color: var(--text);
     background: linear-gradient(var(--c-sun) 0 0) 0 100% / 0 1px no-repeat,
                 linear-gradient(var(--line-strong) 0 0) 0 100% / 100% 1px no-repeat;
-    transition: background-size 0.5s var(--e-reveal);
+    transition: background-size var(--d-sweep) var(--e-reveal);
   }
 
   .link-more:hover,

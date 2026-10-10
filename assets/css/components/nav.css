@@ -1,20 +1,6 @@
 /* ==========================================================================
    NAVIGATION — three pieces, each with one job
-
-     .topbar    the site's own menu. Transparent, in flow, top of the hero
-                only. It scrolls away and never comes back, because below the
-                fold its job belongs to the other two.
-
-     .dock      the page's table of contents. Glass, bottom centre, arrives
-                once you have started reading. Anchors only — where you *are*
-                in this page, not where you can go on the site.
-
-     .menu-btn  the site menu again, once the topbar has gone. Top right,
-                arrives with the dock, opens the same curtain.
-
-   Splitting them this way is what lets each be honest about its content.
-   One bar trying to be both a site menu and a page menu is why the old pill
-   had a wordmark, four anchors and a hamburger fighting for the same 400px.
+   .topbar the site's own menu.
    ========================================================================== */
 
 @layer components {
@@ -33,10 +19,7 @@
     justify-content: space-between;
     gap: var(--sp-8);
     padding-inline: var(--page-inline);
-    /* No background by design. It sits over the hero photograph, which is
-       dark, and it lives outside every [data-ground], so it takes the dark
-       ground's text colours by hand — a data-ground would also paint a
-       background over the photo. */
+    /* No background by design. */
     --text:       var(--c-paper);
     --text-muted: var(--text-invert-muted);
     --c-accent:   var(--c-accent-lift);
@@ -53,8 +36,7 @@
   .topbar__link[aria-current="page"] { color: var(--text); }
 
   .topbar__mark {
-    font-weight: var(--fw-bold);
-    letter-spacing: -0.03em;
+    font-size: 1.125rem;
     white-space: nowrap;
     transition: color var(--d-micro) var(--e-micro);
   }
@@ -104,53 +86,24 @@
      the moment you have. data-shown is set by modules/nav.js.
      ========================================================================== */
 
-  /* Dark glass, on a page that is now almost entirely paper.
-     White-tinted glass over a white ground has nothing to separate itself
-     from — the pill read as part of the page rather than as something
-     floating above it, and its labels inherited that problem. Inverting it
-     fixes both at once: the panel gets an unmistakable edge, and light text
-     on a dark scrim is legible over whatever happens to scroll underneath,
-     including the one dark section. Same reasoning as .media__chip over
-     photography. */
+  /* Dark glass, on a page that is mostly paper. */
   .dock,
   .menu-btn {
-    /* Tint dropped from 0.74 to 0.68 — that's the actual dial for "does this
-       read as glass": backdrop-filter keeps blurring and saturating whatever
-       scrolls underneath either way, but at 0.74 barely a quarter of it was
-       ever let through, so the panel looked like a solid dark pill that
-       happened to have a blur nobody could see. It can't drop much further
-       than this: the dock has to stay legible over the *lightest* thing that
-       could ever scroll under it, not just the dark section, and every
-       0.01 of transparency here is borrowed directly from that contrast
-       budget — 0.6 measured 3.9:1 against the page's paper, under the 4.5:1
-       floor; 0.68 clears it with real margin. Saturate is boosted locally,
-       on top of the shared 1.5 in tokens.css, because more of the backdrop
-       is now showing through and it's the colour bleeding through a blur
-       that reads as looking *through* something, not just at it. */
-    --glass-tint:     rgb(23 18 14 / 0.68);
+    /* The tint is the real dial for "does this read as glass". */
+    --glass-tint:     color-mix(in oklab, var(--c-ink) 68%, transparent);
     --glass-saturate: 2.1;
-    --glass-line:     rgb(255 255 255 / 0.2);
+    --glass-line:     color-mix(in oklab, var(--c-white) 20%, transparent);
     --glass-grain:    0.16;
-    --glass-edge:     inset 0 1px 0 rgb(255 255 255 / 0.3),
-                      inset 0 -1px 0 rgb(0 0 0 / 0.5);
-    --glass-drop:     0 2px 6px rgb(23 18 14 / 0.16),
-                      0 24px 56px -20px rgb(23 18 14 / 0.45);
+    --glass-edge:     inset 0 1px 0 color-mix(in oklab, var(--c-white) 30%, transparent),
+                      inset 0 -1px 0 color-mix(in oklab, var(--c-ink) 50%, transparent);
+    --glass-drop:     0 2px 6px color-mix(in oklab, var(--c-ink) 16%, transparent),
+                      0 24px 56px -20px color-mix(in oklab, var(--c-ink) 45%, transparent);
 
-    /* Text tokens of the dock's own, not the page's --text-muted / --c-ink.
-       Those are calibrated for whichever ground a *section* declares; the
-       dock is a fixed panel that ignores the page's ground entirely, so
-       borrowing them was the actual cause of the low-contrast labels — a
-       mid-grey built for paper, sitting on near-black glass. Alpha nudged up
-       from 0.8 to 0.85 alongside the thinner tint, so resting labels keep
-       the same comfortable margin they had before either changed. */
-    --dock-text:        rgb(232 226 214 / 0.85);
+    /* Text tokens of the dock's own, not the page's --text-muted / --c-ink. */
+    --dock-text:        color-mix(in oklab, var(--c-paper) 85%, transparent);
     --dock-text-strong: var(--c-paper);
 
-    /* Same move the cursor already makes on a dark ground: raw ochre reads
-       heavy on near-black, so anything inside — the progress ring, the roll's
-       incoming word — resolves to the lifted tint instead. The tint is
-       lower now too, so without this the accent would be reading against
-       whatever colour is bleeding through, not a reliable dark backing. */
+    /* Same move the cursor already makes on a dark ground. */
     --c-accent: var(--c-accent-lift);
 
     position: fixed;
@@ -167,18 +120,9 @@
     pointer-events: auto;
   }
 
-  /* ---- Arrival and exit ----------------------------------------------------
-     Keyframes rather than transitions: they play the same on every engine
-     (a transition on `translate` was getting lost on some phones).
-       Dock: rises as a small circle at the bottom centre, then widens out
-             to both sides into the full pill (clip-path), and its links
-             fade up once it is open. Leaving runs it back: it closes to the
-             circle and sinks away.
-       Menu button: already a circle — it simply scales and fades in.
-     One soft curve throughout, no overshoot. [data-shown="false"] only ever
-     exists after a first arrival (nav.js never writes it at load), so
-     nothing plays on page load. The clip reaches 12px past the pill so its
-     shadow and progress ring are never shaved. */
+  /* ---- Arrival and exit
+     ---------------------------------------------------- Keyframes rather
+     than transitions. */
   .dock,
   .menu-btn {
     /* The opening phase: the Work row's curve with a touch more overshoot,
@@ -191,19 +135,15 @@
     --dock-dot: calc(50% - var(--dock-h, 3.25rem) / 2);
   }
 
-  /* Same feel as the Work row opening (--e-attitude, --d-short scale):
-     quick, responsive, with the faintest overshoot. A width overshoot is
-     clipped by the pill's own edge, so the bounce rides on `scale`
-     (0.9 → 1), where it can be seen. */
+  /* Same feel as the Work row opening (--e-attitude, --d-short scale): quick,
+     responsive, with the faintest overshoot. */
   .dock[data-shown="true"]      { animation: dock-in 1.05s both; }
   /* Leaving: the labels fade first (below), the pill follows a beat later. */
   .dock[data-shown="false"]     { animation: dock-out 0.55s 0.12s both; }
   .menu-btn[data-shown="true"]  { animation: btn-in 1s 0.05s both; }
   .menu-btn[data-shown="false"] { animation: btn-out 0.5s both; }
 
-  /* Curves are written out literally inside the keyframes: a var() in a
-     keyframe animation-timing-function is dropped, and the step falls back
-     to plain ease. */
+  /* Curves are written out literally inside the keyframes. */
   @keyframes dock-in {
     0% {
       translate: -50% 120%;
@@ -306,11 +246,7 @@
     height: 2.75rem;
     padding: 0;
     transform: translateY(-140%);
-    /* No tint override here — it shares the dark glass above. A leftover
-       light-tint override on this rule alone was fighting that and nobody
-       noticed, because the bars painted in --c-ink read fine against a
-       light tint and only silently went dark-on-dark once the shared rule
-       changed underneath it. */
+    /* No tint override here — it shares the dark glass above. */
   }
 
   .menu-btn[data-shown="true"] { transform: none; }
@@ -331,11 +267,9 @@
   .menu-btn[aria-expanded="true"] i:first-child { transform: translateY(3.25px) rotate(45deg); }
   .menu-btn[aria-expanded="true"] i:last-child  { transform: translateY(-3.25px) rotate(-45deg); }
 
-  /* ---- Dock --------------------------------------------------------------
-     Bottom centre. The translate property carries the centring *and* the
-     entrance, which is why it is animated separately from transform — the
-     sub-menu uses transform on the same element and the two would overwrite
-     each other otherwise.
+  /* ---------------------------------------------------------------------
+     ---- Dock --------------------------------------------------------------
+     Bottom centre.
      --------------------------------------------------------------------- */
   .dock {
     left: 50%;
@@ -389,25 +323,16 @@
   .dock__sublink:focus-visible { color: var(--dock-text-strong); }
 
   /* Set by modules/nav.js from whichever section is under the middle of the
-     screen. A table of contents that doesn't say where you are is a list.
-     A light wash, not the page's dark-on-light current-state fill — that
-     fill was built for --bg-raised and was invisible here for the same
-     reason the resting labels were. */
+     screen. */
   .dock__link[data-current="true"],
   .dock__sublink[data-current="true"] {
     color: var(--dock-text-strong);
-    background: rgb(255 255 255 / 0.16);
+    background: color-mix(in oklab, var(--c-white) 16%, transparent);
   }
 
-  /* ---- Roll-over labels -----------------------------------------------
-     Built by modules/nav.js: two stacked copies of the same word. The label
-     leaves upward and its replacement arrives from below in the accent, so
-     the hover reads as a mechanism rather than as a colour change. Both
-     copies move on one curve, which is what stops it looking like two
-     separate animations.
-
-     Without the script this collapses to a plain link — the structure is
-     additive, and there is no styling here that a bare <a> would break.
+  /* ---------------------------------------------------------------------
+     ---- Roll-over labels -----------------------------------------------
+     Built by modules/nav.js: two stacked copies of the same word.
      --------------------------------------------------------------------- */
   .roll {
     display: inline-grid;
@@ -428,11 +353,7 @@
   }
 
   /* The dock's own version stays monochrome — the word swaps by motion, not
-     by colour. The dock already spends its accent elsewhere (the progress
-     ring, the current-section pill); repeating it on every hover competed
-     with those and made the accent mean less everywhere it appeared. Colour
-     still changes on hover, same as any resting link — it just comes from
-     the link's own --dock-text-strong rather than from the roll. */
+     by colour. */
   :is(.dock__link, .dock__sublink) .roll__face--in {
     color: inherit;
   }
@@ -449,18 +370,10 @@
 
   /* ==========================================================================
      WORK GROUP — expands in place, on the same row
-
      Hovering, focusing or simply reading one of Work's three sections widens
      the pill so Content / Systems / Brand & web sit beside it, rather than
      opening a second panel above the first. modules/nav.js measures the sub
-     row's natural width once (while it's clipped to zero, via scrollWidth —
-     an element with overflow: hidden still reports its content's full size)
-     and writes it as --dock-sub-w; this only ever animates that one number.
-
-     The group also carries its own faint wash the instant it opens — Work
-     plus its three children read as one cluster before you've picked one of
-     them, and the specific current child then sits inside that wash in its
-     own brighter pill (the [data-current="true"] rule above).
+     row's natural width once (while it's clipped to zero, via scrollWidth.
      ========================================================================== */
 
   .dock__group {
@@ -472,7 +385,7 @@
   }
 
   .dock__group[data-open="true"] {
-    background: rgb(255 255 255 / 0.07);
+    background: color-mix(in oklab, var(--c-white) 7%, transparent);
     padding: 2px;
     margin: -2px;
   }
@@ -496,13 +409,7 @@
   .dock__group[data-open="true"] .dock__caret { rotate: 45deg; }
 
   /* Bounce lives on both ends, but not from the same curve run backwards.
-     --e-attitude overshoots *past* its target and settles — closing to a
-     hard floor of zero has no room past zero to overshoot into, so the same
-     curve in reverse just clips flat. Each direction gets the easing that
-     actually has somewhere to overshoot: the OPEN state below claims
-     --e-attitude for growing past --dock-sub-w, and this base — closed —
-     rule claims --e-anticipate for a small growth-before-collapse on the
-     way back, since CSS runs whichever rule is the *target* of a change. */
+     --e-attitude overshoots *past* its target and settles. */
   .dock__sub {
     display: flex;
     align-items: center;
@@ -530,9 +437,7 @@
     white-space: nowrap;
   }
 
-  /* Below 48rem the dock is the four top-level links only (no Work
-     sub-row). It may still scroll sideways on the very narrowest screens
-     rather than wrap — a two-row pill stops reading as a dock. */
+  /* Below 48rem the dock is the four top-level links only (no Work sub-row). */
   @media (max-width: 48rem) {
     .dock {
       /* Phones: nearer the bottom edge, clear of the home indicator. */
@@ -547,9 +452,7 @@
     .dock__link { padding-inline: var(--sp-3); }
     .dock__link--parent { gap: 6px; }
 
-    /* Phones: no sub-row. Opening it pushed the strip into a sideways
-       scroll that fought the page's own scrolling; "Work" simply goes to
-       the work, and the four links fit across the screen. */
+    /* Phones: no sub-row. */
     .dock__sub,
     .dock__caret { display: none; }
   }
@@ -582,18 +485,13 @@
                 visibility 0s linear var(--d-overlay);
 
     /* The curtain sits outside every [data-ground] but is unmistakably a dark
-       surface, so it adopts the dark ground's accent and rules by hand.
-       Without this the accent inside it resolves to raw ochre, which is a
-       2.7:1 hole against near-black. */
+       surface, so it adopts the dark ground's accent and rules by hand. */
     --c-accent:     var(--c-accent-lift);
     --c-accent-ink: var(--c-ink);
     --line:         var(--line-invert);
   }
 
-  /* Drawn as a construction grid rather than a flat black field. It is the
-     same language the particle canvas speaks everywhere else on the page, so
-     the overlay reads as another surface of the same design file instead of
-     as a modal dropped on top of one. */
+  /* Drawn as a construction grid rather than a flat black field. */
   .menu::before {
     content: "";
     position: absolute;
@@ -606,10 +504,10 @@
     transition: opacity var(--d-reveal) var(--e-reveal) var(--d-micro);
   }
 
-  /* ---- Close ---------------------------------------------------------------
+  /* ---------------------------------------------------------------------
+     ---- Close ---------------------------------------------------------------
      Top right, exactly where the menu button sits, so the button you opened
-     with is the button you close with. It arrives a beat after the rows, so the curtain reads as opening rather
-     than as two things appearing at once.
+     with is the button you close with.
      --------------------------------------------------------------------- */
   .menu__close {
     position: absolute;
@@ -659,10 +557,7 @@
 
   .menu[data-open="true"]::before { opacity: 1; }
 
-  /* minmax(0, 1fr), not the implicit auto. A grid track sized to its
-     min-content is as wide as its longest unbreakable row — and here that
-     propagated all the way out to the fixed curtain, making it wider than the
-     viewport and giving the whole page a horizontal scrollbar. */
+  /* minmax(0, 1fr), not the implicit auto. */
   .menu__inner {
     position: relative;
     width: 100%;
@@ -713,11 +608,9 @@
     transition-delay: calc(var(--i, 0) * var(--stagger-line));
   }
 
-  /* ---- Row focus ----------------------------------------------------------
-     Pointing at one row pushes every other row back. It is the cheapest way
-     to make a menu feel like it is paying attention to you, and unlike a
-     hover colour it uses the whole list to express one hover. Keyboard focus
-     drives it too, so the behaviour is not pointer-only.
+  /* ---------------------------------------------------------------------
+     ---- Row focus ----------------------------------------------------------
+     Pointing at one row pushes every other row back.
      --------------------------------------------------------------------- */
   .menu__list:hover .menu__link,
   .menu__list:focus-within .menu__link { opacity: var(--menu-dim); }
@@ -738,6 +631,8 @@
   }
 
   .menu__meta a:hover { color: var(--c-paper); }
+
+  .menu__clock { margin-top: var(--sp-4); }
 
   /* Locks the page behind an open menu without the layout jumping. */
   .is-menu-open body { overflow: hidden; }

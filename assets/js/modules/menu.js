@@ -40,8 +40,7 @@ function open() {
   stopScroll();
 
   // Focus moves into the menu either way (keyboard users need it there), but
-  // the ring only shows when the menu was opened from the keyboard — after a
-  // click it read as a stray yellow outline on the close button.
+  // the ring only shows when the menu was opened from the keyboard.
   menu.querySelector(FOCUSABLE)?.focus({ focusVisible: viaKeyboard });
 }
 

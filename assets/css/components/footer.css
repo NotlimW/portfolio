@@ -19,10 +19,7 @@
     text-wrap: balance;
   }
 
-  /* The call to action is the address itself, set large: a hairline under
-     it that turns sun on hover says "this is a link" without a button
-     shape, and a small "Copy" beside it for anyone who would rather paste
-     it somewhere (modules/copy.js). */
+  /* The call to action is the address itself, set large. */
   .footer__reach {
     display: flex;
     flex-wrap: wrap;
@@ -41,7 +38,7 @@
     color: var(--c-paper);
     background: linear-gradient(var(--c-sun) 0 0) 0 100% / 0 1px no-repeat,
                 linear-gradient(var(--line-invert) 0 0) 0 100% / 100% 1px no-repeat;
-    transition: background-size 0.5s var(--e-reveal), color var(--d-short) var(--e-micro);
+    transition: background-size var(--d-sweep) var(--e-reveal), color var(--d-short) var(--e-micro);
   }
 
   .footer__mail:hover { background-size: 100% 1px, 100% 1px; }
@@ -66,9 +63,8 @@
   .footer__copy:hover,
   .footer__copy[data-copied] { color: var(--c-sun); }
 
-  /* Two columns even on a phone: the groups are short lists of short
-     words, and stacked one under another they made a footer three screens
-     long. */
+  /* Two columns even on a phone: the groups are short lists of short words,
+     and stacked one under another they made a footer three screens long. */
   .footer__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

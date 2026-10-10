@@ -50,9 +50,10 @@ const clamp = (n) => (n < 0 ? 0 : n > 1 ? 1 : n);
 /** Smooth start and end so scrubbed motion never begins or stops abruptly. */
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
-/** Even pace through the middle, accelerating over the first EDGE and
-    slowing over the last: the track never starts or stops dead, and the
-    middle does not race the way a full ease-in-out does over a long run. */
+/**
+ * Even pace through the middle, accelerating over the first EDGE and slowing
+ * over the last.
+ */
 const EDGE = 0.15;
 const softEnds = (t) => {
   const v = 1 / (1 - EDGE);
@@ -61,21 +62,7 @@ const softEnds = (t) => {
   return v * (t - EDGE / 2);
 };
 
-/*
- * The soft catch. Unsmoothed, a sticky child moves up at full scroll speed
- * and then stops within a single frame as it pins — the hardest moment on
- * the page. Instead, across a zone of 2·D centred on the pin, its speed
- * falls in a straight line from the page's own speed to zero: it is still
- * gliding the last stretch into place for a moment after the pin catches.
- * Speed only ever falls, so there is no surge before the brake. The release
- * mirrors it: the child sets off from rest a moment before the pin lets go
- * and reaches the page's speed just after.
- *
- * With s = rect.top (entry), the child's visual offset from the top is
- * (s + D)² / 4D across s ∈ [−D, D]; its natural (sticky) position is
- * max(s, 0), and --catch is the difference. A function of position only:
- * nothing lags, nothing keeps running after the scroll stops.
- */
+/** How far either side of a pin, as a share of the viewport, the catch eases. */
 const CATCH = 0.3;
 
 function catchFor(rect, viewportH) {
@@ -100,8 +87,7 @@ function progressFor(rect, mode, viewportH) {
   }
 
   // Default: the element is taller than the viewport and pins something
-  // inside itself. Progress runs from its top hitting the top of the screen
-  // to its bottom hitting the bottom.
+  // inside itself.
   const scrollable = rect.height - viewportH;
   if (scrollable <= 0) return clamp((viewportH - rect.top) / (viewportH + rect.height));
   return clamp(-rect.top / scrollable);
@@ -133,9 +119,7 @@ export function init(root = document) {
   const update = () => {
     const viewportH = window.innerHeight;
 
-    // Read every scene's box first, then write. Reading after a write forces
-    // the browser to lay the whole page out again before it can answer, so
-    // interleaving the two cost one full layout per scene per frame.
+    // Read every scene's box first, then write.
     const rects = scenes.map(({ el }) => el.getBoundingClientRect());
 
     scenes.forEach((scene, i) => {

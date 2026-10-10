@@ -1,15 +1,9 @@
 /* ==========================================================================
    PREVIEW — the picture that follows the pointer over a list
-   Positioned by modules/preview.js (transform only). Images crossfade;
-   the frame scales in from the pointer and out again on leave.
+   Positioned by modules/preview.js (transform only).
    ========================================================================== */
 
 @layer components {
-  /* Two layers. The outer one only follows the pointer (transform written
-     by the script every frame). The inner frame does the scale and fade,
-     so it scales from its own pointer-side edge — scaling the outer layer
-     would scale about the page's 0,0 and drag the picture away from the
-     cursor while it appears. */
   .preview {
     position: fixed;
     top: 0;

@@ -36,9 +36,7 @@ function tick() {
   state.y += (state.ty - state.y) * FOLLOW;
   state.vx += ((state.x - px) - state.vx) * 0.3;
   const lean = Math.max(-LEAN_MAX, Math.min(LEAN_MAX, state.vx * LEAN));
-  // The picture stands in for the cursor, hung off its right-hand side:
-  // its left edge sits just past the pointer, centred on it vertically, so
-  // it reads as the pointer and still leaves the row's title uncovered.
+  // The picture stands in for the cursor, hung off its right-hand side.
   figure.style.transform =
     `translate3d(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px, 0) translate(0.5rem, -50%) rotate(${lean.toFixed(2)}deg)`;
   if (Math.abs(state.tx - state.x) > 0.1 || Math.abs(state.ty - state.y) > 0.1 || Math.abs(state.vx) > 0.01) {

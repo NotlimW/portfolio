@@ -1,14 +1,13 @@
 /* ==========================================================================
    SECTIONS — statement, problems, capabilities, process, numbers, now
    ========================================================================== */
-
 @layer components {
 
   /* ==========================================================================
      STATEMENT — words light up against scroll position
      ========================================================================== */
-  /* Was set at 2.75rem. Under a giant poster word it is body copy again —
-     a large, calm paragraph, not a second headline competing with it. */
+  /* Under a giant poster word this is body copy: a large, calm paragraph,
+     not a second headline. */
   .statement {
     font-size: clamp(1.125rem, 1.7vw, 1.5rem);
     line-height: 1.32;
@@ -25,18 +24,8 @@
   .statement .word[data-lit="true"] { color: var(--text); }
 
   /* ==========================================================================
-     PROBLEMS
-     Layout lives in components/editorial.css (.problem-row). This is only
-     the container — the rows carry their own hairlines, so the set needs no
-     surface of its own.
-     ========================================================================== */
-  .problems { display: grid; }
-  .problems > :first-child { border-top: 0; padding-top: 0; }
-
-  /* ==========================================================================
      CAPABILITIES
-     A split holding one graphic against a list of type rows. See .split and
-     .rows in components/editorial.css.
+     A split holding one graphic against a list of type rows.
      ========================================================================== */
   .capabilities {
     position: relative;
@@ -46,13 +35,7 @@
   /* ==========================================================================
      PROCESS — six steps, one thread
      Each step is a large, abstract line drawing (600 × 640) with its text
-     laid over the foot of it. One yellow line runs through every drawing —
-     in at (0,300), out at (600,300) — and on desktop the steps sit edge to
-     edge on a pinned horizontal track, so the six stretches read as one
-     line you follow to the right. modules/thread.js draws each stretch
-     (--d) just ahead of where you are looking; the drawing around it stays
-     in the background and comes up a little as the line arrives.
-     Stacked below 64rem: drawing, then text.
+     laid over the foot of it.
      ========================================================================== */
   .process { display: grid; gap: var(--sp-12); }
 
@@ -72,9 +55,8 @@
 
   .process__art * { vector-effect: non-scaling-stroke; }
 
-  /* Stacked: the foot of each drawing is left empty for the text to sit
-     on (desktop), so below the track layout the text is pulled up into it
-     — 200 of the 600 units, as a share of the width. */
+  /* Stacked: the foot of each drawing is left empty for the text to sit on
+     (desktop), so below the track layout the text is pulled up into it. */
   @media (max-width: 63.99rem) {
     .process__art { margin-bottom: calc(-200 / 600 * 100%); }
   }
@@ -186,9 +168,8 @@
       /* One column per drawing, as large as the screen height allows. */
       --col: min(37.5rem, 76svh * 600 / 640);
       grid-auto-flow: column;
-      /* Edge to edge, no gap: the drawings have to touch for the line to
-         read as one. A trailing margin column so the measured track width
-         includes it and the last drawing lands clear of the edge. */
+      /* Edge to edge, no gap: the drawings have to touch for the line to read
+         as one. */
       grid-template-columns: repeat(6, var(--col)) calc(var(--page-inline) * 2);
       gap: 0;
       padding-inline: var(--page-inline);
@@ -214,10 +195,7 @@
   }
 
   @media (min-width: 64rem) {
-    /* The track rides high in its frame rather than centred: it starts
-       close under the header when the pin catches, and leaves real room
-       between the step text and the dock at the foot of the screen. The
-       drawings are a little smaller to give that room. */
+    /* The track rides high in its frame rather than centred. */
     .process-pin__viewport {
       align-items: flex-start;
       padding-top: clamp(2rem, 7vh, 5rem);
@@ -250,71 +228,8 @@
     .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 
-  .figure__value {
-    font-size: clamp(2.75rem, 6vw, 4.5rem);
-    line-height: 1;
-    letter-spacing: var(--tr-display-l);
-    font-weight: var(--fw-medium);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* ==========================================================================
-     MARQUEE — tools
-     Duplicated track, translated by CSS. Direction and speed are nudged by
-     scroll in modules/marquee.js.
-     ========================================================================== */
-  .marquee {
-    display: flex;
-    overflow: hidden;
-    user-select: none;
-    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  }
-
-  .marquee__track {
-    display: flex;
-    flex-shrink: 0;
-    gap: var(--sp-12);
-    padding-right: var(--sp-12);
-    min-width: 100%;
-    animation: marquee var(--marquee-duration, 40s) linear infinite;
-    animation-direction: var(--marquee-direction, normal);
-  }
-
-  .marquee:hover .marquee__track { animation-play-state: paused; }
-
-  @keyframes marquee {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(-100%, 0, 0); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marquee { mask-image: none; overflow-x: auto; }
-    .marquee__track { animation: none; }
-  }
-
-  /* ---- Statement portrait ------------------------------------------------
-     Centred in the right half of the page, not in whatever space the
-     paragraph happens to leave — the paragraph ends at a different point at
-     every width, and centring on it made the photo drift left. 25% of the
-     row is the middle of its right half; half the photo's width comes off
-     that. On phones the row wraps and the photo centres under the text. */
-  .statement-portrait {
-    --portrait-w: clamp(14rem, 25vw, 23rem);
-    flex: none;
-    width: var(--portrait-w);
-    margin-top: var(--sp-16);
-    margin-left: auto;
-    margin-right: max(0px, calc(25% - var(--portrait-w) / 2));
-  }
-
-  @media (max-width: 47.99rem) {
-    .statement-portrait { margin-inline: auto; }
-  }
-
   /* ---- Capabilities in two columns ---------------------------------------
-     On desktop the list splits into two columns, read across in pairs.
-     Half a page is too narrow for number | title | note side by side, so
-     each row stacks: number in its gutter, the note under the title. */
+     On desktop the list splits into two columns, read across in pairs. */
   @media (min-width: 64rem) {
     .capabilities .rows {
       display: grid;
@@ -330,7 +245,7 @@
 
     .capabilities .row-item__note { grid-column: 2; }
 
-    /* The first pair carries the top rule the list used to have. */
+    /* In two columns, the first pair carries the list's top rule. */
     .capabilities .row-item:nth-child(-n + 2) { border-top: 1px solid var(--line); }
   }
 
@@ -350,148 +265,4 @@
     .now-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: var(--sp-24); }
   }
 
-  /* A small TikTok profile, drawn in the site's language: hairline card,
-     the label face, the sun for the follow button and the active tab. */
-  .tt-card {
-    display: grid;
-    gap: var(--sp-4);
-    padding: var(--sp-6);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--r-md);
-    background: var(--bg);
-  }
-
-  .tt-card__head {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--sp-3);
-  }
-
-  .tt-card__avatar {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: 47% 12%;
-    background: color-mix(in oklab, var(--text) 6%, var(--bg));
-    outline: 1px solid var(--line);
-    outline-offset: 2px;
-    transform: scale(1);
-  }
-
-  .tt-card__who { display: grid; gap: 0.1rem; }
-
-  .tt-card__name {
-    font-weight: var(--fw-medium);
-    font-size: 1.05rem;
-    letter-spacing: -0.015em;
-    line-height: 1.15;
-  }
-
-  .tt-card__handle {
-    font-family: var(--font-sans);
-    font-size: var(--fs-label);
-    color: var(--text-muted);
-  }
-
-  .tt-card__follow {
-    padding: 0.5em 1.1em;
-    border-radius: var(--r-pill);
-    background: var(--c-sun);
-    color: var(--c-ink);
-    font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
-    text-decoration: none;
-    transition: transform var(--d-short) var(--e-micro);
-  }
-
-  .tt-card__follow:hover,
-  .tt-card__follow:focus-visible { transform: translateY(-1px); }
-
-  .tt-card__bio {
-    font-size: var(--fs-small);
-    color: var(--text-muted);
-    line-height: 1.45;
-  }
-
-  .tt-card__tabs {
-    border-bottom: 1px solid var(--line);
-    font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
-  }
-
-  .tt-card__tabs span {
-    display: inline-block;
-    padding-bottom: 0.5em;
-    margin-bottom: -1px;
-    border-bottom: 2px solid var(--c-accent);
-  }
-
-  .tt-card__videos {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.35rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  /* A tile: the thumbnail if there is one (style="--thumb: url(...)"), a
-     drawn placeholder if not — a tone, a few caption lines, a play mark. */
-  .tt-card__video {
-    position: relative;
-    display: block;
-    aspect-ratio: 9 / 16;
-    overflow: hidden;
-    border-radius: var(--r-sm);
-    background:
-      var(--thumb, none) center / cover no-repeat,
-      linear-gradient(transparent 55%, rgb(0 0 0 / 0.35)),
-      #241C15;
-    transition: transform var(--d-short) var(--e-micro);
-  }
-
-  li:nth-child(2) > .tt-card__video { background-color: #3A3029; }
-  li:nth-child(3) > .tt-card__video { background-color: var(--c-sun); }
-
-  .tt-card__video:not([style*="--thumb"])::before {
-    content: "";
-    position: absolute;
-    inset: 22% 14% auto;
-    height: 18%;
-    background:
-      linear-gradient(currentColor, currentColor) 0 0 / 90% 2px no-repeat,
-      linear-gradient(currentColor, currentColor) 0 50% / 70% 2px no-repeat,
-      linear-gradient(currentColor, currentColor) 0 100% / 80% 2px no-repeat;
-    color: rgb(251 250 247 / 0.5);
-  }
-
-  li:nth-child(3) > .tt-card__video:not([style*="--thumb"])::before { color: rgb(23 18 14 / 0.45); }
-
-  .tt-card__video:hover,
-  .tt-card__video:focus-visible { transform: scale(0.97); }
-
-  .tt-card__play {
-    position: absolute;
-    left: 0.5rem;
-    bottom: 0.5rem;
-    width: 0;
-    height: 0;
-    border-left: 0.55rem solid rgb(251 250 247 / 0.95);
-    border-top: 0.35rem solid transparent;
-    border-bottom: 0.35rem solid transparent;
-  }
-
-  li:nth-child(3) .tt-card__play { border-left-color: var(--c-ink); }
-
-  .tt-card__more {
-    justify-self: start;
-    font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  .tt-card__more span { color: var(--c-accent-text); }
 }

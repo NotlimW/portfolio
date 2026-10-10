@@ -1,27 +1,14 @@
 /**
- * reveal.js — when things arrive, and how the headlines do it.
+ * reveal.js — sets data-inview as elements arrive, and animates headlines.
  *
- * Two mechanisms, split on purpose:
+ *   data-reveal="fade" | "stagger" | "media"   CSS transitions keyed on
+ *                                             data-inview
+ *   data-reveal="lines"                        each line swings up on a
+ *                                             spring (Motion); CSS can't
+ *                                             express a spring
  *
- *   fade / stagger  stay in CSS. They are cheap, there are a lot of them, and
- *                   a transition token is the right place to tune them from.
- *                   This module only sets data-inview and gets out of the way.
- *
- *   lines           are animated here, with Motion, on a spring. This is the
- *                   site's signature entrance and it is the one place where a
- *                   spring earns its cost: a cubic-bezier arrives at its end
- *                   value and stops dead, where a spring settles. On a line of
- *                   display type that difference is the whole effect — the
- *                   type reads as having weight rather than as having been
- *                   moved. CSS has no spring, so this cannot be a token.
- *
- * The hidden starting state is applied by JavaScript rather than by CSS, and
- * that is deliberate: if this module never runs — a slow CDN, a blocked
- * script — the headings simply render as headings. Nothing is ever hidden by
- * a stylesheet waiting for a script that may not arrive.
- *
- * Elements reveal once and stay revealed. Replaying on every scroll-past
- * looks clever for ten seconds and irritating for the rest of the visit.
+ * The hidden start state is applied by script, so if this module never
+ * runs the content simply shows. Elements reveal once and stay revealed.
  */
 
 import { animate, inView, stagger } from "../vendor.js";
@@ -44,10 +31,7 @@ function indexChildren(el) {
 
 const linesOf = (el) => Array.from(el.querySelectorAll(":scope > .line > span"));
 
-/* How far below its mask a line waits. Not 110%: the masks are padded so
-   ascenders and descenders survive, and at 110% the tops of the letters
-   showed in that padding before the line had moved. motion.css parks the
-   lines at the same offset before this script runs. */
+/* How far below its mask a line waits. */
 const PARKED = "translateY(135%)";
 
 /** Park the lines below their mask, tilted. Read from the token, not hardcoded. */
@@ -93,10 +77,8 @@ export function init(root = document) {
         if (mode === "lines" && !reduced) play(el);
         queueMicrotask(() => stop?.());
       },
-      // Was -12%, which held everything back until it was well inside the
-      // viewport — so on a fast scroll the page was always a beat behind you.
-      // Starting nearer the edge means content is settled by the time it is
-      // in the middle of the screen, which is where it gets read.
+      // Start near the edge, so content has settled by the time it reaches
+      // the middle of the screen, which is where it gets read.
       { margin: "0px 0px -4% 0px" }
     );
 

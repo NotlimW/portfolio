@@ -42,12 +42,7 @@ const SPEED_CAP = 70;
 const OFFSET_X = 10;
 const OFFSET_Y = -10;
 
-/**
- * What the thing under the pointer actually does. Derived rather than
- * authored, so no markup has to carry a label and nothing can go stale when
- * a link's destination changes. `data-cursor-label` overrides it where a
- * specific word is worth the attribute.
- */
+/** What the thing under the pointer actually does. */
 function labelFor(node) {
   const explicit = node.closest("[data-cursor-label]");
   if (explicit) return explicit.dataset.cursorLabel;
@@ -92,18 +87,14 @@ function loop() {
 }
 
 function onPointerMove(event) {
-  // Only the browser's own events move the dot. A synthetic event carries
-  // whatever coordinates its sender remembered — stale, or 0,0 — and that
-  // is what sent the dot to the corner or left it somewhere else.
+  // Only the browser's own events move the dot.
   if (!event.isTrusted) return;
   seen.x = event.clientX;
   seen.y = event.clientY;
   seen.ok = true;
   target.x = event.clientX + OFFSET_X;
   target.y = event.clientY + OFFSET_Y;
-  // First sighting (page load, or the pointer coming back into the window):
-  // land on the pointer instead of easing in from wherever the dot was
-  // parked — at load that was the top-left corner.
+  // First sighting (page load, or the pointer coming back into the window).
   if (root.dataset.active !== "true") {
     current.x = target.x;
     current.y = target.y;
@@ -115,11 +106,7 @@ function onPointerMove(event) {
   describe(event.target);
 }
 
-/**
- * Re-reads what is under the pointer without it having moved: the page
- * scrolled under a still mouse, or a module (the WebGL carousel) changed
- * what the thing under it is. Uses the pointer's own last real position.
- */
+/** Re-reads what is under the pointer without it having moved. */
 function refresh() {
   if (refreshFrame || !seen.ok || root?.dataset.active !== "true") return;
   refreshFrame = requestAnimationFrame(() => {
@@ -152,8 +139,6 @@ function bindMagnet(el) {
   const onMove = (event) => {
     // Read per-move so the pull is live: the token drops to 0 under reduced
     // motion, and this module can be running when that preference changes.
-    // `??` and `||` cannot be mixed without parentheses — that is a syntax
-    // error, not a precedence quirk, and it takes the whole module graph down.
     const pull = strength ?? (parseFloat(
       getComputedStyle(el).getPropertyValue("--magnet")
     ) || 0);

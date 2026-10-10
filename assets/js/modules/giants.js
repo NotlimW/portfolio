@@ -54,14 +54,8 @@ function split(word) {
   });
 }
 
-/*
- * The loop only runs while something is moving: the lean settling, or
- * letters easing toward the pointer. It reads layout (font size, letter
- * boxes) only when the pointer has moved or letters are still easing, and
- * writes --skew only when it changes. A loop that read and wrote layout on
- * every frame for every visible giant, forever, was a steady cost on the
- * whole page even with nothing happening.
- */
+/* The loop only runs while something is moving: the lean settling, or letters
+   easing toward the pointer. */
 let pointerDirty = false;
 
 const restSettings = `"opsz" 12, "wdth" ${WDTH_REST}`;
@@ -69,11 +63,7 @@ const restSettings = `"opsz" 12, "wdth" ${WDTH_REST}`;
 /**
  * Where each letter's centre sits with the whole word at rest, measured from
  * the edge the word is pinned to (right for data-bleed="right", left for
- * "left", the middle otherwise). The swell is aimed from these, not from
- * the letters' live boxes: a widening letter pushes its neighbours away
- * from the pinned edge — on "Tools" the T slid fifty pixels left — and a
- * letter measured where it now is had moved off the pointer, shrank back,
- * slid under it again, and shook. Re-measured only when the size changes.
+ * "left", the middle otherwise).
  */
 function measureRest(giant, size) {
   const live = giant.letters.map((l) => l.el.style.fontVariationSettings);

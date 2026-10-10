@@ -1,0 +1,16 @@
+<meta name="theme-color" content="#17120E">
+<link rel="icon" href="/assets/media/favicon.svg" type="image/svg+xml">
+
+
+<!-- Park the headline lines below their masks before the first paint;
+     if main.js has not booted in 4s, give the headings back. -->
+<script>
+  document.documentElement.classList.add("reveal-ready");
+  setTimeout(function () {
+    if (!document.documentElement.dataset.ready) {
+      document.documentElement.classList.remove("reveal-ready");
+    }
+  }, 4000);
+</script>
+<link rel="stylesheet" href="/assets/css/main.css">
+<script type="module" src="/assets/js/main.js"></script>

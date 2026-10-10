@@ -1,26 +1,14 @@
 /**
- * logos.js — the client rows roll, and the scroll throws them.
+ * logos.js — the client and tools ribbons.
  *
- * Used by every [data-clients] block on the page: the client marks near
- * the top, and the tools ribbon in "Now". Each block runs on its own; they
- * share the scroll's push.
+ * Every [data-clients] block has two rows rolling right to left. Scroll
+ * speed in either direction pushes them forward, then they ease back to
+ * their own pace. The second row lags a little, and each row leans into
+ * its speed.
  *
- * Both rows travel the same way, right to left, so scrolling down reads as
- * moving right along the page. They roll on their own all the time; scroll
- * speed adds to that in either direction (scrolling up surges them on too,
- * never back) and they ease back to their own pace. Nothing stops them, a
- * pointer resting on a mark included.
- *
- * The second row starts offset and answers the scroll with more lag, so a
- * fast scroll pulls the rows apart and they settle back into step. Each
- * row leans into its own speed (skew) the way the giant headlines do, so
- * the lagging row leans a beat after the first and the lean runs down
- * through the block like a wave.
- *
- * The track is cloned once so the loop is seamless; the clone is hidden
- * from assistive tech. Transform only; widths are read once per resize.
- * Under reduced motion none of this runs and the rows stay still and
- * scrollable by hand.
+ * Each track is cloned once for a seamless loop; the clone is hidden from
+ * assistive tech. Under reduced motion the rows stay still and scroll by
+ * hand.
  */
 
 import { onScroll } from "./smooth-scroll.js";
@@ -28,8 +16,7 @@ import { motionAllowed } from "./motion-prefs.js";
 
 const AUTO = 40;               // px per second, always, leftward
 // A finger flick reports far higher scroll velocities than a wheel, and on a
-// phone the rows are also narrower on screen: with the desktop numbers they
-// shot past at up to 2400px/s. Touch gets a gentle push and a low cap.
+// phone the rows are also narrower on screen.
 const TOUCH = window.matchMedia("(pointer: coarse)").matches;
 const PUSH = TOUCH ? 10 : 55;  // px per second added per unit of scroll velocity
 const MAX = TOUCH ? 420 : 2400; // cap on the surge, px per second

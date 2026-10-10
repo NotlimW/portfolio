@@ -1,16 +1,9 @@
 /* ==========================================================================
    POSTER HEAD — how a section introduces itself
-
-   The hero's move, made reusable: one word in capitals, set too big for
-   the page and cropped by both edges, and under it the section's real
-   headline and one line of explanation, both small. The giant word is
-   decoration of the headline (aria-hidden); the h2 is what a screen reader
-   announces. Every section is its own poster — that is the magazine.
-
-   --end mirrors the small band underneath (headline right, number left).
-   Alternate it down the page so the small type never stacks on one side.
+   The hero's move, made reusable: one word in capitals, set too big for the
+   page and cropped by both edges, and under it the section's real headline
+   and one line of explanation, both small.
    ========================================================================== */
-
 @layer components {
 
   .poster-head {
@@ -22,10 +15,7 @@
     margin-bottom: clamp(var(--sp-12), 7vw, var(--sp-24));
   }
 
-  /* Edge to edge. The container centres the word and modules/fit.js sizes
-     it a few percent wider than the frame, so the crop is split evenly
-     between the left and right edges — the poster is bigger than the page
-     it is printed on. Fallback without the script: the clamp() size. */
+  /* Edge to edge. */
   .poster-head__word {
     display: flex;
     justify-content: center;
@@ -36,13 +26,10 @@
   .poster-head__word .t-bleed { font-size: 1em; }
 
   /* The reveal mask (.line) has overflow: hidden, which would let it shrink
-     as a flex item and clip the word on one side only. Held at full width,
-     it overflows both edges evenly, and the head's own clip crops it. */
+     as a flex item and clip the word on one side only. */
   .poster-head__word .line { flex-shrink: 0; }
 
-  /* The band: headline, explanation, number. Pulled up into the word's
-     descender space so the small type reads as a caption ON the poster,
-     not as a second block underneath it. */
+  /* The band: headline, explanation, number. */
   .poster-head__band {
     position: relative;
     z-index: 1;
@@ -57,23 +44,14 @@
       grid-template-columns: minmax(0, 22ch) minmax(0, var(--measure-compact)) 1fr;
     }
 
-    .poster-head__band .section__num { justify-self: end; }
-
-    /* A band with nothing but its number (the case sections carry their
-       headline and line in the sticky caption): number stays far right. */
-    .poster-head__band > .section__num:only-child { grid-column: 3; }
-
-    /* A right-set giant keeps its band under it, on the right — but the
-       band is not mirrored: headline first, its line to the right of it,
-       and the number out on the far left. (Mirroring put the headline
-       last, after the line it introduces.) */
+    /* A right-set giant keeps its band under it, on the right. */
     .poster-head--end .poster-head__band {
       grid-template-columns: 1fr minmax(0, 22ch) minmax(0, var(--measure-compact));
     }
 
     .poster-head--end .poster-head__band .t-title-compact { grid-column: 2; grid-row: 1; }
     .poster-head--end .poster-head__band .t-compact      { grid-column: 3; grid-row: 1; }
-    .poster-head--end .poster-head__band .section__num   { grid-column: 1; grid-row: 1; justify-self: start; }
+
   }
 
   .poster-head .t-compact { padding-top: 0.3em; }
@@ -82,13 +60,8 @@
 /* ==========================================================================
    BLEED SIDE — shared by the poster heads, the hero and the footer
    The word is sized by modules/fit.js to a share of the frame (data-fit).
-     data-bleed="right"  set flush to the right page margin
-     data-bleed="left"   set flush to the left page margin
-   Nothing leaves the frame: at these sizes even a sliver of a cropped
-   letter read as a mistake rather than a crop, so the giants are held
-   inside the margins and get their scale from size alone.
-   Mix the two down the page, at different sizes, and the page reads as a
-   stack of different posters rather than one template repeated.
+   data-bleed="right" set flush to the right page margin data-bleed="left" set
+   flush to the left page margin Nothing leaves the frame.
    ========================================================================== */
 @layer components {
   [data-fit][data-bleed] .t-bleed { flex-shrink: 0; }
@@ -104,9 +77,7 @@
     padding-right: calc(var(--page-inline) - 0.04em);
   }
 
-  /* Phones: every giant sets flush left. Alternating sides reads as a
-     composition on a wide screen; on a narrow one it just looks like the
-     word slid off, and the eye has to hunt for where each section starts. */
+  /* Phones: every giant sets flush left. */
   @media (max-width: 47.99rem) {
     [data-fit][data-bleed="right"] {
       justify-content: flex-start;
@@ -116,9 +87,7 @@
   }
 }
 
-/* Scroll lean, written by modules/giants.js. On the mask, not the word:
-   the word's own transform belongs to the reveal. Pivots on the baseline
-   so the giant leans like something heavy, not like a flag. */
+/* Scroll lean, written by modules/giants.js. */
 @layer components {
   [data-fit] > .line {
     transform: skewX(var(--skew, 0deg));

@@ -1,47 +1,20 @@
 /**
- * projects.js — previous work on a flowing ribbon (WebGL).
+ * projects.js — the project carousel: cards on one flowing WebGL ribbon.
  *
- * Large cards laid side by side on one band, standing on the page's own
- * dot field (the canvas is transparent). The band is the thing that moves,
- * not the cards: every displacement is a function of where a point sits
- * along the WHOLE band, so neighbouring cards always share one shape and
- * the carousel flows as one ribbon. Idea from jesperlandberg.com, rebuilt
- * here from scratch.
+ * The section is tall and its stage sticky, so scroll progress maps to a
+ * position along the band. The band eases toward it, and the remaining
+ * distance is its speed, which bends the band, swells a running wave,
+ * tightens the cards and slides each picture inside its frame. The pointer
+ * dents the band and sends a ripple out from it. Dragging the canvas
+ * scrolls the page, so drag and scroll are one input.
  *
- * How it moves
- *   The section is tall and its stage is sticky, so the page scroll is the
- *   input: progress through the section maps to a position along the band.
- *   The band eases toward that position; the gap between where it is and
- *   where it is going is its speed, and speed
- *     - bows the whole band into one long curve, trailing the way it moves,
- *     - swells a slow wave that always runs through the band,
- *     - draws the cards in a touch, the way a strip tightens when pulled,
- *     - and slides each picture inside its frame (parallax), so the image
- *       lags behind the card that carries it.
- *   The pointer touches the band rather than lighting up a card: where it
- *   rests the band gives way like cloth under a fingertip and a ripple
- *   runs out from it, and moving it sideways drags the whole band along a
- *   little, the same way a scroll does.
- *   The swell rises quickly and lets go slowly, so the band keeps moving a
- *   beat after the scroll stops. At rest it still breathes. The band is a
- *   loop: positions wrap, with the far ends faded out, so there are cards
- *   on both sides from the first frame and the last hands back to the first.
- *   Dragging the canvas moves the page scroll, so drag and scroll are one
- *   input, never two that disagree.
+ * One plane per card. Each card is painted from its <li>: the picture, and
+ * an overlay with shade, number, tags and title that stays put while the
+ * picture slides under it. Corners are cut in the fragment shader.
  *
- * How it is drawn
- *   One plane per card, 64 × 24 segments. Each card has two faces painted
- *   from its <li>: the picture (or a flat tone with the title set large),
- *   and an overlay with the shade, number, tags, title and arrow. The
- *   picture is sampled zoomed in, so it has room to slide; the overlay is
- *   not, so the type stays put while the image moves under it. Rounded
- *   corners are cut in the fragment shader with a rounded-box distance.
- *
- * Content
- *   The <ol> in the markup is the source of truth. The canvas is
- *   aria-hidden decoration over it; the list stays in the tab order, and
- *   focusing a link scrolls its card to the middle. If three.js fails to
- *   load, the section simply keeps showing the list.
+ * The <ol> in the markup is the content. The canvas is aria-hidden on top
+ * of it; focusing a link scrolls its card to the middle, and if three.js
+ * fails to load the list is shown instead.
  */
 
 import { onScroll, scrollTo } from "./smooth-scroll.js";
@@ -51,8 +24,7 @@ import { refresh as refreshParticles } from "./particles.js";
 const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 
 // Phones get portrait cards: on a tall screen a wide card is a thin strip
-// across the middle. Decided once, at load (the geometry, the shader and the
-// textures are all built to these proportions).
+// across the middle.
 const PORTRAIT = window.matchMedia("(max-width: 47.99rem)").matches;
 const CARD_W = PORTRAIT ? 3.6 : 6;
 const CARD_H = PORTRAIT ? 4.8 : 3.15;   // phones 3 : 4, wide screens about 1.9 : 1
@@ -76,9 +48,7 @@ let calm = 1;              // 1 on wide screens, less where one card fills the w
 let pxPerUnit = 100;       // CSS px per world unit at the band, for the dot field
 const DOTS_DEPTH = 0.6;    // the dot field slides at this share of the cards' speed — it sits behind them
 let frame = 0, visible = false, unsubscribe = null, observer = null;
-// The band's own clock. It only runs while something is moving, so a band
-// at rest is not redrawn sixty times a second for a ripple nobody can see —
-// and picks up exactly where it stopped, with no jump.
+// The band's own clock.
 let clock = 0, lastNow = 0, needsRender = true;
 let pointer = { x: 0, y: 0, inside: false, down: false, startX: 0, startScroll: 0, moved: 0 };
 let hovered = -1;
@@ -406,8 +376,6 @@ function size() {
   camera.aspect = w / h;
   // The middle card takes about 40 % of a wide screen and most of a narrow
   // one; the field of view is worked back from that.
-  // Portrait cards are tall, so a slightly smaller share keeps the captions
-  // above and below them clear of the menu button and the dock.
   const share = camera.aspect >= 1 ? 0.4 : PORTRAIT ? 0.72 : 0.86;
   const halfWidth = CARD_W / share / 2;
   const fovH = 2 * Math.atan(halfWidth / VIEW);
@@ -427,8 +395,7 @@ function size() {
 
 function makeRenderer() {
   // A full-screen WebGL surface at 3× (or even 2×) on a phone is a lot of
-  // fill for photos that are already soft from the zoom; 1.25 reads the
-  // same, and the high pixel ratio makes multisampling redundant there.
+  // fill for photos that are already soft from the zoom.
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   renderer = new THREE.WebGLRenderer({ canvas, antialias: !coarse, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1 : 2));
@@ -486,9 +453,7 @@ function build() {
       material.uniforms.uOverlay.value = texture(paintOverlay(item, title, i, items.length));
       needsRender = true;
     });
-    // Each picture is painted and uploaded in an idle period of its own:
-    // five 1280px canvases drawn and sent to the GPU in one go was a 50ms+
-    // frame on its own.
+    // Each picture is painted and uploaded in an idle period of its own.
     paintPicture(item, title).then((face) => idle(() => {
       material.uniforms.uPicture.value = texture(face);
       material.uniforms.uReady.value = 1;
@@ -519,13 +484,7 @@ function progressFromScroll() {
   return t > 0 ? Math.min(1, Math.max(0, -rect.top / t)) : 0;
 }
 
-/*
- * The band's position along the pin, from the share of it scrolled: even
- * pace through the middle, with a gentle run-up as the section locks and a
- * run-out before it lets go. Linear, the cards started at full speed the
- * moment the pin caught and stopped dead at its end. Same curve as
- * scene.js's data-scene-ease="soft".
- */
+/* The band's position along the pin, from the share of it scrolled. */
 const EDGE = 0.14;
 const SOFT_V = 1 / (1 - EDGE);
 function softEnds(t) {
@@ -573,12 +532,7 @@ function hitTest() {
 
 /* ---- The site cursor ----------------------------------------------------
    The cards are drawn in a canvas, so the cursor (modules/cursor.js) cannot
-   tell a card from the space between them. While a card is under the
-   pointer, the canvas carries the same markers a link to a case would:
-   data-cursor-hover and data-cursor-label="Case". When that changes under
-   a still pointer (the band slid a card in or out), a pointermove is
-   replayed on the canvas so the cursor updates without waiting for the
-   mouse. */
+   tell a card from the space between them. */
 let cursorOnCard = false;
 
 function syncCursor() {
@@ -592,9 +546,7 @@ function syncCursor() {
     delete canvas.dataset.cursorHover;
     delete canvas.dataset.cursorLabel;
   }
-  // Ask the cursor to look again at what is under it. It keeps the real
-  // pointer position itself; sending it a made-up pointermove with our own
-  // remembered coordinates sent the dot to stale spots, or to 0,0.
+  // Ask the cursor to look again at what is under it.
   window.dispatchEvent(new Event("cursor:refresh"));
 }
 
@@ -688,8 +640,6 @@ function tick() {
 
   // The section's dot field travels sideways with the band, a little slower,
   // so the ground the cards stand on moves too.
-  // While the section is pinned the page still scrolls under it; hold the
-  // dots still vertically so they only travel sideways.
   const shift = current * pxPerUnit * DOTS_DEPTH;
   const hold = Math.min(travel(), Math.max(0, -section.getBoundingClientRect().top));
   if (Math.abs(shift - (section.particleShiftX || 0)) > 0.25 || hold !== section.particleHoldY) {
@@ -780,14 +730,11 @@ export function init(root = document) {
   hud.tags = section.querySelector("[data-projects-tags]");
   section.querySelector("[data-projects-total]").textContent = String(items.length).padStart(2, "0");
 
-  // Load three.js once the page has settled after load — in idle time, so
-  // it costs the hero nothing and is warm (shaders compiled, textures on
-  // the GPU) before anyone scrolls to it. Booting it only on approach put
-  // all of that in the middle of a scroll. Approaching first still starts it.
+  // Load three.js once the page has settled after load.
   let started = false;
   // Not straight after load, though: locally and on a fast connection load
   // fires within a fraction of a second, which put the whole boot inside the
-  // hero's entrance animation. Wait out the intro first.
+  // hero's entrance animation.
   const boot = () => { if (!started) { started = true; start(); } };
   const later = () => setTimeout(() => idle(boot), AFTER_INTRO);
   if (document.readyState === "complete") later();
@@ -813,7 +760,6 @@ async function start() {
     await document.fonts?.ready;
     // One step per idle period: loading, building and compiling in a single
     // go was an 80ms frame.
-    // Through a frame first, so two steps never share one idle period.
     const nextIdle = () => new Promise((resolve) => requestAnimationFrame(() => idle(resolve)));
     await nextIdle();
     makeRenderer();

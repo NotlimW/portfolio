@@ -1,7 +1,6 @@
 /* ==========================================================================
    LAYOUT — shell, grid, section rhythm
    ========================================================================== */
-
 @layer layout {
   .shell {
     width: 100%;
@@ -12,9 +11,9 @@
 
   .shell--wide { max-width: none; }
 
-  /* ---- Section ----------------------------------------------------------
-     One rhythm class. Sections never set their own vertical padding, so the
-     page cannot drift out of tune section by section.
+  /* ---------------------------------------------------------------------
+     ---- Section ----------------------------------------------------------
+     One rhythm class.
      --------------------------------------------------------------------- */
   .section { padding-block: var(--section-y); }
   .section--tight { padding-block: calc(var(--section-y) * 0.55); }
@@ -29,23 +28,14 @@
   .section--warm { background: var(--bg-warm); }
   .section--cool { background: var(--bg-cool); }
 
-  .section__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--sp-4) var(--sp-8);
-    margin-bottom: var(--sp-16);
-  }
-
-  .section__num { color: var(--c-accent-text); }
-  .section__aside { margin-left: auto; max-width: 26rem; }
-
   /* ---- Twelve columns ---------------------------------------------------- */
   .grid {
     display: grid;
     grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
     gap: var(--sp-8) var(--grid-gutter);
   }
+
+  .grid--tight { gap: var(--sp-6); }
 
   /* Mobile-first: everything is full width until there is room to be clever. */
   .col-4, .col-5, .col-6, .col-7, .col-8, .col-12 { grid-column: 1 / -1; }
@@ -58,10 +48,10 @@
     .col-8  { grid-column: span 8; }
   }
 
-  /* ---- Stacks ------------------------------------------------------------
+  /* ---------------------------------------------------------------------
+     ---- Stacks ------------------------------------------------------------
      Each size is self-sufficient: it sets the flex context as well as the
-     gap. `gap` on a block element silently does nothing, and a spacing
-     utility that fails silently is worse than no utility at all.
+     gap.
      --------------------------------------------------------------------- */
   .stack,
   .stack-2,
@@ -95,9 +85,11 @@
   }
 
   .row--between { justify-content: space-between; }
+  .row--top { align-items: flex-start; }
 
-  /* ---- Horizontal overflow guard ----------------------------------------
-     Wide content scrolls inside its own container. The page body never does.
+  /* ---------------------------------------------------------------------
+     ---- Horizontal overflow guard ----------------------------------------
+     Wide content scrolls inside its own container.
      --------------------------------------------------------------------- */
   .scroll-x {
     overflow-x: auto;

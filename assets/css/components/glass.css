@@ -1,19 +1,7 @@
 /* ==========================================================================
    GLASS — etched, not glossy
-
-   A gradient across the face reads as a painted surface. Frosted glass reads
-   as four separate things:
-
-     1. a hard blur, so what is behind is present but unresolvable
-     2. a FLAT tint — no ramp, no sheen
-     3. a sprayed grain sitting on the face, which is the frost itself
-     4. hairline edges: bright along the top, dark along the bottom
-
-   Depth comes from the edges and the drop. Never from a gradient.
-   All of it resolves through --glass-* tokens that [data-ground] swaps, so a
-   panel never needs to know which ground it landed on.
+   A gradient across the face reads as a painted surface.
    ========================================================================== */
-
 @layer components {
 
   .glass {
@@ -44,8 +32,6 @@
     background-size: var(--glass-frost) var(--glass-frost);
   }
 
-  .glass--flush { border-radius: 0; }
-
   /* Small elements show grain at a much larger relative scale, so the pill
      gets a lighter, finer spray than a full panel. */
   .glass--pill {
@@ -54,21 +40,11 @@
     --glass-frost: 90px;
   }
 
-  /* Heavier spray and blur for panels sitting directly over imagery, where
-     what's behind is busy enough to compete with the text on top. */
-  .glass--heavy {
-    --glass-blur: 52px;
-    --glass-frost: 120px;
-  }
-
-  /* Labels used to be glass chips here. They are plain editorial text now
-     (see .t-label in base.css); only .media__chip, which sits on
-     photography and needs a backing, keeps the glass, via .glass--pill. */
+  /* Labels are plain editorial text (.t-label in base.css). */
 
   /* ==========================================================================
      PARTICLE CANVAS
-     The halftone dot field. Sits behind content, never interactive, never
-     announced.
+     The halftone dot field.
      ========================================================================== */
 
   .canvas-host {
@@ -76,11 +52,7 @@
     isolation: isolate;
   }
 
-  /* Height is set by modules/particles.js, not here: the canvas is only ever
-     a viewport-sized window onto the section, and it translates down to
-     follow the scroll. Pinning it to inset: 0 would size the backing store to
-     the whole section, which on the tall sections is tens of megabytes to
-     clear and repaint every frame. */
+  /* Height is set by modules/particles.js, not here. */
   /* The canvas's clip — the section's box, painting nothing itself. */
   .particles-clip {
     position: absolute;
@@ -96,29 +68,20 @@
     left: 0;
     width: 100%;
     pointer-events: none;
-    /* No will-change. It would promote all thirteen of these to permanent
-       compositor layers, and a viewport-sized canvas is an expensive layer to
-       hold. The element already gets one while its transform is animating,
-       which is the only time it needs one. */
   }
 
   /* Content inside a canvas host has to sit above the canvas explicitly,
-     since the canvas is pulled behind on its own layer. The wall's grid is
-     the one content child that isn't a .shell — it deliberately breaks out
-     of the page's max-width, but it still needs the same lift. */
+     since the canvas is pulled behind on its own layer. */
   .canvas-host > .shell,
   .canvas-host > .hero__inner,
   .canvas-host > .creative-wall__grid { position: relative; z-index: 1; }
 
-  /* Same lift for the zoom scene's viewport, but z-index only — it is
-     already position: sticky (see scenes.css), and a heavier selector
-     setting position: relative here would win the cascade and quietly
-     downgrade it to non-sticky, un-pinning the whole scene. */
+  /* Same lift for the zoom scene's viewport, but z-index only. */
   .canvas-host > .zoom__viewport { z-index: 1; }
 
-  /* ---- Rule marks --------------------------------------------------------
-     Corner brackets, the way a selected frame reads in a design tool. Used
-     sparingly — on statement sections, not on every box.
+  /* ---------------------------------------------------------------------
+     ---- Rule marks --------------------------------------------------------
+     Corner brackets, the way a selected frame reads in a design tool.
      --------------------------------------------------------------------- */
   .marks { position: relative; }
 
@@ -155,33 +118,21 @@
   }
 }
 
-/* Phones: a lighter blur on the glass (dock, menu button). The radius is
-   what a backdrop-filter pays for on every frame something scrolls under
-   it; at 16px the pill still reads as frosted. */
+/* Phones: a lighter blur on the glass (dock, menu button). */
 @layer components {
-  /* Touch: no live blur at all. The pill is fixed over everything that
-     scrolls, so a backdrop-filter re-blurs the page under it every frame —
-     on a phone GPU that alone could cost the scroll its smoothness. A
-     denser tint keeps it legible. */
+  /* Touch: no live blur at all. */
   @media (hover: none) {
     /* Doubled class: the dock and menu button set their own tint in nav.css. */
     .glass.glass {
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
-      --glass-tint: rgb(23 18 14 / 0.9);
+      --glass-tint: color-mix(in oklab, var(--c-ink) 90%, transparent);
     }
   }
 }
 
 /* ---- Touch screens: what Safari on a phone pays most for ------------------
-   Desktop is untouched. On a phone, mostly Safari:
-   · the frost grain is a blend mode over a fixed pill, so every frame that
-     scrolls beneath it has to be re-blended — dropped;
-   · the logo rows are masked while their contents move every frame, which
-     re-composites the mask continuously — the fade becomes two static
-     gradients laid over the edges instead;
-   · `will-change` holds a GPU layer per element; the wall, parallax images
-     and case pictures stand still on touch, so the layers are given back. */
+   Desktop is untouched. */
 @layer components {
   @media (hover: none) {
     .glass::before { display: none; }

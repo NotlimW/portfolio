@@ -1,30 +1,16 @@
 /* ==========================================================================
    AI — three ways I use it, drawn as wireframes
    Three dark parts, each opened by a poster head (Context, Visuals, Tools).
-   In each, the drawing is the background of the part: full bleed, dimmed,
-   faded out at its edges, and the copy sits in front of it.
-
-   Everything is drawn in line: hairline strokes, no fills, no gradients,
-   no glow. The sun appears only as a stroke, on the one or two marks that
-   matter. The language is the construction drawing — rulers, dials, crosshairs, baselines — the same family as the
-   wireframes in "What I solve".
-
-   Motion follows the scroll. modules/ai-flow.js writes, on each
-   [data-ai-flow] stage: --p (0 → 1, eased progress through the viewport)
-   for gathering and drawing; --v (smoothed scroll velocity) for lean; and
-   --run, a drive that ticks slowly on its own and jumps with every pixel
-   scrolled, for currents, dials and the reel. Without the module — or
-   under reduced motion — --p stays 1 and the rest 0: complete and still.
    ========================================================================== */
 
 @layer components {
 
-  /* ---- Ground ---------------------------------------------------------------
-     The AI stretch (the panel that slides in, the three parts and the close)
-     sits on a deeper black than the site's espresso. */
+  /* ---- Ground
+     --------------------------------------------------------------- The AI
+     stretch (the panel that slides in, the three parts and the close) sits on
+     a deeper black than the site's espresso. */
   .ai-ground {
-    --c-ink-ai: #0C0A08;
-    --bg: var(--c-ink-ai);
+    --bg: var(--c-ink-deep);
   }
 
   /* ---- Layouts -------------------------------------------------------------- */
@@ -32,8 +18,8 @@
   .ai-part { overflow-x: clip; }
 
   /* The three parts read as one run: tighter between them (the gap is both
-     sections' padding added together), normal before the first and after
-     the last. */
+     sections' padding added together), normal before the first and after the
+     last. */
   .ai-part:has(+ .ai-part) { padding-bottom: calc(var(--section-y) * 0.4); }
   .ai-part + .ai-part      { padding-top: calc(var(--section-y) * 0.4); }
   .ai-part .poster-head    { margin-bottom: clamp(var(--sp-8), 4vw, var(--sp-12)); }
@@ -79,10 +65,9 @@
     }
   }
 
-  /* The paragraphs take the column's full width, so they line up with the
-     tag row above them (which fits on one line at this width) instead of
-     stopping short of it. The stacked stage lays its copy out in columns
-     of its own. */
+  /* The paragraphs take the column's full width, so they line up with the tag
+     row above them (which fits on one line at this width) instead of stopping
+     short of it. */
   .ai-stage:not(.ai-stage--stack) > .ai-stage__text > .t-compact { max-width: none; }
 
   /* Stacked: the copy above, the drawing below it — for a drawing whose
@@ -150,10 +135,8 @@
     min-width: 760px;
   }
 
-  /* Phones: the copy needs the room, so the drawing steps further back —
-     and the whole stage packs tight. The copy sits at the top of the stage
-     instead of centred over a drawing taller than it, which left a band of
-     empty ground above and below every block. */
+  /* Phones: the copy needs the room, so the drawing steps further back — and
+     the whole stage packs tight. */
   @media (max-width: 47.99rem) {
     .ai-stage {
       min-height: 0;
@@ -163,11 +146,9 @@
     }
     .ai-stage--stack { row-gap: var(--sp-4); }
 
-    /* The drawings: below the copy rather than behind it, scaled to the
-       width so the whole idea is in view (at their desktop minimum of
-       760px a phone only showed a cropped middle), and at full strength.
-       Their type is set larger in drawing units so it still reads once
-       the drawing is scaled down to a third. */
+    /* The drawings: below the copy rather than behind it, scaled to the width
+       so the whole idea is in view (at their desktop minimum of 760px a phone
+       only showed a cropped middle), and at full strength. */
     .ai-stage {
       grid-template-areas: "text" "fig";
       row-gap: var(--sp-8);
@@ -181,7 +162,7 @@
     }
     /* Context and Tools are drawn a second time for a phone's portrait
        screen: the steps zigzag down, left and right, so the drawing stays
-       compact. Edge to edge, a little dimmer, and faded out on all sides. */
+       compact. */
     .ai-stage > .ai-fig > svg { display: none; }
     .ai-stage > .ai-fig > svg.ai-fig__v {
       display: block;
@@ -207,7 +188,8 @@
   .ai-fig svg.ai-fig__v { display: none; }
 
   /* The upright phone versions: their own pivot and hatch. */
-  .ai-fig__v .ai-dialface { transform-origin: 128px 250px; }
+  svg.ai-fig__v .ai-dialface,
+  svg.ai-fig__v .ai-orbit { transform-origin: 128px 250px; }
   .ai-fig__v .ai-task { fill: url(#ai-hatch-v); }
 
   .ai-fig text {
@@ -244,11 +226,9 @@
     stroke-dashoffset: calc(1 - var(--d, 1));
   }
 
-  /* ---- Context · collect → hold → write --------------------------------------
-     A field of empty circles drifts on the left. As the part scrolls in,
-     the circles fly into the dial one after another (--a), the dial turns
-     with the scroll, and out of it a concept is drafted as outlined lines
-     on a baseline grid (--b). */
+  /* ---- Context · collect → hold → write
+     -------------------------------------- A field of empty circles drifts on
+     the left. */
   .ai-collect {
     --a: clamp(0, calc((var(--p) - 0.08) * 2.2), 1);
     --d: clamp(0, calc((var(--p) - 0.4) * 5), 1);
@@ -300,6 +280,7 @@
   /* The held circles turn only once they have all arrived, so each one
      flies in along a straight line from its place in the field. */
   .ai-orbit { rotate: calc(max(0, var(--p) - 0.5) * 300deg); }
+  .ai-collect .ai-orbit { transform-origin: 640px 205px; }   /* the dial's centre */
 
   .ai-fly {
     --k: clamp(0, calc(var(--a) * 1.5 - var(--i, 0) * 0.011), 1);
@@ -323,11 +304,10 @@
 
   .ai-write--sun { stroke: var(--c-sun); }
 
-  /* ---- Visuals · the reel ----------------------------------------------------
-     Two rows of frame outlines on a tilted plane, running in opposite
-     directions forever (each track is doubled so the loop has no seam).
-     The scroll slides the plane sideways and the rows against each other,
-     so the reel keeps moving with the page. */
+  /* ---- Visuals · the reel
+     ---------------------------------------------------- Two rows of frame
+     outlines on a tilted plane, running in opposite directions forever (each
+     track is doubled so the loop has no seam). */
   .ai-reel { position: relative; min-width: 0; margin-block: 0; overflow-x: clip; }
 
   /* Phones: smaller frames, so the strip stays a backdrop to the copy
@@ -415,11 +395,9 @@
     font-weight: var(--fw-medium);
   }
 
-  /* ---- Tools · tasks → pipeline → creative work ------------------------------
-     Twelve hatched task boxes feed a pipeline of three nodes; a dashed
-     current runs through the wires, faster while you scroll. As the part
-     scrolls in, the tasks appear (--a), the nodes light up one by one
-     (--b), and a sketch is drawn on the sun-outlined canvas (--c). */
+  /* ---- Tools · tasks → pipeline → creative work
+     ------------------------------ Twelve hatched task boxes feed a pipeline
+     of three nodes. */
   .ai-tools {
     --a: clamp(0, calc((var(--p) - 0.08) * 2.5), 1);
     --b: clamp(0, calc((var(--p) - 0.2) * 2.5), 1);

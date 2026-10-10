@@ -1,35 +1,17 @@
 /* ==========================================================================
    MOTION — the six signature moves, as CSS state
-   JS only ever adds `data-inview="true"`. Everything about how a thing moves
-   lives here, so the motion language can be tuned without touching scripts.
+   JS only ever adds `data-inview="true"`.
    ========================================================================== */
 
 @layer components {
 
-  /* ---- 01 · Line mask ----------------------------------------------------
-     Headlines rise out of a clip. The wrapper crops, the inner span moves.
-
-     The line now swings up rather than sliding up. Transform origin is the
-     top-left of the line, so the far end starts dropped and lifts into
-     place: the near end barely moves, which means nothing can ever break the
-     top of the mask and the whole line still lands flat. Three degrees is
-     the point where it reads as weight rather than as a tilt effect —
-     enough that the eye notices the type had to travel to get there.
-
-     --reveal-skew is a token and it is 0 under reduced motion, so this rule
-     collapses to the plain rise without needing a second query.
+  /* ---------------------------------------------------------------------
+     ---- 01 · Line mask ----------------------------------------------------
+     Headlines rise out of a clip.
      --------------------------------------------------------------------- */
-  /* The mask and the pivot live here; the movement does not. modules/reveal.js
-     animates these spans with Motion on a spring, because a spring settles
-     where a cubic-bezier stops dead — and on a line of display type that is
-     the difference between type that has weight and type that was moved.
-
-     The lines are parked below their masks from the very first paint, not
-     from when the script starts — otherwise every heading in view flashed
-     whole and then dropped out of sight. The parking is keyed on
-     html.reveal-ready, which an inline script in <head> sets before
-     anything renders and takes back off if main.js has not booted within
-     a few seconds, so a heading whose script never arrives still shows. */
+  /* The mask and the pivot live here; the movement does not.
+     modules/reveal.js animates these spans with Motion on a spring, because a
+     spring settles where a cubic-bezier stops dead. */
   [data-reveal="lines"] .line { display: block; overflow: hidden; }
 
   [data-reveal="lines"] .line > span {
@@ -58,8 +40,8 @@
   }
 
   /* ---- 03 · Media: an image opens up as it arrives ---------------------
-     The frame un-clips from the bottom while the picture inside settles
-     from a slight zoom. Clip and scale only — nothing reflows. */
+     The frame un-clips from the bottom while the picture inside settles from
+     a slight zoom. */
   [data-reveal="media"] {
     clip-path: inset(14% 0 0 0 round var(--r-lg));
     transition: clip-path 1.1s var(--e-reveal);
@@ -90,26 +72,16 @@
      child never means editing an nth-child ladder. */
   [data-reveal="stagger"] > * { transition-delay: calc(var(--i, 0) * var(--stagger-grid)); }
 
-  /* ---- Rule: media never animates its own box ---------------------------
-     Only transform and opacity. Nothing here triggers layout.
+  /* ---------------------------------------------------------------------
+     ---- Rule: media never animates its own box ---------------------------
+     Only transform and opacity.
      --------------------------------------------------------------------- */
   [data-parallax] { will-change: transform; }
 
-  /* ---- 06 · Custom cursor ------------------------------------------------
+  /* ---------------------------------------------------------------------
+     ---- 06 · Custom cursor ------------------------------------------------
      Pointer-only, and additive: the real cursor is never hidden on touch or
      for anyone who prefers reduced motion.
-
-     Three parts instead of one growing circle. The dot is the pointer and it
-     stretches along its own direction of travel — a circle that deforms
-     under speed reads as a physical object with weight, where a circle that
-     merely lags reads as a laggy circle. The ring is the target state. The
-     label says what the target *is*, which is the part that turns a cursor
-     from decoration into a piece of interface: by the time you have hovered
-     a link you already know it opens a case.
-
-     The element itself is a zero-size anchor; modules/cursor.js builds the
-     three children. If the script never runs, nothing is visible and nothing
-     is lost, because the real cursor was never hidden.
      --------------------------------------------------------------------- */
   .cursor {
     --cursor-fg: var(--c-ink);
@@ -129,8 +101,7 @@
   .cursor[data-active="true"] { opacity: 1; }
 
   /* The pointer floats over every ground on the page, so it reads which one
-     it is currently above and re-tints. Cobalt over near-black would be the
-     one place on the site where the accent is illegible. */
+     it is currently above and re-tints. */
   .cursor[data-ground="dark"] {
     --c-accent:  var(--c-accent-lift);
     --cursor-fg: var(--c-paper);
@@ -150,18 +121,15 @@
     border-radius: var(--r-pill);
     background: var(--c-accent);
     /* Centring lives in transform, not in a margin, so the box can change
-       size without the anchor drifting. modules/cursor.js rewrites this
-       whole string each frame — the leading translate is part of the
-       contract between the two files. */
+       size without the anchor drifting. modules/cursor.js rewrites this whole
+       string each frame. */
     transform: translate(-50%, -50%);
     transition: width var(--d-short) var(--e-attitude),
                 height var(--d-short) var(--e-attitude),
                 background var(--d-micro) var(--e-micro);
   }
 
-  /* Over a target that says what it does, the label takes the dot's place:
-     the dot shrinks away and the word appears where it was, up and to the
-     right of the pointer. A target with nothing to say keeps the dot. */
+  /* Over a target that says what it does, the label takes the dot's place. */
   .cursor[data-hover="true"][data-labelled="true"] .cursor__dot {
     width: 0;
     height: 0;
@@ -180,12 +148,11 @@
                 opacity var(--d-micro) var(--e-micro);
   }
 
-  /* The ring is retired: the label pill alone marks the target state. */
+  /* The label pill alone marks the target state, so the ring stays hidden. */
   .cursor__ring { display: none; }
 
-  /* A small glass pill with a hairline outline, its bottom-left corner on
-     the dot's anchor. The blur is what keeps the word legible over a busy
-     photo; the outline gives the glass an edge. */
+  /* A small glass pill with a hairline outline, its bottom-left corner on the
+     dot's anchor. */
   .cursor__label {
     translate: -4px calc(-100% + 4px);
     padding: 0.6em 0.85em;
@@ -223,8 +190,7 @@
 
   /* ==========================================================================
      Reduced motion
-     Durations are already near-zero via tokens. These rules remove the
-     starting offsets too, so nothing can be left mid-transition.
+     Durations are already near-zero via tokens.
      ========================================================================== */
   @media (prefers-reduced-motion: reduce) {
     [data-reveal],

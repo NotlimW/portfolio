@@ -1,8 +1,6 @@
 /* ==========================================================================
    CONTACT — the contact page's own pieces. The address is the call to
    action, set large like the footer's, with a few plain facts beside it.
-   Everything else (page hero, poster heads, TikTok and LinkedIn cards,
-   footer) is the shared system.
    ========================================================================== */
 @layer components {
 
@@ -40,7 +38,7 @@
     color: var(--text);
     background: linear-gradient(var(--c-sun) 0 0) 0 100% / 0 1px no-repeat,
                 linear-gradient(var(--line-strong) 0 0) 0 100% / 100% 1px no-repeat;
-    transition: background-size 0.5s var(--e-reveal);
+    transition: background-size var(--d-sweep) var(--e-reveal);
   }
 
   .contact__mail:hover,
@@ -81,9 +79,7 @@
 
   .contact__info > div:last-child { border-bottom: 1px solid var(--line); }
 
-  /* LinkedIn and TikTok: small and quiet, side by side. The platform's
-     mark, the name and a little corner arrow, all in the muted tone; the
-     link comes up to the text colour on hover and the arrow nudges out. */
+  /* LinkedIn and TikTok: small and quiet, side by side. */
   .social {
     display: flex;
     flex-wrap: wrap;

@@ -1,25 +1,7 @@
 /* ==========================================================================
    EDGE BLUR — a progressive blur at the top and bottom of the viewport
    Content doesn't cross into blur all at once as it reaches the edge — it
-   eases in, the way focus racks on a lens. CSS has no way to animate a
-   single element's blur radius across its own height, so this is three
-   stacked layers instead per edge: each blurred a little more than the last
-   and masked to a narrower band right at the edge, so where they overlap the
-   blur compounds into a ramp rather than a step.
-
-   Each layer is its own position: fixed element, a sibling of the others —
-   NOT nested inside a wrapper. Nesting was the first attempt, and it
-   silently failed: a backdrop-filter on a position: fixed element renders,
-   but the same backdrop-filter on a position: absolute CHILD of that fixed
-   element does not, at least in this browser. A plain background-color on
-   that same child rendered fine, and a backdrop-filter on a sibling fixed
-   element also rendered fine — so the flat, un-nested structure below is
-   the version that is actually known to work, confirmed by turning each
-   layer's filter into an unmissable invert() one at a time and looking for
-   it, rather than trusting that stacking it "should" work.
-
-   Deliberately subtle and short — this should read as the edge of the
-   screen, not as a special effect layered on top of the page.
+   eases in, the way focus racks on a lens.
    ========================================================================== */
 
 @layer components {
@@ -40,25 +22,16 @@
   .edge-blur--top    { top: 0; }
   .edge-blur--bottom { bottom: 0; }
 
-  /* Each layer covers a narrower slice of the band than the last, tapering
-     toward the outer edge — so the edge itself sits under all three blurs at
-     once, and the inner boundary sits under none. White, not black: mask
-     gradients default to luminance mode in some engines, where black means
-     hidden rather than opaque — the exact opposite of alpha-mode masking's
-     default with the same stop colour. White reads as "fully visible" under
-     both interpretations. */
-  /* One layer per edge (it was three): each backdrop-filter re-blurs the
-     full width of whatever moves under it on every scroll frame, and six of
-     them were a measurable share of the frame. A single blur fading out
-     through its mask reads nearly the same at this size. */
-  .edge-blur--top[data-layer="1"] {
+  /* The mask stops are white, not black: mask gradients default to luminance
+     mode in some engines, where black means hidden. */
+  .edge-blur--top {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     mask-image: linear-gradient(to bottom, white 0%, white 20%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, white 0%, white 20%, transparent 100%);
   }
 
-  .edge-blur--bottom[data-layer="1"] {
+  .edge-blur--bottom {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     mask-image: linear-gradient(to top, white 0%, white 20%, transparent 100%);
@@ -66,20 +39,18 @@
   }
 }
 
-/* Touch screens: a lighter edge blur. A backdrop-filter re-blurs whatever
-   scrolls under it every frame, so on a phone the strips are narrower and
-   the radius smaller: the edge still softens, for a fraction of the cost. */
+/* Touch screens: a lighter edge blur. */
 @layer components {
   @media (hover: none) {
     .edge-blur { height: 2.25rem; }
-    .edge-blur--top[data-layer="1"],
-    .edge-blur--bottom[data-layer="1"] {
+    .edge-blur--top,
+    .edge-blur--bottom {
       backdrop-filter: blur(2px);
       -webkit-backdrop-filter: blur(2px);
     }
-    /* No bottom strip on a phone: iOS Safari (26) reads a fixed element
-       flush with the bottom edge as the page's own toolbar and paints a
-       solid bar behind its controls instead of letting them float. */
+    /* No bottom strip on a phone: iOS Safari (26) reads a fixed element flush
+       with the bottom edge as the page's own toolbar and paints a solid bar
+       behind its controls instead of letting them float. */
     .edge-blur--bottom { display: none; }
   }
 }
