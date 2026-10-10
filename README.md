@@ -35,6 +35,12 @@ changes. The built pages are committed, so the host serves plain HTML with
 no build step. `<!-- include: topbar variant="light" -->` gives a page the
 light topbar, and the current page's topbar link gets `aria-current`.
 
+Write links and assets root-absolute (`/about/`, `/assets/…`). The build
+rewrites each into a path relative to its page, so the site works at a
+domain root and under a sub-path like `notlimw.github.io/portfolio/`.
+`404.html` is served at any depth, so it sets a `<base>` for the site root
+from its own head script instead.
+
 ## Structure
 
 ```
